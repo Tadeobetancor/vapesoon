@@ -518,6 +518,13 @@ main{position:relative;z-index:1;}
 @media(min-width:560px){.carousel .p-card{flex:0 0 380px;}}
 @media(min-width:900px){.carousel .p-card{flex:0 0 380px;}}
 
+/* Spacers reserve equal room on both edges so the snapped card sits centered
+   (including the first/last card, which otherwise has nothing to scroll into). */
+#productCarousel{padding-left:0;padding-right:0;}
+.carousel-spacer{flex:0 0 calc((100% - 88%) / 2);}
+@media(min-width:560px){.carousel-spacer{flex-basis:calc((100% - 380px) / 2);}}
+.catalog.grid-mode .carousel-spacer{display:none;}
+
 .arrow{
   position:absolute;
   top:44%;
@@ -1808,7 +1815,7 @@ function productGlyphHTML(p){
 }
 
 function renderProducts(){
-  productCarousel.innerHTML = CATALOG.map((p, i) => {
+  productCarousel.innerHTML = '<div class="carousel-spacer" aria-hidden="true"></div>' + CATALOG.map((p, i) => {
     const acc = ACCENTS[i % ACCENTS.length];
     const dots = p.flavors.slice(0,5).map(f => `<span style="background:${flavorAccent(f.name)}"></span>`).join('');
     return `
@@ -1829,7 +1836,7 @@ function renderProducts(){
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
     </div>`;
-  }).join('');
+  }).join('') + '<div class="carousel-spacer" aria-hidden="true"></div>';
 
   productCarousel.querySelectorAll('.p-card').forEach(card=>{
     card.addEventListener('click', (e)=> openModal(parseInt(card.dataset.index), null, e));
