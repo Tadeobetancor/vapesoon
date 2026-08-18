@@ -619,7 +619,22 @@ main{position:relative;z-index:1;}
   background:var(--accent);
   color:var(--void);
   font-weight:700;
+  z-index:1;
 }
+.p-badge--oos{
+  background:var(--red-cap);
+  color:var(--white-glove);
+}
+.p-card--oos{
+  opacity:.6;
+  filter:grayscale(.6);
+  border-color:rgba(232,67,58,.4);
+}
+.p-card--oos:hover{
+  border-color:var(--red-cap);
+  box-shadow:0 18px 40px -12px rgba(232,67,58,.35);
+}
+.p-card--oos .p-cta{color:var(--red-cap);}
 .p-puffs{
   position:absolute;top:14px;right:14px;
   font-size:12.5px;
@@ -988,6 +1003,15 @@ main{position:relative;z-index:1;}
 .flavor-dot{width:8px;height:8px;border-radius:50%;flex:none;}
 .flavor-name{font-size:13px;color:var(--ink);font-weight:500;line-height:1.2;white-space:nowrap;}
 .flavor-pill.selected .flavor-name{color:var(--white-glove);}
+.flavor-empty{
+  font-size:13px;
+  line-height:1.5;
+  color:var(--ink-dim);
+  background:rgba(232,67,58,.08);
+  border:1px solid rgba(232,67,58,.25);
+  border-radius:12px;
+  padding:12px 14px;
+}
 
 /* Stock — only for the currently selected flavor */
 .modal-stock-line{
@@ -1674,33 +1698,23 @@ const ACCENTS = [
 
 const CATALOG = [
   {name:'ELFBAR ICE KING', price:26500, puffs:40000, photo:'ice_king', flavors:[
-    {name:'Mango Magic 🥭', stock:3},{name:'Watermelon Ice 🍉', stock:3},{name:'Strawberry Ice 🍓', stock:2},
-    {name:'Strawberry Watermelon 🍓🍉', stock:2},{name:'Tigers Blood 🐅🍉', stock:2},
-    {name:'Cherry Strazz 🍒🍓', stock:1},{name:'Dragon Strawnana 🐉🍓🍌', stock:1}
+    {name:'Watermelon Ice 🍉', stock:1},{name:'Tigers Blood 🐅🍉', stock:1}
   ]},
   {name:'EBCREATE', price:25000, puffs:40000, photo:'ebcreate', flavors:[
-    {name:'Watermelon Ice 🍉', stock:3},{name:'Blue Razz Ice 🫐', stock:2},{name:'Aurora Berries 🍓', stock:1},
-    {name:'Golden Berry 🍑', stock:1},{name:'Black Mint 🌿', stock:1}
+    {name:'Blue Razz Ice 🫐', stock:2},{name:'Black Mint 🌿', stock:1},{name:'Watermelon Ice 🍉', stock:1}
   ]},
   {name:'ELFBAR BC', price:22000, puffs:15000, photo:'bc', flavors:[
     {name:'Miami Mint 🌿', stock:1},{name:'Mango Magic 🥭', stock:1},{name:'Watermelon Ice 🍉', stock:1}
   ]},
   {name:'IGNITE V300', price:25000, originalPrice:27000, puffs:30000, photo:'v300', flavors:[
-    {name:'Banana Ice 🍌', stock:1},{name:'Aloe Grape Ice 🌿🍇', stock:1}
+    {name:'Aloe Grape Ice 🌿🍇', stock:1}
   ]},
   {name:'IGNITE V400', price:30000, puffs:40000, photo:'v400', flavors:[
-    {name:'Strawberry Watermelon 🍓🍉', stock:2},{name:'Grape Mix 🍇', stock:2},{name:'Strawberry 🍓', stock:2},
-    {name:'Cherry Watermelon 🍒🍉', stock:1},{name:'Watermelon 🍉', stock:1},{name:'Grape 🍇', stock:1},
-    {name:'Peach Mango Watermelon 🍑🥭🍉', stock:1},{name:'Strawberry Apple Watermelon 🍓🍎🍉', stock:1}
-  ]},
-  {name:'NIKBAR 30K', price:24000, originalPrice:26500, puffs:30000, photo:'nikbar30', flavors:[
-    {name:'Strawberry Apple Watermelon 🍓🍎🍉', stock:1}
+    {name:'Watermelon 🍉', stock:1},{name:'Peach Mango Watermelon 🍑🥭🍉', stock:1},
+    {name:'Strawberry Watermelon 🍓🍉', stock:1},{name:'Cherry Watermelon 🍒🍉', stock:1}
   ]},
   {name:'NIKBAR 10K', price:18000, puffs:10000, photo:'nikbar10', flavors:[
     {name:'Watermelon Bubble Gum 🍉🍬', stock:1}
-  ]},
-  {name:'IGNITE VMIX', price:30000, originalPrice:32000, puffs:40000, photo:'vmix', flavors:[
-    {name:'Banana Ice + Strawberry Ice 🍌🍓', stock:1}
   ]},
   {name:'IGNITE V250', price:23000, puffs:25000, photo:'v250', flavors:[
     {name:'Menthol 🌿', stock:1}
@@ -1708,19 +1722,14 @@ const CATALOG = [
   {name:'IGNITE V150', price:20000, puffs:15000, photo:'v150', flavors:[
     {name:'Pineapple Ice 🍍', stock:1}
   ]},
-  {name:'ELFBAR SWEET KING', price:26500, puffs:40000, photo:'sweet_king', flavors:[
-    {name:'Bubbaloo Grape 🍇🍬', stock:1},{name:'Blue Razz B-Pop 🫐🍭', stock:2}
-  ]},
   {name:'ELFBAR TRIO', price:27000, originalPrice:29500, puffs:40000, photo:'trio', flavors:[
-    {name:'Blue Razz Ice 🫐', stock:1},{name:'Watermelon Ice 🍉', stock:1},{name:'Scary Berry 🍓', stock:1},
-    {name:'Sour Strawberry Dragonfruit 🍓🐉🍈', stock:1},{name:'Blueberry Pom Slushy 🫐🍑', stock:1}
+    {name:'Blue Razz Ice 🫐', stock:1}
   ]},
-  {name:'HOOKALIT 40K', price:24000, puffs:40000, photo:'hookalit', flavors:[
-    {name:'Blue Razz 🫐🍬', stock:1}
-  ]},
-  {name:'BLVK 45K', price:28000, puffs:45000, photo:'blvk', flavors:[
-    {name:'Watermelon Ice 🍉', stock:1}
-  ]}
+  {name:'NIKBAR 30K', price:24000, originalPrice:26500, puffs:30000, photo:'nikbar30', outOfStock:true, flavors:[]},
+  {name:'IGNITE VMIX', price:30000, originalPrice:32000, puffs:40000, photo:'vmix', outOfStock:true, flavors:[]},
+  {name:'ELFBAR SWEET KING', price:26500, puffs:40000, photo:'sweet_king', outOfStock:true, flavors:[]},
+  {name:'HOOKALIT 40K', price:24000, puffs:40000, photo:'hookalit', outOfStock:true, flavors:[]},
+  {name:'BLVK 45K', price:28000, puffs:45000, photo:'blvk', outOfStock:true, flavors:[]}
 ];
 
 function formatPuffs(n){
@@ -1814,13 +1823,21 @@ function productGlyphHTML(p){
   return `<img class="mascot-hero" src="${window.__MASCOT__}" alt="">`;
 }
 
+function isOutOfStock(p){ return !!p.outOfStock || p.flavors.length===0; }
+
 function renderProducts(){
-  productCarousel.innerHTML = '<div class="carousel-spacer" aria-hidden="true"></div>' + CATALOG.map((p, i) => {
+  // Push out-of-stock products to the end without disturbing the relative
+  // order of everything else (and of the CATALOG array itself).
+  const order = CATALOG.map((p, i) => i).sort((a, b) => isOutOfStock(CATALOG[a]) - isOutOfStock(CATALOG[b]));
+
+  productCarousel.innerHTML = '<div class="carousel-spacer" aria-hidden="true"></div>' + order.map((i, pos) => {
+    const p = CATALOG[i];
+    const oos = isOutOfStock(p);
     const acc = ACCENTS[i % ACCENTS.length];
     const dots = p.flavors.slice(0,5).map(f => `<span style="background:${flavorAccent(f.name)}"></span>`).join('');
     return `
-    <div class="p-card" data-index="${i}" style="--accent:${acc.main};--accent-fade:${acc.fade};--accent-shadow:${acc.shadow}">
-      ${i===0 ? '<div class="p-badge">Más pedido</div>' : ''}
+    <div class="p-card${oos ? ' p-card--oos' : ''}" data-index="${i}" style="--accent:${acc.main};--accent-fade:${acc.fade};--accent-shadow:${acc.shadow}">
+      ${oos ? '<div class="p-badge p-badge--oos">Sin stock</div>' : (pos===0 ? '<div class="p-badge">Más pedido</div>' : '')}
       <div class="p-puffs">${formatPuffs(p.puffs)}</div>
       <div class="p-glyph">${productGlyphHTML(p)}</div>
       <div class="p-name-row">
@@ -1829,10 +1846,10 @@ function renderProducts(){
       </div>
       <div class="p-meta">
         <div class="dots">${dots}</div>
-        <span>${p.flavors.length} sabores · ${totalStock(p)} u.</span>
+        <span>${oos ? 'Sin stock por el momento' : p.flavors.length + ' sabores · ' + totalStock(p) + ' u.'}</span>
       </div>
       <div class="p-cta">
-        <span>Ver sabores</span>
+        <span>${oos ? 'Ver más' : 'Ver sabores'}</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
     </div>`;
@@ -1970,20 +1987,23 @@ function openModal(index, presetFlavor, sourceEvent){
   }
   paintImage(null);
 
-  modalEyebrow.textContent = p.flavors.length + ' sabores disponibles';
+  const oos = isOutOfStock(p);
+  modalEyebrow.textContent = oos ? 'Sin stock por el momento' : p.flavors.length + ' sabores disponibles';
   modalName.textContent = p.name;
   document.getElementById('modalPrice').innerHTML = renderModalPrice(p.price, p.originalPrice);
   document.getElementById('modalPuffs').textContent = formatPuffs(p.puffs);
   updateStockLine(p, null);
 
-  flavorGrid.innerHTML = p.flavors.map(f=>{
-    const c = flavorAccent(f.name);
-    return `
-    <button class="flavor-pill" data-flavor="${f.name}" data-stock="${f.stock}">
-      <span class="flavor-dot" style="background:${c}"></span>
-      <span class="flavor-name">${f.name}</span>
-    </button>`;
-  }).join('');
+  flavorGrid.innerHTML = oos
+    ? `<div class="flavor-empty">😔 Sin stock por el momento. Escribinos por WhatsApp para avisarte cuando vuelva a estar disponible.</div>`
+    : p.flavors.map(f=>{
+      const c = flavorAccent(f.name);
+      return `
+      <button class="flavor-pill" data-flavor="${f.name}" data-stock="${f.stock}">
+        <span class="flavor-dot" style="background:${c}"></span>
+        <span class="flavor-name">${f.name}</span>
+      </button>`;
+    }).join('');
 
   flavorGrid.querySelectorAll('.flavor-pill').forEach(btn=>{
     btn.addEventListener('click', ()=>{
@@ -2051,7 +2071,13 @@ function playSmokeBurst(){
 
 function updateCta(){
   const addCartBtn = document.getElementById('modalAddCart');
-  if(selectedFlavor){
+  const p = activeProductIndex!==null ? CATALOG[activeProductIndex] : null;
+  if(p && isOutOfStock(p)){
+    modalCta.classList.remove('ready');
+    modalCtaText.textContent = 'Sin stock por el momento';
+    modalHint.textContent = 'Te avisamos por WhatsApp apenas vuelva a estar disponible';
+    addCartBtn.classList.remove('ready');
+  } else if(selectedFlavor){
     modalCta.classList.add('ready');
     modalCtaText.textContent = 'Comprar "' + selectedFlavor + '" por WhatsApp';
     modalHint.textContent = 'Te vamos a redirigir a nuestro WhatsApp con el pedido ya armado';
