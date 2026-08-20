@@ -1818,52 +1818,50 @@ const ACCENTS = [
 
 const CATALOG = [
   {name:'ELFBAR ICE KING', price:26000, puffs:40000, photo:'ice_king', flavors:[
-    {name:'Sour Strawberry Dragon Fruit 🍓', stock:1},{name:'Grape Ice 🍇', stock:1},
-    {name:'Green Apple Ice 🍏', stock:1},{name:'Miami Mint 🌴', stock:1},
-    {name:'Bubbaloo Tutti Frutti 🍬', stock:1},{name:'Blueberry Ice 🫐', stock:1},
-    {name:'Sour Green Apple 🍏', stock:1}
+    {name:'Bubbaloo Tutti Frutti 🍬', stock:1},{name:'Sour Apple Ice 🍏', stock:1},
+    {name:'Miami Mint 🌴', stock:1},{name:'Tigers Blood 🐅🍉', stock:1}
   ]},
   {name:'ELFBAR SWEET KING', price:26500, puffs:40000, photo:'sweet_king', flavors:[
     {name:'Blue Razz B-Pop 🔵', stock:1}
   ]},
   {name:'ELFBAR DUKE', price:24500, puffs:35000, photo:'duke', flavors:[
-    {name:'Mango Magic 🥭', stock:1},{name:'Strawberry Kiwi Ice 🍓🥝', stock:1},
-    {name:'Grape Ice 🍇', stock:1},{name:'Icy Mint 🌿', stock:1}
+    {name:'Watermelon Lemon Ice 🍉🍋', stock:2},{name:'Strawberry Kiwi Ice 🍓🥝', stock:1}
   ]},
   {name:'ELFBAR BC', price:21000, puffs:15000, photo:'bc', flavors:[
     {name:'Miami Mint 🌴', stock:1},{name:'Watermelon Ice 🍉', stock:1},{name:'Mango Magic 🥭', stock:1}
   ]},
   {name:'EBCREATE BC PRO', price:25000, puffs:40000, photo:'ebcreate', flavors:[
-    {name:'Watermelon Ice 🍉', stock:1}
+    {name:'Black Mint 🌿', stock:1},{name:'Blue Razz Ice 🫐', stock:1}
   ]},
-  {name:'IGNITE V500', price:31000, puffs:50000, photo:'v500', flavors:[
-    {name:'Pineapple Mango 🍍🥭', stock:1},{name:'Watermelon Kiwi 🍉🥝', stock:1},
-    {name:'Watermelon Ice 🍉', stock:1},{name:'Green Apple Peach Kiwi 🍏🍑🥝', stock:1}
+  {name:'IGNITE V500', price:32000, puffs:50000, photo:'v500', flavors:[
+    {name:'Strawberry Watermelon 🍓🍉', stock:2},{name:'Watermelon Kiwi 🍉🥝', stock:1}
   ]},
   {name:'IGNITE V400 ICE', price:30000, puffs:40000, photo:'v400', flavors:[
-    {name:'Watermelon 🍉', stock:1},{name:'Cherry Watermelon 🍒🍉', stock:1},
-    {name:'Strawberry Watermelon 🍓🍉', stock:1}
+    {name:'Grape Mix 🍇', stock:1}
   ]},
   {name:'IGNITE V300 ULTRA SLIM', price:27500, puffs:30000, photo:'v300', flavors:[
-    {name:'Banana Coconut Water 🍌🥥', stock:1},{name:'Blueberry Ice 🫐', stock:1}
+    {name:'Strawberry Banana 🍓🍌', stock:1},{name:'Pineapple Ice 🍍', stock:1}
   ]},
   {name:'IGNITE V250', price:23000, puffs:25000, photo:'v250', photoScale:1.18, flavors:[
     {name:'Menthol ❄️', stock:1}
   ]},
   {name:'The Blacksheep', price:29500, puffs:40000, photo:'blacksheep', flavors:[
-    {name:'Grape + Grape Mango 🍇🥭', stock:1},{name:'Passion Fruit + Watermelon Strawberry 🥭🍉🍓', stock:1},
-    {name:'Strawberry Kiwi + Fresh Mint 🍓🥝🌿', stock:1},{name:'Grape + Energy Drink 🍇⚡', stock:1},
-    {name:'Blueberry Bubble + Sour Green Apple 🫐🍬🍏', stock:1}
+    {name:'Passion Fruit + Watermelon Strawberry 🥭🍉🍓', stock:1},{name:'Strawberry Kiwi + Fresh Mint 🍓🥝🌿', stock:1},
+    {name:'Grape + Menthol 🍇❄️', stock:1},{name:'Blueberry Bubble + Sour Green Apple 🫐🍬🍏', stock:1}
   ]},
   {name:'NIKBAR 10K', price:20000, puffs:10000, photo:'nikbar10', photoScale:1.18, flavors:[
     {name:'Watermelon Bubble Gum 🍉🍬', stock:1}
   ]},
-  {name:'IGNITE V150', price:24000, puffs:15000, photo:'v150', outOfStock:true, flavors:[]},
+  {name:'IGNITE V150', price:24000, puffs:15000, photo:'v150', flavors:[
+    {name:'Pineapple Ice 🍍', stock:1}
+  ]},
+  {name:'BLVK JUST JUICE', price:26500, puffs:45000, photo:'blvk', flavors:[
+    {name:'Grape 🍇', stock:1},{name:'Strawberry Ice 🍓', stock:1},{name:'Strawberry Mango 🍓🥭', stock:1}
+  ]},
   {name:'ELFBAR TRIO', price:26000, puffs:40000, photo:'trio', outOfStock:true, flavors:[]},
   {name:'NIKBAR 30K', price:22500, puffs:30000, photo:'nikbar30', outOfStock:true, flavors:[]},
   {name:'IGNITE VMIX', price:30000, originalPrice:32000, puffs:40000, photo:'vmix', outOfStock:true, flavors:[]},
-  {name:'HOOKALIT', price:24000, puffs:40000, photo:'hookalit', outOfStock:true, flavors:[]},
-  {name:'BLVK JUST JUICE', price:26500, puffs:45000, photo:'blvk', outOfStock:true, flavors:[]}
+  {name:'HOOKALIT', price:24000, puffs:40000, photo:'hookalit', outOfStock:true, flavors:[]}
 ];
 
 function formatPuffs(n){
@@ -2046,6 +2044,10 @@ function setSortMode(mode){
   filterPriceBtn.classList.toggle('active', sortMode === 'price');
   filterPriceBtn.setAttribute('aria-pressed', sortMode === 'price');
   renderProducts();
+  // Jump the carousel to the new #1 card so the customer starts swiping
+  // from whichever product the filter just put on top.
+  const firstCard = productCarousel.querySelector('.p-card');
+  if(firstCard) firstCard.scrollIntoView({inline:'center', block:'nearest', behavior:'smooth'});
 }
 filterPuffsBtn.addEventListener('click', ()=> setSortMode('puffs'));
 filterPriceBtn.addEventListener('click', ()=> setSortMode('price'));
