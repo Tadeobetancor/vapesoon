@@ -1928,36 +1928,40 @@ const ACCENTS = [
 
 const CATALOG = [
   {name:'ELFBAR ICE KING', price:26000, puffs:40000, photo:'ice_king', flavors:[
-    {name:'Bubbaloo Tutti Frutti 🍬', stock:1},{name:'Sour Apple Ice 🍏', stock:1},
-    {name:'Miami Mint 🌴', stock:1},{name:'Tigers Blood 🐅🍉', stock:1}
+    {name:'Bubbaloo Tutti Frutti 🍬', stock:1},{name:'Sour Apple Ice 🍏', stock:2},
+    {name:'Miami Mint 🌴', stock:2},{name:'Grape Ice 🍇', stock:1},{name:'Green Apple Ice 🍏', stock:1}
   ]},
   {name:'ELFBAR SWEET KING', price:26500, puffs:40000, photo:'sweet_king', flavors:[
     {name:'Blue Razz B-Pop 🔵', stock:1}
   ]},
   {name:'ELFBAR DUKE', price:24500, puffs:35000, photo:'duke', flavors:[
-    {name:'Watermelon Lemon Ice 🍉🍋', stock:2},{name:'Strawberry Kiwi Ice 🍓🥝', stock:1}
+    {name:'Watermelon Lemon Ice 🍉🍋', stock:2},{name:'Strawberry Kiwi Ice 🍓🥝', stock:1},
+    {name:'Mango Magic 🥭', stock:1},{name:'Grape Ice 🍇', stock:2},{name:'Icy Mint 🌿', stock:1}
   ]},
   {name:'ELFBAR BC', price:21000, puffs:15000, photo:'bc', flavors:[
     {name:'Miami Mint 🌴', stock:1},{name:'Watermelon Ice 🍉', stock:1},{name:'Mango Magic 🥭', stock:1}
   ]},
   {name:'EBCREATE BC PRO', price:25000, puffs:40000, photo:'ebcreate', flavors:[
-    {name:'Black Mint 🌿', stock:1},{name:'Blue Razz Ice 🫐', stock:1}
+    {name:'Black Mint 🌿', stock:1},{name:'Blue Razz Ice 🫐', stock:1},{name:'Watermelon Ice 🍉', stock:1}
   ]},
   {name:'IGNITE V500', price:32000, puffs:50000, photo:'v500', flavors:[
-    {name:'Strawberry Watermelon 🍓🍉', stock:2},{name:'Watermelon Kiwi 🍉🥝', stock:1}
+    {name:'Strawberry Watermelon 🍓🍉', stock:2},{name:'Watermelon Kiwi 🍉🥝', stock:1},
+    {name:'Pineapple Mango 🍍🥭', stock:1},{name:'Green Apple Peach Kiwi 🍏🍑🥝', stock:1}
   ]},
   {name:'IGNITE V400 ICE', price:30000, puffs:40000, photo:'v400', flavors:[
-    {name:'Grape Mix 🍇', stock:1}
+    {name:'Grape Mix 🍇', stock:1},{name:'Watermelon 🍉', stock:1},
+    {name:'Cherry Watermelon 🍒🍉', stock:1},{name:'Strawberry Watermelon 🍓🍉', stock:1}
   ]},
   {name:'IGNITE V300 ULTRA SLIM', price:27500, puffs:30000, photo:'v300', flavors:[
-    {name:'Strawberry Banana 🍓🍌', stock:1},{name:'Pineapple Ice 🍍', stock:1}
+    {name:'Pineapple Ice 🍍', stock:1},{name:'Banana Coconut Water 🍌🥥', stock:1},{name:'Blueberry Ice 🫐', stock:1}
   ]},
   {name:'IGNITE V250', price:23000, puffs:25000, photo:'v250', photoScale:1.18, flavors:[
     {name:'Menthol ❄️', stock:1}
   ]},
   {name:'The Blacksheep', price:29500, puffs:40000, photo:'blacksheep', flavors:[
-    {name:'Passion Fruit + Watermelon Strawberry 🥭🍉🍓', stock:1},{name:'Strawberry Kiwi + Fresh Mint 🍓🥝🌿', stock:1},
-    {name:'Grape + Menthol 🍇❄️', stock:1},{name:'Blueberry Bubble + Sour Green Apple 🫐🍬🍏', stock:1}
+    {name:'Passion Fruit + Watermelon Strawberry 🥭🍉🍓', stock:2},{name:'Strawberry Kiwi + Fresh Mint 🍓🥝🌿', stock:2},
+    {name:'Grape + Menthol 🍇❄️', stock:1},{name:'Blueberry Bubble + Sour Green Apple 🫐🍬🍏', stock:3},
+    {name:'Grape + Grape Mango 🍇🥭', stock:1},{name:'Grape + Energy Drink 🍇⚡', stock:1}
   ]},
   {name:'NIKBAR 10K', price:20000, puffs:10000, photo:'nikbar10', photoScale:1.18, flavors:[
     {name:'Watermelon Bubble Gum 🍉🍬', stock:1}
@@ -2403,7 +2407,8 @@ modalOverlay.addEventListener('click', (e)=>{ if(e.target === modalOverlay) clos
 modalCta.addEventListener('click', ()=>{
   if(!selectedFlavor || activeProductIndex===null) return;
   const p = CATALOG[activeProductIndex];
-  const msg = `¡Hola Vapesoon! Quiero comprar un *${p.name}* sabor *${stripEmoji(selectedFlavor)}* ¿Me confirmás disponibilidad?`;
+  const priceLine = p.price != null ? ` — $${p.price.toLocaleString('es-AR')}` : '';
+  const msg = `¡Hola Vapesoon! Quiero comprar un *${p.name}* sabor *${stripEmoji(selectedFlavor)}*${priceLine} ¿Me confirmás disponibilidad?`;
   openFulfillmentChoice(msg);
 });
 
@@ -2558,7 +2563,8 @@ thcInfoToggle.addEventListener('click', ()=>{
 
 thcDetailBuyBtn.addEventListener('click', ()=>{
   if(!thcSelectedFlavor || !thcActiveProduct) return;
-  const msg = `¡Hola Vapesoon! Quiero comprar un *${thcActiveProduct.name}* sabor *${stripEmoji(thcSelectedFlavor)}* ¿Me confirmás disponibilidad?`;
+  const priceLine = ` — $${thcActiveProduct.price.toLocaleString('es-AR')}`;
+  const msg = `¡Hola Vapesoon! Quiero comprar un *${thcActiveProduct.name}* sabor *${stripEmoji(thcSelectedFlavor)}*${priceLine} ¿Me confirmás disponibilidad?`;
   openFulfillmentChoice(msg);
 });
 
@@ -2685,7 +2691,8 @@ cartCheckoutBtn.addEventListener('click', ()=>{
   if(cart.length === 0) return;
   let msg = '¡Hola Vapesoon! Quiero hacer este pedido:\n\n';
   cart.forEach((item, i)=>{
-    msg += `${i+1}. *${item.product}* — ${stripEmoji(item.flavor)}\n`;
+    const priceLine = item.price != null ? ` — $${item.price.toLocaleString('es-AR')}` : '';
+    msg += `${i+1}. *${item.product}* — ${stripEmoji(item.flavor)}${priceLine}\n`;
   });
   const hasAllPrices = cart.every(i => i.price);
   if(hasAllPrices){
