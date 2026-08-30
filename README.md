@@ -6,6 +6,7 @@ Sitio de una sola página (single-file), sin backend ni build: todo el HTML, CSS
 
 ## Estructura
 - `index.html` — sitio completo (catálogo, carrito, reseñas, WhatsApp, etc.)
+- `og-image.png` — imagen de vista previa para cuando se comparte el link (WhatsApp, redes, etc.). Tiene que subirse junto a `index.html`, en la misma carpeta.
 
 ## Deploy
 Pensado para deploy estático directo, sin pasos de build.
