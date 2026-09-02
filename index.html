@@ -1981,8 +1981,8 @@ footer.site{
         <button class="filter-chip" id="filterPuffsBtn" aria-pressed="false">
           <span class="filter-chip-icon">💨</span> Más pitadas
         </button>
-        <button class="filter-chip" id="filterPriceBtn" aria-pressed="false">
-          <span class="filter-chip-icon">💰</span> Más caro
+        <button class="filter-chip" id="filterPopularBtn" aria-pressed="false">
+          <span class="filter-chip-icon">🔥</span> Más pedidos
         </button>
         <button class="filter-chip filter-chip--thc" id="filterThcBtn">
           <span class="filter-chip-icon">🌿</span> THC
@@ -2333,12 +2333,11 @@ const ACCENTS = [
 
 const CATALOG = [
   {name:'ELFBAR ICE KING', price:26000, puffs:40000, photo:'ice_king', flavors:[
-    {name:'Green Apple Ice 🍏', stock:1},{name:'Miami Mint 🌴', stock:2},{name:'Sour Apple Ice 🍏', stock:2}
+    {name:'Green Apple Ice 🍏', stock:1},{name:'Miami Mint 🌴', stock:2},{name:'Sour Apple Ice 🍏', stock:1}
   ]},
   {name:'ELFBAR SWEET KING', price:26500, puffs:40000, photo:'sweet_king', outOfStock:true, flavors:[]},
   {name:'ELFBAR DUKE', price:24500, puffs:35000, photo:'duke', flavors:[
-    {name:'Mango Magic 🥭', stock:1},{name:'Grape Ice 🍇', stock:2},
-    {name:'Icy Mint 🌿', stock:1},{name:'Watermelon Lemon Ice 🍉🍋', stock:2}
+    {name:'Grape Ice 🍇', stock:1},{name:'Icy Mint 🌿', stock:1},{name:'Watermelon Lemon Ice 🍉🍋', stock:2}
   ]},
   {name:'ELFBAR BC', price:21000, puffs:15000, photo:'bc', flavors:[
     {name:'Miami Mint 🌴', stock:1},{name:'Watermelon Ice 🍉', stock:1}
@@ -2346,12 +2345,9 @@ const CATALOG = [
   {name:'EBCREATE BC PRO', price:25000, puffs:40000, photo:'ebcreate', flavors:[
     {name:'Black Mint 🌿', stock:1}
   ]},
-  {name:'IGNITE V500', price:32000, puffs:50000, photo:'v500', flavors:[
-    {name:'Green Apple Peach Kiwi 🍏🍑🥝', stock:1}
-  ]},
+  {name:'IGNITE V500', price:32000, puffs:50000, photo:'v500', outOfStock:true, flavors:[]},
   {name:'IGNITE V400 ICE', price:30000, puffs:40000, photo:'v400', flavors:[
-    {name:'Watermelon 🍉', stock:1},{name:'Strawberry Watermelon 🍓🍉', stock:1},
-    {name:'Grape Mix 🍇', stock:1},{name:'Grape 🍇', stock:1}
+    {name:'Strawberry Watermelon 🍓🍉', stock:1},{name:'Grape Mix 🍇', stock:1},{name:'Grape 🍇', stock:1}
   ]},
   {name:'IGNITE V300 ULTRA SLIM', price:27500, puffs:30000, photo:'v300', flavors:[
     {name:'Banana Coconut Water 🍌🥥', stock:1},{name:'Blueberry Ice 🫐', stock:1},{name:'Pineapple Ice 🍍', stock:1}
@@ -2360,9 +2356,9 @@ const CATALOG = [
     {name:'Menthol ❄️', stock:1}
   ]},
   {name:'BLACKSHEEP 40K', price:29500, puffs:40000, photo:'blacksheep', flavors:[
-    {name:'Grape + Grape Mango 🍇🥭', stock:1},{name:'Passion Fruit + Watermelon Strawberry 🥭🍉🍓', stock:2},
+    {name:'Grape + Grape Mango 🍇🥭', stock:1},{name:'Passion Fruit + Watermelon Strawberry 🥭🍉🍓', stock:1},
     {name:'Strawberry Kiwi + Fresh Mint 🍓🥝🌿', stock:1},{name:'Grape + Energy Drink 🍇⚡', stock:1},
-    {name:'Blueberry Bubble + Sour Green Apple 🫐🍬🍏', stock:3},{name:'Grape + Menthol 🍇❄️', stock:1}
+    {name:'Blueberry Bubble + Sour Green Apple 🫐🍬🍏', stock:2},{name:'Grape + Menthol 🍇❄️', stock:1}
   ]},
   {name:'BLACKSHEEP ICE 40K', price:31000, puffs:40000, photo:'blacksheep_ice', flavors:[
     {name:'Kiwi Grape Starfruit + Acai Strawberry Banana 🥝🍇🫐🍓🍌', stock:1}
@@ -2373,9 +2369,7 @@ const CATALOG = [
   {name:'IGNITE V150', price:24000, puffs:15000, photo:'v150', flavors:[
     {name:'Pineapple Ice 🍍', stock:1}
   ]},
-  {name:'BLVK JUST JUICE', price:26500, puffs:45000, photo:'blvk', flavors:[
-    {name:'Strawberry Mango 🍓🥭', stock:1}
-  ]},
+  {name:'BLVK JUST JUICE', price:26500, puffs:45000, photo:'blvk', outOfStock:true, flavors:[]},
   {name:'ELFBAR TRIO', price:26000, puffs:40000, photo:'trio', outOfStock:true, flavors:[]},
   {name:'NIKBAR 30K', price:22500, puffs:30000, photo:'nikbar30', outOfStock:true, flavors:[]},
   {name:'IGNITE VMIX', price:30000, originalPrice:32000, puffs:40000, photo:'vmix', outOfStock:true, flavors:[]},
@@ -2391,6 +2385,19 @@ const CATALOG = [
       {name:'20W', stock:10}
     ]}
 ];
+
+/* Ranking manual de "más pedidos" (de mayor a menor demanda). Los modelos
+   que no figuran acá (p.ej. sin stock suficiente para tener un lugar fijo)
+   quedan relegados al final de ese orden. */
+const POPULARITY_ORDER = [
+  'ELFBAR ICE KING', 'IGNITE V500', 'ELFBAR DUKE', 'BLACKSHEEP 40K',
+  'EBCREATE BC PRO', 'IGNITE V400 ICE', 'BLACKSHEEP ICE 40K', 'ELFBAR BC',
+  'IGNITE V300 ULTRA SLIM', 'IGNITE V150', 'NIKBAR 10K'
+];
+function popularityRank(p){
+  const i = POPULARITY_ORDER.indexOf(p.name);
+  return i === -1 ? Infinity : i;
+}
 
 function formatPuffs(n){
   if(n == null) return 'Consultar';
@@ -2470,7 +2477,7 @@ function flavorAccent(name){
 let currentView = 'carousel';
 let activeProductIndex = null;
 let selectedFlavor = null;
-let sortMode = null; // null | 'puffs' | 'price'
+let sortMode = null; // null | 'puffs' | 'popular'
 const WHATSAPP_NUMBER = '5491131635898';
 
 // Some WhatsApp clients garble 4-byte "astral" emoji (most fruit/object
@@ -2641,12 +2648,12 @@ function renderProducts(){
     const oosDiff = isOutOfStock(pa) - isOutOfStock(pb);
     if(oosDiff !== 0) return oosDiff;
     if(sortMode === 'puffs') return (pb.puffs||0) - (pa.puffs||0);
-    if(sortMode === 'price') return (pb.price||0) - (pa.price||0);
+    if(sortMode === 'popular') return popularityRank(pa) - popularityRank(pb);
     return 0;
   });
   const inStockVapeIndices = sortedVapeIndices.filter(i => !isOutOfStock(CATALOG[i]));
   const oosVapeIndices = sortedVapeIndices.filter(i => isOutOfStock(CATALOG[i]));
-  const thcOrdered = sortMode === 'price' ? [...THC_PRODUCTS].sort((a, b) => b.price - a.price) : THC_PRODUCTS;
+  const thcOrdered = THC_PRODUCTS;
 
   let cardsHTML = '';
   let cardCount = 0;
@@ -2734,13 +2741,13 @@ window.addEventListener('resize', ()=>{
 
 /* ---- sort filter chips ---- */
 const filterPuffsBtn = document.getElementById('filterPuffsBtn');
-const filterPriceBtn = document.getElementById('filterPriceBtn');
+const filterPopularBtn = document.getElementById('filterPopularBtn');
 function setSortMode(mode){
   sortMode = (sortMode === mode) ? null : mode;
   filterPuffsBtn.classList.toggle('active', sortMode === 'puffs');
   filterPuffsBtn.setAttribute('aria-pressed', sortMode === 'puffs');
-  filterPriceBtn.classList.toggle('active', sortMode === 'price');
-  filterPriceBtn.setAttribute('aria-pressed', sortMode === 'price');
+  filterPopularBtn.classList.toggle('active', sortMode === 'popular');
+  filterPopularBtn.setAttribute('aria-pressed', sortMode === 'popular');
   renderProducts();
   // Jump the carousel to the new #1 card so the customer starts swiping
   // from whichever product the filter just put on top.
@@ -2748,7 +2755,7 @@ function setSortMode(mode){
   if(firstCard) firstCard.scrollIntoView({inline:'center', block:'nearest', behavior:'smooth'});
 }
 filterPuffsBtn.addEventListener('click', ()=> setSortMode('puffs'));
-filterPriceBtn.addEventListener('click', ()=> setSortMode('price'));
+filterPopularBtn.addEventListener('click', ()=> setSortMode('popular'));
 
 /* ================= RENDER: REVIEWS ================= */
 const reviewCarousel = document.getElementById('reviewCarousel');
@@ -3180,7 +3187,7 @@ const THC_PRODUCTS = [
     photoScale:1.15,
     grams:'8g (8000mg)',
     description:'Vaporizador recargable (USB-C) con blend de extracto de hongos, en variedades Indica, Sativa e Híbrida para elegir el efecto que buscás.',
-    flavors:['Watermelon 🍉 (Indica)', 'Sour Diesel 🍋🌿 (Hybrid)', 'Lemon Haze 🍋 (Indica)', 'Skunk OG 🌲 (Sativa)', 'Pineapple Express 🍍 (Hybrid)']
+    flavors:['Watermelon 🍉 (Indica)', 'Sour Diesel 🍋🌿 (Hybrid)', 'Skunk OG 🌲 (Sativa)']
   }
 ];
 const THC_ACCENT = {main:'#3ecf6e', fade:'rgba(62,207,110,.28)', shadow:'rgba(62,207,110,.35)'};
