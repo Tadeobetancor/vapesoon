@@ -222,18 +222,18 @@ header.site{
   overflow:hidden;
   max-height:60px;
   opacity:1;
-  transition:max-height .32s ease, opacity .25s ease, padding .32s ease;
+  border-bottom-color:var(--line);
+  transition:max-height .45s ease-in-out, opacity .4s ease-in-out, padding .45s ease-in-out, border-color .35s ease-in-out;
 }
 header.site.compact .ticker{
   max-height:0;
   opacity:0;
   padding-top:0;
   padding-bottom:0;
-  border:none;
+  border-bottom-color:transparent;
 }
 header.site.compact .header-inner{
   padding:7px 16px;
-  transition:padding .3s ease;
 }
 header.site.compact .brand-row{
   margin-bottom:0;
@@ -259,10 +259,18 @@ header.site.compact .search-box{
   overflow:hidden;
   pointer-events:none;
   margin:0;
-  transition:max-height .25s ease, opacity .2s ease;
 }
-.header-inner, .brand-row, .brand-logo-wrap, .brand-logo, .brand-location, .search-field{
-  transition:all .3s ease;
+/* One shared, symmetric transition for every part of the header that
+   shrinks/grows — declared on the base (non-.compact) rules too, not just
+   the compact variant, so scrolling back UP animates just as smoothly as
+   scrolling down. .search-box previously had no transition at all outside
+   .compact, so it used to snap open instantly instead of easing in. */
+.header-inner, .brand-row, .brand-logo-wrap, .brand-logo, .brand-location, .search-field, .search-box, .brand-logo-wrap::before{
+  transition:all .45s ease-in-out;
+}
+.search-box{
+  max-height:60px;
+  opacity:1;
 }
 .header-inner{
   position:relative;
@@ -1921,7 +1929,13 @@ footer.site{
   position:relative;
   display:block;
   overflow:hidden;
-  margin:12px 16px 10px;
+  margin:12px 4px 10px;
+  /* <button> ignores width:auto's normal "fill container minus margins"
+     behavior (browsers give buttons shrink-to-fit intrinsic sizing even
+     with display:block) — without this it doesn't shrink on narrow
+     screens, it overflows them. Keep in sync with the left+right margin
+     above (4px + 4px = 8px). */
+  width:calc(100% - 8px);
   padding:8px 14px;
   border-radius:16px;
   border:1.5px solid rgba(255,200,87,.35);
