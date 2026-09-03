@@ -3679,7 +3679,7 @@ const DELIVERY_ZONES = [
   {region:'Zona Oeste', localities:['Moreno','Hurlingham','Morón','Tres de Febrero','Marcos Paz','Rodríguez','Luján']},
   {region:'Zona Sur', localities:['Cañuelas','Alejandro Korn','San Vicente','Guernica','La Matanza','Avellaneda','Lanús','Lomas de Zamora','Esteban Echeverría','Berazategui','Florencio Varela','Almirante Brown','Presidente Perón']},
   {region:'La Plata / Gran La Plata', localities:['La Plata','Berisso','Ensenada']},
-  {region:'CABA', localities:['CABA']},
+  {region:'CABA', localities:['Agronomía','Almagro','Balvanera','Barracas','Belgrano','Boedo','Caballito','Chacarita','Coghlan','Colegiales','Constitución','Flores','Floresta','La Boca','La Paternal','Liniers','Mataderos','Monte Castro','Monserrat','Nueva Pompeya','Núñez','Palermo','Parque Avellaneda','Parque Chacabuco','Parque Chas','Parque Patricios','Puerto Madero','Recoleta','Retiro','Saavedra','San Cristóbal','San Nicolás','San Telmo','Vélez Sarsfield','Versalles','Villa Crespo','Villa del Parque','Villa Devoto','Villa General Mitre','Villa Lugano','Villa Luro','Villa Ortúzar','Villa Pueyrredón','Villa Real','Villa Riachuelo','Villa Santa Rita','Villa Soldati','Villa Urquiza']},
 ];
 const SAME_DAY_LOCALITIES = ['Hurlingham','Morón','Tres de Febrero','José C. Paz','San Miguel'];
 const LOCALITY_INDEX = DELIVERY_ZONES.flatMap(z => z.localities.map(name => ({name, region:z.region})));
@@ -3696,7 +3696,16 @@ function renderZoneSuggestions(query){
   const q = normalize(query.trim());
   // sin texto todavía: mostramos toda la lista (con scroll) para que se pueda
   // elegir sin tipear, tipear filtra al toque (el "acortador" pedido).
-  const results = q ? LOCALITY_INDEX.filter(l => normalize(l.name).includes(q)) : LOCALITY_INDEX;
+  // Las que EMPIEZAN con lo tipeado van primero (y entre ellas, alfabético);
+  // las que sólo contienen la letra en el medio quedan después.
+  const results = q
+    ? LOCALITY_INDEX.filter(l => normalize(l.name).includes(q)).sort((a, b) => {
+        const an = normalize(a.name), bn = normalize(b.name);
+        const aStarts = an.startsWith(q) ? 0 : 1;
+        const bStarts = bn.startsWith(q) ? 0 : 1;
+        return aStarts !== bStarts ? aStarts - bStarts : an.localeCompare(bn);
+      })
+    : LOCALITY_INDEX;
 
   if(results.length === 0){
     fulfillZoneSuggestions.innerHTML = '<div class="fz-empty">No encontramos esa localidad</div>';
@@ -3729,7 +3738,7 @@ function selectLocality(name){
     fulfillZoneNote.textContent = `✅ ¡Buenas noticias! En ${name} entregamos en el día.`;
   } else {
     fulfillZoneNote.classList.add('next-day');
-    fulfillZoneNote.textContent = `🕐 El envío a ${name} se realiza al día siguiente, entre las 17 y las 22 hs.`;
+    fulfillZoneNote.textContent = `📦 En ${name} el envío llega al día siguiente, entre las 17 y las 22 hs. Te pedimos estar disponible en ese horario.`;
   }
 }
 
