@@ -33,6 +33,13 @@
   --orange-pulp:#ff9130;
   --green-thc:#3ecf6e;
   --green-thc-dim:#2a9650;
+  --gold:#ffc857;
+  --gold-dim:#caa04a;
+  /* richer, multi-stop version of the gold->orange pair used for every
+     wholesale CTA — a plain 2-color gold/orange-pulp blend reads as flat at
+     button size, this adds a highlight and a deeper shadow stop for depth. */
+  --wholesale-grad:linear-gradient(135deg, #ffe08a 0%, var(--gold) 32%, var(--orange-pulp) 68%, #e0670f 100%);
+  --wholesale-grad-border:rgba(200,92,12,.55);
   --white-glove:#f2f9ff;
   --ink:#dbe9f7;
   --ink-dim:#8fa6bd;
@@ -66,7 +73,6 @@ a{color:inherit;text-decoration:none;}
   pointer-events:none;
   background:
     radial-gradient(ellipse 80% 50% at 15% -5%, rgba(79,195,247,0.14), transparent 60%),
-    radial-gradient(ellipse 70% 45% at 100% 15%, rgba(255,145,48,0.08), transparent 55%),
     radial-gradient(ellipse 60% 45% at 10% 60%, rgba(255,255,255,0.05), transparent 60%),
     radial-gradient(ellipse 70% 50% at 90% 95%, rgba(232,67,58,0.07), transparent 55%),
     linear-gradient(180deg, var(--void) 0%, var(--bg-deep) 35%, var(--bg-mid) 70%, var(--bg-deep) 100%);
@@ -714,6 +720,12 @@ main{position:relative;z-index:1;}
 .p-badge--oos{
   background:var(--red-cap);
   color:var(--white-glove);
+}
+/* "Más pedido" always uses the site's blue accent, regardless of which
+   --accent color the card itself is cycling through. */
+.p-badge--popular{
+  background:var(--blue-neon);
+  color:var(--void);
 }
 .p-badge--thc{
   background:var(--green-thc);
@@ -1903,6 +1915,349 @@ footer.site{
   .fab{width:58px;height:58px;}
   .fab svg{width:27px;height:27px;}
 }
+
+/* ---------- MAYORISTA (WHOLESALE) ---------- */
+.wholesale-banner{
+  position:relative;
+  display:block;
+  overflow:hidden;
+  margin:12px 16px 10px;
+  padding:8px 14px;
+  border-radius:16px;
+  border:1.5px solid rgba(255,200,87,.35);
+  background:linear-gradient(135deg, rgba(255,200,87,.14), rgba(255,145,48,.05) 55%, rgba(21,45,74,.45));
+  text-align:left;
+  cursor:pointer;
+  transition:border-color .25s var(--ease), transform .15s var(--ease);
+}
+.wholesale-banner:hover{border-color:var(--gold);}
+.wholesale-banner:active{transform:scale(.99);}
+/* eyebrow sits on its own line above; icon, title and CTA share one flex row
+   below it so all three line up on the same visual baseline. Tight gap
+   between them keeps the whole banner compact. */
+.wholesale-banner-eyebrow{display:block;position:relative;z-index:1;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:3px;}
+.wholesale-banner-inner{position:relative;z-index:1;display:flex;align-items:center;gap:11px;}
+.wholesale-banner-icon{
+  flex:none;
+  width:34px;height:34px;
+  border-radius:10px;
+  background:rgba(255,200,87,.16);
+  border:1px solid rgba(255,200,87,.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;
+}
+/* Sized to always fit on one line next to the icon and CTA — a display font
+   this wide needs a conservative size here or it truncates. */
+.wholesale-banner-title{flex:1;min-width:0;font-family:'Bungee',cursive;font-size:12.5px;color:var(--white-glove);letter-spacing:.2px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 0 14px rgba(255,180,90,.4);}
+.wholesale-banner-cta{
+  flex:none;
+  display:flex;align-items:center;gap:5px;
+  padding:8px 13px;
+  border-radius:999px;
+  background:var(--wholesale-grad);
+  border:1.5px solid var(--wholesale-grad-border);
+  color:var(--void);
+  font-weight:700;font-size:11.5px;
+  white-space:nowrap;
+}
+.wholesale-banner-cta svg{width:13px;height:13px;}
+@media(min-width:640px){
+  .wholesale-banner{padding:10px 18px;}
+  .wholesale-banner-title{font-size:15px;}
+  .wholesale-banner-eyebrow{font-size:10px;}
+}
+
+/* Temporary "locked" state — toggled by WHOLESALE_LOCKED (see the wholesale
+   JS section). Dims everything but the red badge, mutes the CTA to grey,
+   and swaps the cursor; the button itself gets a native `disabled` too. */
+.wholesale-banner-lock-badge{
+  display:none;
+  position:absolute;
+  top:8px; right:10px;
+  z-index:2;
+  background:var(--red-cap);
+  color:var(--white-glove);
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.2px;
+  padding:4px 9px;
+  border-radius:999px;
+  white-space:nowrap;
+  box-shadow:0 2px 8px rgba(0,0,0,.35);
+}
+@media(min-width:640px){.wholesale-banner-lock-badge{top:10px;right:14px;font-size:10px;}}
+.wholesale-banner.wholesale-locked{cursor:not-allowed;}
+.wholesale-banner.wholesale-locked:hover{border-color:rgba(255,200,87,.35);}
+.wholesale-banner.wholesale-locked:active{transform:none;}
+.wholesale-banner.wholesale-locked .wholesale-banner-lock-badge{display:inline-flex;}
+.wholesale-banner.wholesale-locked .wholesale-banner-inner,
+.wholesale-banner.wholesale-locked .wholesale-banner-eyebrow{opacity:.55;}
+.wholesale-banner.wholesale-locked .wholesale-banner-cta{
+  background:rgba(255,255,255,.08);
+  border-color:var(--line);
+  color:var(--ink-dim);
+}
+
+/* Tightens the gap between the compact banner and the catalog below it,
+   without touching .section's shared top padding used by every other section. */
+#catalog{padding-top:16px;}
+@media(min-width:900px){#catalog{padding-top:20px;}}
+
+/* modal */
+.wholesale-overlay{z-index:240;}
+.wholesale-sheet{
+  max-width:900px;
+  padding:8px 8px 20px;
+  border-color:rgba(255,200,87,.28);
+  overflow:hidden;
+}
+@media(min-width:820px){.wholesale-sheet{padding:8px 8px 26px;}}
+/* Orange wash flowing bottom-to-top — reinforces "this is the wholesale
+   zone" on every screen of the flow, dark base kept intact. Static (no
+   animation/movement) so it never competes for attention while browsing. */
+.wholesale-sheet::before{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:0;
+  height:360px;
+  background:linear-gradient(to top, rgba(255,145,48,.24), transparent);
+  pointer-events:none;
+  z-index:0;
+}
+@media(min-width:820px){.wholesale-sheet::before{height:460px;}}
+
+/* Same floating-dots motif as the home page's .nebula-bg::before, replicated
+   (in white, per spec) and confined to the sheet so the wholesale flow feels
+   consistent with the rest of the site. Reuses the shared drift/twinkle
+   keyframes — dots still drift/twinkle, only the orange wash above is static. */
+.wholesale-sheet::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background-image:
+    radial-gradient(2.4px 2.4px at 20% 20%, rgba(255,255,255,.95) 50%, transparent 51%),
+    radial-gradient(2.2px 2.2px at 65% 12%, rgba(255,255,255,.85) 50%, transparent 51%),
+    radial-gradient(1.8px 1.8px at 80% 45%, rgba(255,255,255,.9) 50%, transparent 51%),
+    radial-gradient(2.4px 2.4px at 35% 65%, rgba(255,255,255,.8) 50%, transparent 51%),
+    radial-gradient(1.8px 1.8px at 90% 78%, rgba(255,255,255,.85) 50%, transparent 51%),
+    radial-gradient(2.2px 2.2px at 10% 88%, rgba(255,255,255,.75) 50%, transparent 51%),
+    radial-gradient(1.8px 1.8px at 50% 35%, rgba(255,255,255,.8) 50%, transparent 51%),
+    radial-gradient(2px 2px at 25% 50%, rgba(255,255,255,.7) 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 75% 92%, rgba(255,255,255,.7) 50%, transparent 51%),
+    radial-gradient(2px 2px at 5% 40%, rgba(255,255,255,.65) 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 55% 8%, rgba(255,255,255,.75) 50%, transparent 51%),
+    radial-gradient(2.2px 2.2px at 95% 20%, rgba(255,255,255,.75) 50%, transparent 51%);
+  background-repeat:repeat;
+  background-size:340px 340px;
+  opacity:.9;
+  animation:drift 55s linear infinite, twinkle 3.5s ease-in-out infinite;
+}
+
+/* Persistent header row, outside the step containers so it's visible across
+   all three steps. The left slot swaps content per step: currency toggle on
+   the catalog, a "back" button on the flavor/cart steps (only one of the
+   three is ever un-hidden at a time — see setWholesaleTopbarMode). */
+.wholesale-sheet-topbar{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px;}
+.wholesale-sheet-topbar-left{display:flex;align-items:center;min-width:0;}
+#wholesaleClose{flex:none;position:relative;}
+
+/* Sole heading of the cart step — centered and sized up as the screen's
+   main title now that the topbar carries no duplicate label. */
+.wholesale-title{position:relative;z-index:1;font-family:'Bungee',cursive;font-size:clamp(22px,6vw,32px);color:var(--white-glove);line-height:1.15;text-align:center;margin:0 0 14px;}
+
+.currency-toggle{flex:none;display:flex;gap:3px;background:var(--bg-card);border:1px solid var(--line);border-radius:999px;padding:3px;}
+.currency-toggle button{background:none;border:1px solid transparent;padding:7px 14px;border-radius:999px;font-size:12px;font-weight:700;color:var(--ink-dim);font-family:'Poppins',sans-serif;transition:background .2s, color .2s;}
+.currency-toggle button.active{background:var(--wholesale-grad);border-color:var(--wholesale-grad-border);color:var(--void);}
+
+/* search + list/grid toggle share one compact row so the search bar keeps a
+   small footprint without losing space or prominence — finding a flavor fast
+   stays the priority, only the vertical room it takes shrinks. */
+.wholesale-toolbar{position:relative;z-index:1;margin-top:0;display:flex;align-items:center;gap:8px;}
+.wholesale-search{position:relative;flex:1;min-width:0;}
+.wholesale-search input{width:100%;background:var(--bg-card);border:1px solid var(--line);border-radius:12px;padding:8px 12px 8px 34px;color:var(--white-glove);font-size:13px;font-family:'Poppins',sans-serif;outline:none;transition:border-color .2s;}
+.wholesale-search input:focus{border-color:var(--gold);}
+.wholesale-search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--ink-dim);pointer-events:none;}
+.wholesale-toolbar .view-toggle{flex:none;padding:3px;}
+.wholesale-toolbar .view-toggle button{width:30px;height:30px;}
+.wholesale-toolbar .view-toggle button svg{width:14px;height:14px;}
+/* keeps the wholesale flow orange even though .view-toggle is shared with the
+   retail catalog (whose active state is blue) — retail's rule is untouched. */
+.wholesale-sheet .view-toggle button.active{background:var(--wholesale-grad);border:1px solid var(--wholesale-grad-border);color:var(--void);}
+
+/* "Más pedidos" / "Más pitadas" pills — visual only for now, styled like the
+   retail catalog's sort chips but in the wholesale orange accent. */
+.wholesale-filters{position:relative;z-index:1;display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0;}
+.wholesale-filter-chip{display:flex;align-items:center;gap:6px;background:var(--bg-card);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-size:12px;font-weight:600;color:var(--ink-dim);transition:border-color .2s, background .2s, color .2s;}
+.wholesale-filter-chip-icon{font-size:13px;line-height:1;}
+.wholesale-filter-chip:hover{border-color:var(--orange-pulp);}
+.wholesale-filter-chip.active{background:var(--wholesale-grad);border-color:var(--wholesale-grad-border);color:var(--void);}
+
+/* catalog: carousel (deslizable) by default, grid (cuadrícula) via view toggle — same pattern as the main catalog */
+.wholesale-catalog{position:relative;z-index:1;margin-top:12px;}
+.wholesale-carousel-wrap{position:relative;}
+.wholesale-grid{
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  padding:4px 2px 10px;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  max-height:none;
+}
+.wholesale-grid::-webkit-scrollbar{display:none;}
+.wholesale-carousel-spacer{flex:0 0 calc((100% - 84%) / 2);}
+@media(min-width:560px){.wholesale-carousel-spacer{flex-basis:calc((100% - 340px) / 2);}}
+.wholesale-catalog.grid-mode .wholesale-carousel-spacer{display:none;}
+.wholesale-catalog.grid-mode .wholesale-grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  overflow:visible;
+  max-height:46vh;
+  overflow-y:auto;
+  padding:4px 2px 4px;
+}
+@media(min-width:640px){.wholesale-catalog.grid-mode .wholesale-grid{grid-template-columns:repeat(3, minmax(0,1fr));}}
+@media(min-width:900px){.wholesale-catalog.grid-mode .wholesale-grid{grid-template-columns:repeat(4, minmax(0,1fr));max-height:50vh;}}
+
+/* arrows + pagination dots, same mechanics as the retail carousel but in the
+   wholesale orange accent (kept as dedicated classes so retail's blue .arrow
+   / .carousel-dots rules are never touched). */
+.wholesale-arrow{position:absolute;top:44%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:rgba(8,18,32,.85);border:1px solid var(--line);color:var(--gold);display:flex;align-items:center;justify-content:center;z-index:5;backdrop-filter:blur(6px);transition:background .2s, transform .15s;}
+.wholesale-arrow:hover{background:rgba(255,200,87,.18);}
+.wholesale-arrow:active{transform:translateY(-50%) scale(.88);}
+.wholesale-arrow svg{width:15px;height:15px;}
+.wholesale-arrow.prev{left:0;}
+.wholesale-arrow.next{right:0;}
+@media(min-width:820px){
+  .wholesale-arrow{width:38px;height:38px;}
+  .wholesale-arrow.prev{left:-16px;}
+  .wholesale-arrow.next{right:-16px;}
+}
+.wholesale-catalog.grid-mode .wholesale-arrow{display:none;}
+.wholesale-dots{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:8px;}
+.wholesale-dots .dot{width:6px;height:6px;border-radius:999px;background:var(--line);transition:background .25s var(--ease), width .25s var(--ease);cursor:pointer;}
+.wholesale-dots .dot.active{background:var(--orange-pulp);width:18px;}
+.wholesale-catalog.grid-mode .wholesale-dots{display:none;}
+
+/* PRODUCT CARD — big image-first layout, same visual weight as the retail
+   catalog's .p-card, so vape cards (not the search bar) are the first and
+   biggest thing seen when the catalog opens. */
+.wholesale-card{
+  position:relative;
+  min-width:0;scroll-snap-align:center;flex:0 0 84%;
+  background:linear-gradient(160deg, var(--bg-card) 0%, var(--bg-card-2) 100%);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:16px;
+  overflow:hidden;
+  display:flex;flex-direction:column;gap:9px;
+  transition:border-color .2s, box-shadow .2s;
+}
+@media(min-width:560px){.wholesale-card{flex:0 0 340px;}}
+.wholesale-catalog.grid-mode .wholesale-card{flex:none;width:100%;}
+.wholesale-card:hover{border-color:rgba(255,200,87,.4);box-shadow:0 18px 40px -12px rgba(255,145,48,.25);}
+.wholesale-card--oos{opacity:.6;filter:grayscale(.5);}
+
+.wholesale-card-badge{position:absolute;top:14px;left:14px;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:linear-gradient(120deg, var(--gold), var(--orange-pulp));color:var(--void);font-weight:700;z-index:1;}
+.wholesale-card-oos-tag{position:absolute;top:14px;left:14px;font-size:10.5px;font-weight:700;color:var(--white-glove);background:var(--red-cap);padding:4px 10px;border-radius:999px;z-index:1;}
+
+/* placeholder image area — same footprint a real product photo will occupy,
+   so swapping in real photos later needs no layout changes. Sized big: this
+   carousel is the most important part of the wholesale catalog. */
+.wholesale-card-glyph{position:relative;height:230px;display:flex;align-items:center;justify-content:center;margin-bottom:4px;}
+@media(min-width:560px){.wholesale-card-glyph{height:270px;}}
+.wholesale-catalog.grid-mode .wholesale-card-glyph{height:130px;}
+.wholesale-placeholder{width:64%;height:100%;max-width:190px;border-radius:20px;background:rgba(255,200,87,.08);border:1.5px dashed rgba(255,200,87,.32);display:flex;align-items:center;justify-content:center;}
+.wholesale-placeholder svg{width:44%;height:44%;color:rgba(255,200,87,.55);}
+.wholesale-catalog.grid-mode .wholesale-placeholder{max-width:100px;}
+
+.wholesale-card-name-row{display:flex;align-items:baseline;justify-content:space-between;gap:8px;}
+.wholesale-card-name{min-width:0;font-family:'Bungee',cursive;font-size:14.5px;color:var(--white-glove);letter-spacing:.2px;line-height:1.25;}
+.wholesale-card-price{font-family:'Poppins',sans-serif;font-weight:800;font-size:15px;color:var(--gold);white-space:nowrap;flex:none;}
+.wholesale-card-meta{display:flex;align-items:center;gap:8px;}
+
+/* model card CTA — mirrors retail's .p-cta--solid "Ver sabores" pattern;
+   clicking anywhere on the card opens that model's flavor list. */
+.wholesale-card-cta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto;padding:10px 12px;border-radius:12px;background:var(--wholesale-grad);border:1.5px solid var(--wholesale-grad-border);color:var(--void);font-weight:700;font-size:12.5px;font-family:'Poppins',sans-serif;}
+.wholesale-card-cta svg{width:15px;height:15px;transition:transform .25s var(--ease);}
+.wholesale-card:hover .wholesale-card-cta svg{transform:translateX(4px);}
+.wholesale-card--oos .wholesale-card-cta{background:rgba(255,255,255,.04);color:var(--red-cap);}
+
+.wholesale-empty-search{grid-column:1/-1;flex:1 0 100%;text-align:center;padding:30px 10px;color:var(--ink-dim);font-size:13px;}
+
+/* flavor step: qty stepper per sabor, one shared "Agregar" button that adds
+   every selected flavor+quantity to the cart in a single tap. */
+/* Product context box — photo/placeholder + full model name + unit price,
+   pinned to the top of the flavor screen so the customer always sees exactly
+   what they're choosing flavors for, instead of a name truncated in the
+   narrow topbar. */
+.wholesale-product-box{position:relative;z-index:1;display:flex;align-items:center;gap:14px;padding:12px;margin-bottom:14px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:16px;}
+.wholesale-product-box-glyph{flex:none;width:60px;height:60px;border-radius:13px;background:rgba(255,200,87,.08);border:1.5px dashed rgba(255,200,87,.32);display:flex;align-items:center;justify-content:center;}
+.wholesale-product-box-glyph svg{width:55%;height:55%;color:rgba(255,200,87,.55);}
+.wholesale-product-box-glyph img{width:100%;height:100%;object-fit:contain;border-radius:13px;}
+.wholesale-product-box-info{flex:1;min-width:0;}
+.wholesale-product-box-name{font-family:'Bungee',cursive;font-size:15.5px;color:var(--white-glove);line-height:1.25;margin-bottom:4px;}
+.wholesale-product-box-price{font-family:'Poppins',sans-serif;font-weight:800;font-size:14.5px;color:var(--gold);}
+.wholesale-flavor-hint{position:relative;z-index:1;display:block;font-size:12px;color:var(--ink-dim);margin:0 0 12px;}
+.wholesale-flavor-list{position:relative;z-index:1;max-height:44vh;overflow-y:auto;padding-right:2px;display:flex;flex-direction:column;gap:8px;}
+.wholesale-flavor-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;background:var(--bg-card);border:1px solid var(--line);border-radius:13px;transition:border-color .2s, background .2s;}
+.wholesale-flavor-row.selected{border-color:rgba(255,200,87,.5);background:rgba(255,200,87,.07);}
+.wholesale-flavor-row--oos{opacity:.55;}
+.wholesale-flavor-row-name{font-size:13px;font-weight:700;color:var(--white-glove);margin-bottom:4px;}
+
+.wholesale-qty{display:flex;align-items:center;background:var(--bg-card);border:1px solid var(--line);border-radius:11px;overflow:hidden;flex:none;}
+.wholesale-qty button{width:28px;height:28px;background:none;border:none;color:var(--white-glove);font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.wholesale-qty button:active{background:rgba(255,255,255,.06);}
+.wholesale-qty button:disabled{opacity:.3;pointer-events:none;}
+.wholesale-qty-val{width:32px;text-align:center;font-size:12.5px;font-weight:700;color:var(--white-glove);font-family:'Poppins',sans-serif;}
+
+.wholesale-flavor-add{position:relative;z-index:1;width:100%;margin-top:14px;padding:13px;border-radius:14px;border:1.5px solid var(--wholesale-grad-border);background:var(--wholesale-grad);color:var(--void);font-weight:700;font-size:13.5px;font-family:'Poppins',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s, color .2s, transform .15s;}
+.wholesale-flavor-add svg{width:16px;height:16px;flex:none;}
+.wholesale-flavor-add:active{transform:scale(.98);}
+.wholesale-flavor-add:disabled,.wholesale-flavor-add.disabled{background:rgba(255,255,255,.06);border-color:var(--line);color:var(--ink-dim);pointer-events:none;cursor:not-allowed;}
+.wholesale-flavor-add.just-added{background:linear-gradient(120deg, var(--green-thc), var(--green-thc-dim));border-color:rgba(62,207,110,.6);}
+
+/* Compact "empty" state (just a hint, no wasted height) that expands to the
+   full units/total/button layout only once there's at least one item. */
+.wholesale-cart-bar{position:relative;z-index:1;margin-top:14px;padding:11px 16px;border-radius:16px;background:linear-gradient(120deg, rgba(255,200,87,.16), rgba(255,145,48,.08));border:1px solid rgba(255,200,87,.35);}
+.wholesale-cart-bar-empty{margin:0;text-align:center;font-size:12px;color:var(--ink-dim);}
+.wholesale-cart-bar-filled{display:none;align-items:center;justify-content:space-between;gap:12px;}
+.wholesale-cart-bar.has-items{padding:13px 16px;}
+.wholesale-cart-bar.has-items .wholesale-cart-bar-empty{display:none;}
+.wholesale-cart-bar.has-items .wholesale-cart-bar-filled{display:flex;}
+.wholesale-cart-bar-info{font-size:12px;color:var(--ink-dim);}
+.wholesale-cart-bar-count{color:var(--white-glove);font-weight:700;}
+.wholesale-cart-bar-total{font-family:'Poppins',sans-serif;font-weight:800;font-size:16px;color:var(--gold);display:block;}
+.wholesale-cart-bar-btn{flex:none;display:flex;align-items:center;gap:6px;padding:10px 16px;border-radius:999px;border:1.5px solid var(--wholesale-grad-border);background:var(--wholesale-grad);color:var(--void);font-weight:700;font-size:12.5px;font-family:'Poppins',sans-serif;}
+.wholesale-cart-bar-btn svg{width:14px;height:14px;flex:none;}
+
+.wholesale-step{position:relative;z-index:1;}
+.wholesale-back{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:999px;color:var(--ink-dim);font-size:12px;font-weight:600;padding:8px 14px 8px 11px;white-space:nowrap;transition:background .2s, border-color .2s, color .2s, transform .15s;}
+.wholesale-back svg{width:14px;height:14px;flex:none;}
+.wholesale-back:hover{background:rgba(255,200,87,.1);border-color:rgba(255,200,87,.4);color:var(--white-glove);}
+.wholesale-back:active{transform:scale(.97);background:rgba(255,200,87,.16);}
+.wholesale-cart-list{max-height:34vh;overflow-y:auto;padding-right:2px;}
+.wholesale-cart-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:var(--bg-card);border:1px solid var(--line);border-radius:14px;margin-bottom:9px;}
+.wholesale-cart-item-name{font-size:13px;font-weight:700;color:var(--white-glove);}
+.wholesale-cart-item-meta{font-size:11px;color:var(--ink-dim);margin-top:2px;}
+.wholesale-cart-item-right{display:flex;align-items:center;gap:10px;flex:none;}
+.wholesale-cart-item-price{font-family:'Poppins',sans-serif;font-weight:800;font-size:13.5px;color:var(--gold);white-space:nowrap;}
+
+.wholesale-totals{margin-top:8px;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line);}
+.wholesale-totals-row{display:flex;align-items:center;justify-content:space-between;padding:4px 0;}
+.wholesale-totals-label{font-size:12px;color:var(--ink-dim);}
+/* ARS on top, USD below — both plain white, same size and weight. */
+.wholesale-totals-value{font-family:'Poppins',sans-serif;font-weight:700;font-size:19px;color:#fff;}
+.wholesale-totals-divider{border-top:1px solid var(--line);margin:8px 0;}
+
+.wholesale-checkout-btn{width:100%;margin-top:14px;padding:14px;border-radius:14px;border:1.5px solid var(--wholesale-grad-border);background:var(--wholesale-grad);color:var(--void);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;gap:9px;font-family:'Poppins',sans-serif;text-align:center;transition:background .2s, color .2s;}
+.wholesale-checkout-btn svg{width:17px;height:17px;flex:none;}
+.wholesale-checkout-btn.disabled{background:rgba(255,255,255,.06);border-color:var(--line);color:var(--ink-dim);pointer-events:none;cursor:not-allowed;}
+.wholesale-checkout-btn.disabled svg{display:none;}
+.wholesale-cart-empty{text-align:center;padding:36px 10px;color:var(--ink-dim);font-size:13px;line-height:1.6;}
 </style>
 </head>
 <body>
@@ -1955,6 +2310,20 @@ footer.site{
 
 <main>
   <div class="wrap">
+
+    <!-- MAYORISTA BANNER -->
+    <button class="wholesale-banner" id="wholesaleBannerBtn" type="button">
+      <span class="wholesale-banner-lock-badge">No disponible por el momento</span>
+      <span class="wholesale-banner-eyebrow">Para revendedores</span>
+      <div class="wholesale-banner-inner">
+        <div class="wholesale-banner-icon" aria-hidden="true">📦</div>
+        <h2 class="wholesale-banner-title">Catálogo Mayorista</h2>
+        <div class="wholesale-banner-cta">
+          Ver catálogo
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+    </button>
 
     <!-- SECTION 1: CATALOGO -->
     <section class="section catalog" id="catalog">
@@ -2280,6 +2649,131 @@ footer.site{
   </div>
 </div>
 
+<!-- MAYORISTA MODAL -->
+<div class="modal-overlay wholesale-overlay" id="wholesaleOverlay">
+  <div class="modal-sheet wholesale-sheet" id="wholesaleSheet">
+    <div class="wholesale-sheet-topbar">
+      <div class="wholesale-sheet-topbar-left">
+        <div class="currency-toggle" id="wholesaleCurrencyToggle" role="group" aria-label="Elegir moneda">
+          <button id="wCurrencyUsd" class="active" type="button">🇺🇸 USD</button>
+          <button id="wCurrencyArs" type="button">🇦🇷 ARS</button>
+        </div>
+        <button class="wholesale-back hidden" id="wholesaleFlavorBack" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Volver al catálogo
+        </button>
+        <button class="wholesale-back hidden" id="wholesaleBack" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Seguir viendo el catálogo
+        </button>
+      </div>
+      <button class="modal-close" id="wholesaleClose" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <!-- Vista catálogo: modelos de vape (igual que el catálogo minorista) -->
+    <div class="wholesale-step" id="wholesaleCatalogStep">
+      <div class="wholesale-toolbar">
+        <div class="wholesale-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg>
+          <input id="wholesaleSearchInput" type="text" placeholder="Buscá un modelo o sabor..." autocomplete="off">
+        </div>
+        <div class="view-toggle" role="group" aria-label="Cambiar vista">
+          <button id="wViewCarousel" class="active" aria-label="Vista carrusel: deslizar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="7" height="12" rx="1.5"/><rect x="15" y="6" width="7" height="12" rx="1.5"/><rect x="9.5" y="4" width="5" height="16" rx="1.5" opacity=".4"/></svg>
+          </button>
+          <button id="wViewGrid" aria-label="Vista grilla: cuadrados">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="wholesale-filters" role="group" aria-label="Ordenar catálogo mayorista">
+        <button class="wholesale-filter-chip" id="wFilterPopularBtn" type="button" aria-pressed="false">
+          <span class="wholesale-filter-chip-icon">🔥</span> Más pedidos
+        </button>
+        <button class="wholesale-filter-chip" id="wFilterPuffsBtn" type="button" aria-pressed="false">
+          <span class="wholesale-filter-chip-icon">💨</span> Más pitadas
+        </button>
+      </div>
+
+      <div class="wholesale-catalog" id="wholesaleCatalogWrap">
+        <div class="wholesale-carousel-wrap">
+          <button class="wholesale-arrow prev" id="wArrowPrev" aria-label="Anterior">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="wholesale-grid" id="wholesaleGrid"></div>
+          <button class="wholesale-arrow next" id="wArrowNext" aria-label="Siguiente">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <div class="wholesale-dots" id="wholesaleDots" role="tablist" aria-label="Posición en el catálogo mayorista"></div>
+      </div>
+    </div>
+
+    <!-- Vista sabores: al entrar a un modelo específico -->
+    <div class="wholesale-step hidden" id="wholesaleFlavorStep">
+      <div class="wholesale-product-box">
+        <div class="wholesale-product-box-glyph" id="wholesaleFlavorGlyph"></div>
+        <div class="wholesale-product-box-info">
+          <div class="wholesale-product-box-name" id="wholesaleFlavorModelName">—</div>
+          <div class="wholesale-product-box-price" id="wholesaleFlavorModelPrice"></div>
+        </div>
+      </div>
+      <p class="wholesale-flavor-hint">Elegí cantidad por sabor y agregalos todos juntos</p>
+      <div class="wholesale-flavor-list" id="wholesaleFlavorList"></div>
+      <button class="wholesale-flavor-add" id="wholesaleFlavorAddBtn" type="button" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1.4"/><circle cx="18" cy="21" r="1.4"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span id="wholesaleFlavorAddText">Elegí al menos un sabor</span>
+      </button>
+    </div>
+
+    <!-- carrito compacto, visible mientras se navega el catálogo o los sabores -->
+    <div class="wholesale-cart-bar" id="wholesaleCartBar">
+      <p class="wholesale-cart-bar-empty" id="wholesaleCartBarEmpty">Agregá productos para armar tu pedido mayorista</p>
+      <div class="wholesale-cart-bar-filled">
+        <div class="wholesale-cart-bar-info">
+          <span class="wholesale-cart-bar-count" id="wholesaleCartBarCount">0 unidades</span><br>
+          <span class="wholesale-cart-bar-total" id="wholesaleCartBarTotal">$0</span>
+        </div>
+        <button class="wholesale-cart-bar-btn" id="wholesaleCartBarBtn" type="button">
+          Ver carrito
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Vista carrito mayorista -->
+    <div class="wholesale-step hidden" id="wholesaleCartStep">
+      <h2 class="wholesale-title">Carrito mayorista ✈️</h2>
+
+      <div id="wholesaleCartEmpty" class="wholesale-cart-empty hidden">
+        Todavía no agregaste sabores.<br>Volvé al catálogo y elegí por cantidad. 📦
+      </div>
+
+      <div class="wholesale-cart-list" id="wholesaleCartList"></div>
+
+      <div class="wholesale-totals hidden" id="wholesaleTotals">
+        <div class="wholesale-totals-row">
+          <span class="wholesale-totals-label">Total en ARS (1 USD = $1.650)</span>
+          <span class="wholesale-totals-value" id="wholesaleTotalArs">$0</span>
+        </div>
+        <div class="wholesale-totals-divider"></div>
+        <div class="wholesale-totals-row">
+          <span class="wholesale-totals-label">Total en USD</span>
+          <span class="wholesale-totals-value" id="wholesaleTotalUsd">$0</span>
+        </div>
+      </div>
+
+      <button class="wholesale-checkout-btn" id="wholesaleCheckoutBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39c1.44.79 3.06 1.2 4.71 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.03c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.81-.11-.42-.13-.95-.31-1.64-.6-2.88-1.24-4.76-4.14-4.9-4.33-.14-.19-1.17-1.56-1.17-2.97 0-1.41.74-2.1 1-2.39.26-.29.57-.36.76-.36h.55c.18 0 .42-.03.65.5.24.56.8 1.94.87 2.08.07.14.12.31.02.5-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.26 1.64 2.04 1.13.99 2.07 1.31 2.36 1.46.29.15.46.13.63-.05.17-.19.72-.84.92-1.13.19-.29.39-.24.65-.14.27.1 1.7.8 1.99.95.29.15.48.22.55.34.07.13.07.72-.17 1.4z"/></svg>
+        <span id="wholesaleCheckoutText">Enviar pedido por WhatsApp</span>
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- CART FLOATING BUTTON (top-left) -->
 <button class="cart-fab" id="cartFab" aria-label="Ver carrito">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1.4"/><circle cx="18" cy="21" r="1.4"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -2333,11 +2827,16 @@ const ACCENTS = [
 
 const CATALOG = [
   {name:'ELFBAR ICE KING', price:26000, puffs:40000, photo:'ice_king', flavors:[
-    {name:'Green Apple Ice 🍏', stock:1},{name:'Miami Mint 🌴', stock:2},{name:'Sour Apple Ice 🍏', stock:1}
+    {name:'Baja Splash 🌊', stock:1},{name:'Blue Razz Ice 🫐', stock:3},{name:'Blueberry Ice 🫐', stock:2},
+    {name:'Bubaloo Tutti Fruit 🍬', stock:2},{name:'Cherry Fuse 🍒', stock:1},{name:'Cherry Strazz 🍒', stock:1},
+    {name:'Dragon Strawnana 🐉', stock:2},{name:'Grape Ice 🍇', stock:2},{name:'Mango Magic 🥭', stock:2},
+    {name:'Miami Mint 🌴', stock:1},{name:'Peach Mango Water 🍑', stock:1},{name:'Sour Apple Ice 🍏', stock:1},
+    {name:'Sour Straw Dragon 🍓', stock:2},{name:'Strawberry Ice 🍓', stock:2},{name:'Strawberry Watermelon 🍓🍉', stock:2},
+    {name:'Tigers Blood 🐯', stock:1},{name:'Watermelon Ice 🍉', stock:2}
   ]},
   {name:'ELFBAR SWEET KING', price:26500, puffs:40000, photo:'sweet_king', outOfStock:true, flavors:[]},
-  {name:'ELFBAR DUKE', price:24500, puffs:35000, photo:'duke', flavors:[
-    {name:'Grape Ice 🍇', stock:1},{name:'Icy Mint 🌿', stock:1},{name:'Watermelon Lemon Ice 🍉🍋', stock:2}
+  {name:'ELFBAR DUKE', price:25000, puffs:35000, photo:'duke', flavors:[
+    {name:'Watermelon Lemon Ice 🍉🍋', stock:2},{name:'Grape Ice 🍇', stock:1},{name:'Icy Mint 🌿', stock:1}
   ]},
   {name:'ELFBAR BC', price:21000, puffs:15000, photo:'bc', flavors:[
     {name:'Miami Mint 🌴', stock:1},{name:'Watermelon Ice 🍉', stock:1}
@@ -2345,34 +2844,45 @@ const CATALOG = [
   {name:'EBCREATE BC PRO', price:25000, puffs:40000, photo:'ebcreate', flavors:[
     {name:'Black Mint 🌿', stock:1}
   ]},
-  {name:'IGNITE V500', price:32000, puffs:50000, photo:'v500', outOfStock:true, flavors:[]},
+  {name:'IGNITE V500', price:32000, puffs:50000, photo:'v500', flavors:[
+    {name:'Banana Cherry 🍌🍒', stock:1},{name:'Green Apple 🍏', stock:1},{name:'Green Apple Peach Kiwi 🍏🍑🥝', stock:1},
+    {name:'Mango Passionfruit 🥭', stock:2},{name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:2},{name:'Strawberry Banana 🍓🍌', stock:1},
+    {name:'Strawberry Ice 🍓', stock:2},{name:'Strawberry Kiwi 🍓🥝', stock:2},{name:'Watermelon Kiwi 🍉🥝', stock:1},
+    {name:'Watermelon Mix 🍉', stock:2}
+  ]},
   {name:'IGNITE V400 ICE', price:30000, puffs:40000, photo:'v400', flavors:[
-    {name:'Strawberry Watermelon 🍓🍉', stock:1},{name:'Grape Mix 🍇', stock:1},{name:'Grape 🍇', stock:1}
+    {name:'Grape Mix 🍇', stock:1},{name:'Grape 🍇', stock:1},{name:'Strawberry Watermelon 🍓🍉', stock:1}
   ]},
-  {name:'IGNITE V300 ULTRA SLIM', price:27500, puffs:30000, photo:'v300', flavors:[
-    {name:'Banana Coconut Water 🍌🥥', stock:1},{name:'Blueberry Ice 🫐', stock:1},{name:'Pineapple Ice 🍍', stock:1}
+  {name:'IGNITE V300 ULTRA SLIM', price:26000, puffs:30000, photo:'v300', flavors:[
+    {name:'Pineapple Ice 🍍', stock:1},{name:'Banana Coconut Water 🍌🥥', stock:1},{name:'Blueberry Ice 🫐', stock:1}
   ]},
-  {name:'IGNITE V250', price:23000, puffs:25000, photo:'v250', photoScale:1.18, flavors:[
+  {name:'IGNITE V250', price:24500, puffs:25000, photo:'v250', photoScale:1.18, flavors:[
     {name:'Menthol ❄️', stock:1}
   ]},
-  {name:'BLACKSHEEP 40K', price:29500, puffs:40000, photo:'blacksheep', flavors:[
-    {name:'Grape + Grape Mango 🍇🥭', stock:1},{name:'Passion Fruit + Watermelon Strawberry 🥭🍉🍓', stock:1},
-    {name:'Strawberry Kiwi + Fresh Mint 🍓🥝🌿', stock:1},{name:'Grape + Energy Drink 🍇⚡', stock:1},
-    {name:'Blueberry Bubble + Sour Green Apple 🫐🍬🍏', stock:2},{name:'Grape + Menthol 🍇❄️', stock:1}
+  {name:'BLACKSHEEP 40K', price:29000, puffs:40000, photo:'blacksheep', flavors:[
+    {name:'Passion Fruit + Watermelon Strawberry 🥭🍉🍓', stock:1},{name:'Grape + Menthol 🍇❄️', stock:1},
+    {name:'Grape + Grape Mango 🍇🥭', stock:1},{name:'Strawberry Kiwi + Fresh Mint 🍓🥝🌿', stock:1},
+    {name:'Blueberry Bubble + Sour Green Apple 🫐🍬🍏', stock:2}
   ]},
-  {name:'BLACKSHEEP ICE 40K', price:31000, puffs:40000, photo:'blacksheep_ice', flavors:[
-    {name:'Kiwi Grape Starfruit + Acai Strawberry Banana 🥝🍇🫐🍓🍌', stock:1}
+  {name:'BLACKSHEEP ICE 40K', price:29000, puffs:40000, photo:'blacksheep_ice', flavors:[
+    {name:'Kiwi Grape Starfruit + Acai Straw Banana 🥝🍇⭐🍓🍌', stock:1}
   ]},
-  {name:'NIKBAR 10K', price:20000, puffs:10000, photo:'nikbar10', photoScale:1.18, flavors:[
+  {name:'NIKBAR 10K', price:19000, puffs:10000, photo:'nikbar10', photoScale:1.18, flavors:[
     {name:'Watermelon Bubble Gum 🍉🍬', stock:1}
   ]},
-  {name:'IGNITE V150', price:24000, puffs:15000, photo:'v150', flavors:[
+  {name:'IGNITE V150', price:22000, puffs:15000, photo:'v150', flavors:[
     {name:'Pineapple Ice 🍍', stock:1}
   ]},
   {name:'BLVK JUST JUICE', price:26500, puffs:45000, photo:'blvk', outOfStock:true, flavors:[]},
-  {name:'ELFBAR TRIO', price:26000, puffs:40000, photo:'trio', outOfStock:true, flavors:[]},
+  {name:'ELFBAR TRIO', price:27000, puffs:40000, photo:'trio', flavors:[
+    {name:'Blue Razz Ice 🫐', stock:1},{name:'Blueberry Pom Slushy 🫐', stock:1},{name:'Sour Strawberry Dragon 🍓', stock:1},
+    {name:'Watermelon Ice 🍉', stock:1},{name:'Raspberry Watermelon 🍓🍉', stock:1}
+  ]},
   {name:'NIKBAR 30K', price:22500, puffs:30000, photo:'nikbar30', outOfStock:true, flavors:[]},
-  {name:'IGNITE VMIX', price:30000, originalPrice:32000, puffs:40000, photo:'vmix', outOfStock:true, flavors:[]},
+  {name:'IGNITE VMIX', price:30000, originalPrice:32000, puffs:40000, photo:'vmix', flavors:[
+    {name:'Grape Ice + Strawberry 🍇🍓', stock:2},{name:'Icy Mint + Peach Grape 🌿🍑🍇', stock:1},
+    {name:'Orange Ice + Strawb Ice 🍊🍓', stock:1},{name:'Aloe Grape + Straw Watermelon 🌿🍇🍓🍉', stock:2}
+  ]},
   {name:'HOOKALIT', price:24000, puffs:40000, photo:'hookalit', outOfStock:true, flavors:[]},
   {name:'AirPods', price:25000, photo:'airpods', category:'apple', variantWord:'modelo', variantWordPlural:'modelos',
     description:'Auriculares inalámbricos con estuche de carga, Bluetooth estable y compatibilidad con Find My.',
@@ -2390,7 +2900,7 @@ const CATALOG = [
    que no figuran acá (p.ej. sin stock suficiente para tener un lugar fijo)
    quedan relegados al final de ese orden. */
 const POPULARITY_ORDER = [
-  'ELFBAR ICE KING', 'IGNITE V500', 'ELFBAR DUKE', 'BLACKSHEEP 40K',
+  'ELFBAR ICE KING', 'IGNITE VMIX', 'ELFBAR TRIO', 'IGNITE V500', 'ELFBAR DUKE', 'BLACKSHEEP 40K',
   'EBCREATE BC PRO', 'IGNITE V400 ICE', 'BLACKSHEEP ICE 40K', 'ELFBAR BC',
   'IGNITE V300 ULTRA SLIM', 'IGNITE V150', 'NIKBAR 10K'
 ];
@@ -2559,7 +3069,7 @@ function productCardHTML(p, i, badgeText, showPuffs){
 
   return `
     <div class="p-card${oos ? ' p-card--oos' : ''}" data-index="${i}" style="--accent:${acc.main};--accent-fade:${acc.fade};--accent-shadow:${acc.shadow}">
-      ${oos ? '<div class="p-badge p-badge--oos">Sin stock</div>' : (badgeText ? `<div class="p-badge">${badgeText}</div>` : '')}
+      ${oos ? '<div class="p-badge p-badge--oos">Sin stock</div>' : (badgeText ? `<div class="p-badge${badgeText === 'Más pedido' ? ' p-badge--popular' : ''}">${badgeText}</div>` : '')}
       ${showPuffs ? `<div class="p-puffs">${formatPuffs(p.puffs)}</div>` : ''}
       <div class="p-glyph">${productGlyphHTML(p)}</div>
       <div class="p-name-row">
@@ -3177,7 +3687,7 @@ const THC_PRODUCTS = [
     photo:'phenom',
     grams:'6g (6000mg)',
     description:'Vaporizador descartable y recargable (USB-C) de la línea Phenom Miami. Blend de extractos pensado para una experiencia relajante y prolongada.',
-    flavors:['Gold 24k 🪙', 'Ice Cream Cake 🍦🍪', 'Vainilla 🌼']
+    flavors:['24k Gold 🪙', 'Vanilla 🌼', 'Ice Cream Cake 🍦🍪']
   },
   {
     key:'shroomz',
@@ -3187,7 +3697,7 @@ const THC_PRODUCTS = [
     photoScale:1.15,
     grams:'8g (8000mg)',
     description:'Vaporizador recargable (USB-C) con blend de extracto de hongos, en variedades Indica, Sativa e Híbrida para elegir el efecto que buscás.',
-    flavors:['Watermelon 🍉 (Indica)', 'Sour Diesel 🍋🌿 (Hybrid)', 'Skunk OG 🌲 (Sativa)']
+    flavors:['Sour Diesel 🍋🌿 (Hybrid)', 'Skunk OG 🌲 (Sativa)', 'Watermelon 🍉 (Indica)', 'Pineapple Express 🍍', 'Lemon Haze 🍋']
   }
 ];
 const THC_ACCENT = {main:'#3ecf6e', fade:'rgba(62,207,110,.28)', shadow:'rgba(62,207,110,.35)'};
@@ -3534,11 +4044,527 @@ function initIntro(){
   setTimeout(dismissIntro, 1000);
 }
 
+/* ================= MAYORISTA (WHOLESALE) ================= */
+
+/* 🔒 BLOQUEO TEMPORAL — cambiar a false para reactivar todo el catálogo
+   mayorista (banner, modal, carrito) tal cual estaba. Es el único cambio
+   necesario: no hay que tocar ningún otro archivo ni deshacer estilos. */
+const WHOLESALE_LOCKED = true;
+
+/* Cotización manual: actualizala acá cuando cambie el precio que
+   nos acepta el revendedor. Todo el catálogo mayorista se calcula
+   en USD a partir de este valor. */
+const USD_TO_ARS = 1650;
+
+/* Modelos y sabores mayoristas — PLACEHOLDER de ejemplo (mismos modelos que
+   el catálogo minorista, a precio de reventa por bulto). Reemplazá esta
+   lista todos los días con los datos del Excel: cada modelo tiene un precio
+   mayorista único por unidad (en USD) y su lista de sabores con el stock
+   disponible de cada uno. No hay mínimo por sabor — el mínimo se exige
+   sobre el total del pedido (ver WHOLESALE_MIN_UNITS más abajo).
+   Cuando llegue el catálogo real de vaporizadores para reventa, esta
+   lista pasa a alimentarse desde ahí (fotos incluidas — ver wholesalePlaceholderGlyphHTML). */
+const WHOLESALE_CATALOG = [
+  {name:'ELFBAR ICE KING', price:3.4, flavors:[
+    {name:'Green Apple Ice 🍏', stock:60},
+    {name:'Miami Mint 🌴', stock:45},
+    {name:'Watermelon Ice 🍉', stock:40},
+    {name:'Menthol ❄️', stock:55},
+  ]},
+  {name:'ELFBAR DUKE', price:3.2, flavors:[
+    {name:'Sour Apple Ice 🍏', stock:30},
+    {name:'Grape Ice 🍇', stock:50},
+    {name:'Blueberry Ice 🫐', stock:27},
+  ]},
+  {name:'IGNITE V400 ICE', price:3.6, flavors:[
+    {name:'Icy Mint 🌿', stock:38},
+    {name:'Watermelon Lemon Ice 🍉🍋', stock:24},
+    {name:'Black Mint 🌿', stock:20},
+  ]},
+  {name:'IGNITE V500', price:3.9, flavors:[
+    {name:'Strawberry Watermelon 🍓🍉', stock:33},
+    {name:'Pineapple Ice 🍍', stock:22},
+    {name:'Grape + Grape Mango 🍇🥭', stock:15},
+    {name:'Watermelon Bubble Gum 🍉🍬', stock:12},
+  ]},
+  {name:'BLACKSHEEP 40K', price:3.5, flavors:[
+    {name:'Banana Coconut Water 🍌🥥', stock:18},
+    {name:'Grape Mix 🍇', stock:0},
+  ]},
+];
+const WHOLESALE_MIN_UNITS = 10;
+const WHOLESALE_WHATSAPP_NUMBER = '5491151244554'; // Fran — socio encargado de mayorista
+
+let wholesaleCart = []; // {model, flavor, qty, price}
+let wholesaleCurrency = 'USD'; // 'USD' | 'ARS' — moneda activa al recorrer el catálogo
+let wholesaleActiveModel = null; // modelo abierto actualmente en la vista de sabores
+const wholesaleFlavorQtyState = {}; // "modelo|sabor" -> cantidad elegida en el stepper (antes de agregar), se resetea a 0 después de agregar
+
+const wholesaleOverlay = document.getElementById('wholesaleOverlay');
+const wholesaleSheet = document.getElementById('wholesaleSheet');
+const wholesaleCurrencyToggleEl = document.getElementById('wholesaleCurrencyToggle');
+const wholesaleCatalogStep = document.getElementById('wholesaleCatalogStep');
+const wholesaleFlavorStep = document.getElementById('wholesaleFlavorStep');
+const wholesaleCartStep = document.getElementById('wholesaleCartStep');
+const wholesaleGrid = document.getElementById('wholesaleGrid');
+const wholesaleSearchInput = document.getElementById('wholesaleSearchInput');
+const wholesaleCartBar = document.getElementById('wholesaleCartBar');
+const wholesaleCartBarCount = document.getElementById('wholesaleCartBarCount');
+const wholesaleCartBarTotal = document.getElementById('wholesaleCartBarTotal');
+const wholesaleCartList = document.getElementById('wholesaleCartList');
+const wholesaleCartEmpty = document.getElementById('wholesaleCartEmpty');
+const wholesaleTotals = document.getElementById('wholesaleTotals');
+const wholesaleTotalUsd = document.getElementById('wholesaleTotalUsd');
+const wholesaleTotalArs = document.getElementById('wholesaleTotalArs');
+const wCurrencyUsd = document.getElementById('wCurrencyUsd');
+const wCurrencyArs = document.getElementById('wCurrencyArs');
+const wholesaleDotsEl = document.getElementById('wholesaleDots');
+const wholesaleCheckoutBtn = document.getElementById('wholesaleCheckoutBtn');
+const wholesaleCheckoutText = document.getElementById('wholesaleCheckoutText');
+const wholesaleFlavorList = document.getElementById('wholesaleFlavorList');
+const wholesaleFlavorModelName = document.getElementById('wholesaleFlavorModelName');
+const wholesaleFlavorModelPrice = document.getElementById('wholesaleFlavorModelPrice');
+const wholesaleFlavorGlyph = document.getElementById('wholesaleFlavorGlyph');
+const wholesaleFlavorAddBtn = document.getElementById('wholesaleFlavorAddBtn');
+const wholesaleFlavorAddText = document.getElementById('wholesaleFlavorAddText');
+const wholesaleFlavorBackBtn = document.getElementById('wholesaleFlavorBack');
+const wholesaleCartBackBtn = document.getElementById('wholesaleBack');
+
+/* Left slot of the persistent topbar shows one of three things depending on
+   the active step: the currency toggle (catalog), or a "back" button (flavor
+   / cart) — never more than one at once. */
+function setWholesaleTopbarMode(mode){
+  wholesaleCurrencyToggleEl.classList.toggle('hidden', mode !== 'catalog');
+  wholesaleFlavorBackBtn.classList.toggle('hidden', mode !== 'flavor');
+  wholesaleCartBackBtn.classList.toggle('hidden', mode !== 'cart');
+}
+
+function formatUsd(n){
+  return '$' + n.toLocaleString('en-US', {minimumFractionDigits: (n % 1 === 0) ? 0 : 2, maximumFractionDigits:2});
+}
+function formatArs(n){ return '$' + Math.round(n).toLocaleString('es-AR'); }
+/* Precio de un sabor en la moneda activa del catálogo mayorista. */
+function formatWholesaleAmount(usd){
+  return wholesaleCurrency === 'USD' ? formatUsd(usd) + ' USD' : formatArs(usd * USD_TO_ARS);
+}
+function wholesaleFlavorIsOutOfStock(f){ return !f.stock || f.stock <= 0; }
+function wholesaleModelIsOutOfStock(m){ return !m.flavors.length || m.flavors.every(wholesaleFlavorIsOutOfStock); }
+function wholesaleFlavorKey(modelName, flavorName){ return modelName + '|' + flavorName; }
+
+/* Same status logic as stockDotColor (retail), but swaps the "healthy stock"
+   blue for gold so the dot never breaks the wholesale orange identity. */
+function wholesaleStockDotColor(stock){
+  if(stock === 1) return '#e8433a';
+  if(stock <= 3) return '#ff9130';
+  return '#ffc857';
+}
+
+/* Generic vape-shaped icon used everywhere a product photo isn't loaded yet
+   (carousel cards, the flavor-screen product box). Same footprint a real
+   photo will occupy, so wiring one in later is a straight swap. */
+function wholesaleVapeIconSVG(){
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="8" y="2.5" width="8" height="5" rx="1.5"/><rect x="6.5" y="7" width="11" height="14" rx="3.5"/><path d="M9 12h6M9 15.5h6" stroke-linecap="round"/></svg>`;
+}
+function wholesalePlaceholderGlyphHTML(){
+  return `<div class="wholesale-placeholder" aria-hidden="true">${wholesaleVapeIconSVG()}</div>`;
+}
+
+function renderWholesaleGrid(){
+  const query = normalize(wholesaleSearchInput.value.trim());
+  const list = query ? WHOLESALE_CATALOG.filter(m =>
+    normalize(m.name).includes(query) || m.flavors.some(f => normalize(f.name).includes(query))
+  ) : WHOLESALE_CATALOG;
+
+  if(list.length === 0){
+    wholesaleGrid.innerHTML = '<div class="wholesale-empty-search">No encontramos ese modelo o sabor. Probá con otro nombre ✨</div>';
+    renderWholesaleDots(0);
+    return;
+  }
+
+  let cardCount = 0;
+  const cardsHTML = list.map(m=>{
+    const oos = wholesaleModelIsOutOfStock(m);
+    const totalStock = m.flavors.reduce((s,f)=> s + (f.stock||0), 0);
+    const badgeHTML = (!query && !oos && cardCount === 0) ? '<div class="wholesale-card-badge">Más pedido</div>' : '';
+    cardCount++;
+    return `
+    <div class="wholesale-card${oos ? ' wholesale-card--oos' : ''}" data-model="${m.name}">
+      ${oos ? '<div class="wholesale-card-oos-tag">Sin stock</div>' : badgeHTML}
+      <div class="wholesale-card-glyph">${wholesalePlaceholderGlyphHTML()}</div>
+      <div class="wholesale-card-name-row">
+        <div class="wholesale-card-name">${m.name}</div>
+        <div class="wholesale-card-price">${formatWholesaleAmount(m.price)}</div>
+      </div>
+      <div class="wholesale-card-meta">
+        <span class="stock-badge"><span class="stock-dot" style="background:${wholesaleStockDotColor(totalStock)}"></span>${oos ? 'Sin stock' : m.flavors.length + ' sabores · ' + totalStock + ' u.'}</span>
+      </div>
+      <div class="wholesale-card-cta">
+        <span>${oos ? 'Ver más' : 'Ver sabores'}</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>`;
+  }).join('');
+
+  wholesaleGrid.innerHTML = '<div class="wholesale-carousel-spacer" aria-hidden="true"></div>' +
+    cardsHTML +
+    '<div class="wholesale-carousel-spacer" aria-hidden="true"></div>';
+
+  wireWholesaleCards();
+  renderWholesaleDots(cardCount);
+  requestAnimationFrame(()=> updateWholesaleActiveDot());
+}
+
+/* ---- carousel pagination dots + arrows (mirrors the retail carousel's
+   renderCarouselDots/updateActiveDot, kept as dedicated wholesale functions
+   since those target the retail-only .p-card selector). ---- */
+function renderWholesaleDots(count){
+  wholesaleDotsEl.innerHTML = Array.from({length: count}, (_, i) =>
+    `<span class="dot${i===0 ? ' active' : ''}" data-i="${i}"></span>`
+  ).join('');
+  wholesaleDotsEl.querySelectorAll('.dot').forEach(dot => {
+    dot.addEventListener('click', () => {
+      const card = wholesaleGrid.querySelectorAll('.wholesale-card')[parseInt(dot.dataset.i)];
+      if(card) card.scrollIntoView({inline:'center', block:'nearest', behavior:'smooth'});
+    });
+  });
+}
+function updateWholesaleActiveDot(){
+  const cards = wholesaleGrid.querySelectorAll('.wholesale-card');
+  const dots = wholesaleDotsEl.querySelectorAll('.dot');
+  if(!cards.length || !dots.length) return;
+  const center = wholesaleGrid.scrollLeft + wholesaleGrid.clientWidth / 2;
+  let closest = 0, min = Infinity;
+  cards.forEach((c, i) => {
+    const mid = c.offsetLeft + c.offsetWidth / 2;
+    const d = Math.abs(mid - center);
+    if(d < min){ min = d; closest = i; }
+  });
+  dots.forEach((d, i) => d.classList.toggle('active', i === closest));
+}
+wholesaleGrid.addEventListener('scroll', ()=> updateWholesaleActiveDot(), {passive:true});
+document.getElementById('wArrowPrev').addEventListener('click', ()=>{
+  const card = wholesaleGrid.querySelector('.wholesale-card');
+  const w = card ? card.getBoundingClientRect().width + 12 : 300;
+  wholesaleGrid.scrollBy({left:-w, behavior:'smooth'});
+});
+document.getElementById('wArrowNext').addEventListener('click', ()=>{
+  const card = wholesaleGrid.querySelector('.wholesale-card');
+  const w = card ? card.getBoundingClientRect().width + 12 : 300;
+  wholesaleGrid.scrollBy({left:w, behavior:'smooth'});
+});
+
+/* ---- "Más pedidos" / "Más pitadas" pills — visual selection only for now,
+   real sort logic comes later. ---- */
+const wholesaleFilterChips = [document.getElementById('wFilterPopularBtn'), document.getElementById('wFilterPuffsBtn')];
+wholesaleFilterChips.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const wasActive = btn.classList.contains('active');
+    wholesaleFilterChips.forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+    if(!wasActive){ btn.classList.add('active'); btn.setAttribute('aria-pressed','true'); }
+  });
+});
+
+function wireWholesaleCards(){
+  wholesaleGrid.querySelectorAll('.wholesale-card').forEach(card=>{
+    const modelName = card.dataset.model;
+    const m = WHOLESALE_CATALOG.find(x => x.name === modelName);
+    if(!m) return;
+    card.addEventListener('click', ()=> openWholesaleFlavorStep(m));
+  });
+}
+
+/* ---- vista sabores: se entra desde un modelo del carrusel principal ---- */
+function openWholesaleFlavorStep(model){
+  wholesaleActiveModel = model;
+  wholesaleFlavorModelName.textContent = model.name;
+  wholesaleFlavorModelPrice.textContent = formatWholesaleAmount(model.price) + ' / u.';
+  wholesaleFlavorGlyph.innerHTML = wholesaleVapeIconSVG();
+  renderWholesaleFlavorList();
+  setWholesaleTopbarMode('flavor');
+  wholesaleCatalogStep.classList.add('hidden');
+  wholesaleFlavorStep.classList.remove('hidden');
+  wholesaleCartStep.classList.add('hidden');
+  updateWholesaleCartBar();
+  wholesaleSheet.scrollTop = 0;
+}
+
+function renderWholesaleFlavorList(){
+  const m = wholesaleActiveModel;
+  wholesaleFlavorList.innerHTML = m.flavors.map(f=>{
+    const oos = wholesaleFlavorIsOutOfStock(f);
+    const key = wholesaleFlavorKey(m.name, f.name);
+    const qty = oos ? 0 : Math.min(wholesaleFlavorQtyState[key] || 0, f.stock);
+    wholesaleFlavorQtyState[key] = qty;
+    return `
+    <div class="wholesale-flavor-row${oos ? ' wholesale-flavor-row--oos' : ''}${qty > 0 ? ' selected' : ''}" data-flavor="${f.name}">
+      <div class="wholesale-flavor-row-info">
+        <div class="wholesale-flavor-row-name">${f.name}</div>
+        <span class="stock-badge"><span class="stock-dot" style="background:${wholesaleStockDotColor(f.stock)}"></span>${oos ? 'Sin stock' : f.stock + ' disponibles'}</span>
+      </div>
+      ${oos ? '<span class="wholesale-card-oos-tag" style="position:static;">Sin stock</span>' : `
+      <div class="wholesale-qty">
+        <button type="button" class="wf-qty-minus" aria-label="Restar" ${qty <= 0 ? 'disabled' : ''}>−</button>
+        <span class="wholesale-qty-val wf-qty-val">${qty}</span>
+        <button type="button" class="wf-qty-plus" aria-label="Sumar" ${qty >= f.stock ? 'disabled' : ''}>+</button>
+      </div>`}
+    </div>`;
+  }).join('');
+
+  wireWholesaleFlavorRows();
+  updateWholesaleFlavorAddState();
+}
+
+function wireWholesaleFlavorRows(){
+  const m = wholesaleActiveModel;
+  wholesaleFlavorList.querySelectorAll('.wholesale-flavor-row').forEach(row=>{
+    const flavorName = row.dataset.flavor;
+    const f = m.flavors.find(x => x.name === flavorName);
+    if(!f || wholesaleFlavorIsOutOfStock(f)) return;
+    const key = wholesaleFlavorKey(m.name, f.name);
+    const valEl = row.querySelector('.wf-qty-val');
+    const minusBtn = row.querySelector('.wf-qty-minus');
+    const plusBtn = row.querySelector('.wf-qty-plus');
+
+    minusBtn.addEventListener('click', ()=>{
+      const q = Math.max(0, (wholesaleFlavorQtyState[key] || 0) - 1);
+      wholesaleFlavorQtyState[key] = q;
+      valEl.textContent = q;
+      minusBtn.disabled = q <= 0;
+      plusBtn.disabled = q >= f.stock;
+      row.classList.toggle('selected', q > 0);
+      updateWholesaleFlavorAddState();
+    });
+    plusBtn.addEventListener('click', ()=>{
+      const q = Math.min(f.stock, (wholesaleFlavorQtyState[key] || 0) + 1);
+      wholesaleFlavorQtyState[key] = q;
+      valEl.textContent = q;
+      plusBtn.disabled = q >= f.stock;
+      minusBtn.disabled = q <= 0;
+      row.classList.toggle('selected', q > 0);
+      updateWholesaleFlavorAddState();
+    });
+  });
+}
+
+/* Habilita el botón único "Agregar" apenas hay al menos un sabor con
+   cantidad > 0 (se llama después de cada click en +/-, así el texto y el
+   estado habilitado se actualizan en el momento). */
+function updateWholesaleFlavorAddState(){
+  const m = wholesaleActiveModel;
+  if(!m) return;
+  const hasSelection = m.flavors.some(f => (wholesaleFlavorQtyState[wholesaleFlavorKey(m.name, f.name)] || 0) > 0);
+  wholesaleFlavorAddBtn.disabled = !hasSelection;
+  wholesaleFlavorAddBtn.classList.toggle('disabled', !hasSelection);
+  wholesaleFlavorAddText.textContent = hasSelection ? 'Agregar al carrito' : 'Elegí al menos un sabor';
+}
+
+wholesaleFlavorAddBtn.addEventListener('click', ()=>{
+  const m = wholesaleActiveModel;
+  if(!m) return;
+  const selected = m.flavors.filter(f => (wholesaleFlavorQtyState[wholesaleFlavorKey(m.name, f.name)] || 0) > 0);
+  if(selected.length === 0) return;
+  selected.forEach(f=>{
+    const key = wholesaleFlavorKey(m.name, f.name);
+    addToWholesaleCart(m, f, wholesaleFlavorQtyState[key]);
+    wholesaleFlavorQtyState[key] = 0;
+  });
+  updateWholesaleCartBar();
+  updateWholesaleCheckoutState();
+  renderWholesaleFlavorList();
+  flashAddedState(wholesaleFlavorAddBtn);
+});
+
+wholesaleFlavorBackBtn.addEventListener('click', ()=>{
+  wholesaleFlavorStep.classList.add('hidden');
+  wholesaleCatalogStep.classList.remove('hidden');
+  setWholesaleTopbarMode('catalog');
+  updateWholesaleCartBar();
+});
+
+function addToWholesaleCart(model, flavor, qty){
+  const existing = wholesaleCart.find(i => i.model === model.name && i.flavor === flavor.name);
+  if(existing){
+    existing.qty = Math.min(flavor.stock, existing.qty + qty);
+  } else {
+    wholesaleCart.push({model:model.name, flavor:flavor.name, qty:Math.min(flavor.stock, qty), price:model.price});
+  }
+}
+
+function wholesaleCartTotalUsd(){ return wholesaleCart.reduce((s,i)=> s + i.qty * i.price, 0); }
+function wholesaleCartCount(){ return wholesaleCart.reduce((s,i)=> s + i.qty, 0); }
+
+/* Barra compacta: sin ítems muestra sólo el texto de aliento (altura mínima);
+   con al menos un ítem se expande al bloque de unidades/total/botón. Se
+   oculta del todo mientras se está viendo el carrito completo (wholesaleCartStep). */
+function updateWholesaleCartBar(){
+  const count = wholesaleCartCount();
+  const onCartStep = !wholesaleCartStep.classList.contains('hidden');
+  wholesaleCartBar.classList.toggle('hidden', onCartStep);
+  wholesaleCartBar.classList.toggle('has-items', count > 0);
+  if(count > 0){
+    wholesaleCartBarCount.textContent = count + (count === 1 ? ' unidad' : ' unidades');
+    wholesaleCartBarTotal.textContent = formatWholesaleAmount(wholesaleCartTotalUsd());
+  }
+}
+
+function renderWholesaleCart(){
+  const hasItems = wholesaleCart.length > 0;
+  wholesaleCartEmpty.classList.toggle('hidden', hasItems);
+  wholesaleTotals.classList.toggle('hidden', !hasItems);
+
+  wholesaleCartList.innerHTML = wholesaleCart.map((item, idx)=>{
+    const subtotal = item.qty * item.price;
+    return `
+    <div class="wholesale-cart-item">
+      <div>
+        <div class="wholesale-cart-item-name">${item.model}</div>
+        <div class="wholesale-cart-item-meta">${item.flavor} · ${item.qty} u. × ${formatWholesaleAmount(item.price)}</div>
+      </div>
+      <div class="wholesale-cart-item-right">
+        <span class="wholesale-cart-item-price">${formatWholesaleAmount(subtotal)}</span>
+        <button class="cart-item-remove" data-idx="${idx}" aria-label="Quitar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+
+  wholesaleCartList.querySelectorAll('.cart-item-remove').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      wholesaleCart.splice(parseInt(btn.dataset.idx), 1);
+      renderWholesaleCart();
+      updateWholesaleCartBar();
+    });
+  });
+
+  const totalUsd = wholesaleCartTotalUsd();
+  wholesaleTotalUsd.textContent = formatUsd(totalUsd) + ' USD';
+  wholesaleTotalArs.textContent = formatArs(totalUsd * USD_TO_ARS);
+  updateWholesaleCheckoutState();
+}
+
+/* Pedido mínimo por TOTAL de unidades (no por producto individual): el botón
+   de checkout se deshabilita y muestra cuánto falta hasta llegar a
+   WHOLESALE_MIN_UNITS, actualizándose cada vez que el carrito cambia
+   (agregar, quitar, sumar/restar cantidad). */
+function updateWholesaleCheckoutState(){
+  const count = wholesaleCartCount();
+  const missing = WHOLESALE_MIN_UNITS - count;
+  if(missing > 0){
+    wholesaleCheckoutBtn.classList.add('disabled');
+    wholesaleCheckoutBtn.setAttribute('aria-disabled', 'true');
+    wholesaleCheckoutText.textContent = `Sumá ${missing} u. más para completar el pedido mínimo (${WHOLESALE_MIN_UNITS} u.)`;
+  } else {
+    wholesaleCheckoutBtn.classList.remove('disabled');
+    wholesaleCheckoutBtn.removeAttribute('aria-disabled');
+    wholesaleCheckoutText.textContent = 'Enviar pedido por WhatsApp';
+  }
+}
+
+function setWholesaleCurrency(cur){
+  wholesaleCurrency = cur;
+  wCurrencyUsd.classList.toggle('active', cur === 'USD');
+  wCurrencyArs.classList.toggle('active', cur === 'ARS');
+  renderWholesaleGrid();
+  renderWholesaleCart();
+  updateWholesaleCartBar();
+  if(wholesaleActiveModel){
+    wholesaleFlavorModelPrice.textContent = formatWholesaleAmount(wholesaleActiveModel.price) + ' / u.';
+  }
+}
+wCurrencyUsd.addEventListener('click', ()=> setWholesaleCurrency('USD'));
+wCurrencyArs.addEventListener('click', ()=> setWholesaleCurrency('ARS'));
+
+/* Vista carrusel (deslizable) / grilla (cuadrícula) — mismo patrón que el catálogo principal. */
+const wholesaleCatalogWrap = document.getElementById('wholesaleCatalogWrap');
+const wBtnCarousel = document.getElementById('wViewCarousel');
+const wBtnGrid = document.getElementById('wViewGrid');
+wBtnCarousel.addEventListener('click', ()=>{
+  wholesaleCatalogWrap.classList.remove('grid-mode');
+  wBtnCarousel.classList.add('active'); wBtnGrid.classList.remove('active');
+});
+wBtnGrid.addEventListener('click', ()=>{
+  wholesaleCatalogWrap.classList.add('grid-mode');
+  wBtnGrid.classList.add('active'); wBtnCarousel.classList.remove('active');
+});
+
+wholesaleSearchInput.addEventListener('input', renderWholesaleGrid);
+
+document.getElementById('wholesaleCartBarBtn').addEventListener('click', ()=>{
+  wholesaleCatalogStep.classList.add('hidden');
+  wholesaleFlavorStep.classList.add('hidden');
+  wholesaleCartStep.classList.remove('hidden');
+  setWholesaleTopbarMode('cart');
+  renderWholesaleCart();
+  updateWholesaleCartBar();
+  wholesaleSheet.scrollTop = 0;
+});
+wholesaleCartBackBtn.addEventListener('click', ()=>{
+  wholesaleCartStep.classList.add('hidden');
+  wholesaleCatalogStep.classList.remove('hidden');
+  setWholesaleTopbarMode('catalog');
+  updateWholesaleCartBar();
+});
+
+function openWholesaleModal(){
+  if(WHOLESALE_LOCKED) return; // bloqueo temporal — ver WHOLESALE_LOCKED más arriba
+  renderWholesaleGrid();
+  setWholesaleTopbarMode('catalog');
+  updateWholesaleCartBar();
+  updateWholesaleCheckoutState();
+  wholesaleCatalogStep.classList.remove('hidden');
+  wholesaleFlavorStep.classList.add('hidden');
+  wholesaleCartStep.classList.add('hidden');
+  wholesaleOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeWholesaleModal(){
+  wholesaleOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+/* Se abre únicamente con el botón "Ver catálogo" del banner — nunca
+   automáticamente al cargar la página. */
+document.getElementById('wholesaleBannerBtn').addEventListener('click', openWholesaleModal);
+document.getElementById('wholesaleClose').addEventListener('click', closeWholesaleModal);
+wholesaleOverlay.addEventListener('click', (e)=>{ if(e.target === wholesaleOverlay) closeWholesaleModal(); });
+
+document.getElementById('wholesaleCheckoutBtn').addEventListener('click', ()=>{
+  if(wholesaleCart.length === 0 || wholesaleCartCount() < WHOLESALE_MIN_UNITS) return;
+  let msg = '📦 ¡Hola Fran! Quiero hacer este *pedido mayorista* de Vapesoon:\n\n';
+  wholesaleCart.forEach((item, i)=>{
+    const subtotal = item.qty * item.price;
+    msg += `${i+1}. *${stripEmoji(item.model)}* — ${stripEmoji(item.flavor)} — ${item.qty} u. × ${formatWholesaleAmount(item.price)} = ${formatWholesaleAmount(subtotal)}\n`;
+  });
+  const totalUnits = wholesaleCartCount();
+  const totalUsd = wholesaleCartTotalUsd();
+  msg += `\nTotal de unidades: ${totalUnits} u.`;
+  msg += `\nTotal: ${formatWholesaleAmount(totalUsd)}`;
+  msg += '\n\n¿Me confirmás disponibilidad y precio final? ✈️';
+  const url = `https://wa.me/${WHOLESALE_WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+});
+
+/* Aplica el estado visual/funcional de "bloqueado" al banner cuando
+   WHOLESALE_LOCKED está en true: lo atenúa, muestra la etiqueta roja,
+   apaga el CTA y deshabilita el botón nativo (bloquea click y teclado,
+   además del guard ya puesto en openWholesaleModal). */
+function applyWholesaleLockState(){
+  const bannerBtn = document.getElementById('wholesaleBannerBtn');
+  if(!WHOLESALE_LOCKED){
+    bannerBtn.disabled = false;
+    bannerBtn.classList.remove('wholesale-locked');
+    return;
+  }
+  bannerBtn.disabled = true;
+  bannerBtn.classList.add('wholesale-locked');
+}
+
 /* ================= INIT ================= */
 renderProducts();
 renderAppleProducts();
 renderReviews();
 initIntro();
+applyWholesaleLockState();
 
 /* ================= HEADER SHRINK ON SCROLL ================= */
 const siteHeader = document.querySelector('header.site');
