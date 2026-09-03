@@ -1047,7 +1047,7 @@ main{position:relative;z-index:1;}
 .fulfill-btn:hover{border-color:var(--blue-neon);background:rgba(79,195,247,.08);}
 .fulfill-btn:active{transform:scale(.97);}
 .fulfill-btn-icon{font-size:22px;flex:none;}
-.fulfill-address-field{margin-top:20px;}
+.fulfill-address-field{margin-top:14px;}
 .fulfill-address-field input{
   width:100%;
   background:var(--bg-card);
@@ -1064,6 +1064,69 @@ main{position:relative;z-index:1;}
 .fulfill-address-field input::placeholder{color:var(--ink-dim);}
 .fulfill-address-hint{color:var(--ink-dim);}
 .fulfill-address-hint.error{color:var(--red-cap);}
+
+/* ---- locality autocomplete (delivery-zone step) ---- */
+.fulfill-zone-field{margin-top:20px;position:relative;}
+.fulfill-zone-label{display:block;font-size:11px;letter-spacing:.5px;color:var(--ink-dim);margin-bottom:6px;text-transform:uppercase;font-weight:600;}
+.fulfill-zone-search{position:relative;}
+.fulfill-zone-search input{
+  width:100%;
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px 14px;
+  color:var(--white-glove);
+  font-size:13.5px;
+  font-family:'Poppins',sans-serif;
+  outline:none;
+  transition:border-color .25s var(--ease), box-shadow .25s var(--ease);
+}
+.fulfill-zone-search input:focus{border-color:var(--blue-neon);box-shadow:0 0 0 3px rgba(79,195,247,0.15);}
+.fulfill-zone-search input::placeholder{color:var(--ink-dim);}
+.fulfill-zone-suggestions{
+  position:absolute;
+  top:calc(100% + 6px);
+  left:0;right:0;
+  background:var(--bg-card-2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 20px 45px rgba(0,0,0,.5);
+  max-height:220px;
+  overflow-y:auto;
+  opacity:0;
+  transform:translateY(-6px);
+  pointer-events:none;
+  transition:opacity .22s var(--ease), transform .22s var(--ease);
+  z-index:20;
+}
+.fulfill-zone-suggestions.open{opacity:1;transform:translateY(0);pointer-events:auto;}
+.fz-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:11px 14px;
+  border-bottom:1px solid rgba(255,255,255,.05);
+  transition:background .15s;
+}
+.fz-item:last-child{border-bottom:none;}
+.fz-item:hover, .fz-item:active{background:rgba(79,195,247,.1);}
+.fz-item-name{font-size:13.5px;color:var(--white-glove);}
+.fz-item-badge{flex:none;font-size:9px;font-weight:700;letter-spacing:.2px;padding:3px 8px;border-radius:999px;text-transform:uppercase;white-space:nowrap;}
+.fz-item-badge.same-day{background:rgba(62,207,110,.16);color:var(--green-thc);}
+.fz-item-badge.next-day{background:rgba(255,145,48,.16);color:var(--orange-pulp);}
+.fz-empty{padding:16px 14px;text-align:center;color:var(--ink-dim);font-size:13px;}
+.fulfill-zone-note{
+  margin-top:10px;
+  padding:10px 13px;
+  border-radius:12px;
+  font-size:12px;
+  line-height:1.5;
+  border:1px solid var(--line);
+}
+.fulfill-zone-note.same-day{background:rgba(62,207,110,.1);border-color:rgba(62,207,110,.3);color:var(--green-thc);}
+.fulfill-zone-note.next-day{background:rgba(255,145,48,.1);border-color:rgba(255,145,48,.3);color:var(--orange-pulp);}
 .fulfill-sheet .modal-cta{margin-top:16px;}
 #fulfillClose{position:absolute;top:10px;right:10px;z-index:2;width:24px;height:24px;}
 #fulfillClose svg{width:10px;height:10px;}
@@ -2612,6 +2675,16 @@ footer.site{
     <div class="fulfill-step hidden" id="fulfillAddressStep">
       <div class="modal-eyebrow">Vapesoon</div>
       <h2 class="modal-name">¿Cuál es tu dirección?</h2>
+
+      <div class="fulfill-zone-field">
+        <label class="fulfill-zone-label" for="fulfillZoneInput">Zona de entrega</label>
+        <div class="fulfill-zone-search">
+          <input type="text" id="fulfillZoneInput" placeholder="Escribí tu localidad..." autocomplete="off">
+          <div class="fulfill-zone-suggestions" id="fulfillZoneSuggestions"></div>
+        </div>
+      </div>
+      <p class="fulfill-zone-note hidden" id="fulfillZoneNote"></p>
+
       <div class="fulfill-address-field">
         <input type="text" id="fulfillAddressInput" placeholder="Calle y número/dpto">
       </div>
@@ -3597,11 +3670,95 @@ const fulfillAddressInput = document.getElementById('fulfillAddressInput');
 const fulfillAddressHint = document.getElementById('fulfillAddressHint');
 const fulfillAddressOk = document.getElementById('fulfillAddressOk');
 
+/* ---- zonas de entrega — actualizá esta lista si cambian las localidades
+   que cubrimos. SAME_DAY_LOCALITIES son las únicas con envío en el día;
+   cualquier otra localidad de DELIVERY_ZONES se entrega al día siguiente
+   de 17 a 22hs (se le avisa al cliente apenas la elige). */
+const DELIVERY_ZONES = [
+  {region:'Zona Norte', localities:['Tigre','Garín','Nordelta','Maschwitz','Escobar','Del Viso','Villa Rosa','Derqui','Pilar','Malvinas Argentinas','José C. Paz','San Miguel','General San Martín','Vicente López','Zárate','Campana']},
+  {region:'Zona Oeste', localities:['Moreno','Hurlingham','Morón','Tres de Febrero','Marcos Paz','Rodríguez','Luján']},
+  {region:'Zona Sur', localities:['Cañuelas','Alejandro Korn','San Vicente','Guernica','La Matanza','Avellaneda','Lanús','Lomas de Zamora','Esteban Echeverría','Berazategui','Florencio Varela','Almirante Brown','Presidente Perón']},
+  {region:'La Plata / Gran La Plata', localities:['La Plata','Berisso','Ensenada']},
+  {region:'CABA', localities:['CABA']},
+];
+const SAME_DAY_LOCALITIES = ['Hurlingham','Morón','Tres de Febrero','José C. Paz','San Miguel'];
+const LOCALITY_INDEX = DELIVERY_ZONES.flatMap(z => z.localities.map(name => ({name, region:z.region})));
+function isSameDayLocality(name){
+  return SAME_DAY_LOCALITIES.some(l => normalize(l) === normalize(name));
+}
+
+let selectedLocality = null; // {name, sameDay} — sólo se completa eligiendo una sugerencia de la lista
+const fulfillZoneInput = document.getElementById('fulfillZoneInput');
+const fulfillZoneSuggestions = document.getElementById('fulfillZoneSuggestions');
+const fulfillZoneNote = document.getElementById('fulfillZoneNote');
+
+function renderZoneSuggestions(query){
+  const q = normalize(query.trim());
+  // sin texto todavía: mostramos toda la lista (con scroll) para que se pueda
+  // elegir sin tipear, tipear filtra al toque (el "acortador" pedido).
+  const results = q ? LOCALITY_INDEX.filter(l => normalize(l.name).includes(q)) : LOCALITY_INDEX;
+
+  if(results.length === 0){
+    fulfillZoneSuggestions.innerHTML = '<div class="fz-empty">No encontramos esa localidad</div>';
+  } else {
+    fulfillZoneSuggestions.innerHTML = results.map(l=>{
+      const sameDay = isSameDayLocality(l.name);
+      return `
+      <div class="fz-item" data-name="${l.name}">
+        <span class="fz-item-name">${l.name}</span>
+        <span class="fz-item-badge ${sameDay ? 'same-day' : 'next-day'}">${sameDay ? 'En el día' : 'Envío 24hs'}</span>
+      </div>`;
+    }).join('');
+    fulfillZoneSuggestions.querySelectorAll('.fz-item').forEach(item=>{
+      item.addEventListener('click', ()=> selectLocality(item.dataset.name));
+    });
+  }
+  fulfillZoneSuggestions.classList.add('open');
+}
+
+function selectLocality(name){
+  const sameDay = isSameDayLocality(name);
+  selectedLocality = {name, sameDay};
+  fulfillZoneInput.value = name;
+  fulfillZoneSuggestions.classList.remove('open');
+  fulfillAddressHint.classList.remove('error');
+  fulfillAddressHint.textContent = 'Con esto armamos el envío por WhatsApp';
+  fulfillZoneNote.classList.remove('hidden', 'same-day', 'next-day');
+  if(sameDay){
+    fulfillZoneNote.classList.add('same-day');
+    fulfillZoneNote.textContent = `✅ ¡Buenas noticias! En ${name} entregamos en el día.`;
+  } else {
+    fulfillZoneNote.classList.add('next-day');
+    fulfillZoneNote.textContent = `🕐 El envío a ${name} se realiza al día siguiente, entre las 17 y las 22 hs.`;
+  }
+}
+
+fulfillZoneInput.addEventListener('input', (e)=>{
+  selectedLocality = null;
+  fulfillZoneNote.classList.add('hidden');
+  renderZoneSuggestions(e.target.value);
+});
+fulfillZoneInput.addEventListener('focus', ()=> renderZoneSuggestions(fulfillZoneInput.value));
+fulfillZoneInput.addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){
+    e.preventDefault();
+    const first = fulfillZoneSuggestions.querySelector('.fz-item');
+    if(first){ selectLocality(first.dataset.name); fulfillAddressInput.focus(); }
+  }
+});
+document.addEventListener('click', (e)=>{
+  if(!e.target.closest('.fulfill-zone-field')) fulfillZoneSuggestions.classList.remove('open');
+});
+
 function openFulfillmentChoice(baseMessage, skipOffer){
   pendingCheckoutMessage = baseMessage;
   fulfillChoiceStep.classList.remove('hidden');
   fulfillAddressStep.classList.add('hidden');
   fulfillAddressInput.value = '';
+  fulfillZoneInput.value = '';
+  selectedLocality = null;
+  fulfillZoneNote.classList.add('hidden');
+  fulfillZoneSuggestions.classList.remove('open');
   fulfillAddressHint.textContent = 'Con esto armamos el envío por WhatsApp';
   fulfillAddressHint.classList.remove('error');
   fulfillOverlay.classList.add('open');
@@ -3633,7 +3790,7 @@ document.getElementById('fulfillPickupBtn').addEventListener('click', ()=>{
 document.getElementById('fulfillDeliveryBtn').addEventListener('click', ()=>{
   fulfillChoiceStep.classList.add('hidden');
   fulfillAddressStep.classList.remove('hidden');
-  fulfillAddressInput.focus();
+  fulfillZoneInput.focus();
   stopOfferCountdown();
 });
 
@@ -3678,13 +3835,20 @@ document.getElementById('offerAcceptBtn').addEventListener('click', ()=>{
 document.getElementById('offerDeclineBtn').addEventListener('click', stopOfferCountdown);
 fulfillAddressOk.addEventListener('click', ()=>{
   const address = fulfillAddressInput.value.trim();
+  if(!selectedLocality){
+    fulfillAddressHint.textContent = 'Elegí tu localidad de la lista para continuar';
+    fulfillAddressHint.classList.add('error');
+    fulfillZoneInput.focus();
+    return;
+  }
   if(!address){
     fulfillAddressHint.textContent = 'Ingresá tu dirección para continuar';
     fulfillAddressHint.classList.add('error');
     fulfillAddressInput.focus();
     return;
   }
-  sendWhatsAppOrder(`\n\n*Modalidad:* Envío a domicilio\n*Dirección:* ${stripEmoji(address)}`);
+  const deliveryNote = selectedLocality.sameDay ? 'envío en el día' : 'envío al día siguiente, 17 a 22hs';
+  sendWhatsAppOrder(`\n\n*Modalidad:* Envío a domicilio\n*Localidad:* ${stripEmoji(selectedLocality.name)} (${deliveryNote})\n*Dirección:* ${stripEmoji(address)}`);
 });
 fulfillAddressInput.addEventListener('keydown', (e)=>{
   if(e.key === 'Enter') fulfillAddressOk.click();
