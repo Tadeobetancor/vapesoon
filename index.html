@@ -49,13 +49,14 @@
 }
 
 *{box-sizing:border-box;}
-html{scroll-behavior:smooth;overflow-anchor:none;}
+html{scroll-behavior:smooth;overflow-anchor:none;overscroll-behavior-y:none;}
 body{
   margin:0;
   font-family:'Poppins',sans-serif;
   background:var(--void);
   color:var(--ink);
   overflow-x:hidden;
+  overscroll-behavior-y:none;
   -webkit-tap-highlight-color:transparent;
 }
 img{max-width:100%;display:block;}
@@ -1018,6 +1019,11 @@ main{position:relative;z-index:1;}
   border-radius:26px;
   padding:24px 22px 26px;
   overflow-y:auto;
+  /* Stops an overscroll at the top/bottom of this sheet's own scroll from
+     "chaining" into whatever's behind it — without this, dragging past
+     this sheet's scroll limit on some mobile browsers lets the page behind
+     the modal peek through for as long as the finger is still down. */
+  overscroll-behavior:contain;
   transform:translate(-50%,-50%) scale(.9);
   opacity:0;
   transition:transform .36s var(--ease), opacity .28s ease;
@@ -2946,7 +2952,7 @@ footer.site{
 }
 .truck-road{
   position:absolute;
-  left:0;right:0;top:50%;
+  left:0;right:0;top:40%;
   height:74px;
   transform:translateY(-50%);
   background:linear-gradient(180deg, #0a1626 0%, #050b16 100%);
@@ -2991,7 +2997,8 @@ footer.site{
    own edge instead of getting clipped right where it starts (SVGs clip to
    their viewBox by default) — that clipping was why it barely read as
    smoke at all. */
-.truck-rig svg{display:block;width:100%;height:auto;overflow:visible;filter:drop-shadow(0 10px 14px rgba(0,0,0,.45));}
+.truck-rig svg{display:block;width:100%;height:auto;overflow:visible;filter:drop-shadow(0 14px 18px rgba(0,0,0,.6));}
+.truck-boxes{filter:drop-shadow(0 4px 5px rgba(0,0,0,.5));}
 /* Loose cargo — sways a bit more/independently from the cab+wheels instead
    of moving as one perfectly rigid block with the rest of the truck. */
 .truck-boxes{transform-box:fill-box;transform-origin:50% 100%;}
@@ -3026,7 +3033,10 @@ footer.site{
    brand's brighter gold/orange, aiming for "old but still running" rather
    than shiny. */
 .truck-cab{fill:#c9702f;}
-.truck-chassis{fill:var(--void);}
+/* var(--void) was too close to the scene's own near-black backdrop to read
+   as a shape at all — a visible dark grey instead, so the bed connecting
+   the boxes to the cab actually shows up. */
+.truck-chassis{fill:#3a4048;stroke:rgba(255,255,255,.08);stroke-width:1;}
 .truck-wheel{fill:var(--void);stroke:var(--line);stroke-width:2;}
 .truck-hub{fill:var(--blue-bright);}
 .truck-box{fill:#8a5a34;stroke:rgba(0,0,0,.3);stroke-width:1.3;}
@@ -3629,13 +3639,15 @@ footer.site{
           <!-- back wall stub (open tailgate) + a solid bed deck that actually
                spans from the back all the way to the cab, so the boxes read
                as sitting IN something instead of floating disconnected
-               above the wheels -->
+               above the wheels — shortened gap to the cab too. -->
           <rect class="truck-chassis" x="10" y="44" width="7" height="26" rx="2"/>
-          <rect class="truck-chassis" x="12" y="68" width="150" height="15" rx="3"/>
-          <rect class="truck-chassis" x="150" y="74" width="54" height="7" rx="2"/>
+          <rect class="truck-chassis" x="12" y="68" width="135" height="15" rx="3"/>
+          <rect class="truck-chassis" x="135" y="74" width="54" height="7" rx="2"/>
           <!-- messy pile of plain brown boxes, stacked high and unevenly —
                moves as its own loose group (see .truck-boxes) so it sways a
-               bit more than the rigid cab+wheels when the truck bounces -->
+               bit more than the rigid cab+wheels when the truck bounces.
+               The precarious tilted one now sits at the very top of the
+               pile, not off to the side. -->
           <g class="truck-boxes">
             <rect class="truck-box" x="16" y="38" width="34" height="32" rx="3"/>
             <line class="truck-box-fold" x1="16" y1="48" x2="50" y2="48"/>
@@ -3647,21 +3659,21 @@ footer.site{
             <line class="truck-box-fold" x1="26" y1="19" x2="58" y2="19" transform="rotate(-5 42 25)"/>
             <rect class="truck-box" x="58" y="6" width="30" height="32" rx="3" transform="rotate(4 73 22)"/>
             <line class="truck-box-fold" x1="58" y1="15" x2="88" y2="15" transform="rotate(4 73 22)"/>
-            <rect class="truck-box" x="6" y="2" width="28" height="26" rx="3" transform="rotate(-16 20 15)"/>
-            <line class="truck-box-fold" x1="6" y1="10" x2="34" y2="10" transform="rotate(-16 20 15)"/>
+            <rect class="truck-box" x="40" y="-10" width="28" height="26" rx="3" transform="rotate(-15 54 3)"/>
+            <line class="truck-box-fold" x1="40" y1="-2" x2="68" y2="-2" transform="rotate(-15 54 3)"/>
           </g>
           <!-- plain boxy cab -->
-          <rect class="truck-cab" x="160" y="32" width="54" height="50" rx="9"/>
-          <rect class="truck-glass" x="176" y="40" width="22" height="18" rx="3"/>
-          <rect class="truck-chassis" x="196" y="74" width="16" height="10" rx="3"/>
+          <rect class="truck-cab" x="145" y="32" width="54" height="50" rx="9"/>
+          <rect class="truck-glass" x="161" y="40" width="22" height="18" rx="3"/>
+          <rect class="truck-chassis" x="181" y="74" width="16" height="10" rx="3"/>
           <!-- two wheels, no spokes -->
           <g class="truck-wheel-group">
             <circle class="truck-wheel" cx="48" cy="88" r="15"/>
             <circle class="truck-hub" cx="48" cy="88" r="5"/>
           </g>
           <g class="truck-wheel-group">
-            <circle class="truck-wheel" cx="172" cy="88" r="15"/>
-            <circle class="truck-hub" cx="172" cy="88" r="5"/>
+            <circle class="truck-wheel" cx="157" cy="88" r="15"/>
+            <circle class="truck-hub" cx="157" cy="88" r="5"/>
           </g>
           <circle class="truck-smoke s1" cx="8" cy="66" r="6"/>
           <circle class="truck-smoke s2" cx="8" cy="66" r="6"/>
