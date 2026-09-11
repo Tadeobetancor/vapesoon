@@ -1,0 +1,3917 @@
+[
+  {
+    "modelo": "BLACK SHEEP 40K SWITCH",
+    "sabores": [
+      {
+        "sabor": "ACAI STRAW ACAI GRAPE",
+        "precio": "12,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/black-sheep-40k-switch-acai-straw-acai-grape/"
+      },
+      {
+        "sabor": "BLUEBERRY BUBBLE SOUR GREEN APPLE",
+        "precio": "12,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/black-sheep-40k-switch-blueberry-bubble-sour-green-apple/"
+      },
+      {
+        "sabor": "BLUEBERRY GRAPE CHERRY BERRY",
+        "precio": "12,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/black-sheep-40k-switch-blueberry-grape-cherry-berry/"
+      },
+      {
+        "sabor": "FRESH MINT MANGO ORANGE",
+        "precio": "12,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/black-sheep-40k-switch-fresh-mint-mango-orange/"
+      },
+      {
+        "sabor": "GRAPE GRAPE MANGO",
+        "precio": "12,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/black-sheep-40k-switch-grape-grape-mango/"
+      },
+      {
+        "sabor": "GRAPE MENTHOL",
+        "precio": "12,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/black-sheep-40k-switch-grape-menthol/"
+      },
+      {
+        "sabor": "GRAPE PASS FRUIT",
+        "precio": "12,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/black-sheep-40k-switch-grape-pass-fruit/"
+      },
+      {
+        "sabor": "GRAPE/ENERGY DRINK",
+        "precio": "12,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/black-sheep-40k-switch-grape-energy-drink/"
+      },
+      {
+        "sabor": "GRAPEMANGO FRESH MINT",
+        "precio": "12,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/black-sheep-40k-switch-grapemango-fresh-mint/"
+      },
+      {
+        "sabor": "KIWI GRAP ACAI STRAW BANANA",
+        "precio": "12,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/black-sheep-40k-switch-kiwi-grap-acai-straw-banana/"
+      },
+      {
+        "sabor": "MASTER GRAPE GRAPE",
+        "precio": "12,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/black-sheep-40k-switch-master-grape-grape/"
+      },
+      {
+        "sabor": "PASSION FRUIT STRAWBERRY WATERMELON",
+        "precio": "13,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/black-sheep-40k-switch-passion-fruit-strawberry-watermelon/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI COLA LIME",
+        "precio": "12,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/black-sheep-40k-switch-strawberry-kiwi-cola-lime/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI FRESH MINT",
+        "precio": "12,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/black-sheep-40k-switch-strawberry-kiwi-cola-lime-3/"
+      }
+    ]
+  },
+  {
+    "modelo": "BLACKSHEEP 25K",
+    "sabores": [
+      {
+        "sabor": "BLUEBERRY BUBBLE",
+        "precio": "6,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/blacksheep-25k-blueberry-bubble/"
+      },
+      {
+        "sabor": "COLA LIME",
+        "precio": "6,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/blacksheep-25k-cola-lime/"
+      },
+      {
+        "sabor": "GRAPE",
+        "precio": "6,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/blacksheep-25k-grape/"
+      },
+      {
+        "sabor": "MANGO GRAPE",
+        "precio": "6,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/blacksheep-25k-mango-grape/"
+      },
+      {
+        "sabor": "MINT ONE",
+        "precio": "6,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/blacksheep-25k-mint-one/"
+      },
+      {
+        "sabor": "PASSION FRUIT",
+        "precio": "6,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/blacksheep-25k-passion-fruit/"
+      },
+      {
+        "sabor": "SOUR GREEN APPLE",
+        "precio": "6,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/blacksheep-25k-sour-green-apple/"
+      },
+      {
+        "sabor": "STRAWBERRY BUBBLE",
+        "precio": "6,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/blacksheep-25k-strawberry-bubble/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI",
+        "precio": "6,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/blacksheep-25k-strawberry-kiwi/"
+      }
+    ]
+  },
+  {
+    "modelo": "BLACKSHEEP 55K",
+    "sabores": [
+      {
+        "sabor": "BLUE RAZZ ICE",
+        "precio": "12,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blacksheep-55k-cool-mint-2/"
+      },
+      {
+        "sabor": "BLUEBERRY WATERMELON",
+        "precio": "12,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blacksheep-55k-blueberry-watermelon/"
+      },
+      {
+        "sabor": "COOL MINT",
+        "precio": "12,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blacksheep-55k-cool-mint/"
+      },
+      {
+        "sabor": "LEMON HEADS",
+        "precio": "12,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blacksheep-55k-lemon-heads/"
+      },
+      {
+        "sabor": "MIAMI MINT",
+        "precio": "12,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blacksheep-55k-miami-mint/"
+      },
+      {
+        "sabor": "MIXED BERRY",
+        "precio": "12,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blacksheep-55k-mixed-berry/"
+      },
+      {
+        "sabor": "PASSION FRUIT",
+        "precio": "12,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blacksheep-55k-passion-fruit/"
+      },
+      {
+        "sabor": "STRAWBERRY BANANA",
+        "precio": "12,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blacksheep-55k-strawberry-banana/"
+      },
+      {
+        "sabor": "STRAWBERRY ICE",
+        "precio": "12,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blacksheep-55k-strawberry-ice/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "12,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blacksheep-55k-watermelon-ice/"
+      },
+      {
+        "sabor": "WHITE GRAPE",
+        "precio": "12,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blacksheep-55k-white-grape/"
+      }
+    ]
+  },
+  {
+    "modelo": "BLVK JUST JUICE 45K",
+    "sabores": [
+      {
+        "sabor": "DRAGON STRAWNANA",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/blvk-just-juice-45k-dragon-strawnana/"
+      },
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "11,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blvk-just-juice-45k-grape-ice/"
+      },
+      {
+        "sabor": "GREEN APPLE",
+        "precio": "11,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blvk-just-juice-45k-green-apple/"
+      },
+      {
+        "sabor": "KIWI PASSION FRUIT",
+        "precio": "11,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blvk-just-juice-45k-kiwi-passion-fruit/"
+      },
+      {
+        "sabor": "MENTHOL",
+        "precio": "11,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blvk-just-juice-45k-menthol/"
+      },
+      {
+        "sabor": "SPEARMINT",
+        "precio": "11,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blvk-just-juice-45k-spearmint/"
+      },
+      {
+        "sabor": "STRAWBERRY ICE",
+        "precio": "11,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blvk-just-juice-45k-strawberry-ice/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI",
+        "precio": "11,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blvk-just-juice-45k-strawberry-kiwi/"
+      },
+      {
+        "sabor": "STRAWBERRY MANGO",
+        "precio": "11,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blvk-just-juice-45k-strawberry-mango/"
+      },
+      {
+        "sabor": "STRAWBERRY WATERM",
+        "precio": "11,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blvk-just-juice-45k-strawberry-waterm/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "11,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/blvk-just-juice-45k-watermelon-ice/"
+      }
+    ]
+  },
+  {
+    "modelo": "EBCREATE BC PRO 40K",
+    "sabores": [
+      {
+        "sabor": "AURORA BERRIES",
+        "precio": "7,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ebcreate-bc-pro-40k-aurora-berries/"
+      },
+      {
+        "sabor": "BLACK MINT",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ebcreate-bc-pro-40k-black-mint/"
+      },
+      {
+        "sabor": "BLACKBERRY GRAPE",
+        "precio": "8,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ebcreate-bc-pro-40k-blackberry-grape/"
+      },
+      {
+        "sabor": "BLUE RAZZ ICE",
+        "precio": "7,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ebcreate-bc-pro-40k-blue-razz-ice/"
+      },
+      {
+        "sabor": "GOLDEN BERRY",
+        "precio": "7,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ebcreate-bc-pro-40k-golden-berry/"
+      },
+      {
+        "sabor": "GRAPE TWIST",
+        "precio": "8,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ebcreate-bc-pro-40k-grape-twist/"
+      },
+      {
+        "sabor": "PINEAPPLE POM",
+        "precio": "7,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ebcreate-bc-pro-40k-pineapple-pom/"
+      },
+      {
+        "sabor": "SOUR FCUKING FAB",
+        "precio": "7,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ebcreate-bc-pro-40k-sour-fcuking-fab/"
+      },
+      {
+        "sabor": "STRAWBERRY BLEND",
+        "precio": "7,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ebcreate-bc-pro-40k-strawberry-blend/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI",
+        "precio": "7,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ebcreate-bc-pro-40k-strawberry-kiwi/"
+      },
+      {
+        "sabor": "STRAWBERRY RASPB FRO",
+        "precio": "7,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ebcreate-bc-pro-40k-strawberry-raspb-fro/"
+      },
+      {
+        "sabor": "TOASTED PINEAPPLE",
+        "precio": "7,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ebcreate-bc-pro-40k-toasted-pineapple/"
+      },
+      {
+        "sabor": "TRIPLE BERRY",
+        "precio": "7,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ebcreate-bc-pro-40k-triple-berry/"
+      },
+      {
+        "sabor": "TROPICAL BAJA",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ebcreate-bc-pro-40k-tropical-baja/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ebcreate-bc-pro-40k-watermelon-ice/"
+      },
+      {
+        "sabor": "WATERMELON PEACH FRO",
+        "precio": "7,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ebcreate-bc-pro-40k-watermelon-peach-fro/"
+      },
+      {
+        "sabor": "WINTER MINT",
+        "precio": "7,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ebcreate-bc-pro-40k-winter-mint/"
+      }
+    ]
+  },
+  {
+    "modelo": "ELFBAR 40K ICE KING",
+    "sabores": [
+      {
+        "sabor": "AMERICANO ICE",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-americano-ice/"
+      },
+      {
+        "sabor": "BAJA SPLASH",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-baja-splash/"
+      },
+      {
+        "sabor": "BLUE RAZZ ICE",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-blue-razz-ice/"
+      },
+      {
+        "sabor": "BLUEBERRY ICE",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-blueberry-ice/"
+      },
+      {
+        "sabor": "BUBALOO TUTTI FRUIT",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-bubaloo-tutti-fruit/"
+      },
+      {
+        "sabor": "CHERRY FUSE",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-cherry-fuse/"
+      },
+      {
+        "sabor": "CHERRY STRAZZ",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-cherry-strazz/"
+      },
+      {
+        "sabor": "CRANBERRY PINEAPPLE",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-cranberry-pineapple/"
+      },
+      {
+        "sabor": "DOUBLE APPLE",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-double-apple/"
+      },
+      {
+        "sabor": "DRAGON STRAWNANA",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-dragon-strawnana/"
+      },
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-grape-ice/"
+      },
+      {
+        "sabor": "GREEN APPLE",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-green-apple/"
+      },
+      {
+        "sabor": "MANGO MAGIC",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-mango-magic/"
+      },
+      {
+        "sabor": "MELON GRAPE MENTHOL",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-melon-grape-menthol/"
+      },
+      {
+        "sabor": "MIAMI MINT",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-miami-mint/"
+      },
+      {
+        "sabor": "PEACH +",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-peach/"
+      },
+      {
+        "sabor": "PEACH MANGO WATER",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-peach-mango-water/"
+      },
+      {
+        "sabor": "SCARRY BERRY",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-scarry-berry/"
+      },
+      {
+        "sabor": "SOUR APPLE ICE",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-sour-apple-ice/"
+      },
+      {
+        "sabor": "SOUR LUSH GUMMY",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-sour-lush-gummy/"
+      },
+      {
+        "sabor": "SOUR STRAW DRAGON",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-sour-straw-dragon/"
+      },
+      {
+        "sabor": "STRAWBERRY ICE",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-strawberry-ice/"
+      },
+      {
+        "sabor": "STRAWBERRY WATERMELON",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-strawberry-watermelon/"
+      },
+      {
+        "sabor": "SUMER SPLASH",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-sumer-splash/"
+      },
+      {
+        "sabor": "SUMMER GREEN APPLE SLUHS",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-summer-green-apple-sluhs/"
+      },
+      {
+        "sabor": "TIGERS BLOOD",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-tigers-blood/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-ice-king-watermelon-ice/"
+      }
+    ]
+  },
+  {
+    "modelo": "ELFBAR 40K SWEET KING",
+    "sabores": [
+      {
+        "sabor": "BLUE RAZZ B-POP",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-sweet-king-blue-razz-b-pop/"
+      },
+      {
+        "sabor": "BUBBALO GRAPE",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-sweet-king-bubbalo-grape/"
+      },
+      {
+        "sabor": "BUBBALO TUTTIF",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-sweet-king-bubbalo-tuttif/"
+      },
+      {
+        "sabor": "LEMON HEADS",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-40k-sweet-king-lemon-heads/"
+      },
+      {
+        "sabor": "RASPBERRY ORANGE",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-sweet-king-raspberry-orange/"
+      },
+      {
+        "sabor": "TRIPLE BERRY",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-sweet-king-triple-berry/"
+      },
+      {
+        "sabor": "WATERMELON ROLL UP",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-sweet-king-watermelon-roll-up/"
+      },
+      {
+        "sabor": "WINTERGREEN SAVERS",
+        "precio": "10,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-sweet-king-wintergreen-savers/"
+      }
+    ]
+  },
+  {
+    "modelo": "ELFBAR 40K TRIO",
+    "sabores": [
+      {
+        "sabor": "BLACK MINT",
+        "precio": "10,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-40k-trio-black-mint/"
+      },
+      {
+        "sabor": "BLUE RAZZ ICE",
+        "precio": "10,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-40k-trio-blue-razz-ice/"
+      },
+      {
+        "sabor": "BLUEBERRY POM SLUSHY",
+        "precio": "10,25",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-trio-blueberry-pom-slushy/"
+      },
+      {
+        "sabor": "COOL MENTHOL",
+        "precio": "10,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-40k-trio-cool-menthol/"
+      },
+      {
+        "sabor": "LA GRAPE",
+        "precio": "10,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-40k-trio-la-grape/"
+      },
+      {
+        "sabor": "ORANGE BLAST",
+        "precio": "10,25",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-trio-orange-blast/"
+      },
+      {
+        "sabor": "PEACH TWIST",
+        "precio": "10,25",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-trio-peach-twist/"
+      },
+      {
+        "sabor": "PINEAPPLE LIME",
+        "precio": "10,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-40k-trio-pineapple-lime/"
+      },
+      {
+        "sabor": "POMEGRANATE BLAST",
+        "precio": "10,25",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-trio-pomegranate-blast/"
+      },
+      {
+        "sabor": "RASPBERRY WATERMELON",
+        "precio": "10,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-40k-trio-raspberry-watermelon/"
+      },
+      {
+        "sabor": "SAKURA GRAPE",
+        "precio": "10,25",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-trio-sakura-grape/"
+      },
+      {
+        "sabor": "SCARY BERRY",
+        "precio": "10,25",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-trio-scary-berry/"
+      },
+      {
+        "sabor": "SOUR STRAWBERRY DRAGON",
+        "precio": "10,25",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-trio-sour-strawberry-dragon/"
+      },
+      {
+        "sabor": "STRAWBERRY ORANGE L",
+        "precio": "10,25",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-40k-trio-sour-strawberry-orange-l/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "10,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-40k-trio-watermelon-ice/"
+      }
+    ]
+  },
+  {
+    "modelo": "ELFBAR BC 15K",
+    "sabores": [
+      {
+        "sabor": "AMERICANO ICE",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-americano-ice/"
+      },
+      {
+        "sabor": "BLUE RAZZ ICE",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-blue-razz-ice/"
+      },
+      {
+        "sabor": "BLUEBERRY ICE",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-blueberry-ice/"
+      },
+      {
+        "sabor": "BUBBA GRAPE",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-bubba-grape/"
+      },
+      {
+        "sabor": "ELF LOVE",
+        "precio": "7,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-elf-love/"
+      },
+      {
+        "sabor": "GREEN APPLE ICE",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-green-apple-ice/"
+      },
+      {
+        "sabor": "ICY MINT",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-icy-mint/"
+      },
+      {
+        "sabor": "KIWI PASS GUAVA",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-kiwi-pass-guava/"
+      },
+      {
+        "sabor": "MANGO MAGIC",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-mango-magic/"
+      },
+      {
+        "sabor": "MIAMI MINT",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-miami-mint/"
+      },
+      {
+        "sabor": "PASSION FRUIT GRANGE GUAVA",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-passion-fruit-grange-guava/"
+      },
+      {
+        "sabor": "PEACH MANGO WATERMELON",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-peach-mango-watermelon/"
+      },
+      {
+        "sabor": "PINEAPPLE ICE",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-pineapple-ice/"
+      },
+      {
+        "sabor": "SAKURA GRAPE",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-sakura-grape/"
+      },
+      {
+        "sabor": "SOUR APPLE ICE",
+        "precio": "7,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-sour-apple-ice/"
+      },
+      {
+        "sabor": "STRAWBERRY ICE",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-strawberry-ice/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-strawberry-kiwi/"
+      },
+      {
+        "sabor": "STRAWBERRY WATER",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-strawberry-water/"
+      },
+      {
+        "sabor": "TROPICAL LEMONADE",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-tropical-lemonade/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-bc-15k-watermelon-ice/"
+      }
+    ]
+  },
+  {
+    "modelo": "ELFBAR BC 45K PRO",
+    "sabores": [
+      {
+        "sabor": "AMERICANO ICE",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-bc-45k-pro-americano-ice/"
+      },
+      {
+        "sabor": "BLUEBERRY STRAWBERRY COCONUT ICE",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-bc-45k-pro-blueberry-strawberry-coconut-ice/"
+      },
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-bc-45k-pro-grape-ice/"
+      },
+      {
+        "sabor": "GRAPE TWIST",
+        "precio": "12,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-bc-45k-pro-grape-twist/"
+      },
+      {
+        "sabor": "GREEN APPLE ICE",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-bc-45k-pro-green-apple-ice/"
+      },
+      {
+        "sabor": "MANGO MAGIC",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-bc-45k-pro-mango-magic/"
+      },
+      {
+        "sabor": "MIAMI MINT",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-bc-45k-pro-miami-mint/"
+      },
+      {
+        "sabor": "PINEAPPLE POM",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-bc-45k-pro-pineapple-pom/"
+      },
+      {
+        "sabor": "STRAWBERRY ICE",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-bc-45k-pro-strawberry-ice/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-bc-45k-pro-strawberry-kiwi/"
+      },
+      {
+        "sabor": "TROPICAL BAJA",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-bc-45k-pro-tropical-baja/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-bc-45k-pro-watermelon-ice/"
+      },
+      {
+        "sabor": "WATERMELON PEACH FROST",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-bc-45k-pro-watermelon-peach-frost/"
+      }
+    ]
+  },
+  {
+    "modelo": "ELFBAR DISP TE30K 5%",
+    "sabores": [
+      {
+        "sabor": "ACAI BANANA ICE",
+        "precio": "9,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-acai-banana-ice/"
+      },
+      {
+        "sabor": "BANANA COCONUT ICE",
+        "precio": "9,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-banana-coconut-ice/"
+      },
+      {
+        "sabor": "BLUEBERRY ICE",
+        "precio": "9,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-blueberry-ice/"
+      },
+      {
+        "sabor": "BLUEBERRY SOUR",
+        "precio": "9,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-blueberry-sour/"
+      },
+      {
+        "sabor": "BUBBALOO GRAPE",
+        "precio": "9,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-bubbaloo-grape/"
+      },
+      {
+        "sabor": "BUBBALOO TUTTI",
+        "precio": "9,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-bubbaloo-tutti/"
+      },
+      {
+        "sabor": "CHERRY STRAZZ",
+        "precio": "9,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-cherry-strazz/"
+      },
+      {
+        "sabor": "DRAGON STRAWNA",
+        "precio": "9,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-dragon-strawna/"
+      },
+      {
+        "sabor": "ELF LOVE",
+        "precio": "9,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-elf-love/"
+      },
+      {
+        "sabor": "GREEN APPLE ICE",
+        "precio": "9,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-green-apple-ice/"
+      },
+      {
+        "sabor": "GUAVA PASSION FRUIT KIWI",
+        "precio": "9,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-guava-passion-fruit-kiwi/"
+      },
+      {
+        "sabor": "MENTHOL",
+        "precio": "10,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-menthol/"
+      },
+      {
+        "sabor": "MIAMI MINT",
+        "precio": "9,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-miami-mint/"
+      },
+      {
+        "sabor": "PEACH MANGO WATER",
+        "precio": "9,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-peach-mango-water/"
+      },
+      {
+        "sabor": "PINEAPPLE ICE",
+        "precio": "9,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-pineapple-ice/"
+      },
+      {
+        "sabor": "PINEAPPLE MANGO",
+        "precio": "9,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-pineapple-mango/"
+      },
+      {
+        "sabor": "SOUR LUSH GAMI",
+        "precio": "9,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-sour-lush-gami/"
+      },
+      {
+        "sabor": "STRAWBERRY ICE",
+        "precio": "9,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-strawberry-ice/"
+      },
+      {
+        "sabor": "STRAWBERRY WATERMELON ICE",
+        "precio": "9,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-strawberry-watermelon-ice/"
+      },
+      {
+        "sabor": "STRAWMELON PEACH",
+        "precio": "9,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-strawmelon-peach/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "9,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-watermelon-ice/"
+      },
+      {
+        "sabor": "WINTER MINT",
+        "precio": "9,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-disp-te30k-5-winter-mint/"
+      }
+    ]
+  },
+  {
+    "modelo": "ELFBAR DUKE 35K",
+    "sabores": [
+      {
+        "sabor": "BLUE RAZZ ICE",
+        "precio": "9,85",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-duke-35k-blue-razz-ice/"
+      },
+      {
+        "sabor": "BLUEBERRY ICE",
+        "precio": "9,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-duke-35k/"
+      },
+      {
+        "sabor": "BUBBALOO TUTTI FRUTTI",
+        "precio": "9,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-duke-35k-2/"
+      },
+      {
+        "sabor": "COCONUT STRAW",
+        "precio": "9,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-duke-35k-coconut-straw/"
+      },
+      {
+        "sabor": "FANTA GRAPE",
+        "precio": "9,85",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-duke-35k-fanta-grape/"
+      },
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "9,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-duke-35k-grape-ice/"
+      },
+      {
+        "sabor": "ICY MINT",
+        "precio": "9,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-duke-35k-icy-mint/"
+      },
+      {
+        "sabor": "KIWI PASS GUAVA",
+        "precio": "9,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-duke-35k-kiwi-pass-guava/"
+      },
+      {
+        "sabor": "MANGO MAGIC",
+        "precio": "9,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-duke-35k-mango-magic/"
+      },
+      {
+        "sabor": "PEACH MANGO WATER",
+        "precio": "9,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-duke-35k-peach-mango-water/"
+      },
+      {
+        "sabor": "PINEAPPLE ICE",
+        "precio": "9,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-duke-35k-pineapple-ice/"
+      },
+      {
+        "sabor": "STRAW KIWI",
+        "precio": "9,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-duke-35k-straw-kiwi/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "9,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-duke-35k-watermelon-ice/"
+      },
+      {
+        "sabor": "WATERMELON LEMON",
+        "precio": "9,85",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-duke-35k-watermelon-lemon/"
+      }
+    ]
+  },
+  {
+    "modelo": "ELFBAR GH 23000",
+    "sabores": [
+      {
+        "sabor": "APPLE PEAR",
+        "precio": "9,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-gh-23000-apple-pear/"
+      },
+      {
+        "sabor": "BLUE RAZZ ICE",
+        "precio": "9,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-gh-23000-blue-razz-ice/"
+      },
+      {
+        "sabor": "BLUEBERRY PEAR",
+        "precio": "9,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-gh-23000-blueberry-pear/"
+      },
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "9,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-gh-23000-grape-ice/"
+      },
+      {
+        "sabor": "KIWI DRAGON FRUIT",
+        "precio": "9,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-gh-23000-kiwi-dragon-fruit/"
+      },
+      {
+        "sabor": "LIME GRAPEFRUIT ICE",
+        "precio": "9,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-gh-23000-lime-grapefruit-ice/"
+      },
+      {
+        "sabor": "MIAMI MINT",
+        "precio": "9,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-gh-23000-miami-mint/"
+      },
+      {
+        "sabor": "PEACH MANGO WATERMELON",
+        "precio": "9,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-gh-23000-peach-mango-watermelon/"
+      },
+      {
+        "sabor": "PINEAPPLE PLUMS LIME MINT",
+        "precio": "9,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-gh-23000-pineapple-plums-lime-mint/"
+      },
+      {
+        "sabor": "SAKURA GRAPE",
+        "precio": "9,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-gh-23000-sakura-grape/"
+      },
+      {
+        "sabor": "STRAWBERRY BANANA",
+        "precio": "9,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-gh-23000-strawberry-banana/"
+      },
+      {
+        "sabor": "STRAWBERRY ICE",
+        "precio": "9,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-gh-23000-strawberry-ice/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "9,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-gh-23000-watermelon-ice/"
+      }
+    ]
+  },
+  {
+    "modelo": "ELFBAR GH 33K PRO",
+    "sabores": [
+      {
+        "sabor": "CHERRY POME PINEAPPLE",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-gh-33k-pro-cherry-pome-pineapple/"
+      },
+      {
+        "sabor": "GRAPEFRUIT PASSION GUA",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-gh-33k-pro-grapefruit-passion-gua/"
+      },
+      {
+        "sabor": "LEMON LIME",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-gh-33k-pro-lemon-lime/"
+      },
+      {
+        "sabor": "PINE NEEDLES",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/elfbar-gh-33k-pro-pine-needles/"
+      }
+    ]
+  },
+  {
+    "modelo": "ELFBAR TE30K",
+    "sabores": [
+      {
+        "sabor": "AMERICANO ICE",
+        "precio": "9,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/elfbar-te30k-black-americano-ice/"
+      }
+    ]
+  },
+  {
+    "modelo": "GEEKBAR Z35",
+    "sabores": [
+      {
+        "sabor": "BANANA TAFFY FREEZE",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/geekbar-z35-banana-taffy-freeze/"
+      },
+      {
+        "sabor": "BLACKBERRY BLUEBERRY",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/geekbar-z35-blackberry-blueberry/"
+      },
+      {
+        "sabor": "BLUE RAZZ ICE",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/geekbar-z35-blue-razz-ice/"
+      },
+      {
+        "sabor": "EXTREME MINT",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/geekbar-z35-extreme-mint/"
+      },
+      {
+        "sabor": "FROZEN PINA COLADA",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/geekbar-z35-frozen-pina-colada/"
+      },
+      {
+        "sabor": "FROZEN STRAWBERRY",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/geekbar-z35-frozen-strawberry/"
+      },
+      {
+        "sabor": "FROZEN WATERMELON",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/geekbar-z35-frozen-watermelon/"
+      },
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/geekbar-z35-grape-ice/"
+      },
+      {
+        "sabor": "PASSIONFRUIT SOUR KIWI",
+        "precio": "8,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/geekbar-z35-passionfruit-sour-kiwi/"
+      },
+      {
+        "sabor": "SOUR APPLE ICE",
+        "precio": "8,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/geekbar-z35-sour-apple-ice/"
+      },
+      {
+        "sabor": "SOUR STRAWS",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/geekbar-z35-sour-straws/"
+      },
+      {
+        "sabor": "STONE FREEZE",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/geekbar-z35-stone-freeze/"
+      },
+      {
+        "sabor": "STRAWBERRY B-POP",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/geekbar-z35-strawberry-b-pop/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI ICE",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/geekbar-z35-strawberry-kiwi-ice/"
+      },
+      {
+        "sabor": "WHITE PEACH RASPBERRY",
+        "precio": "8,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/geekbar-z35-white-peach-raspberry/"
+      }
+    ]
+  },
+  {
+    "modelo": "IGNITE P100 KIT METALIC GRAY",
+    "sabores": [
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "9,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-p100-kit-metalic-gray-grape-ice/"
+      },
+      {
+        "sabor": "GREEN APPLE",
+        "precio": "9,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-p100-kit-metalic-gray-green-apple/"
+      },
+      {
+        "sabor": "ICY MINT",
+        "precio": "9,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-p100-kit-metalic-gray-icy-mint/"
+      },
+      {
+        "sabor": "MENTHOL",
+        "precio": "9,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-p100-kit-metalic-gray-menthol/"
+      },
+      {
+        "sabor": "STRAWBERRY",
+        "precio": "9,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-p100-kit-metalic-gray-strawberry/"
+      },
+      {
+        "sabor": "WATERMELON",
+        "precio": "9,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-p100-kit-metalic-gray-watermelon/"
+      }
+    ]
+  },
+  {
+    "modelo": "IGNITE V-NANO",
+    "sabores": [
+      {
+        "sabor": "ACAI GRAPE",
+        "precio": "3,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v-nano-acai-grape/"
+      },
+      {
+        "sabor": "BANANA ICE",
+        "precio": "3,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v-nano-banana-ice/"
+      },
+      {
+        "sabor": "BLUEBERRY RASPBERRY",
+        "precio": "3,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v-nano-blueberry-raspberry/"
+      },
+      {
+        "sabor": "CHERRY LEMONADE",
+        "precio": "3,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v-nano-cherry-lemonade/"
+      },
+      {
+        "sabor": "COOL MENTHOL",
+        "precio": "3,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v-nano-cool-menthol/"
+      },
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "3,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v-nano-grape-ice/"
+      },
+      {
+        "sabor": "GREEN APPLE",
+        "precio": "3,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v-nano-green-apple/"
+      },
+      {
+        "sabor": "ICY MINT",
+        "precio": "3,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v-nano-icy-mint/"
+      },
+      {
+        "sabor": "PASSION FRUIT SOUR KIWI",
+        "precio": "3,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v-nano-passion-fruit-sour-kiwi/"
+      },
+      {
+        "sabor": "PINEAPPLE ICE",
+        "precio": "3,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v-nano-pineapple-ice/"
+      },
+      {
+        "sabor": "STRAWBERRY ICE",
+        "precio": "3,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v-nano-strawberry-ice/"
+      },
+      {
+        "sabor": "TROPICAL FRUIT",
+        "precio": "3,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v-nano-tropical-fruit/"
+      },
+      {
+        "sabor": "VANILLA CREAM",
+        "precio": "3,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v-nano-vanilla-cream/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "3,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v-nano-watermelon-ice/"
+      }
+    ]
+  },
+  {
+    "modelo": "IGNITE V120",
+    "sabores": [
+      {
+        "sabor": "ALOE GRAPE",
+        "precio": "8,80",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v120-aloe-grape/"
+      }
+    ]
+  },
+  {
+    "modelo": "IGNITE V150",
+    "sabores": [
+      {
+        "sabor": "PEPPERMINT CREAM",
+        "precio": "8,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v150-peppermint-cream/"
+      }
+    ]
+  },
+  {
+    "modelo": "IGNITE V150 PRO",
+    "sabores": [
+      {
+        "sabor": "ALOE GRAPE",
+        "precio": "8,85",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v150-pro-aloe-grape/"
+      },
+      {
+        "sabor": "BLUEBERRY ICE",
+        "precio": "8,85",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v150-pro-blueberry-ice/"
+      },
+      {
+        "sabor": "CHERRY BANANA",
+        "precio": "8,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v150-pro-cherry-banana/"
+      },
+      {
+        "sabor": "CHERRY WATERMELON",
+        "precio": "8,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v150-pro-cherry-watermelon/"
+      },
+      {
+        "sabor": "DRAGON FRUIT LEMONADE",
+        "precio": "8,85",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v150-pro-dragon-fruit-lemonade/"
+      },
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "8,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v150-pro-grape-ice/"
+      },
+      {
+        "sabor": "GREEN APPLE",
+        "precio": "8,85",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v150-pro-green-apple/"
+      },
+      {
+        "sabor": "GREEN APPLE PEACH KIWI",
+        "precio": "8,85",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v150-pro-green-apple-peach-kiwi/"
+      },
+      {
+        "sabor": "LEMON ICE",
+        "precio": "8,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v150-pro-lemon-ice/"
+      },
+      {
+        "sabor": "PINEAPPLE ICE",
+        "precio": "8,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v150-pro-pineapple-ice/"
+      },
+      {
+        "sabor": "SOUR APPLE ICE",
+        "precio": "8,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v150-pro-sour-apple-ice/"
+      },
+      {
+        "sabor": "STRAW APPLE WATERMELON",
+        "precio": "8,85",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v150-pro-straw-apple-watermelon/"
+      }
+    ]
+  },
+  {
+    "modelo": "IGNITE V155 MATTE BLACK",
+    "sabores": [
+      {
+        "sabor": "BANANA ICE",
+        "precio": "9,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-matte-black-banana-ice/"
+      },
+      {
+        "sabor": "GREEN APPLE",
+        "precio": "9,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-matte-black-green-apple/"
+      },
+      {
+        "sabor": "PINEAPPLE ICE",
+        "precio": "9,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-matte-black-pineapple-ice/"
+      },
+      {
+        "sabor": "STRAW BANANA",
+        "precio": "9,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-matte-black-straw-banana/"
+      },
+      {
+        "sabor": "STRAW WATER",
+        "precio": "9,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-matte-black-starw-water/"
+      },
+      {
+        "sabor": "STRAWBERRY ICE",
+        "precio": "9,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-matte-black-strawberry-ice/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI",
+        "precio": "9,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-matte-black-strawberry-kiwi/"
+      },
+      {
+        "sabor": "WATERMELON DRAGON FRUIT",
+        "precio": "9,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-matte-black-watermelon-dragon-fruit/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "9,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-matte-black-watermelon-ice/"
+      },
+      {
+        "sabor": "WATERMELON MIX",
+        "precio": "9,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-matte-black-watermelon-mix/"
+      }
+    ]
+  },
+  {
+    "modelo": "IGNITE V155 ORANGE",
+    "sabores": [
+      {
+        "sabor": "BANANA ICE",
+        "precio": "9,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-orange-banana-ice/"
+      },
+      {
+        "sabor": "BLUEBERRY ICE",
+        "precio": "9,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-orange-blueberry-ice/"
+      },
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "9,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-orange-grape-ice/"
+      },
+      {
+        "sabor": "GREEN APPLE ICE",
+        "precio": "9,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-orange-green-apple-ice/"
+      },
+      {
+        "sabor": "ICY MINT",
+        "precio": "9,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-orange-icy-mint/"
+      },
+      {
+        "sabor": "KIWI PASS FRUIT",
+        "precio": "9,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-orange-kiwi-pass-fruit/"
+      },
+      {
+        "sabor": "PINEAPPLE ICE",
+        "precio": "9,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-orange-pineapple-ice/"
+      },
+      {
+        "sabor": "STRAW BANANA",
+        "precio": "9,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-orange-straw-banana/"
+      },
+      {
+        "sabor": "STRAWBERRY ICE",
+        "precio": "9,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-orange-strawberry-ice/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI",
+        "precio": "9,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v155-orange-strawberry-kiwi/"
+      },
+      {
+        "sabor": "STRAWBERRY WATER",
+        "precio": "9,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-orange-strawberry-water/"
+      },
+      {
+        "sabor": "TROPICAL ACAI",
+        "precio": "9,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-orange-tropical-acai/"
+      },
+      {
+        "sabor": "WATERMELON DRAGON FRUIT",
+        "precio": "9,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v155-orange-watermelon-dragon-fruit/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "9,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v155-orange-watermelon-ice/"
+      }
+    ]
+  },
+  {
+    "modelo": "IGNITE V250 BLACK",
+    "sabores": [
+      {
+        "sabor": "ICY MINT",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v250-black-icy-mint/"
+      },
+      {
+        "sabor": "PINEAPPLE ICE",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v250-black-pineapple-ice/"
+      },
+      {
+        "sabor": "PINEAPPLE KIWI DRAGON",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v250-black-pineapple-kiwi-dragon/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v250-black-strawberry-kiwi/"
+      }
+    ]
+  },
+  {
+    "modelo": "IGNITE V300 BLACK",
+    "sabores": [
+      {
+        "sabor": "BANANA COCONUT WATERMELON",
+        "precio": "11,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v300-black-banana-coconut-watermelon/"
+      },
+      {
+        "sabor": "BLUEBERRY ICE",
+        "precio": "11,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v300-black-blueberry-ice/"
+      },
+      {
+        "sabor": "CACTUS LIME SODA",
+        "precio": "11,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v300-black-cactus-lime-soda/"
+      },
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "11,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v300-black-grape-ice/"
+      },
+      {
+        "sabor": "GREEN APPLE",
+        "precio": "11,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v300-black-green-apple/"
+      },
+      {
+        "sabor": "ICY MENTHOL",
+        "precio": "11,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v300-black-icy-menthol/"
+      },
+      {
+        "sabor": "ICY MINT",
+        "precio": "11,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v300-black-icy-mint/"
+      },
+      {
+        "sabor": "MINT MELON",
+        "precio": "11,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v300-black-mint-melon/"
+      },
+      {
+        "sabor": "STRAWBERRY BANANA",
+        "precio": "11,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v300-black-strawberry-banana/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI",
+        "precio": "11,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v300-black-strawberry-kiwi/"
+      },
+      {
+        "sabor": "SWEET AND SOUR POME",
+        "precio": "11,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v300-black-sweet-and-sour-pome/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "11,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v300-black-watermelon-ice/"
+      },
+      {
+        "sabor": "WATERMELON MIX",
+        "precio": "11,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v300-black-watermelon-mix/"
+      }
+    ]
+  },
+  {
+    "modelo": "IGNITE V300 ULTRA SLIM",
+    "sabores": [
+      {
+        "sabor": "ALOE GRAPE",
+        "precio": "11,30",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-aloe-grape/"
+      },
+      {
+        "sabor": "BANANA COCONUT WATER",
+        "precio": "11,30",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-banana-coconut-water/"
+      },
+      {
+        "sabor": "BANANA ICE",
+        "precio": "11,30",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-ignite-v300-ultra-slim-banana-ice/"
+      },
+      {
+        "sabor": "BLUEBERRY ICE",
+        "precio": "11,30",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-blueberry-ice/"
+      },
+      {
+        "sabor": "BLUEBERRY STRAW COCONUT",
+        "precio": "11,30",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-blueberry-straw-coconut/"
+      },
+      {
+        "sabor": "CACTUS LIME SODA",
+        "precio": "11,30",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-cactus-lime-soda/"
+      },
+      {
+        "sabor": "DRAGON FRUIT WATERMELON",
+        "precio": "11,30",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-dragon-fruit-watermelon/"
+      },
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "11,30",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-grape-ice/"
+      },
+      {
+        "sabor": "GREEN APPLE",
+        "precio": "11,30",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-green-apple/"
+      },
+      {
+        "sabor": "ICY MINT",
+        "precio": "11,30",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-icy-mint/"
+      },
+      {
+        "sabor": "MENTHOL",
+        "precio": "11,30",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-menthol/"
+      },
+      {
+        "sabor": "MINTY MELON",
+        "precio": "11,30",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-minty-melon/"
+      },
+      {
+        "sabor": "PEACH MANGO",
+        "precio": "11,30",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-peach-mango/"
+      },
+      {
+        "sabor": "PINEAPPLE ICE",
+        "precio": "11,30",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-pineapple-ice/"
+      },
+      {
+        "sabor": "PINEAPPLE KIWI DRAGON FRUIT",
+        "precio": "11,30",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-pineapple-kiwi-dragon-fruit/"
+      },
+      {
+        "sabor": "PINEAPPLE MANGO",
+        "precio": "11,30",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-pineapple-mango/"
+      },
+      {
+        "sabor": "STRAWBERRY BANANA",
+        "precio": "11,30",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-strawberry-banana/"
+      },
+      {
+        "sabor": "STRAWBERRY ICE",
+        "precio": "11,30",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-strawberry-ice/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI",
+        "precio": "11,30",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-strawberry-kiwi/"
+      },
+      {
+        "sabor": "SWEET AND SOUR POMEGRANATE",
+        "precio": "11,30",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-sweet-and-sour-pomegranate/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "11,30",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-watermelon-ice/"
+      },
+      {
+        "sabor": "WATERMELON MIX",
+        "precio": "11,30",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v300-ultra-slim-watermelon-mix/"
+      }
+    ]
+  },
+  {
+    "modelo": "IGNITE V400 ICY",
+    "sabores": [
+      {
+        "sabor": "BLUEBERRY",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-blueberry/"
+      },
+      {
+        "sabor": "CHERRY BANANA",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-cherry-banana-ice/"
+      },
+      {
+        "sabor": "CHERRY WATERMELON ICE",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-cherry-watermelon-ice/"
+      },
+      {
+        "sabor": "GRAPE",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-grape/"
+      },
+      {
+        "sabor": "GRAPE BUBBLEGUM",
+        "precio": "11,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-grape-2/"
+      },
+      {
+        "sabor": "GRAPE MIX",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-grape-mix/"
+      },
+      {
+        "sabor": "GRAPE PEACH",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-grape-peach/"
+      },
+      {
+        "sabor": "MANGO",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-mango/"
+      },
+      {
+        "sabor": "MENTHOL",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-menthol/"
+      },
+      {
+        "sabor": "MINT",
+        "precio": "11,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-mint/"
+      },
+      {
+        "sabor": "PASS FUIT SOUR KIWI",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-pass-fuit-sour-kiwi/"
+      },
+      {
+        "sabor": "PEACH",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-peach/"
+      },
+      {
+        "sabor": "PEACH MANGO WATER",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-peach-mango-water/"
+      },
+      {
+        "sabor": "PINEAPPLE",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-pineapple/"
+      },
+      {
+        "sabor": "PINEAPPLE KIWI DRAGON FRUIT",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-pineapple-kiwi-dragon-fruit/"
+      },
+      {
+        "sabor": "SAKURA GRAPE",
+        "precio": "11,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-sakura-grape/"
+      },
+      {
+        "sabor": "STRAWBERRY",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-strawberry/"
+      },
+      {
+        "sabor": "STRAWBERRY APPLE WATER",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-strawberry-apple-water/"
+      },
+      {
+        "sabor": "STRAWBERRY BANANA",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-strawberry-banana/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-strawberry-kiwi/"
+      },
+      {
+        "sabor": "STRAWBERRY WATERMELON",
+        "precio": "11,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-strawberry-watermelon/"
+      },
+      {
+        "sabor": "TUTTI FRUIT MIX",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-tutti-fruit-mix/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-watermelon-ice/"
+      }
+    ]
+  },
+  {
+    "modelo": "IGNITE V400 SWEET",
+    "sabores": [
+      {
+        "sabor": "BANANA CHERRY",
+        "precio": "11,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v400-sweet-banana-cherry/"
+      },
+      {
+        "sabor": "PINEAPPLE ICE",
+        "precio": "11,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-sweet-pineapple-copia/"
+      }
+    ]
+  },
+  {
+    "modelo": "IGNITE V500",
+    "sabores": [
+      {
+        "sabor": "BANANA CHERRY",
+        "precio": "13,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v500-cherry-banana/"
+      },
+      {
+        "sabor": "BLUEBERRY ICE",
+        "precio": "13,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v400-icy-blue-raspberry/"
+      },
+      {
+        "sabor": "COOL MENTHOL",
+        "precio": "13,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v500-cool-menthol/"
+      },
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "13,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v500-grape-ice/"
+      },
+      {
+        "sabor": "GREEN APPLE",
+        "precio": "13,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v500-green-apple/"
+      },
+      {
+        "sabor": "GREEN APPLE PEACH KIWI",
+        "precio": "13,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v500-green-apple-peach-kiwi/"
+      },
+      {
+        "sabor": "ICY MINT",
+        "precio": "13,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v500-icy-mint/"
+      },
+      {
+        "sabor": "KIWI ACAI",
+        "precio": "13,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v500-kiwi-acai/"
+      },
+      {
+        "sabor": "MANGO PASSIONFRUIT",
+        "precio": "13,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v500-mango-passionfruit/"
+      },
+      {
+        "sabor": "PEACH GRAPE",
+        "precio": "13,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v500-peach-grape/"
+      },
+      {
+        "sabor": "PINEAPPLE ICE",
+        "precio": "13,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v500-pineapple-ice/"
+      },
+      {
+        "sabor": "PINEAPPLE MANGO",
+        "precio": "13,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v500-pineapple-mango/"
+      },
+      {
+        "sabor": "STRAWBERRY APPLE WATERMELON",
+        "precio": "13,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v500-strawberry-apple-watermelon/"
+      },
+      {
+        "sabor": "STRAWBERRY BANANA",
+        "precio": "13,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v500-strawberry-banana/"
+      },
+      {
+        "sabor": "STRAWBERRY ICE",
+        "precio": "13,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v500-strawberry-ice/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI",
+        "precio": "13,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v500-strawberry-kiwi/"
+      },
+      {
+        "sabor": "STRAWBERRY WATERMELON",
+        "precio": "13,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v500-strawberry-watermelon/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "13,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v500-watermelon-ice/"
+      },
+      {
+        "sabor": "WATERMELON KIWI",
+        "precio": "13,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-v500-watermelon-kiwi/"
+      },
+      {
+        "sabor": "WATERMELON MIX",
+        "precio": "13,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-v500-watermelon-mix/"
+      }
+    ]
+  },
+  {
+    "modelo": "IGNITE VMIX 40K",
+    "sabores": [
+      {
+        "sabor": "ACAI ICE + WATER GRAPE",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-acai-ice-water-grape/"
+      },
+      {
+        "sabor": "ALOE GRAPE + STRAW WAT",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-aloe-grape-straw-wat/"
+      },
+      {
+        "sabor": "APPLE ICE + STRAW WATERM",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-apple-ice-straw-waterm/"
+      },
+      {
+        "sabor": "BANANA ICE + STRAWB ICE",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-banana-ice-strawb-ice/"
+      },
+      {
+        "sabor": "BLUEBERRY ICE + RASP BLA",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-blueberry-ice-rasp-bla/"
+      },
+      {
+        "sabor": "CHERRY ICE + WATERMEL IC",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-cherry-ice-watermel-ic/"
+      },
+      {
+        "sabor": "GRAPE ICE + STRAWBERRY",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-grape-ice-strawberry/"
+      },
+      {
+        "sabor": "GRAPE POP + PEACH ICE",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-grape-pop-peach-ice/"
+      },
+      {
+        "sabor": "ICY MINT + PEACH GRAPE",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-icy-mint-peach-grape/"
+      },
+      {
+        "sabor": "MANGO ICE + PASS FRUI GU",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-mango-ice-pass-frui-gu/"
+      },
+      {
+        "sabor": "MANGO ICE + PEACH WAT IC",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-mango-ice-peach-wat-ic/"
+      },
+      {
+        "sabor": "MENTHOL + MIGHTY MELON",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-menthol-mighty-melon/"
+      },
+      {
+        "sabor": "NEW BANANA CHERRY + GRAPE ICE",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-new-banana-cherry-grape-ice/"
+      },
+      {
+        "sabor": "NEW BLUEBERRY + STRAWBERRY",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-new-blueberry-strawberry/"
+      },
+      {
+        "sabor": "NEW CHERRY + GRAPE ICE",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-new-cherry-grape-ice/"
+      },
+      {
+        "sabor": "NEW GRAPE ICE + STRAWBERRY",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-new-grape-ice-strawberry/"
+      },
+      {
+        "sabor": "NEW ICY MINT + MENTHOL",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-new-icy-mint-menthol/"
+      },
+      {
+        "sabor": "NEW ICY MINT + PEACH GRAPE",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-new-icy-mint-peach-grape/"
+      },
+      {
+        "sabor": "NEW KIWI PASSION GUAVA ICE + STRAWBERRY ICE",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-new-kiwi-passion-guava-ice-strawberry-ice/"
+      },
+      {
+        "sabor": "NEW MANGO ICE + PASSION FRUIT",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-new-mango-ice-passion-fruit/"
+      },
+      {
+        "sabor": "NEW MENTHOL + MIGHTY MELON",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-new-menthol-mighty-melon/"
+      },
+      {
+        "sabor": "NEW PINEAPPLE + COCONUT",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-new-pineapple-coconut/"
+      },
+      {
+        "sabor": "NEW PINEAPPLE + PASSION FRUIT",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-new-pineapple-passion-fruit/"
+      },
+      {
+        "sabor": "NEW RASPBERRY ICE + WATERMELON ICE",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-new-raspberry-ice-watermelon-ice/"
+      },
+      {
+        "sabor": "NEW STRAWBERRY GRAPE ICE + KIWI WATERMELON ICE",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-new-strawberry-grape-ice-kiwi-watermelon-ice/"
+      },
+      {
+        "sabor": "NEW STRAWBERRY KIWI ICE + GRAPE KIWI ICE",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-new-strawberry-kiwi-ice-grape-kiwi-ice/"
+      },
+      {
+        "sabor": "NEW STRAWBERRY LEMON + GRAPE ICE",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-new-strawberry-lemon-grape-ice/"
+      },
+      {
+        "sabor": "NEW TRIPLE BERRY ICE + GRAPE ICE",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-new-triple-berry-ice-grape-ice/"
+      },
+      {
+        "sabor": "NEW WATERMELON ICE + GRAPE ICE",
+        "precio": "12,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-new-watermelon-ice-grape-ice/"
+      },
+      {
+        "sabor": "ORANGE ICE + STRAWB ICE",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-orange-ice-strawb-ice/"
+      },
+      {
+        "sabor": "PINEAPPLE ICE + PASS FRU",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-pineapple-ice-pass-fru/"
+      },
+      {
+        "sabor": "STRAWB ICE + PINN MANGO",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-strawb-ice-pinn-mango/"
+      },
+      {
+        "sabor": "STRAWB MANGO ICE + BANAN",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-strawb-mango-ice-banan/"
+      },
+      {
+        "sabor": "WATERMELO ICE + GRAPE IC",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/ignite-vmix-40k-watermelo-ice-grape-ic/"
+      }
+    ]
+  },
+  {
+    "modelo": "LIFE POD ECO II CART 10K",
+    "sabores": [
+      {
+        "sabor": "BANANA CUSTARD",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-banana-custard/"
+      },
+      {
+        "sabor": "BANANA ICE",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-banana-ice/"
+      },
+      {
+        "sabor": "BLACK BERRY ICE",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-black-berry-ice/"
+      },
+      {
+        "sabor": "BLACKBERRY HULL",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-blackberry-hull/"
+      },
+      {
+        "sabor": "BLUE RAZZ ICE",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-blue-razz-ice/"
+      },
+      {
+        "sabor": "BLUEBERRY MINT",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-blueberry-mint/"
+      },
+      {
+        "sabor": "BLUEBERRY STRAW",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-blueberry-straw/"
+      },
+      {
+        "sabor": "BLUEBERRY WATER",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-blueberry-water/"
+      },
+      {
+        "sabor": "CANDY ICE",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-candy-ice/"
+      },
+      {
+        "sabor": "CAPUCCINO",
+        "precio": "7,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-capuccino/"
+      },
+      {
+        "sabor": "CHERRY BUBBLEG",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-cherry-bubbleg/"
+      },
+      {
+        "sabor": "CHERRY LIME ICE",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-cherry-lime-ice/"
+      },
+      {
+        "sabor": "COCONUT WATER",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-coconut-water/"
+      },
+      {
+        "sabor": "DRAG BLUERAZZ",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-drag-bluerazz/"
+      },
+      {
+        "sabor": "DRAGON FRUIT",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-dragon-fruit/"
+      },
+      {
+        "sabor": "GRAPE",
+        "precio": "7,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-grape/"
+      },
+      {
+        "sabor": "GRAPE BUBBLEGUM",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-grape-bubblegum/"
+      },
+      {
+        "sabor": "GRAPE HONEYDEW",
+        "precio": "7,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-grape-honeydew/"
+      },
+      {
+        "sabor": "GREEN APPLE",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-green-apple/"
+      },
+      {
+        "sabor": "GREEN GRAPE",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-green-grape/"
+      },
+      {
+        "sabor": "KIWI BERRIES",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-kiwi-berries/"
+      },
+      {
+        "sabor": "LOVE 66",
+        "precio": "7,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-love-66/"
+      },
+      {
+        "sabor": "MENTHOL",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-menthol/"
+      },
+      {
+        "sabor": "MIAMI MINT",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-miami-mint/"
+      },
+      {
+        "sabor": "MINT BUBBLEGUM",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-mint-bubblegum/"
+      },
+      {
+        "sabor": "MINT WATER BERRIES",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-mint-water-berries/"
+      },
+      {
+        "sabor": "MONSTER DRINK",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-monster-drink/"
+      },
+      {
+        "sabor": "PASSION FRUIT",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-passion-fruit/"
+      },
+      {
+        "sabor": "PASSION MANGO",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-passion-mango/"
+      },
+      {
+        "sabor": "PEACH MANGO",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-peach-mango/"
+      },
+      {
+        "sabor": "PINK LEMONADE",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-pink-lemonade/"
+      },
+      {
+        "sabor": "POLAR ICE",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-polar-ice/"
+      },
+      {
+        "sabor": "STRAW BUBBLEGUM",
+        "precio": "7,50",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-straw-bubblegum/"
+      },
+      {
+        "sabor": "STRAW COCONUT",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-straw-coconut/"
+      },
+      {
+        "sabor": "STRAW KIWI",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-straw-kiwi/"
+      },
+      {
+        "sabor": "STRAW WATER",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-straw-water/"
+      },
+      {
+        "sabor": "STRONG APPLE",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-strong-apple/"
+      },
+      {
+        "sabor": "SUMMER LOVE",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-summer-love/"
+      },
+      {
+        "sabor": "WATERMELON",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-watermelon/"
+      },
+      {
+        "sabor": "WATERMELON BUBB",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-watermelon-bubb/"
+      },
+      {
+        "sabor": "WATERMELON PEACH",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-watermelon-peach/"
+      },
+      {
+        "sabor": "WHITE MOCHA",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-white-mocha/"
+      },
+      {
+        "sabor": "WHITE PEACH BERRIES",
+        "precio": "7,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-ii-cart-10k-white-peach-berries/"
+      }
+    ]
+  },
+  {
+    "modelo": "LIFE POD ECO III CART",
+    "sabores": [
+      {
+        "sabor": "BLUEBERRY BUBBLEGUM",
+        "precio": "8,25",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/life-pod-eco-iii-cart-blueberry-bubblegum/"
+      },
+      {
+        "sabor": "CHERRY BUBBLEGUM",
+        "precio": "8,25",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/life-pod-eco-iii-cart-cherry-bubblegum/"
+      },
+      {
+        "sabor": "GRAPE BUBBLEGUM",
+        "precio": "8,25",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/life-pod-eco-iii-cart-grape-bubblegum/"
+      },
+      {
+        "sabor": "GREEN APPLE",
+        "precio": "8,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-iii-cart-green-apple/"
+      },
+      {
+        "sabor": "GREEN GRAPE",
+        "precio": "8,25",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/life-pod-eco-iii-cart-green-grape/"
+      },
+      {
+        "sabor": "LOVE 66",
+        "precio": "8,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-iii-cart-love-66/"
+      },
+      {
+        "sabor": "MANGO BUBBLEGUM",
+        "precio": "8,25",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/life-pod-eco-iii-cart-mango-bubblegum/"
+      },
+      {
+        "sabor": "MIAMI MINT",
+        "precio": "8,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-iii-cart-miami-mint/"
+      },
+      {
+        "sabor": "MINT BUBBLEGUM",
+        "precio": "8,25",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/life-pod-eco-iii-cart-mint-bubblegum/"
+      },
+      {
+        "sabor": "PASSIONT FRUIT BUBBLEGUM",
+        "precio": "8,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-iii-cart-passiont-fruit-bubblegum/"
+      },
+      {
+        "sabor": "STRAWBERRY BUBBLEGUM",
+        "precio": "8,25",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/life-pod-eco-iii-cart-strawberry-bubblegum/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI",
+        "precio": "8,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-eco-iii-cart-strawberry-kiwi/"
+      },
+      {
+        "sabor": "WATERMELON BUBBLEGUM",
+        "precio": "8,25",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/life-pod-eco-iii-cart-watermelon-bubblegum/"
+      }
+    ]
+  },
+  {
+    "modelo": "LIFE POD THE ONE CARBON",
+    "sabores": [
+      {
+        "sabor": "BLUERAZZ BBG",
+        "precio": "10,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/life-pod-the-one-carbon-bluerazz-bbg/"
+      },
+      {
+        "sabor": "COCONUT WATERMELON",
+        "precio": "10,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/life-pod-the-one-carbon-coconut-watermelon/"
+      },
+      {
+        "sabor": "MIAMI MINT",
+        "precio": "10,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/life-pod-the-one-carbon-miami-mint/"
+      },
+      {
+        "sabor": "SPEARMINT",
+        "precio": "10,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/life-pod-the-one-carbon-spearmint/"
+      },
+      {
+        "sabor": "STRAWBERRY BBG",
+        "precio": "10,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/life-pod-the-one-carbon-strawberry-bbg/"
+      },
+      {
+        "sabor": "WATERMELON BBG",
+        "precio": "10,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/life-pod-the-one-carbon-watermelon-bbg/"
+      }
+    ]
+  },
+  {
+    "modelo": "LIFE POD THE ONE GRAY",
+    "sabores": [
+      {
+        "sabor": "STRAW BBG",
+        "precio": "10,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/life-pod-the-one-gray-straw-bbg/"
+      }
+    ]
+  },
+  {
+    "modelo": "LOST MARY DURA 35000",
+    "sabores": [
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/lost-mary-dura-35000-grape-ice/"
+      },
+      {
+        "sabor": "GRAPEFRUIT PASS",
+        "precio": "8,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/lost-mary-dura-35000-grapefruit-pass/"
+      },
+      {
+        "sabor": "GREEN APPLE",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/lost-mary-dura-35000-green-apple/"
+      },
+      {
+        "sabor": "HAWAIIAN JUICE",
+        "precio": "8,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/lost-mary-dura-35000-hawaiian-juice/"
+      },
+      {
+        "sabor": "HAWAIIAN MINT",
+        "precio": "8,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/lost-mary-dura-35000-hawaiian-mint/"
+      },
+      {
+        "sabor": "MANGO ICE",
+        "precio": "9,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/lost-mary-dura-35000-mango-ice/"
+      },
+      {
+        "sabor": "MIAMI MINT",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/lost-mary-dura-35000-miami-mint/"
+      },
+      {
+        "sabor": "PINEAPPLE ICE",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/lost-mary-dura-35000-pineapple-ice/"
+      },
+      {
+        "sabor": "POME CHERRY PINEAPPLE",
+        "precio": "8,75",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/lost-mary-dura-35000-pome-cherry-pineapple/"
+      },
+      {
+        "sabor": "STRAWBERRY ICE",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/lost-mary-dura-35000-strawberry-ice/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/lost-mary-dura-35000-strawberry-kiwi/"
+      },
+      {
+        "sabor": "STRAWBERRY WATERMEL",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/lost-mary-dura-35000-strawberry-watermel/"
+      },
+      {
+        "sabor": "SUMMER ORANGE",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/lost-mary-dura-35000-summer-orange/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "8,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/lost-mary-dura-35000-watermelon-ice/"
+      }
+    ]
+  },
+  {
+    "modelo": "LOST MARY MT20.000",
+    "sabores": [
+      {
+        "sabor": "BERRY BURST",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/lost-mary-mt15000-miami-mint/"
+      },
+      {
+        "sabor": "BLUE RAZZ ICE",
+        "precio": "7,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/lost-mary-mt20-000-blue-razz/"
+      },
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/lost-mary-mt20-000-grape-ice/"
+      },
+      {
+        "sabor": "HAWAIAN JUICE",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/lost-mary-mt20-000-hawaian-juice/"
+      },
+      {
+        "sabor": "MIAMI MINT",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/lost-mary-mt20-000-miami-mint/"
+      },
+      {
+        "sabor": "NANA COCONUT",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/lost-mary-mt20-000-nana-coconut/"
+      },
+      {
+        "sabor": "PINEAPPLE LEMON",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/lost-mary-mt20-000-pineapple-coconut/"
+      },
+      {
+        "sabor": "ROCKET FREEZE",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/lost-mary-mt20-000-rocket-freeze/"
+      },
+      {
+        "sabor": "SOUR STRAW DRAGON",
+        "precio": "7,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/lost-mary-mt20-000-sour-straw-dragon/"
+      },
+      {
+        "sabor": "STRAW KIWI",
+        "precio": "7,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/lost-mary-mt20-000-straw-kiwi/"
+      },
+      {
+        "sabor": "STRAWMELON PEACH",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/lost-mary-mt20-000-strawmelon-peach/"
+      },
+      {
+        "sabor": "SUMMER GRAPE",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/lost-mary-mt20-000-summer-grape/"
+      },
+      {
+        "sabor": "TOASTED BANANA",
+        "precio": "7,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/lost-mary-mt20-000-toasted-banana/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "7,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/lost-mary-mt20-000-watermelon-ice/"
+      },
+      {
+        "sabor": "WINTER MINT",
+        "precio": "7,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/lost-mary-mt20-000-winter-mint/"
+      }
+    ]
+  },
+  {
+    "modelo": "MASKKING FLAVOR X 50K",
+    "sabores": [
+      {
+        "sabor": "BLUEBERRY ICE",
+        "precio": "10,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-flavor-x-50k-blueberry-ice/"
+      },
+      {
+        "sabor": "BLUEBERRY WATER ICE",
+        "precio": "10,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-flavor-x-50k-blueberry-water-ice/"
+      },
+      {
+        "sabor": "BLUERAZZ ICE",
+        "precio": "10,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-flavor-x-50k-bluerazz-ice/"
+      },
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "10,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-flavor-x-50k-grape-ice/"
+      },
+      {
+        "sabor": "MEXICAN MANGO ICE",
+        "precio": "10,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-flavor-x-50k-mexican-mango-ice/"
+      },
+      {
+        "sabor": "MIAMI MINT",
+        "precio": "10,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-flavor-x-50k-miami-mint/"
+      },
+      {
+        "sabor": "PEACH ICE",
+        "precio": "10,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-flavor-x-50k-peach-ice/"
+      },
+      {
+        "sabor": "PINEAPPLE ICE",
+        "precio": "10,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-flavor-x-50k-pineapple-ice/"
+      },
+      {
+        "sabor": "STRAW GRAPE ICE",
+        "precio": "10,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-flavor-x-50k-straw-grape-ice/"
+      },
+      {
+        "sabor": "STRAW WATER",
+        "precio": "10,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-flavor-x-50k-straw-water/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "10,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-flavor-x-50k-watermelon-ice/"
+      }
+    ]
+  },
+  {
+    "modelo": "MASKKING ICEX 40K",
+    "sabores": [
+      {
+        "sabor": "APPLE PEAR MELOD",
+        "precio": "9,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-icex-40k-apple-pear-melod/"
+      },
+      {
+        "sabor": "COFFEE GUM BLISS",
+        "precio": "9,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-icex-40k-coffee-gum-bliss/"
+      },
+      {
+        "sabor": "ESPRESSO VELVET",
+        "precio": "9,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-icex-40k-espresso-velvet/"
+      }
+    ]
+  },
+  {
+    "modelo": "MASKKING MIBO 35K",
+    "sabores": [
+      {
+        "sabor": "BLUE RAZZ ICE",
+        "precio": "7,60",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/maskking-mibo-35k-blue-razz-ice/"
+      },
+      {
+        "sabor": "BLUEBERRY ICE",
+        "precio": "8,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-mibo-35k-blueberry-ice/"
+      },
+      {
+        "sabor": "CHERRY COLA",
+        "precio": "7,60",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/maskking-mibo-35k-cherry-cola/"
+      },
+      {
+        "sabor": "COOL MINT",
+        "precio": "7,60",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/maskking-mibo-35k-cool-mint/"
+      },
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "8,25",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/maskking-mibo-35k-grape-ice/"
+      },
+      {
+        "sabor": "MANGO PEACH ICE",
+        "precio": "7,60",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/maskking-mibo-35k-mango-peach-ice/"
+      },
+      {
+        "sabor": "PASS MELON FREEZE",
+        "precio": "7,60",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/maskking-mibo-35k-pass-melon-freeze/"
+      },
+      {
+        "sabor": "PINEAPPLE ICE",
+        "precio": "7,60",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/maskking-mibo-35k-pineapple-ice/"
+      },
+      {
+        "sabor": "POMEGRANATE LEMON",
+        "precio": "7,60",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/maskking-mibo-35k-pomegranate-lemon/"
+      },
+      {
+        "sabor": "RASPBERRY WATER",
+        "precio": "7,60",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/maskking-mibo-35k-raspberry-water/"
+      },
+      {
+        "sabor": "STRAW BANANA ICE",
+        "precio": "7,60",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/maskking-mibo-35k-straw-banana-ice/"
+      },
+      {
+        "sabor": "STRAW KIWI ICE",
+        "precio": "8,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-mibo-35k-straw-kiwi-ice/"
+      },
+      {
+        "sabor": "STRAW MANGO ICE",
+        "precio": "7,60",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/maskking-mibo-35k-straw-mango-ice/"
+      },
+      {
+        "sabor": "STRAW RASPBERRY CHERRY",
+        "precio": "8,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-mibo-35k-straw-raspberry-cherry/"
+      },
+      {
+        "sabor": "STRAWBERRY ICE",
+        "precio": "8,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-mibo-35k-strawberry-ice/"
+      },
+      {
+        "sabor": "STRAWBERRY WATER ICE",
+        "precio": "7,60",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/maskking-mibo-35k-strawberry-water-ice/"
+      },
+      {
+        "sabor": "WATER BUBBLE ICE",
+        "precio": "8,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-mibo-35k-water-bubble-ice/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "8,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/maskking-mibo-35k-watermelon-ice/"
+      }
+    ]
+  },
+  {
+    "modelo": "NIKBAR 10000",
+    "sabores": [
+      {
+        "sabor": "ALOE GRAPE",
+        "precio": "6,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-10000-aloe-grape/"
+      },
+      {
+        "sabor": "ARTIC GUM",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-artic-gum/"
+      },
+      {
+        "sabor": "BANANA ICE",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-banana-ice/"
+      },
+      {
+        "sabor": "BLUEBERRY ICE",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-blueberry-ice/"
+      },
+      {
+        "sabor": "BLUEBERRY RASPBERR",
+        "precio": "6,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-10000-blueberry-raspberr/"
+      },
+      {
+        "sabor": "CHERRY WATERMELON",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-cherry-watermelon/"
+      },
+      {
+        "sabor": "FRESH MINT",
+        "precio": "6,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-10000-grape-ice/"
+      },
+      {
+        "sabor": "GRAPE APPLE ICE",
+        "precio": "6,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-10000-grape-apple/"
+      },
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-grape-ice-2/"
+      },
+      {
+        "sabor": "GRAPE STRAWBERRY ICE",
+        "precio": "6,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-10000-grape-strawberry-ice/"
+      },
+      {
+        "sabor": "GREEN APPLE",
+        "precio": "6,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-10000-green-apple/"
+      },
+      {
+        "sabor": "ICY MINT",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-icy-mint/"
+      },
+      {
+        "sabor": "MENTHOL",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-menthol-2/"
+      },
+      {
+        "sabor": "MIAMI MINT",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-miami-mint/"
+      },
+      {
+        "sabor": "PASS SOUR KIWI",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-menthol/"
+      },
+      {
+        "sabor": "PASSION FRUIT ICE MINT",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-passion-fruit-ice-mint/"
+      },
+      {
+        "sabor": "PINEAPPLE ICE",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-pineapple-ice/"
+      },
+      {
+        "sabor": "SAKURA GRAPE",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-sakura-grape/"
+      },
+      {
+        "sabor": "SPEARMINT GRAPE",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-spearmint-grape/"
+      },
+      {
+        "sabor": "SPEARMINT GUM",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-spearmint-gum/"
+      },
+      {
+        "sabor": "SPEARMINT STRAWBERRY",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-spearmint-strawberry/"
+      },
+      {
+        "sabor": "STONE FREEZE",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-stone-freeze/"
+      },
+      {
+        "sabor": "STRAWBERRY APPLE WATERMELON",
+        "precio": "6,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-10000-strawberry-apple-watermelon/"
+      },
+      {
+        "sabor": "STRAWBERRY BANANA",
+        "precio": "6,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-10000-strawberry-banana/"
+      },
+      {
+        "sabor": "STRAWBERRY ICE",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-strawberry-ice/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-strawberry-kiwi/"
+      },
+      {
+        "sabor": "WATERMELON BUBBLEGUM",
+        "precio": "6,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-10000-watermelon-bubblegum/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-watermelon-ice/"
+      },
+      {
+        "sabor": "WATERMELON MINT",
+        "precio": "6,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-10000-watermelon-mint/"
+      },
+      {
+        "sabor": "WATERMELON SOUR",
+        "precio": "6,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-10000-watermelon-sour/"
+      }
+    ]
+  },
+  {
+    "modelo": "NIKBAR 25000",
+    "sabores": [
+      {
+        "sabor": "BLUEBERRY WATERMELON",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-25000-blueberry-watermelon/"
+      }
+    ]
+  },
+  {
+    "modelo": "NIKBAR 30000",
+    "sabores": [
+      {
+        "sabor": "BLUEBERRY ICE",
+        "precio": "8,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-30000-blueberry-ice/"
+      },
+      {
+        "sabor": "CHERRY BANANA",
+        "precio": "8,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-30000-cherry-banana/"
+      },
+      {
+        "sabor": "FRESH MINT",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-30000-fresh-mint/"
+      },
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "8,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-30000-grape-ice/"
+      },
+      {
+        "sabor": "ICY MINT",
+        "precio": "8,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-30000-icy-mint/"
+      },
+      {
+        "sabor": "MENTHOL",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-30000-menthol/"
+      },
+      {
+        "sabor": "MIAMI MINT",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-30000-miami-mint/"
+      },
+      {
+        "sabor": "PASSION FRUIT SOUR KIWI",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/nikbar-30000-passion-fruit-sour-kiwi/"
+      },
+      {
+        "sabor": "SAKURA GRAPE",
+        "precio": "8,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-30000-sakura-grape/"
+      },
+      {
+        "sabor": "SOUR APPLE ICE",
+        "precio": "8,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-30000-sour-apple-ice/"
+      },
+      {
+        "sabor": "STRAWBERRY APPLE WATERMELON",
+        "precio": "8,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-30000-strawberry-apple-watermelon/"
+      },
+      {
+        "sabor": "STRAWBERRY ICE",
+        "precio": "8,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-30000-strawberry-ice/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI",
+        "precio": "8,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-30000-strawberry-kiwi/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "8,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-30000-watermelon-ice/"
+      }
+    ]
+  },
+  {
+    "modelo": "NIKBAR 40K ICE NIC",
+    "sabores": [
+      {
+        "sabor": "BANANA ICE",
+        "precio": "10,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-40k-ice-nic-banana-ice/"
+      }
+    ]
+  },
+  {
+    "modelo": "NIKBAR 40K T.CHILL",
+    "sabores": [
+      {
+        "sabor": "ICE MINT",
+        "precio": "10,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-40k-t-chill-ice-mint/"
+      },
+      {
+        "sabor": "MENTHOL",
+        "precio": "10,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-40k-t-chill-menthol/"
+      },
+      {
+        "sabor": "PINEAPPLE ICE",
+        "precio": "10,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/nikbar-40k-t-chill-pineapple-ice/"
+      }
+    ]
+  },
+  {
+    "modelo": "OXBAR 30000 MAGIC MAZE 2",
+    "sabores": [
+      {
+        "sabor": "BLUE RASPB LEMON",
+        "precio": "9,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/oxbar-30000-magic-maze-2-blue-raspb-lemon/"
+      }
+    ]
+  },
+  {
+    "modelo": "OXBAR 35K ICE+NIC",
+    "sabores": [
+      {
+        "sabor": "STRAWBERRY ORANGE POP",
+        "precio": "10,80",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/oxbar-35k-icenic-strawberry-orange-pop/"
+      }
+    ]
+  },
+  {
+    "modelo": "OXBAR 50K INVIS VAPOR 3IN1",
+    "sabores": [
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/oxbar-50k-invis-vapor-3in1-grape-ice/"
+      },
+      {
+        "sabor": "ICY MINT",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/oxbar-50k-invis-vapor-3in1-icy-mint/"
+      },
+      {
+        "sabor": "MENTHOL",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/oxbar-50k-invis-vapor-3in1-menthol/"
+      },
+      {
+        "sabor": "PASSIONFRUIT SOUR KIWI",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/oxbar-50k-invis-vapor-3in1-passionfruit-sour-kiwi/"
+      },
+      {
+        "sabor": "PINEAPPLE ICE",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/oxbar-50k-invis-vapor-3in1-pineapple-ice/"
+      },
+      {
+        "sabor": "PINEAPPLE KIWI DRAGON",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/oxbar-50k-invis-vapor-3in1-pineapple-kiwi-dragon/"
+      },
+      {
+        "sabor": "STRAWBERRY GRAPE",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/oxbar-50k-invis-vapor-3in1-strawberry-grape/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI",
+        "precio": "12,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/oxbar-50k-invis-vapor-3in1-strawberry-kiwi/"
+      }
+    ]
+  },
+  {
+    "modelo": "OXBAR X15",
+    "sabores": [
+      {
+        "sabor": "ALOE GRAPE ICE",
+        "precio": "7,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/oxbar-x15k-aloe-grape-ice/"
+      }
+    ]
+  },
+  {
+    "modelo": "OXBAR X15K",
+    "sabores": [
+      {
+        "sabor": "BLUEBERRY ICE",
+        "precio": "7,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/oxbar-x15k-blueberry-ice/"
+      },
+      {
+        "sabor": "COOL MINT",
+        "precio": "7,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/oxbar-x15k-cool-mint/"
+      },
+      {
+        "sabor": "GRAPE ICE",
+        "precio": "7,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/oxbar-x15k-grape-ice/"
+      },
+      {
+        "sabor": "GRAPE LYCHEE",
+        "precio": "7,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/oxbar-x15k-grape-lychee/"
+      },
+      {
+        "sabor": "MIX BERRIES ICE",
+        "precio": "7,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/oxbar-x15k-mix-berries-ice/"
+      },
+      {
+        "sabor": "STRAWBERRY PEACH ICE",
+        "precio": "7,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/oxbar-x15k-strawberry-peach-ice/"
+      },
+      {
+        "sabor": "STRAWBERRY WATERMELON ICE",
+        "precio": "7,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/oxbar-x15k-strawberry-watermelon-ice/"
+      },
+      {
+        "sabor": "WATERMELON SLUSHIE",
+        "precio": "7,25",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/oxbar-x15k-watermelon-slushie/"
+      }
+    ]
+  },
+  {
+    "modelo": "SMOK PRIVBAR TU 15K",
+    "sabores": [
+      {
+        "sabor": "BLACKBERRY PEACH LEMON",
+        "precio": "5,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/smok-privbar-tu-15k-blackberry-peach-lemon/"
+      },
+      {
+        "sabor": "HONDULU BLUE",
+        "precio": "5,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/smok-privbar-tu-15k-hondulu-blue/"
+      },
+      {
+        "sabor": "PEACH BERRY ICE",
+        "precio": "5,50",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/smok-privbar-tu-15k-peach-berry-ice/"
+      },
+      {
+        "sabor": "TROPICAL LIME BLAST",
+        "precio": "4,75",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/smok-privbar-tu-15k-triple-mango/"
+      }
+    ]
+  },
+  {
+    "modelo": "VAPORESSO DOJO X 40K",
+    "sabores": [
+      {
+        "sabor": "BAJA SPLASH",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-baja-splash/"
+      },
+      {
+        "sabor": "BERRY BLAST TRIAD",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-berry-blast-triad/"
+      },
+      {
+        "sabor": "BLUE RAZZ ICE",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-blue-razz-ice/"
+      },
+      {
+        "sabor": "BLUE STAR",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-blue-star/"
+      },
+      {
+        "sabor": "FRESH BERRY ORANGE",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-fresh-berry-orange/"
+      },
+      {
+        "sabor": "FRESH SPLASH",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-fresh-splash/"
+      },
+      {
+        "sabor": "FROSTY BANANA TAFFY",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-frosty-banana-taffy/"
+      },
+      {
+        "sabor": "FROZEN GRAPEFRUIT",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-frozen-grapefruit/"
+      },
+      {
+        "sabor": "FUCKING FAB",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-fucking-fab/"
+      },
+      {
+        "sabor": "GRAPE MOJO",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-grape-mojo/"
+      },
+      {
+        "sabor": "HAWAIAN DREAM",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-hawaian-dream/"
+      },
+      {
+        "sabor": "MEXICO MANGO",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-mexico-mango/"
+      },
+      {
+        "sabor": "MIAMI MINT",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-miami-mint/"
+      },
+      {
+        "sabor": "PEACH SMASH",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-peach-smash/"
+      },
+      {
+        "sabor": "PINK LEMONADE",
+        "precio": "8,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-pink-lemonade/"
+      },
+      {
+        "sabor": "RASPBERRY PEACH LIME",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-raspberry-peach-lime/"
+      },
+      {
+        "sabor": "SOUR APPLE B-POP",
+        "precio": "8,00",
+        "estado": "Agotado",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-sour-apple-b-pop/"
+      },
+      {
+        "sabor": "SOUR BATCH WATERMELON PEACH",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k/"
+      },
+      {
+        "sabor": "SOUR GUSH",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-sour-gush/"
+      },
+      {
+        "sabor": "STRAWBERRY KIWI",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-strawberry-kiwi/"
+      },
+      {
+        "sabor": "STRAWBERRY SLAM DUNK",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-strawberry-slam-dunk/"
+      },
+      {
+        "sabor": "TROPICAL BOOM",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-tropical-boom/"
+      },
+      {
+        "sabor": "WATERMELON ICE",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-watermelon-ice/"
+      },
+      {
+        "sabor": "WHITE GUMMY",
+        "precio": "8,00",
+        "estado": "En stock",
+        "url": "https://italiashop.com.py/product/vaporesso-dojo-x-40k-white-gummy/"
+      }
+    ]
+  }
+]

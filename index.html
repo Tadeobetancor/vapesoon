@@ -35,10 +35,10 @@
   --green-thc-dim:#2a9650;
   --gold:#ffc857;
   --gold-dim:#caa04a;
-  /* richer, multi-stop version of the gold->orange pair used for every
-     wholesale CTA — a plain 2-color gold/orange-pulp blend reads as flat at
-     button size, this adds a highlight and a deeper shadow stop for depth. */
-  --wholesale-grad:linear-gradient(135deg, #ffe08a 0%, var(--gold) 32%, var(--orange-pulp) 68%, #e0670f 100%);
+  /* Flat two-stop gold->orange blend for every wholesale CTA — kept to a
+     single accent hue on purpose so the wholesale flow reads calm instead
+     of busy (it used to add extra highlight/shadow stops here). */
+  --wholesale-grad:linear-gradient(135deg, var(--gold) 0%, var(--orange-pulp) 100%);
   --wholesale-grad-border:rgba(200,92,12,.55);
   --white-glove:#f2f9ff;
   --ink:#dbe9f7;
@@ -620,7 +620,7 @@ main{position:relative;z-index:1;}
   border-radius:50%;
   background:rgba(8,18,32,.85);
   border:1px solid var(--line);
-  color:var(--blue-bright);
+  color:var(--white-glove);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -1546,7 +1546,7 @@ main{position:relative;z-index:1;}
   gap:8px;
   width:100%;
   padding:11px 12px;
-  margin:4px 0 14px;
+  margin:18px 0 14px;
   border-radius:14px;
   border:none;
   background:linear-gradient(135deg, var(--blue-neon), var(--blue-steel));
@@ -2060,6 +2060,21 @@ footer.site{
   .fab svg{width:27px;height:27px;}
 }
 
+/* Wholesale's own floating WhatsApp button — the home page's .fab-stack
+   sits behind the wholesale page (lower z-index) so it's not reachable
+   there; this is a dedicated one, in wholesale's gold/orange accent
+   instead of the site's blue, positioned the same way .fab-stack is. */
+.wholesale-fab-wpp{
+  position:fixed;
+  right:18px;
+  bottom:22px;
+  z-index:5;
+  background:var(--wholesale-grad);
+  color:var(--void);
+}
+.wholesale-fab-wpp:hover{box-shadow:0 12px 30px rgba(255,145,48,.4);transform:translateY(-2px);}
+@media(min-width:900px){.wholesale-fab-wpp{right:32px;bottom:32px;}}
+
 /* ---------- MAYORISTA (WHOLESALE) ---------- */
 .wholesale-banner{
   position:relative;
@@ -2153,7 +2168,11 @@ footer.site{
 #catalog{padding-top:16px;}
 @media(min-width:900px){#catalog{padding-top:20px;}}
 
-/* modal */
+/* Full-page takeover, not a floating card: the wholesale flow gets its own
+   "screen" instead of a boxed modal — see .wholesale-sheet below. Keeps the
+   inherited .modal-overlay blur/fade (same style used everywhere else, e.g.
+   the retail flavor picker) for its own open/close crossfade — the truck
+   transition (further down) only plays on open, layered on top of it. */
 .wholesale-overlay{z-index:240;}
 
 /* ---------- TICKET DE RULETA — animación al confirmar cualquier pedido ---------- */
@@ -2239,28 +2258,44 @@ footer.site{
 }
 .ticket-cta:hover{background-position:100% 0;}
 .ticket-cta:active{transform:scale(.97);}
+/* Not a floating "recuadro" card — a full screen the customer navigates
+   into, like a separate page of the site. Overrides .modal-sheet's centered
+   floating-card geometry (position/inset/border/radius/shadow/transform)
+   with an edge-to-edge fixed screen instead. */
 .wholesale-sheet{
-  max-width:900px;
-  padding:8px 8px 20px;
-  border-color:rgba(255,200,87,.28);
-  overflow:hidden;
+  position:fixed;
+  inset:0;
+  width:auto;
+  max-width:none;
+  max-height:none;
+  margin:0;
+  border:none;
+  border-radius:0;
+  box-shadow:none;
+  transform:none;
+  padding:18px 16px 28px;
+  overflow-x:hidden;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  background:linear-gradient(180deg, var(--bg-mid) 0%, var(--void) 60%);
 }
-@media(min-width:820px){.wholesale-sheet{padding:8px 8px 26px;}}
-/* Orange wash flowing bottom-to-top — reinforces "this is the wholesale
-   zone" on every screen of the flow, dark base kept intact. Static (no
-   animation/movement) so it never competes for attention while browsing. */
-.wholesale-sheet::before{
-  content:"";
-  position:absolute;
-  left:0;right:0;bottom:0;
-  height:360px;
-  background:linear-gradient(to top, rgba(255,145,48,.24), transparent);
-  pointer-events:none;
-  z-index:0;
-}
-@media(min-width:820px){.wholesale-sheet::before{height:460px;}}
+.wholesale-overlay.open .wholesale-sheet{transform:none;opacity:1;}
+@media(min-width:820px){.wholesale-sheet{padding:26px 34px 36px;}}
+@media(min-width:1080px){.wholesale-sheet{padding:30px 46px 40px;}}
+/* NOTE: there used to be an orange wash here (::before, bottom:0, fixed
+   360-460px tall) meant to sit at the visual bottom of the wholesale
+   screen. It was anchored to the .wholesale-sheet box itself, which made
+   sense when that box was a short, capped-height modal — now the page is
+   full length and its content height varies a lot between the catalog
+   grid, the carousel, sabores and carrito, so that fixed-position wash
+   landed mid-content instead of at the real bottom (worst in carousel
+   view, which is short) — an ugly, out-of-place orange band partway down
+   the page. Removed rather than reworked: nothing here reliably knows
+   where each step's real bottom is without JS, and the page doesn't need
+   this wash to still read as "the wholesale zone" (the header/badges/CTAs
+   already do that job).
 
-/* Same floating-dots motif as the home page's .nebula-bg::before, replicated
+   Same floating-dots motif as the home page's .nebula-bg::before, replicated
    (in white, per spec) and confined to the sheet so the wholesale flow feels
    consistent with the rest of the site. Reuses the shared drift/twinkle
    keyframes — dots still drift/twinkle, only the orange wash above is static. */
@@ -2308,7 +2343,11 @@ footer.site{
 /* search + list/grid toggle share one compact row so the search bar keeps a
    small footprint without losing space or prominence — finding a flavor fast
    stays the priority, only the vertical room it takes shrinks. */
-.wholesale-toolbar{position:relative;z-index:1;margin-top:0;display:flex;align-items:center;gap:8px;}
+/* flex-end, not center: the "VISTA" toggle has a label sitting above its
+   buttons while the search bar doesn't, so centering the row left the
+   search input and the toggle buttons visibly off-line — aligning to the
+   bottom edge lines up the two actual controls instead. */
+.wholesale-toolbar{position:relative;z-index:1;margin-top:0;display:flex;align-items:flex-end;gap:8px;}
 .wholesale-search{position:relative;flex:1;min-width:0;}
 .wholesale-search input{width:100%;background:var(--bg-card);border:1px solid var(--line);border-radius:12px;padding:8px 12px 8px 34px;color:var(--white-glove);font-size:13px;font-family:'Poppins',sans-serif;outline:none;transition:border-color .2s;}
 .wholesale-search input:focus{border-color:var(--gold);}
@@ -2342,24 +2381,27 @@ footer.site{
   max-height:none;
 }
 .wholesale-grid::-webkit-scrollbar{display:none;}
-.wholesale-carousel-spacer{flex:0 0 calc((100% - 84%) / 2);}
-@media(min-width:560px){.wholesale-carousel-spacer{flex-basis:calc((100% - 340px) / 2);}}
+.wholesale-carousel-spacer{flex:0 0 calc((100% - 88%) / 2);}
+@media(min-width:560px){.wholesale-carousel-spacer{flex-basis:calc((100% - 380px) / 2);}}
 .wholesale-catalog.grid-mode .wholesale-carousel-spacer{display:none;}
+/* No inner max-height/scroll here on purpose: the wholesale page itself
+   scrolls now (it's a full page, not a height-capped modal), so a second,
+   nested scroll box on the grid used to clip whole rows of cards — that
+   was the "no se llegan a apreciar todos los vaporizadores" bug. The grid
+   just flows and the page scrolls it like any normal section. */
 .wholesale-catalog.grid-mode .wholesale-grid{
   display:grid;
   grid-template-columns:repeat(2, minmax(0,1fr));
   overflow:visible;
-  max-height:46vh;
-  overflow-y:auto;
   padding:4px 2px 4px;
 }
 @media(min-width:640px){.wholesale-catalog.grid-mode .wholesale-grid{grid-template-columns:repeat(3, minmax(0,1fr));}}
-@media(min-width:900px){.wholesale-catalog.grid-mode .wholesale-grid{grid-template-columns:repeat(4, minmax(0,1fr));max-height:50vh;}}
+@media(min-width:900px){.wholesale-catalog.grid-mode .wholesale-grid{grid-template-columns:repeat(4, minmax(0,1fr));}}
 
 /* arrows + pagination dots, same mechanics as the retail carousel but in the
    wholesale orange accent (kept as dedicated classes so retail's blue .arrow
    / .carousel-dots rules are never touched). */
-.wholesale-arrow{position:absolute;top:44%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:rgba(8,18,32,.85);border:1px solid var(--line);color:var(--gold);display:flex;align-items:center;justify-content:center;z-index:5;backdrop-filter:blur(6px);transition:background .2s, transform .15s;}
+.wholesale-arrow{position:absolute;top:44%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:rgba(8,18,32,.85);border:1px solid var(--line);color:var(--white-glove);display:flex;align-items:center;justify-content:center;z-index:5;backdrop-filter:blur(6px);transition:background .2s, transform .15s;}
 .wholesale-arrow:hover{background:rgba(255,200,87,.18);}
 .wholesale-arrow:active{transform:translateY(-50%) scale(.88);}
 .wholesale-arrow svg{width:15px;height:15px;}
@@ -2381,7 +2423,7 @@ footer.site{
    biggest thing seen when the catalog opens. */
 .wholesale-card{
   position:relative;
-  min-width:0;scroll-snap-align:center;flex:0 0 84%;
+  min-width:0;scroll-snap-align:center;flex:0 0 88%;
   background:linear-gradient(160deg, var(--bg-card) 0%, var(--bg-card-2) 100%);
   border:1px solid var(--line);
   border-radius:22px;
@@ -2390,14 +2432,18 @@ footer.site{
   display:flex;flex-direction:column;gap:9px;
   transition:border-color .2s, box-shadow .2s;
 }
-@media(min-width:560px){.wholesale-card{flex:0 0 340px;}}
+@media(min-width:560px){.wholesale-card{flex:0 0 380px;}}
 .wholesale-catalog.grid-mode .wholesale-card{flex:none;width:100%;}
 .wholesale-card:hover{border-color:rgba(255,200,87,.4);box-shadow:0 18px 40px -12px rgba(255,145,48,.25);}
 .wholesale-card--oos{opacity:.6;filter:grayscale(.5);}
 
-.wholesale-card-badge{position:absolute;top:14px;left:14px;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:linear-gradient(120deg, var(--gold), var(--orange-pulp));color:var(--void);font-weight:700;z-index:1;}
+/* Solid gold, not the retail catalog's blue — blue read as an off-brand
+   clash against wholesale's gold/orange system, a flat solid gold tag
+   stays inside that same family while still standing apart from the
+   gradient CTAs (flat fill vs. gradient) so it reads as a distinct badge. */
+.wholesale-card-badge{position:absolute;top:14px;left:14px;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--gold);border:1px solid rgba(200,92,12,.4);color:var(--void);font-weight:700;z-index:1;}
 .wholesale-card-oos-tag{position:absolute;top:14px;left:14px;font-size:10.5px;font-weight:700;color:var(--white-glove);background:var(--red-cap);padding:4px 10px;border-radius:999px;z-index:1;}
-.wholesale-card-puffs{position:absolute;top:14px;right:14px;font-size:12.5px;letter-spacing:.2px;font-weight:700;font-family:'Poppins',sans-serif;padding:6px 12px;border-radius:999px;background:rgba(5,10,20,.6);border:1.5px solid var(--blue-neon);color:var(--white-glove);backdrop-filter:blur(4px);z-index:1;}
+.wholesale-card-puffs{position:absolute;top:14px;right:14px;font-size:12.5px;letter-spacing:.2px;font-weight:700;font-family:'Poppins',sans-serif;padding:6px 12px;border-radius:999px;background:rgba(5,10,20,.6);border:1.5px solid var(--line);color:var(--white-glove);backdrop-filter:blur(4px);z-index:1;}
 .wholesale-catalog.grid-mode .wholesale-card-puffs{display:none;}
 /* Vista vertical (grid): la pastilla con borde tapaba la foto del vape, así
    que ahí se muestra en cambio este texto vertical al costado de la imagen,
@@ -2410,7 +2456,7 @@ footer.site{
   font-weight:700;
   font-size:11px;
   letter-spacing:.5px;
-  color:var(--blue-neon);
+  color:var(--ink-dim);
   white-space:nowrap;
   flex:none;
 }
@@ -2418,20 +2464,32 @@ footer.site{
 
 /* placeholder image area — same footprint a real product photo will occupy,
    so swapping in real photos later needs no layout changes. Sized big: this
-   carousel is the most important part of the wholesale catalog. */
-.wholesale-card-glyph{position:relative;height:230px;display:flex;align-items:center;justify-content:center;margin-bottom:4px;}
-@media(min-width:560px){.wholesale-card-glyph{height:270px;}}
+   carousel is the most important part of the wholesale catalog. A soft glow
+   sits behind the photo (::before) so photos that don't fill the whole box
+   fade into it instead of leaving a hard, empty-looking edge — and it means
+   swiping between differently-sized product photos never feels like an
+   abrupt cut, since there's always the same soft backdrop under all of them. */
+.wholesale-card-glyph{position:relative;height:260px;display:flex;align-items:center;justify-content:center;margin-bottom:4px;}
+.wholesale-card-glyph::before{
+  content:"";
+  position:absolute;
+  inset:6%;
+  background:radial-gradient(closest-side, rgba(255,200,87,.14), rgba(255,145,48,.05) 65%, transparent 78%);
+  border-radius:50%;
+}
+@media(min-width:560px){.wholesale-card-glyph{height:300px;}}
 .wholesale-catalog.grid-mode .wholesale-card-glyph{height:150px;}
 .wholesale-placeholder{width:64%;height:100%;max-width:190px;border-radius:20px;background:rgba(255,200,87,.08);border:1.5px dashed rgba(255,200,87,.32);display:flex;align-items:center;justify-content:center;}
 .wholesale-placeholder svg{width:44%;height:44%;color:rgba(255,200,87,.55);}
 .wholesale-catalog.grid-mode .wholesale-placeholder{max-width:118px;}
 .wholesale-product-photo{
-  width:160px;height:160px;
+  position:relative;
+  width:180px;height:180px;
   object-fit:contain;
   filter:drop-shadow(0 12px 20px rgba(0,0,0,.55));
   animation:floaty 4s ease-in-out infinite;
 }
-@media(min-width:560px){.wholesale-product-photo{width:190px;height:190px;}}
+@media(min-width:560px){.wholesale-product-photo{width:210px;height:210px;}}
 .wholesale-catalog.grid-mode .wholesale-product-photo{width:130px;height:130px;}
 
 /* Nombre y precio apilados (no en la misma fila) — con nombres largos como
@@ -2477,8 +2535,7 @@ footer.site{
 .wholesale-flavor-list{position:relative;z-index:1;max-height:44vh;overflow-y:auto;padding-right:2px;display:flex;flex-direction:column;gap:8px;}
 .wholesale-flavor-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;background:var(--bg-card);border:1px solid var(--line);border-radius:13px;transition:border-color .2s, background .2s;}
 .wholesale-flavor-row.selected{border-color:rgba(255,200,87,.5);background:rgba(255,200,87,.07);}
-.wholesale-flavor-row--oos{opacity:.55;}
-.wholesale-flavor-row-name{font-size:13px;font-weight:700;color:var(--white-glove);margin-bottom:4px;}
+.wholesale-flavor-row-name{font-size:13px;font-weight:700;color:var(--white-glove);}
 
 .wholesale-qty{display:flex;align-items:center;background:var(--bg-card);border:1px solid var(--line);border-radius:11px;overflow:hidden;flex:none;}
 .wholesale-qty button{width:28px;height:28px;background:none;border:none;color:var(--white-glove);font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;}
@@ -2530,6 +2587,238 @@ footer.site{
 .wholesale-checkout-btn.disabled{background:rgba(255,255,255,.06);border-color:var(--line);color:var(--ink-dim);pointer-events:none;cursor:not-allowed;}
 .wholesale-checkout-btn.disabled svg{display:none;}
 .wholesale-cart-empty{text-align:center;padding:36px 10px;color:var(--ink-dim);font-size:13px;line-height:1.6;}
+
+/* Info bar — a minimal, borderless "trust bar" instead of a boxed card: two
+   hairline rules frame the whole band (no fill, no radius, no shadow) so it
+   reads as a quiet divider section woven into the page, not a widget on top
+   of it. Holds two things: a small credibility line (.wholesale-trust-strip)
+   and the 4 benefits (.wholesale-benefits) below it. */
+.wholesale-info-bar{
+  position:relative;z-index:1;
+  margin:40px 0 6px;
+  padding:20px 6px 26px;
+  border-top:1px solid rgba(255,255,255,.08);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+/* Credibility line — deliberately tiny and muted (smaller text, dim color,
+   no icon/value emphasis like the benefits get) so it reads as a quiet
+   signal sitting above the real benefits, never competing with them. Just
+   a hairline underneath separates it from the row below, no card/box. Top
+   and bottom padding kept equal (here and on .wholesale-info-bar above) so
+   the line doesn't look off-balance inside its own little band. */
+.wholesale-trust-strip{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  text-align:center;
+  margin:0 0 20px;
+  padding-bottom:20px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.wholesale-trust-strip-icon{font-size:12px;color:var(--gold);flex:none;line-height:1;}
+.wholesale-trust-strip-text{display:flex;flex-direction:column;gap:2px;line-height:1.3;}
+.wholesale-trust-strip-title{font-size:11.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ink-dim);}
+.wholesale-trust-strip-sub{font-size:11.5px;color:var(--ink-dim);opacity:.7;}
+
+/* Benefits — icon -> small caps label -> value, stacked and centered, so
+   it scans in a glance. Mobile: a centered, arrow-driven carousel — same
+   spacer + scroll-snap-align:center trick as the retail product carousel,
+   so the active benefit always rests in the middle instead of pinned to
+   the left edge, with a peek of the next one. Desktop: a still row of 4
+   with subtle dividers between items (never on mobile — the dividers, the
+   spacers and the arrows are only ever added inside the min-width query
+   below). */
+.wholesale-benefits-wrap{position:relative;}
+.wholesale-benefits{
+  display:flex;
+  gap:14px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  padding:2px 0 4px;
+}
+.wholesale-benefits::-webkit-scrollbar{display:none;}
+.wholesale-benefits-spacer{flex:0 0 calc((100% - 72%) / 2);}
+.wholesale-info-item{
+  flex:0 0 72%;
+  scroll-snap-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:9px;
+  text-align:center;
+  padding:0 6px;
+}
+.wholesale-info-icon{font-size:27px;line-height:1;opacity:.95;}
+.wholesale-info-label{
+  font-size:11.5px;
+  font-weight:700;
+  letter-spacing:1.3px;
+  text-transform:uppercase;
+  color:var(--ink-dim);
+}
+.wholesale-info-value{
+  font-size:16.5px;
+  font-weight:800;
+  letter-spacing:.1px;
+  color:var(--white-glove);
+}
+/* Deliberately "transparent" — no filled circle like the product-carousel
+   arrows, just a faint glyph that brightens on hover/press, and hidden
+   entirely (via the shared updateCarouselArrows() JS) whenever there's
+   nothing further in that direction to go to. */
+.wholesale-benefits-arrow{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:30px;height:30px;
+  border-radius:50%;
+  background:none;
+  border:none;
+  color:rgba(242,249,255,.5);
+  display:flex;align-items:center;justify-content:center;
+  z-index:2;
+  transition:color .2s, background .2s;
+}
+.wholesale-benefits-arrow:hover{background:rgba(255,255,255,.07);color:var(--white-glove);}
+.wholesale-benefits-arrow:active{transform:translateY(-50%) scale(.9);}
+.wholesale-benefits-arrow svg{width:16px;height:16px;}
+.wholesale-benefits-arrow.prev{left:-6px;}
+.wholesale-benefits-arrow.next{right:-6px;}
+@media(min-width:700px){
+  .wholesale-benefits-arrow{display:none;}
+  .wholesale-benefits-spacer{display:none;}
+  .wholesale-benefits{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    overflow-x:visible;
+    gap:0;
+    padding:0;
+  }
+  .wholesale-info-item{flex:none;border-left:1px solid rgba(255,255,255,.08);}
+  .wholesale-info-item:first-child{border-left:none;}
+}
+
+/* Keeps the readable content from stretching edge-to-edge on wide desktop
+   screens, same content width as the rest of the site's .wrap — only the
+   background/road-trip decoration behind it is full-bleed. */
+.wholesale-page-inner{position:relative;max-width:960px;margin:0 auto;}
+
+/* Big page-level heading, visible on every step of the flow (catalog,
+   sabores, carrito) so it always reads as its own screen: "Catálogo
+   Mayorista", not a popup on top of the shop. The "back" button sits in its
+   own row above it, pinned top-right. */
+.wholesale-page-header{position:relative;z-index:2;margin:2px 4px 20px;}
+.wholesale-page-header-top{display:flex;justify-content:flex-end;margin-bottom:14px;}
+/* Plain centered text (not a flex row) so the emoji flows right after the
+   last word instead of sitting off to the side as its own item — that was
+   what threw the whole title off-center. Sized to stay on one line on
+   ordinary phone widths; centers correctly even if a very narrow screen
+   still wraps it. */
+.wholesale-page-title{
+  font-family:'Bungee',cursive;
+  font-size:clamp(18px,5.6vw,34px);
+  color:var(--white-glove);
+  letter-spacing:.2px;
+  line-height:1.2;
+  margin:0;
+  text-align:center;
+}
+.wholesale-page-title-emoji{font-size:.78em;margin-left:0;}
+@media(min-width:820px){.wholesale-page-header{margin:4px 6px 26px;}}
+
+/* ---------- WHOLESALE PAGE TRANSITION — truck crossing the screen ----------
+   Plays only when OPENING the wholesale page (closing uses the same plain
+   fade every other modal on the site uses — see closeWholesaleModal()). The
+   backdrop blurs the real home page through (same idea as the retail
+   flavor-picker modal's rgba(3,7,14,.72)+blur) instead of swapping to a
+   solid color, with a heavier blur and a slower fade so it reads as a
+   gradual dissolve rather than a cut. A delivery truck drives across a road
+   through the middle of the screen on top of that blur — see
+   playWholesaleOpenTransition() in the script, which swaps home -> wholesale
+   content while it's covered, well before the truck finishes crossing. */
+.truck-transition{
+  position:fixed;
+  inset:0;
+  z-index:500;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .45s var(--ease);
+  overflow:hidden;
+}
+.truck-transition.visible{opacity:1;pointer-events:auto;}
+/* backdrop-filter is one of the heaviest things a browser can paint every
+   frame on a full-screen layer — kept modest (not the 12px this briefly
+   was) so it doesn't compete with the truck's own animation for the main
+   thread on slower devices. The darker background alpha (.78) keeps the
+   "hidden" effect strong even with a lighter blur. */
+.truck-transition-bg{
+  position:absolute;
+  inset:0;
+  background:rgba(3,7,14,.78);
+  backdrop-filter:blur(7px);
+  -webkit-backdrop-filter:blur(7px);
+}
+.truck-road{
+  position:absolute;
+  left:0;right:0;top:50%;
+  height:74px;
+  transform:translateY(-50%);
+  background:linear-gradient(180deg, #0a1626 0%, #050b16 100%);
+  border-top:2px solid rgba(255,255,255,.08);
+  border-bottom:2px solid rgba(255,255,255,.08);
+}
+@media(min-width:640px){.truck-road{height:96px;}}
+.truck-road::before{
+  content:"";
+  position:absolute;left:0;right:0;top:50%;
+  height:4px;transform:translateY(-50%);
+  background-image:repeating-linear-gradient(90deg, rgba(255,200,87,.55) 0 32px, transparent 32px 60px);
+}
+.truck-rig{
+  position:absolute;
+  top:50%;
+  left:0;
+  width:170px;
+  transform:translate(calc(-100% - 60px), -58%);
+  will-change:transform;
+}
+@media(min-width:640px){.truck-rig{width:220px;}}
+.truck-transition.driving .truck-rig{animation:truckDriveRight 1s linear forwards;}
+@keyframes truckDriveRight{
+  from{transform:translate(calc(-100% - 60px), -58%);}
+  to{transform:translate(calc(100vw + 60px), -58%);}
+}
+.truck-rig-inner{display:block;}
+.truck-rig svg{display:block;width:100%;height:auto;filter:drop-shadow(0 10px 14px rgba(0,0,0,.45));}
+.truck-wheel-group{transform-box:fill-box;transform-origin:center;animation:wheelSpin .4s linear infinite;animation-play-state:paused;}
+.truck-transition.driving .truck-wheel-group,
+.truck-transition.driving .truck-smoke{animation-play-state:running;}
+@keyframes wheelSpin{to{transform:rotate(360deg);}}
+.truck-smoke{fill:rgba(255,255,255,.55);opacity:0;transform-box:fill-box;transform-origin:center;animation:smokePuff .85s ease-out infinite;animation-play-state:paused;}
+.truck-smoke.s1{animation-delay:0s;}
+.truck-smoke.s2{animation-delay:.2s;}
+.truck-smoke.s3{animation-delay:.4s;}
+.truck-smoke.s4{animation-delay:.6s;}
+@keyframes smokePuff{
+  0%{opacity:0;transform:translate(0,0) scale(.5);}
+  18%{opacity:.5;}
+  100%{opacity:0;transform:translate(-30px,-22px) scale(2);}
+}
+/* Kept to a single accent hue (the brand gold/orange) plus neutrals, same
+   spirit as the color cleanup on the wholesale cards. */
+.truck-accent{fill:var(--orange-pulp);}
+.truck-wheel{fill:var(--void);stroke:var(--line);stroke-width:2;}
+.truck-hub{fill:var(--gold);}
+.truck-spoke{stroke:var(--gold);stroke-width:2;stroke-linecap:round;}
+.truck-box{fill:var(--white-glove);stroke:rgba(8,18,32,.4);stroke-width:1.5;}
+.truck-box-tape{stroke:rgba(8,18,32,.35);stroke-width:1.4;}
+.truck-glass{fill:rgba(242,249,255,.4);}
+.truck-outline{stroke:rgba(8,18,32,.4);stroke-width:1.2;}
+.truck-shadow{fill:rgba(0,0,0,.35);}
 </style>
 </head>
 <body>
@@ -2942,6 +3231,16 @@ footer.site{
 <!-- MAYORISTA MODAL -->
 <div class="modal-overlay wholesale-overlay" id="wholesaleOverlay">
   <div class="modal-sheet wholesale-sheet" id="wholesaleSheet">
+   <div class="wholesale-page-inner">
+    <div class="wholesale-page-header">
+      <div class="wholesale-page-header-top">
+        <button class="wholesale-back" id="wholesaleClose" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Volver al menú
+        </button>
+      </div>
+      <h1 class="wholesale-page-title">Catálogo Mayorista<span class="wholesale-page-title-emoji" aria-hidden="true">📦</span></h1>
+    </div>
     <div class="wholesale-sheet-topbar">
       <div class="wholesale-sheet-topbar-left">
         <div class="currency-toggle" id="wholesaleCurrencyToggle" role="group" aria-label="Elegir moneda">
@@ -2957,9 +3256,6 @@ footer.site{
           Seguir viendo el catálogo
         </button>
       </div>
-      <button class="modal-close" id="wholesaleClose" aria-label="Cerrar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
-      </button>
     </div>
 
     <!-- Vista catálogo: modelos de vape (igual que el catálogo minorista) -->
@@ -2972,10 +3268,10 @@ footer.site{
         <div class="view-toggle-wrap">
           <span class="view-toggle-label">Vista</span>
           <div class="view-toggle" role="group" aria-label="Cambiar vista">
-            <button id="wViewCarousel" aria-label="Vista carrusel: deslizar">
+            <button id="wViewCarousel" class="active" aria-label="Vista carrusel: deslizar">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="7" height="12" rx="1.5"/><rect x="15" y="6" width="7" height="12" rx="1.5"/><rect x="9.5" y="4" width="5" height="16" rx="1.5" opacity=".4"/></svg>
             </button>
-            <button id="wViewGrid" class="active" aria-label="Vista grilla: cuadrados">
+            <button id="wViewGrid" aria-label="Vista grilla: cuadrados">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
             </button>
           </div>
@@ -2991,7 +3287,7 @@ footer.site{
         </button>
       </div>
 
-      <div class="wholesale-catalog grid-mode" id="wholesaleCatalogWrap">
+      <div class="wholesale-catalog" id="wholesaleCatalogWrap">
         <div class="wholesale-carousel-wrap">
           <button class="wholesale-arrow prev" id="wArrowPrev" aria-label="Anterior">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -3002,6 +3298,48 @@ footer.site{
           </button>
         </div>
         <div class="wholesale-dots" id="wholesaleDots" role="tablist" aria-label="Posición en el catálogo mayorista"></div>
+      </div>
+
+      <div class="wholesale-info-bar">
+        <div class="wholesale-trust-strip">
+          <span class="wholesale-trust-strip-icon" aria-hidden="true">⭐</span>
+          <span class="wholesale-trust-strip-text">
+            <span class="wholesale-trust-strip-title">Tienda especializada en vapes</span>
+            <span class="wholesale-trust-strip-sub">Experiencia y atención desde 2025</span>
+          </span>
+        </div>
+        <div class="wholesale-benefits-wrap">
+          <button class="wholesale-benefits-arrow prev hidden" id="wBenefitsPrev" aria-label="Anterior" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="wholesale-benefits" id="wholesaleBenefits">
+            <div class="wholesale-benefits-spacer" aria-hidden="true"></div>
+            <div class="wholesale-info-item">
+              <span class="wholesale-info-icon" aria-hidden="true">🚚</span>
+              <span class="wholesale-info-label">Enviamos</span>
+              <span class="wholesale-info-value">A todo el país</span>
+            </div>
+            <div class="wholesale-info-item">
+              <span class="wholesale-info-icon" aria-hidden="true">📦</span>
+              <span class="wholesale-info-label">Pedido mínimo</span>
+              <span class="wholesale-info-value">20 unidades</span>
+            </div>
+            <div class="wholesale-info-item">
+              <span class="wholesale-info-icon" aria-hidden="true">💬</span>
+              <span class="wholesale-info-label">Pedidos</span>
+              <span class="wholesale-info-value">Por WhatsApp</span>
+            </div>
+            <div class="wholesale-info-item">
+              <span class="wholesale-info-icon" aria-hidden="true">⚡</span>
+              <span class="wholesale-info-label">Entrega</span>
+              <span class="wholesale-info-value">24/48 hs</span>
+            </div>
+            <div class="wholesale-benefits-spacer" aria-hidden="true"></div>
+          </div>
+          <button class="wholesale-benefits-arrow next" id="wBenefitsNext" aria-label="Siguiente" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -3063,6 +3401,62 @@ footer.site{
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39c1.44.79 3.06 1.2 4.71 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.03c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.81-.11-.42-.13-.95-.31-1.64-.6-2.88-1.24-4.76-4.14-4.9-4.33-.14-.19-1.17-1.56-1.17-2.97 0-1.41.74-2.1 1-2.39.26-.29.57-.36.76-.36h.55c.18 0 .42-.03.65.5.24.56.8 1.94.87 2.08.07.14.12.31.02.5-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.26 1.64 2.04 1.13.99 2.07 1.31 2.36 1.46.29.15.46.13.63-.05.17-.19.72-.84.92-1.13.19-.29.39-.24.65-.14.27.1 1.7.8 1.99.95.29.15.48.22.55.34.07.13.07.72-.17 1.4z"/></svg>
         <span id="wholesaleCheckoutText">Enviar pedido por WhatsApp</span>
       </button>
+    </div>
+   </div>
+  </div>
+  <a class="fab wholesale-fab-wpp" href="https://wa.me/5491151244554?text=%C2%A1Hola!%20Quiero%20hacer%20una%20consulta%20sobre%20el%20cat%C3%A1logo%20mayorista." target="_blank" rel="noopener" aria-label="Consultar por WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39c1.44.79 3.06 1.2 4.71 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.03c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.81-.11-.42-.13-.95-.31-1.64-.6-2.88-1.24-4.76-4.14-4.9-4.33-.14-.19-1.17-1.56-1.17-2.97 0-1.41.74-2.1 1-2.39.26-.29.57-.36.76-.36h.55c.18 0 .42-.03.65.5.24.56.8 1.94.87 2.08.07.14.12.31.02.5-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.26 1.64 2.04 1.13.99 2.07 1.31 2.36 1.46.29.15.46.13.63-.05.17-.19.72-.84.92-1.13.19-.29.39-.24.65-.14.27.1 1.7.8 1.99.95.29.15.48.22.55.34.07.13.07.72-.17 1.4z"/></svg>
+  </a>
+</div>
+
+<!-- WHOLESALE PAGE TRANSITION — truck driving across the screen, played by
+     playWholesaleOpenTransition() only when the wholesale page opens. -->
+<div class="truck-transition" id="truckTransition" aria-hidden="true">
+  <div class="truck-transition-bg"></div>
+  <div class="truck-road">
+    <div class="truck-rig" id="truckRig">
+      <div class="truck-rig-inner">
+        <svg viewBox="0 0 220 120" focusable="false">
+          <ellipse class="truck-shadow" cx="110" cy="104" rx="98" ry="6"/>
+          <rect class="truck-box" x="26" y="30" width="32" height="44" rx="3"/>
+          <line class="truck-box-tape" x1="42" y1="30" x2="42" y2="74"/>
+          <line class="truck-box-tape" x1="26" y1="52" x2="58" y2="52"/>
+          <rect class="truck-box" x="60" y="42" width="28" height="32" rx="3"/>
+          <line class="truck-box-tape" x1="74" y1="42" x2="74" y2="74"/>
+          <line class="truck-box-tape" x1="60" y1="58" x2="88" y2="58"/>
+          <rect class="truck-box" x="90" y="18" width="32" height="56" rx="3"/>
+          <line class="truck-box-tape" x1="106" y1="18" x2="106" y2="74"/>
+          <line class="truck-box-tape" x1="90" y1="46" x2="122" y2="46"/>
+          <rect class="truck-box" x="124" y="38" width="26" height="36" rx="3"/>
+          <line class="truck-box-tape" x1="137" y1="38" x2="137" y2="74"/>
+          <line class="truck-box-tape" x1="124" y1="56" x2="150" y2="56"/>
+          <rect class="truck-accent" x="16" y="74" width="178" height="8" rx="2"/>
+          <rect class="truck-accent" x="16" y="36" width="8" height="42" rx="2"/>
+          <rect class="truck-accent" x="6" y="62" width="8" height="7" rx="1"/>
+          <rect class="truck-accent" x="172" y="44" width="38" height="38" rx="6"/>
+          <rect class="truck-accent" x="203" y="66" width="8" height="14" rx="2"/>
+          <rect class="truck-glass" x="180" y="50" width="18" height="16" rx="2"/>
+          <line class="truck-outline" x1="192" y1="50" x2="192" y2="82"/>
+          <g class="truck-wheel-group">
+            <circle class="truck-wheel" cx="44" cy="90" r="14"/>
+            <circle class="truck-hub" cx="44" cy="90" r="5"/>
+            <line class="truck-spoke" x1="44" y1="90" x2="44" y2="77"/>
+            <line class="truck-spoke" x1="44" y1="90" x2="55" y2="97"/>
+            <line class="truck-spoke" x1="44" y1="90" x2="33" y2="97"/>
+          </g>
+          <g class="truck-wheel-group">
+            <circle class="truck-wheel" cx="178" cy="90" r="14"/>
+            <circle class="truck-hub" cx="178" cy="90" r="5"/>
+            <line class="truck-spoke" x1="178" y1="90" x2="178" y2="77"/>
+            <line class="truck-spoke" x1="178" y1="90" x2="189" y2="97"/>
+            <line class="truck-spoke" x1="178" y1="90" x2="167" y2="97"/>
+          </g>
+          <circle class="truck-smoke s1" cx="6" cy="58" r="6"/>
+          <circle class="truck-smoke s2" cx="6" cy="58" r="6"/>
+          <circle class="truck-smoke s3" cx="6" cy="58" r="6"/>
+          <circle class="truck-smoke s4" cx="6" cy="58" r="6"/>
+        </svg>
+      </div>
     </div>
   </div>
 </div>
@@ -3307,12 +3701,21 @@ const WHATSAPP_NUMBER = '5491131635898';
 // text, showing "?" or "" to the recipient. Strip them from anything we
 // actually send, while leaving the on-site UI emoji (unaffected) alone.
 function stripEmoji(str){
-  return String(str).replace(/\p{Extended_Pictographic}/gu, '').replace(/\s{2,}/g, ' ').trim();
+  return String(str)
+    .replace(/\p{Extended_Pictographic}/gu, '')
+    // Variation selectors (U+FE0F/FE0E) and the zero-width joiner ride along
+    // with some emoji (e.g. "❄️" = U+2744 + U+FE0F) — stripping just the
+    // pictograph above leaves that invisible byte behind as a stray glyph.
+    .replace(/[\u{FE0F}\u{FE0E}\u{200D}]/gu, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
 }
 
 /* ================= RENDER: PRODUCT CARDS ================= */
 const productCarousel = document.getElementById('productCarousel');
 const productDots = document.getElementById('productDots');
+const arrowPrevBtn = document.getElementById('arrowPrev');
+const arrowNextBtn = document.getElementById('arrowNext');
 
 function totalStock(p){ return p.flavors.reduce((s,f)=>s+f.stock,0); }
 
@@ -3491,12 +3894,17 @@ function renderProducts(){
   revealOnScroll(productCarousel, '.p-card');
   alignCatalogFilters();
   renderCarouselDots(productDots, productCarousel, cardCount);
-  requestAnimationFrame(()=> updateActiveDot(productCarousel, productDots));
+  requestAnimationFrame(()=>{
+    updateActiveDot(productCarousel, productDots);
+    updateCarouselArrows(productCarousel, arrowPrevBtn, arrowNextBtn);
+  });
 }
 
 /* ================= RENDER: APPLE ACCESSORIES ================= */
 const appleCarousel = document.getElementById('appleCarousel');
 const appleDots = document.getElementById('appleDots');
+const appleArrowPrevBtn = document.getElementById('appleArrowPrev');
+const appleArrowNextBtn = document.getElementById('appleArrowNext');
 
 function renderAppleProducts(){
   const order = CATALOG.map((p, i) => i)
@@ -3510,7 +3918,10 @@ function renderAppleProducts(){
   wireProductCards(appleCarousel);
   revealOnScroll(appleCarousel, '.p-card');
   renderCarouselDots(appleDots, appleCarousel, order.length);
-  requestAnimationFrame(()=> updateActiveDot(appleCarousel, appleDots));
+  requestAnimationFrame(()=>{
+    updateActiveDot(appleCarousel, appleDots);
+    updateCarouselArrows(appleCarousel, appleArrowPrevBtn, appleArrowNextBtn);
+  });
 }
 
 /* ---- carousel pagination dots (shared by the vape and Apple carousels) ---- */
@@ -3537,6 +3948,26 @@ function updateActiveDot(carouselEl, dotsEl){
     if(d < min){ min = d; closest = i; }
   });
   dots.forEach((d, i) => d.classList.toggle('active', i === closest));
+}
+
+/* Hides a carousel's prev/next arrow once there's nothing further in that
+   direction — e.g. the first card no longer shows a (non-functional) "go
+   back" arrow. Shared by every arrow-driven carousel on the site (retail,
+   Apple, reviews, wholesale catalog, wholesale benefits). Threshold is 20px,
+   not ~0 — carousels that center their first/last card via a spacer (see
+   .carousel-spacer / .wholesale-benefits-spacer) naturally rest a little
+   off zero even at the very start. */
+function updateCarouselArrows(carouselEl, prevBtn, nextBtn){
+  if(!carouselEl || !prevBtn || !nextBtn) return;
+  const EDGE = 20;
+  const max = carouselEl.scrollWidth - carouselEl.clientWidth;
+  if(max <= EDGE){
+    prevBtn.classList.add('hidden');
+    nextBtn.classList.add('hidden');
+    return;
+  }
+  prevBtn.classList.toggle('hidden', carouselEl.scrollLeft <= EDGE);
+  nextBtn.classList.toggle('hidden', carouselEl.scrollLeft >= max - EDGE);
 }
 
 /* Lines up the sort chips with wherever the first card actually rendered
@@ -3620,6 +4051,7 @@ function renderReviews(){
     </div>`;
   }).join('');
   revealOnScroll(reviewCarousel, '.review-card');
+  requestAnimationFrame(()=> updateCarouselArrows(reviewCarousel, reviewArrowPrevBtn, reviewArrowNextBtn));
 }
 
 function revealOnScroll(container, selector){
@@ -3647,6 +4079,7 @@ btnCarousel.addEventListener('click', ()=>{
   catalogSection.classList.remove('grid-mode');
   btnCarousel.classList.add('active'); btnGrid.classList.remove('active');
   setTimeout(alignCatalogFilters, 50);
+  requestAnimationFrame(()=> updateCarouselArrows(productCarousel, arrowPrevBtn, arrowNextBtn));
 });
 btnGrid.addEventListener('click', ()=>{
   currentView='grid';
@@ -3669,6 +4102,7 @@ document.getElementById('arrowNext').addEventListener('click', ()=>{
 productCarousel.addEventListener('scroll', ()=>{
   document.getElementById('swipeHint').style.opacity = productCarousel.scrollLeft > 20 ? '0' : '1';
   updateActiveDot(productCarousel, productDots);
+  updateCarouselArrows(productCarousel, arrowPrevBtn, arrowNextBtn);
 }, {passive:true});
 
 document.getElementById('appleArrowPrev').addEventListener('click', ()=>{
@@ -3681,18 +4115,24 @@ document.getElementById('appleArrowNext').addEventListener('click', ()=>{
   const w = card ? card.getBoundingClientRect().width + 14 : 300;
   appleCarousel.scrollBy({left:w, behavior:'smooth'});
 });
-appleCarousel.addEventListener('scroll', ()=> updateActiveDot(appleCarousel, appleDots), {passive:true});
+appleCarousel.addEventListener('scroll', ()=>{
+  updateActiveDot(appleCarousel, appleDots);
+  updateCarouselArrows(appleCarousel, appleArrowPrevBtn, appleArrowNextBtn);
+}, {passive:true});
 
-document.getElementById('reviewPrev').addEventListener('click', ()=>{
+const reviewArrowPrevBtn = document.getElementById('reviewPrev');
+const reviewArrowNextBtn = document.getElementById('reviewNext');
+reviewArrowPrevBtn.addEventListener('click', ()=>{
   const card = reviewCarousel.querySelector('.review-card');
   const w = card ? card.getBoundingClientRect().width + 14 : 260;
   reviewCarousel.scrollBy({left:-w, behavior:'smooth'});
 });
-document.getElementById('reviewNext').addEventListener('click', ()=>{
+reviewArrowNextBtn.addEventListener('click', ()=>{
   const card = reviewCarousel.querySelector('.review-card');
   const w = card ? card.getBoundingClientRect().width + 14 : 260;
   reviewCarousel.scrollBy({left:w, behavior:'smooth'});
 });
+reviewCarousel.addEventListener('scroll', ()=> updateCarouselArrows(reviewCarousel, reviewArrowPrevBtn, reviewArrowNextBtn), {passive:true});
 
 /* ================= MODAL ================= */
 const modalOverlay = document.getElementById('modalOverlay');
@@ -4449,17 +4889,36 @@ cartOverlay.addEventListener('click', (e)=>{ if(e.target === cartOverlay) closeC
 
 cartCheckoutBtn.addEventListener('click', ()=>{
   if(cart.length === 0) return;
+  // Agrupado por producto (un párrafo en negrita por modelo, los sabores
+  // debajo) en vez de una lista plana numerada — mismo criterio que el
+  // pedido mayorista, para que se lea de un vistazo con varios productos.
   let msg = '¡Hola Vapesoon! Quiero hacer este pedido:\n\n';
-  cart.forEach((item, i)=>{
-    const priceLine = item.price != null ? ` — $${item.price.toLocaleString('es-AR')}` : '';
-    msg += `${i+1}. *${item.product}* — ${stripEmoji(item.flavor)}${priceLine}\n`;
+  const byProduct = new Map();
+  cart.forEach(item=>{
+    if(!byProduct.has(item.product)) byProduct.set(item.product, []);
+    byProduct.get(item.product).push(item);
+  });
+  byProduct.forEach((items, product)=>{
+    msg += `*${product}*\n`;
+    const byFlavor = new Map();
+    items.forEach(item=>{
+      const flavor = stripEmoji(item.flavor);
+      if(!byFlavor.has(flavor)) byFlavor.set(flavor, {qty:0, price:item.price});
+      byFlavor.get(flavor).qty++;
+    });
+    byFlavor.forEach((info, flavor)=>{
+      const qtyText = info.qty > 1 ? ` x${info.qty}` : '';
+      const priceText = info.price != null ? ` — $${(info.price * info.qty).toLocaleString('es-AR')}` : '';
+      msg += `- ${flavor}${qtyText}${priceText}\n`;
+    });
+    msg += '\n';
   });
   const hasAllPrices = cart.every(i => i.price);
   if(hasAllPrices){
     const total = cart.reduce((s,i)=>s+i.price, 0);
-    msg += `\nTotal aprox: $${total.toLocaleString('es-AR')}`;
+    msg += `Total aprox: $${total.toLocaleString('es-AR')}\n\n`;
   }
-  msg += '\n\n¿Me confirmás disponibilidad?';
+  msg += '¿Me confirmás disponibilidad?';
   openFulfillmentChoice(msg, cart.some(item => item.category === 'apple'));
 });
 
@@ -4559,11 +5018,10 @@ function initIntro(){
    necesario: no hay que tocar ningún otro archivo ni deshacer estilos. */
 const WHOLESALE_LOCKED = false;
 
-/* 📖 SOLO CONSULTA — el catálogo mayorista queda visible (modelos, fotos,
-   precios, stock) pero no se puede elegir sabores ni armar pedido: las
-   tarjetas no abren la vista de sabores, el carrito y el checkout quedan
-   inalcanzables. Cambiar a false reactiva el flujo de pedido completo. */
-const WHOLESALE_ORDERING_DISABLED = true;
+/* Flujo de pedido completo activo: las tarjetas abren la vista de sabores
+   y el carrito/checkout mayorista quedan disponibles. Cambiar a true para
+   volver a modo "solo consulta" (catálogo visible, sin poder pedir). */
+const WHOLESALE_ORDERING_DISABLED = false;
 
 /* Cotización manual: actualizala acá cuando cambie el precio que
    nos acepta el revendedor. Todo el catálogo mayorista se calcula
@@ -4571,43 +5029,42 @@ const WHOLESALE_ORDERING_DISABLED = true;
 const USD_TO_ARS = 1650;
 
 /* Modelos mayoristas — precio de costo del proveedor + margen mínimo de
-   USD 1.50 por unidad (ver WHOLESALE_MARGIN_USD). Orden: primero los que ya
-   sabemos que más se piden en el minorista (mismo ranking que
-   POPULARITY_ORDER), después el resto agrupado por línea/marca.
+   USD 1.50 por unidad (ver WHOLESALE_MARGIN_USD). Sabores, precio y stock
+   se generan automáticamente desde el catálogo del proveedor (italiashop.com.py)
+   con scripts/actualizar-stock-mayorista.js + scripts/generar-catalogo-mayorista.js
+   — para refrescar esto, correr ambos de nuevo y pegar el resultado de
+   scripts/wholesale-catalog.txt acá. `stock` por sabor es 20 (disponible) o
+   0 (agotado): el proveedor solo publica sí/no hay stock, no una cantidad
+   real, así que 20 es un valor asumido, no un conteo exacto.
    `photo` reutiliza los mismos assets que el catálogo minorista cuando es
    literalmente el mismo dispositivo — los modelos sin `photo` todavía no
-   tienen foto cargada y muestran el ícono genérico de placeholder.
-   Los sabores están TODOS pendientes de cargar (placeholder de 1 solo
-   ítem "Sabor a confirmar") — reemplazar por la lista real de sabores +
-   stock de cada modelo apenas esté disponible. */
+   tienen foto cargada y muestran el ícono genérico de placeholder. Los
+   modelos marcados VERIFICAR no tenían ningún número de puffs reconocible
+   en su nombre — confirmar la cifra real antes de mostrarla. */
 const WHOLESALE_MARGIN_USD = 1.5;
 function wholesalePrice(cost){ return Math.round((cost + WHOLESALE_MARGIN_USD) * 100) / 100; }
-// Cada modelo necesita su PROPIO array (no una referencia compartida), para
-// que el stock/estado de cada uno se pueda editar de forma independiente
-// el día que se cargue la lista real de sabores.
-function wholesalePlaceholderFlavors(){ return [{name:'Sabor a confirmar', stock:20}]; }
 const WHOLESALE_CATALOG = [
-  {name:'ELFBAR 40K ICE KING', price:wholesalePrice(10.50), puffs:40000, photo:'ice_king', flavors:wholesalePlaceholderFlavors()},
-  {name:'IGNITE VMIX 40K', price:wholesalePrice(12.00), puffs:40000, photo:'vmix', flavors:wholesalePlaceholderFlavors()},
-  {name:'ELFBAR 40K TRIO', price:wholesalePrice(10.25), puffs:40000, photo:'trio', flavors:wholesalePlaceholderFlavors()},
-  {name:'IGNITE V500', price:wholesalePrice(13.00), puffs:50000, photo:'v500', flavors:wholesalePlaceholderFlavors()},
-  {name:'ELFBAR DUKE 35K', price:wholesalePrice(9.85), puffs:35000, photo:'duke', flavors:wholesalePlaceholderFlavors()},
-  {name:'BLACKSHEEP 40K', price:wholesalePrice(12.75), puffs:40000, photo:'blacksheep', flavors:wholesalePlaceholderFlavors()},
-  {name:'EBCREATE BC PRO', price:wholesalePrice(7.50), puffs:40000, photo:'ebcreate', flavors:wholesalePlaceholderFlavors()},
-  {name:'IGNITE V400 ICE', price:wholesalePrice(11.00), puffs:40000, photo:'v400', flavors:wholesalePlaceholderFlavors()},
-  {name:'ELFBAR BC 15K', price:wholesalePrice(7.00), puffs:15000, photo:'bc', flavors:wholesalePlaceholderFlavors()},
-  {name:'IGNITE V300 ULTRA SLIM', price:wholesalePrice(11.30), puffs:30000, photo:'wholesale_v300_ultra_slim', flavors:wholesalePlaceholderFlavors()},
-  {name:'IGNITE V150 PRO', price:wholesalePrice(8.85), puffs:15000, photo:'v150', flavors:wholesalePlaceholderFlavors()},
-  {name:'NIKBAR 10000', price:wholesalePrice(6.00), puffs:10000, photo:'nikbar10', flavors:wholesalePlaceholderFlavors()},
-  {name:'ELFBAR 40K SWEET KING', price:wholesalePrice(10.50), puffs:40000, photo:'sweet_king', flavors:wholesalePlaceholderFlavors()},
-  {name:'IGNITE V300', price:wholesalePrice(11.50), puffs:30000, photo:'wholesale_v300', flavors:wholesalePlaceholderFlavors()},
-  {name:'NIKBAR 30000', price:wholesalePrice(8.00), puffs:30000, photo:'nikbar30', flavors:wholesalePlaceholderFlavors()},
-  {name:'BLACKSHEEP 55K', price:wholesalePrice(12.50), puffs:55000, photo:'blacksheep_55k', flavors:wholesalePlaceholderFlavors()},
-  {name:'BLVK JUST JUICE', price:wholesalePrice(11.00), puffs:45000, photo:'blvk', flavors:wholesalePlaceholderFlavors()},
-  {name:'LOST MARY DURA 35000', price:wholesalePrice(8.75), puffs:35000, photo:'lost_mary_dura_35000', flavors:wholesalePlaceholderFlavors()},
-  {name:'LOST MARY MT20.000', price:wholesalePrice(7.00), puffs:20000, photo:'lost_mary_mt20000', flavors:wholesalePlaceholderFlavors()},
-  {name:'ELFBAR GH 23000', price:wholesalePrice(9.50), puffs:23000, photo:'elfbar_gh_23000', flavors:wholesalePlaceholderFlavors()},
-  {name:'ELFBAR DISP TE30K', price:wholesalePrice(9.75), puffs:30000, photo:'elfbar_disp_te30k', flavors:wholesalePlaceholderFlavors()},
+  {name:'ELFBAR 40K ICE KING', price:wholesalePrice(10.5), puffs:40000, photo:'ice_king', flavors:[{name:'Baja Splash 🌊', stock:20},{name:'Blue Razz Ice 🫐❄️', stock:20},{name:'Blueberry Ice 🫐❄️', stock:20},{name:'Bubaloo Tutti Fruit 🍭', stock:20},{name:'Cherry Fuse 🍒', stock:20},{name:'Cherry Strazz 🍒', stock:20},{name:'Cranberry Pineapple 🍍🍏', stock:20},{name:'Grape Ice 🍇❄️', stock:20},{name:'Mango Magic 🥭', stock:20},{name:'Melon Grape Menthol 🍇❄️', stock:20},{name:'Miami Mint ❄️', stock:20},{name:'Peach + 🍑', stock:20},{name:'Peach Mango Water 🥭🍑', stock:20},{name:'Sour Straw Dragon 🍓🐉', stock:20},{name:'Strawberry Ice 🍓❄️', stock:20},{name:'Tigers Blood 🐯', stock:20},{name:'Watermelon Ice 🍉❄️', stock:20}]},
+  {name:'IGNITE VMIX 40K', price:wholesalePrice(12), puffs:40000, photo:'vmix', flavors:[{name:'Acai Ice + Water Grape 🍇❄️', stock:20},{name:'Icy Mint + Peach Grape 🍇🍑', stock:20},{name:'Mango Ice + Pass Frui Gu 🥭❄️', stock:20},{name:'Mango Ice + Peach Wat Ic 🥭🍑', stock:20},{name:'Menthol + Mighty Melon ❄️🍈', stock:20},{name:'New Banana Cherry + Grape Ice 🍇🍌', stock:20},{name:'New Blueberry + Strawberry 🍓🫐', stock:20},{name:'New Cherry + Grape Ice 🍇🍒', stock:20},{name:'New Grape Ice + Strawberry 🍓🍇', stock:20},{name:'New Icy Mint + Menthol ❄️', stock:20},{name:'New Icy Mint + Peach Grape 🍇🍑', stock:20},{name:'New Kiwi Passion Guava Ice + Strawberry Ice 🍓🥝', stock:20},{name:'New Mango Ice + Passion Fruit 🥭❄️', stock:20},{name:'New Menthol + Mighty Melon ❄️🍈', stock:20},{name:'New Pineapple + Coconut 🍍🍏', stock:20},{name:'New Pineapple + Passion Fruit 🍍🍏', stock:20},{name:'New Raspberry Ice + Watermelon Ice 🍉❄️', stock:20},{name:'New Strawberry Grape Ice + Kiwi Watermelon Ice 🍓🍇', stock:20},{name:'New Strawberry Kiwi Ice + Grape Kiwi Ice 🍓🍇', stock:20},{name:'New Strawberry Lemon + Grape Ice 🍓🍇', stock:20},{name:'New Triple Berry Ice + Grape Ice 🍇❄️', stock:20},{name:'New Watermelon Ice + Grape Ice 🍇🍉', stock:20}]},
+  {name:'ELFBAR 40K TRIO', price:wholesalePrice(10.25), puffs:40000, photo:'trio', flavors:[{name:'Blueberry Pom Slushy 🫐', stock:20},{name:'Orange Blast 🍊💥', stock:20},{name:'Peach Twist 🍑💥', stock:20},{name:'Pomegranate Blast 🌺💥', stock:20},{name:'Sakura Grape 🍇', stock:20},{name:'Scary Berry 🫐', stock:20},{name:'Sour Strawberry Dragon 🍓🐉', stock:20},{name:'Strawberry Orange L 🍓🍊', stock:20}]},
+  {name:'IGNITE V500', price:wholesalePrice(13), puffs:50000, photo:'v500', flavors:[{name:'Banana Cherry 🍌🍒', stock:20},{name:'Kiwi Acai 🥝', stock:20},{name:'Watermelon Kiwi 🍉🥝', stock:20}]},
+  {name:'ELFBAR DUKE 35K', price:wholesalePrice(9.85), puffs:35000, photo:'duke', flavors:[{name:'Blue Razz Ice 🫐❄️', stock:20},{name:'Fanta Grape 🍇', stock:20},{name:'Kiwi Pass Guava 🥝🍈', stock:20},{name:'Watermelon Lemon 🍉🍋', stock:20}]},
+  {name:'BLACKSHEEP 40K', price:wholesalePrice(12.75), puffs:40000, photo:'blacksheep', flavors:[{name:'Blueberry Bubble Sour Green Apple 🫐🍏', stock:20},{name:'Blueberry Grape Cherry Berry 🍇🍒', stock:20},{name:'Fresh Mint Mango Orange 🥭🍊', stock:20},{name:'Grape Grape Mango 🍇🥭', stock:20},{name:'Grape Menthol 🍇❄️', stock:20},{name:'Grape Pass Fruit 🍇', stock:20},{name:'Grape/Energy Drink 🍇⚡', stock:20},{name:'Kiwi Grap Acai Straw Banana 🍓🍌', stock:20},{name:'Master Grape Grape 🍇', stock:20},{name:'Strawberry Kiwi Cola Lime 🍓🥝', stock:20},{name:'Strawberry Kiwi Fresh Mint 🍓🥝', stock:20}]},
+  {name:'EBCREATE BC PRO', price:wholesalePrice(7.5), puffs:40000, photo:'ebcreate', flavors:[{name:'Aurora Berries 🫐', stock:20},{name:'Blue Razz Ice 🫐❄️', stock:20},{name:'Golden Berry 🫐', stock:20},{name:'Pineapple Pom 🍍🍏', stock:20},{name:'Sour Fcuking Fab 🍋', stock:20},{name:'Strawberry Blend 🍓🫐', stock:20},{name:'Strawberry Kiwi 🍓🥝', stock:20},{name:'Strawberry Raspb Fro 🍓🫐', stock:20},{name:'Toasted Pineapple 🍍🍏', stock:20},{name:'Triple Berry 🫐', stock:20},{name:'Watermelon Peach Fro 🍉🍑', stock:20},{name:'Winter Mint ❄️', stock:20}]},
+  {name:'IGNITE V400 ICE', price:wholesalePrice(11), puffs:40000, photo:'v400', flavors:[{name:'Grape Bubblegum 🍇🍬', stock:20},{name:'Mint ❄️', stock:20},{name:'Sakura Grape 🍇', stock:20},{name:'Strawberry Watermelon 🍓🍉', stock:20}]},
+  {name:'ELFBAR BC 15K', price:wholesalePrice(7), puffs:15000, photo:'bc', flavors:[{name:'Americano Ice ❄️', stock:20},{name:'Blue Razz Ice 🫐❄️', stock:20},{name:'Blueberry Ice 🫐❄️', stock:20},{name:'Bubba Grape 🍇', stock:20},{name:'Green Apple Ice 🍏❄️', stock:20},{name:'Icy Mint ❄️', stock:20},{name:'Kiwi Pass Guava 🥝🍈', stock:20},{name:'Mango Magic 🥭', stock:20},{name:'Miami Mint ❄️', stock:20},{name:'Passion Fruit Grange Guava 🐠🍈', stock:20},{name:'Peach Mango Watermelon 🥭🍉', stock:20},{name:'Pineapple Ice 🍍🍏', stock:20},{name:'Sakura Grape 🍇', stock:20},{name:'Strawberry Ice 🍓❄️', stock:20},{name:'Strawberry Kiwi 🍓🥝', stock:20},{name:'Strawberry Water 🍓🫐', stock:20},{name:'Tropical Lemonade 🍋🌴', stock:20},{name:'Watermelon Ice 🍉❄️', stock:20}]},
+  {name:'IGNITE V300 ULTRA SLIM', price:wholesalePrice(11.3), puffs:30000, photo:'wholesale_v300_ultra_slim', flavors:[{name:'Aloe Grape 🍇', stock:20},{name:'Banana Coconut Water 🍌🥥', stock:20},{name:'Banana Ice 🍌❄️', stock:20},{name:'Blueberry Ice 🫐❄️', stock:20},{name:'Blueberry Straw Coconut 🍓🫐', stock:20},{name:'Cactus Lime Soda 🍈🥤', stock:20},{name:'Dragon Fruit Watermelon 🍉🐉', stock:20},{name:'Grape Ice 🍇❄️', stock:20},{name:'Green Apple 🍏', stock:20},{name:'Icy Mint ❄️', stock:20},{name:'Menthol ❄️', stock:20},{name:'Minty Melon ❄️🍈', stock:20},{name:'Peach Mango 🥭🍑', stock:20},{name:'Pineapple Kiwi Dragon Fruit 🍍🥝', stock:20},{name:'Strawberry Banana 🍓🍌', stock:20},{name:'Strawberry Ice 🍓❄️', stock:20},{name:'Watermelon Ice 🍉❄️', stock:20},{name:'Watermelon Mix 🍉🍈', stock:20}]},
+  {name:'IGNITE V150 PRO', price:wholesalePrice(8.85), puffs:15000, photo:'v150', flavors:[{name:'Aloe Grape 🍇', stock:20},{name:'Blueberry Ice 🫐❄️', stock:20},{name:'Dragon Fruit Lemonade 🍋🐉', stock:20},{name:'Green Apple 🍏', stock:20},{name:'Green Apple Peach Kiwi 🍑🥝', stock:20}]},
+  {name:'NIKBAR 10000', price:wholesalePrice(6), puffs:10000, photo:'nikbar10', flavors:[{name:'Artic Gum 🍬', stock:20},{name:'Banana Ice 🍌❄️', stock:20},{name:'Blueberry Ice 🫐❄️', stock:20},{name:'Cherry Watermelon 🍉🍒', stock:20},{name:'Grape Ice 🍇❄️', stock:20},{name:'Icy Mint ❄️', stock:20},{name:'Menthol ❄️', stock:20},{name:'Miami Mint ❄️', stock:20},{name:'Pass Sour Kiwi 🥝🍋', stock:20},{name:'Passion Fruit Ice Mint ❄️🐠', stock:20},{name:'Pineapple Ice 🍍🍏', stock:20},{name:'Sakura Grape 🍇', stock:20},{name:'Spearmint Grape 🍇❄️', stock:20},{name:'Spearmint Gum ❄️🍬', stock:20},{name:'Spearmint Strawberry 🍓❄️', stock:20},{name:'Stone Freeze ❄️', stock:20},{name:'Strawberry Ice 🍓❄️', stock:20},{name:'Strawberry Kiwi 🍓🥝', stock:20},{name:'Watermelon Ice 🍉❄️', stock:20},{name:'Watermelon Mint 🍉❄️', stock:20}]},
+  {name:'ELFBAR 40K SWEET KING', price:wholesalePrice(10.5), puffs:40000, photo:'sweet_king', flavors:[{name:'Blue Razz B-Pop 🫐🍬', stock:20},{name:'Bubbalo Grape 🍇', stock:20},{name:'Bubbalo Tuttif 🍭', stock:20},{name:'Raspberry Orange 🍊🍇', stock:20},{name:'Triple Berry 🫐', stock:20},{name:'Watermelon Roll Up 🍉🍈', stock:20},{name:'Wintergreen Savers ❄️', stock:20}]},
+  {name:'IGNITE V300', price:wholesalePrice(11.5), puffs:30000, photo:'wholesale_v300', flavors:[{name:'Mint Melon ❄️🍈', stock:20}]},
+  {name:'NIKBAR 30000', price:wholesalePrice(8), puffs:30000, photo:'nikbar30', flavors:[{name:'Fresh Mint ❄️', stock:20},{name:'Menthol ❄️', stock:20},{name:'Miami Mint ❄️', stock:20},{name:'Passion Fruit Sour Kiwi 🥝🐠', stock:20}]},
+  {name:'BLACKSHEEP 55K', price:wholesalePrice(12.5), puffs:55000, photo:'blacksheep_55k', flavors:[{name:'Blue Razz Ice 🫐❄️', stock:20},{name:'Blueberry Watermelon 🍉🫐', stock:20},{name:'Cool Mint ❄️', stock:20},{name:'Lemon Heads 🍋', stock:20},{name:'Miami Mint ❄️', stock:20},{name:'Mixed Berry 🫐', stock:20},{name:'Passion Fruit 🐠', stock:20},{name:'Strawberry Banana 🍓🍌', stock:20},{name:'Strawberry Ice 🍓❄️', stock:20},{name:'Watermelon Ice 🍉❄️', stock:20},{name:'White Grape 🍇', stock:20}]},
+  {name:'BLVK JUST JUICE', price:wholesalePrice(11), puffs:45000, photo:'blvk', flavors:[{name:'Grape Ice 🍇❄️', stock:20},{name:'Green Apple 🍏', stock:20},{name:'Kiwi Passion Fruit 🥝🐠', stock:20},{name:'Menthol ❄️', stock:20},{name:'Spearmint ❄️', stock:20},{name:'Strawberry Ice 🍓❄️', stock:20},{name:'Strawberry Kiwi 🍓🥝', stock:20},{name:'Strawberry Mango 🍓🥭', stock:20},{name:'Strawberry Waterm 🍓🫐', stock:20},{name:'Watermelon Ice 🍉❄️', stock:20}]},
+  {name:'LOST MARY DURA 35000', price:wholesalePrice(8.75), puffs:35000, photo:'lost_mary_dura_35000', flavors:[{name:'Grapefruit Pass 🍇', stock:20},{name:'Hawaiian Juice ❄️', stock:20},{name:'Hawaiian Mint ❄️', stock:20},{name:'Pome Cherry Pineapple 🍍🍒', stock:20}]},
+  {name:'LOST MARY MT20.000', price:wholesalePrice(7), puffs:20000, photo:'lost_mary_mt20000', flavors:[{name:'Berry Burst 🫐', stock:20},{name:'Grape Ice 🍇❄️', stock:20},{name:'Hawaian Juice ❄️', stock:20},{name:'Miami Mint ❄️', stock:20},{name:'Nana Coconut 🍌🥥', stock:20},{name:'Pineapple Lemon 🍍🍏', stock:20},{name:'Rocket Freeze ❄️', stock:20},{name:'Strawmelon Peach 🍑🍈', stock:20},{name:'Summer Grape 🍇', stock:20},{name:'Winter Mint ❄️', stock:20}]},
+  {name:'ELFBAR GH 23000', price:wholesalePrice(9.5), puffs:23000, photo:'elfbar_gh_23000', flavors:[{name:'Blueberry Pear 🫐', stock:20},{name:'Grape Ice 🍇❄️', stock:20},{name:'Kiwi Dragon Fruit 🥝🐉', stock:20},{name:'Miami Mint ❄️', stock:20},{name:'Strawberry Ice 🍓❄️', stock:20}]},
+  {name:'ELFBAR DISP TE30K', price:wholesalePrice(9.75), puffs:30000, photo:'elfbar_disp_te30k', flavors:[{name:'Blueberry Ice 🫐❄️', stock:20},{name:'Bubbaloo Tutti 🍭', stock:20},{name:'Cherry Strazz 🍒', stock:20},{name:'Dragon Strawna 🐉', stock:20},{name:'Green Apple Ice 🍏❄️', stock:20},{name:'Peach Mango Water 🥭🍑', stock:20},{name:'Pineapple Ice 🍍🍏', stock:20},{name:'Pineapple Mango 🥭🍍', stock:20},{name:'Strawberry Watermelon Ice 🍓🍉', stock:20},{name:'Strawmelon Peach 🍑🍈', stock:20}]},
 ];
 const WHOLESALE_MIN_UNITS = 20;
 const WHOLESALE_WHATSAPP_NUMBER = '5491151244554'; // Fran — socio encargado de mayorista
@@ -4636,6 +5093,8 @@ const wholesaleTotalArs = document.getElementById('wholesaleTotalArs');
 const wCurrencyUsd = document.getElementById('wCurrencyUsd');
 const wCurrencyArs = document.getElementById('wCurrencyArs');
 const wholesaleDotsEl = document.getElementById('wholesaleDots');
+const wArrowPrevBtn = document.getElementById('wArrowPrev');
+const wArrowNextBtn = document.getElementById('wArrowNext');
 const wholesaleCheckoutBtn = document.getElementById('wholesaleCheckoutBtn');
 const wholesaleCheckoutText = document.getElementById('wholesaleCheckoutText');
 const wholesaleFlavorList = document.getElementById('wholesaleFlavorList');
@@ -4668,14 +5127,6 @@ function formatWholesaleAmount(usd){
 function wholesaleFlavorIsOutOfStock(f){ return !f.stock || f.stock <= 0; }
 function wholesaleModelIsOutOfStock(m){ return !m.flavors.length || m.flavors.every(wholesaleFlavorIsOutOfStock); }
 function wholesaleFlavorKey(modelName, flavorName){ return modelName + '|' + flavorName; }
-
-/* Same status logic as stockDotColor (retail), but swaps the "healthy stock"
-   blue for gold so the dot never breaks the wholesale orange identity. */
-function wholesaleStockDotColor(stock){
-  if(stock === 1) return '#e8433a';
-  if(stock <= 3) return '#ff9130';
-  return '#ffc857';
-}
 
 /* Generic vape-shaped icon used everywhere a product photo isn't loaded yet
    (carousel cards, the flavor-screen product box). Same footprint a real
@@ -4711,7 +5162,6 @@ function renderWholesaleGrid(){
   let cardCount = 0;
   const cardsHTML = list.map(m=>{
     const oos = wholesaleModelIsOutOfStock(m);
-    const totalStock = m.flavors.reduce((s,f)=> s + (f.stock||0), 0);
     const badgeHTML = (!query && !oos && cardCount === 0) ? '<div class="wholesale-card-badge">Más pedido</div>' : '';
     cardCount++;
     return `
@@ -4727,7 +5177,7 @@ function renderWholesaleGrid(){
         <div class="wholesale-card-price">${formatWholesaleAmount(m.price)}</div>
       </div>
       <div class="wholesale-card-meta">
-        <span class="stock-badge"><span class="stock-dot" style="background:${wholesaleStockDotColor(totalStock)}"></span>${oos ? 'Sin stock' : m.flavors.length + ' sabores · ' + totalStock + ' u.'}</span>
+        <span class="stock-badge"><span class="stock-dot" style="background:var(--gold)"></span>${oos ? 'Sin stock' : m.flavors.length + ' sabores'}</span>
       </div>
       <div class="wholesale-card-cta">
         <span>${oos ? 'Sin stock' : (WHOLESALE_ORDERING_DISABLED ? '¡En breve disponible!' : 'Ver sabores')}</span>
@@ -4742,7 +5192,10 @@ function renderWholesaleGrid(){
 
   wireWholesaleCards();
   renderWholesaleDots(cardCount);
-  requestAnimationFrame(()=> updateWholesaleActiveDot());
+  requestAnimationFrame(()=>{
+    updateWholesaleActiveDot();
+    updateCarouselArrows(wholesaleGrid, wArrowPrevBtn, wArrowNextBtn);
+  });
 }
 
 /* ---- carousel pagination dots + arrows (mirrors the retail carousel's
@@ -4772,7 +5225,10 @@ function updateWholesaleActiveDot(){
   });
   dots.forEach((d, i) => d.classList.toggle('active', i === closest));
 }
-wholesaleGrid.addEventListener('scroll', ()=> updateWholesaleActiveDot(), {passive:true});
+wholesaleGrid.addEventListener('scroll', ()=>{
+  updateWholesaleActiveDot();
+  updateCarouselArrows(wholesaleGrid, wArrowPrevBtn, wArrowNextBtn);
+}, {passive:true});
 document.getElementById('wArrowPrev').addEventListener('click', ()=>{
   const card = wholesaleGrid.querySelector('.wholesale-card');
   const w = card ? card.getBoundingClientRect().width + 12 : 300;
@@ -4782,6 +5238,33 @@ document.getElementById('wArrowNext').addEventListener('click', ()=>{
   const card = wholesaleGrid.querySelector('.wholesale-card');
   const w = card ? card.getBoundingClientRect().width + 12 : 300;
   wholesaleGrid.scrollBy({left:w, behavior:'smooth'});
+});
+
+/* ---- benefits strip (mobile carousel): same centered scroll-snap as the
+   product carousels, with its own transparent prev/next arrows that hide
+   themselves via updateCarouselArrows() once there's nothing further in
+   that direction. Static content (doesn't re-render), so it only needs to
+   be measured once the wholesale page is actually visible — see the call
+   in openWholesaleModal()'s onMidpoint — plus on resize, since the item's
+   flex-basis is a % of the viewport. ---- */
+const wholesaleBenefits = document.getElementById('wholesaleBenefits');
+const wBenefitsPrevBtn = document.getElementById('wBenefitsPrev');
+const wBenefitsNextBtn = document.getElementById('wBenefitsNext');
+wBenefitsPrevBtn.addEventListener('click', ()=>{
+  const item = wholesaleBenefits.querySelector('.wholesale-info-item');
+  const w = item ? item.getBoundingClientRect().width + 14 : 240;
+  wholesaleBenefits.scrollBy({left:-w, behavior:'smooth'});
+});
+wBenefitsNextBtn.addEventListener('click', ()=>{
+  const item = wholesaleBenefits.querySelector('.wholesale-info-item');
+  const w = item ? item.getBoundingClientRect().width + 14 : 240;
+  wholesaleBenefits.scrollBy({left:w, behavior:'smooth'});
+});
+wholesaleBenefits.addEventListener('scroll', ()=> updateCarouselArrows(wholesaleBenefits, wBenefitsPrevBtn, wBenefitsNextBtn), {passive:true});
+let wholesaleBenefitsResizeTimer;
+window.addEventListener('resize', ()=>{
+  clearTimeout(wholesaleBenefitsResizeTimer);
+  wholesaleBenefitsResizeTimer = setTimeout(()=> updateCarouselArrows(wholesaleBenefits, wBenefitsPrevBtn, wBenefitsNextBtn), 150);
 });
 
 /* ---- "Más pedidos" / "Más pitadas" pills — visual selection only for now,
@@ -4824,25 +5307,28 @@ function openWholesaleFlavorStep(model){
   wholesaleSheet.scrollTop = 0;
 }
 
+/* Sin badge de stock acá a propósito: el cliente elige cantidad libremente,
+   sin que la vista le muestre cuánto queda de cada sabor (ver WHOLESALE_CATALOG
+   más arriba — el `stock` por sabor sigue existiendo como tope interno del
+   stepper, simplemente no se muestra). Los sabores agotados directamente no
+   están en `flavors` (se filtran al generar el catálogo), así que acá no
+   hace falta un estado "sin stock" por fila. */
 function renderWholesaleFlavorList(){
   const m = wholesaleActiveModel;
   wholesaleFlavorList.innerHTML = m.flavors.map(f=>{
-    const oos = wholesaleFlavorIsOutOfStock(f);
     const key = wholesaleFlavorKey(m.name, f.name);
-    const qty = oos ? 0 : Math.min(wholesaleFlavorQtyState[key] || 0, f.stock);
+    const qty = Math.min(wholesaleFlavorQtyState[key] || 0, f.stock);
     wholesaleFlavorQtyState[key] = qty;
     return `
-    <div class="wholesale-flavor-row${oos ? ' wholesale-flavor-row--oos' : ''}${qty > 0 ? ' selected' : ''}" data-flavor="${f.name}">
+    <div class="wholesale-flavor-row${qty > 0 ? ' selected' : ''}" data-flavor="${f.name}">
       <div class="wholesale-flavor-row-info">
         <div class="wholesale-flavor-row-name">${f.name}</div>
-        <span class="stock-badge"><span class="stock-dot" style="background:${wholesaleStockDotColor(f.stock)}"></span>${oos ? 'Sin stock' : f.stock + ' disponibles'}</span>
       </div>
-      ${oos ? '<span class="wholesale-card-oos-tag" style="position:static;">Sin stock</span>' : `
       <div class="wholesale-qty">
         <button type="button" class="wf-qty-minus" aria-label="Restar" ${qty <= 0 ? 'disabled' : ''}>−</button>
         <span class="wholesale-qty-val wf-qty-val">${qty}</span>
         <button type="button" class="wf-qty-plus" aria-label="Sumar" ${qty >= f.stock ? 'disabled' : ''}>+</button>
-      </div>`}
+      </div>
     </div>`;
   }).join('');
 
@@ -5018,6 +5504,7 @@ const wBtnGrid = document.getElementById('wViewGrid');
 wBtnCarousel.addEventListener('click', ()=>{
   wholesaleCatalogWrap.classList.remove('grid-mode');
   wBtnCarousel.classList.add('active'); wBtnGrid.classList.remove('active');
+  requestAnimationFrame(()=> updateCarouselArrows(wholesaleGrid, wArrowPrevBtn, wArrowNextBtn));
 });
 wBtnGrid.addEventListener('click', ()=>{
   wholesaleCatalogWrap.classList.add('grid-mode');
@@ -5042,8 +5529,41 @@ wholesaleCartBackBtn.addEventListener('click', ()=>{
   updateWholesaleCartBar();
 });
 
+/* Truck transition played only when OPENING the wholesale page — see
+   .truck-transition rules in <style> for the visuals. The backdrop blurs
+   the real home page (same idea as the retail flavor-picker modal) instead
+   of hiding it behind a solid color. Long enough (~1.4s total) to actually
+   register as "a truck crossing the screen" instead of a flash, but well
+   short of a loading-screen wait.
+
+   The home->wholesale swap used to happen in the *middle* of this, timed
+   via setTimeout — but renderWholesaleGrid() builds dozens of product
+   cards, and running that expensive synchronous work mid-animation could
+   block the main thread long enough to freeze the truck's CSS animation
+   entirely on slower devices/browsers (it doesn't pause and resume — time
+   keeps passing while the tab is blocked, so it can just jump straight to
+   its end state, or never get painted moving at all). Doing the swap
+   immediately, before the truck even starts, removes that mid-flight
+   blocking risk — it's still hidden the same way, under the opaque blur
+   that's about to cover the screen for the next ~1.4s regardless. */
+const truckTransition = document.getElementById('truckTransition');
+let truckTransitionTimers = [];
+const TRUCK_DRIVE_MS = 1000;
+const TRUCK_FADE_MS = 450;
+function playWholesaleOpenTransition(){
+  truckTransitionTimers.forEach(clearTimeout);
+  truckTransitionTimers = [];
+  truckTransition.classList.remove('driving');
+  void truckTransition.offsetWidth; // reflow so re-triggering restarts the CSS animation
+  truckTransition.classList.add('visible', 'driving');
+  truckTransitionTimers.push(setTimeout(()=> truckTransition.classList.remove('visible'), TRUCK_DRIVE_MS));
+  truckTransitionTimers.push(setTimeout(()=> truckTransition.classList.remove('driving'), TRUCK_DRIVE_MS + TRUCK_FADE_MS + 60));
+}
+
 function openWholesaleModal(){
   if(WHOLESALE_LOCKED) return; // bloqueo temporal — ver WHOLESALE_LOCKED más arriba
+  document.body.style.overflow = 'hidden';
+  playWholesaleOpenTransition();
   renderWholesaleGrid();
   setWholesaleTopbarMode('catalog');
   updateWholesaleCartBar();
@@ -5052,8 +5572,11 @@ function openWholesaleModal(){
   wholesaleFlavorStep.classList.add('hidden');
   wholesaleCartStep.classList.add('hidden');
   wholesaleOverlay.classList.add('open');
-  document.body.style.overflow = 'hidden';
+  wholesaleSheet.scrollTop = 0;
+  requestAnimationFrame(()=> updateCarouselArrows(wholesaleBenefits, wBenefitsPrevBtn, wBenefitsNextBtn));
 }
+/* Closing is a plain, basic transition — the same fade every other modal on
+   the site uses (see .modal-overlay/.modal-sheet). No truck on the way out. */
 function closeWholesaleModal(){
   wholesaleOverlay.classList.remove('open');
   document.body.style.overflow = '';
@@ -5066,16 +5589,30 @@ wholesaleOverlay.addEventListener('click', (e)=>{ if(e.target === wholesaleOverl
 
 document.getElementById('wholesaleCheckoutBtn').addEventListener('click', ()=>{
   if(wholesaleCart.length === 0 || wholesaleCartCount() < WHOLESALE_MIN_UNITS) return;
-  let msg = '📦 ¡Hola Fran! Quiero hacer este *pedido mayorista* de Vapesoon:\n\n';
-  wholesaleCart.forEach((item, i)=>{
-    const subtotal = item.qty * item.price;
-    msg += `${i+1}. *${stripEmoji(item.model)}* — ${stripEmoji(item.flavor)} — ${item.qty} u. × ${formatWholesaleAmount(item.price)} = ${formatWholesaleAmount(subtotal)}\n`;
+  // Sin emojis a propósito — solo *asteriscos* (negrita de WhatsApp) para
+  // remarcar el modelo. Agrupado por modelo (en vez de una lista plana
+  // numerada) para que un pedido con varios sabores del mismo modelo se
+  // lea de un vistazo: el modelo una sola vez arriba, los sabores abajo.
+  let msg = '¡Hola Fran! Quiero hacer este *pedido mayorista* de Vapesoon:\n\n';
+  const byModel = new Map();
+  wholesaleCart.forEach(item=>{
+    const model = stripEmoji(item.model);
+    if(!byModel.has(model)) byModel.set(model, []);
+    byModel.get(model).push(item);
+  });
+  byModel.forEach((items, model)=>{
+    msg += `*${model}*\n`;
+    items.forEach(item=>{
+      const subtotal = item.qty * item.price;
+      msg += `- ${stripEmoji(item.flavor)} — ${item.qty} u. × ${formatWholesaleAmount(item.price)} = ${formatWholesaleAmount(subtotal)}\n`;
+    });
+    msg += '\n';
   });
   const totalUnits = wholesaleCartCount();
   const totalUsd = wholesaleCartTotalUsd();
-  msg += `\nTotal de unidades: ${totalUnits} u.`;
+  msg += `Total de unidades: ${totalUnits} u.`;
   msg += `\nTotal: ${formatWholesaleAmount(totalUsd)}`;
-  msg += '\n\n¿Me confirmás disponibilidad y precio final? ✈️';
+  msg += '\n\n¿Me confirmás disponibilidad y precio final?';
   const url = `https://wa.me/${WHOLESALE_WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');
 });
