@@ -1419,6 +1419,15 @@ main{position:relative;z-index:1;}
   top:18px;right:18px;
   z-index:2;
 }
+#wholesaleCartClose{
+  position:absolute;
+  top:18px;right:18px;
+  z-index:2;
+}
+/* Smaller than the base .wholesale-title clamp — at the default size,
+   "CARRITO MAYORISTA ✈️" plus the padding-right needed to clear the close
+   button didn't leave room for the emoji, so it wrapped onto its own line. */
+.wholesale-cart-sheet .wholesale-title{padding-right:36px;font-size:clamp(17px,4.6vw,24px);white-space:nowrap;}
 
 /* Layout: single column on mobile, two columns from 820px up.
    position+z-index lift this above #modalSheet::after's drifting dots. */
@@ -2182,9 +2191,10 @@ footer.site{
 .fab svg{width:24px;height:24px;}
 .fab:active{transform:scale(.9);}
 /* Same glass-bubble look as the cart button (.cart-fab) — blur, gradient,
-   soft border, gentle float — just tinted WhatsApp's own green instead of
-   blue, so the two floating actions read as one consistent family instead
-   of two different button styles. */
+   soft border — just tinted WhatsApp's own green instead of blue, so the
+   two floating actions read as one consistent family. Stays put (no
+   float) — only the cart button moves, so that motion still stands out as
+   "hey, you added something" instead of every button jiggling at once. */
 .fab-wpp{
   background:
     radial-gradient(circle at 30% 25%, rgba(150,255,190,.5), transparent 60%),
@@ -2192,10 +2202,9 @@ footer.site{
   border-color:rgba(255,255,255,.22);
   color:#fff;
   backdrop-filter:blur(10px) saturate(140%);
-  animation:cartFabFloat 2.6s ease-in-out infinite;
 }
 .fab-wpp:hover{box-shadow:0 12px 30px rgba(37,211,102,.4);transform:translateY(-2px);}
-.fab-wpp:active{animation:none;transform:scale(.9);}
+.fab-wpp:active{transform:scale(.9);}
 @media(min-width:900px){
   .fab-stack{right:32px;bottom:32px;}
   .fab{width:58px;height:58px;}
@@ -2226,10 +2235,9 @@ footer.site{
   border-color:rgba(255,255,255,.22);
   color:#fff;
   backdrop-filter:blur(10px) saturate(140%);
-  animation:cartFabFloat 2.6s ease-in-out infinite;
 }
 .wholesale-fab-wpp:hover{box-shadow:0 12px 30px rgba(37,211,102,.4);transform:translateY(-2px);}
-.wholesale-fab-wpp:active{animation:none;transform:scale(.9);}
+.wholesale-fab-wpp:active{transform:scale(.9);}
 .wholesale-cart-fab{
   position:absolute;
   right:0;
@@ -2961,9 +2969,9 @@ footer.site{
   will-change:transform;
 }
 @media(min-width:640px){.truck-rig{width:220px;}}
-/* Slowed way down (was 1s — crossed the screen too fast to actually see the
-   smoke, the boxes, anything) so the whole illustration has time to read. */
-.truck-transition.driving .truck-rig{animation:truckDriveRight 3.5s linear forwards;}
+/* A bit faster than the first pass at this (3.5s felt sluggish) but still
+   slow enough to actually see the smoke/boxes/wobble. */
+.truck-transition.driving .truck-rig{animation:truckDriveRight 2.4s linear forwards;}
 @keyframes truckDriveRight{
   from{transform:translate(calc(-100% - 60px), -58%);}
   to{transform:translate(calc(100vw + 60px), -58%);}
@@ -2979,21 +2987,38 @@ footer.site{
   74%{transform:translateY(-1px) rotate(-.7deg);}
   90%{transform:translateY(.7px) rotate(.5deg);}
 }
-.truck-rig svg{display:block;width:100%;height:auto;filter:drop-shadow(0 10px 14px rgba(0,0,0,.45));}
+/* overflow:visible so the smoke can actually drift up past the drawing's
+   own edge instead of getting clipped right where it starts (SVGs clip to
+   their viewBox by default) — that clipping was why it barely read as
+   smoke at all. */
+.truck-rig svg{display:block;width:100%;height:auto;overflow:visible;filter:drop-shadow(0 10px 14px rgba(0,0,0,.45));}
+/* Loose cargo — sways a bit more/independently from the cab+wheels instead
+   of moving as one perfectly rigid block with the rest of the truck. */
+.truck-boxes{transform-box:fill-box;transform-origin:50% 100%;}
+.truck-transition.driving .truck-boxes{animation:truckBoxSway .45s ease-in-out infinite;}
+@keyframes truckBoxSway{
+  0%,100%{transform:translateY(0) rotate(0deg);}
+  30%{transform:translateY(-2.2px) rotate(1.1deg);}
+  55%{transform:translateY(.8px) rotate(-.8deg);}
+  80%{transform:translateY(-1.4px) rotate(.8deg);}
+}
 /* Wheel speed matches the slower crawl (was .4s, tuned for the old 1s crossing). */
-.truck-wheel-group{transform-box:fill-box;transform-origin:center;animation:wheelSpin 1.4s linear infinite;animation-play-state:paused;}
+.truck-wheel-group{transform-box:fill-box;transform-origin:center;animation:wheelSpin 1s linear infinite;animation-play-state:paused;}
 .truck-transition.driving .truck-wheel-group,
 .truck-transition.driving .truck-smoke{animation-play-state:running;}
 @keyframes wheelSpin{to{transform:rotate(360deg);}}
-.truck-smoke{fill:rgba(255,255,255,.65);opacity:0;transform-box:fill-box;transform-origin:center;animation:smokePuff .85s ease-out infinite;animation-play-state:paused;}
+/* Brighter/more opaque white, and a longer, more upward escape so it reads
+   as smoke actually leaving the exhaust instead of a faint dot that barely
+   moves before disappearing. */
+.truck-smoke{fill:rgba(255,255,255,.85);opacity:0;transform-box:fill-box;transform-origin:center;animation:smokePuff 1s ease-out infinite;animation-play-state:paused;}
 .truck-smoke.s1{animation-delay:0s;}
-.truck-smoke.s2{animation-delay:.2s;}
-.truck-smoke.s3{animation-delay:.4s;}
-.truck-smoke.s4{animation-delay:.6s;}
+.truck-smoke.s2{animation-delay:.25s;}
+.truck-smoke.s3{animation-delay:.5s;}
+.truck-smoke.s4{animation-delay:.75s;}
 @keyframes smokePuff{
   0%{opacity:0;transform:translate(0,0) scale(.5);}
-  18%{opacity:.6;}
-  100%{opacity:0;transform:translate(-30px,-24px) scale(2.1);}
+  20%{opacity:.85;}
+  100%{opacity:0;transform:translate(-42px,-38px) scale(2.6);}
 }
 /* Redrawn simpler: a plain boxy cab, a bare chassis rail, two wheels (no
    spokes), and a messy pile of brown boxes stacked unevenly in the back —
@@ -3438,10 +3463,6 @@ footer.site{
           <button id="wCurrencyUsd" class="active" type="button">🇺🇸 USD</button>
           <button id="wCurrencyArs" type="button">🇦🇷 ARS</button>
         </div>
-        <button class="wholesale-back hidden" id="wholesaleBack" type="button">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Seguir viendo el catálogo
-        </button>
       </div>
     </div>
 
@@ -3547,8 +3568,17 @@ footer.site{
       </button>
     </div>
 
-    <!-- Vista carrito mayorista -->
-    <div class="wholesale-step hidden" id="wholesaleCartStep">
+   </div>
+  </div>
+
+  <!-- Carrito mayorista — overlay propio con fondo difuminado, igual que el
+       carrito del catálogo minorista (#cartOverlay), en vez de ser otro
+       "paso" dentro de la misma pantalla de siempre. -->
+  <div class="modal-overlay" id="wholesaleCartStep">
+    <div class="modal-sheet wholesale-cart-sheet" id="wholesaleCartSheet">
+      <button class="modal-close" id="wholesaleCartClose" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+      </button>
       <h2 class="wholesale-title">Carrito mayorista ✈️</h2>
 
       <div id="wholesaleCartEmpty" class="wholesale-cart-empty hidden">
@@ -3574,8 +3604,8 @@ footer.site{
         <span id="wholesaleCheckoutText">Enviar pedido por WhatsApp</span>
       </button>
     </div>
-   </div>
   </div>
+
   <div class="wholesale-fab-stack">
   <button class="fab wholesale-cart-fab" id="wholesaleCartFab" type="button" aria-label="Ver carrito mayorista">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1.4"/><circle cx="18" cy="21" r="1.4"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -3596,23 +3626,30 @@ footer.site{
       <div class="truck-rig-inner">
         <svg viewBox="0 0 220 120" focusable="false">
           <ellipse class="truck-shadow" cx="110" cy="104" rx="98" ry="6"/>
-          <!-- back wall stub (open tailgate) + chassis rail -->
-          <rect class="truck-chassis" x="8" y="50" width="6" height="28" rx="2"/>
-          <rect class="truck-chassis" x="8" y="76" width="204" height="7" rx="2"/>
-          <!-- messy pile of plain brown boxes, stacked unevenly and spilling
-               over the back edge like it's overloaded -->
-          <rect class="truck-box" x="20" y="46" width="36" height="32" rx="3"/>
-          <line class="truck-box-fold" x1="20" y1="56" x2="56" y2="56"/>
-          <rect class="truck-box" x="60" y="40" width="32" height="38" rx="3"/>
-          <line class="truck-box-fold" x1="60" y1="50" x2="92" y2="50"/>
-          <rect class="truck-box" x="96" y="48" width="28" height="30" rx="3"/>
-          <line class="truck-box-fold" x1="96" y1="57" x2="124" y2="57"/>
-          <rect class="truck-box" x="34" y="16" width="30" height="30" rx="3" transform="rotate(-6 49 31)"/>
-          <line class="truck-box-fold" x1="34" y1="25" x2="64" y2="25" transform="rotate(-6 49 31)"/>
-          <rect class="truck-box" x="68" y="18" width="26" height="28" rx="3" transform="rotate(5 81 32)"/>
-          <line class="truck-box-fold" x1="68" y1="27" x2="94" y2="27" transform="rotate(5 81 32)"/>
-          <rect class="truck-box" x="4" y="22" width="26" height="24" rx="3" transform="rotate(-22 17 34)"/>
-          <line class="truck-box-fold" x1="4" y1="30" x2="30" y2="30" transform="rotate(-22 17 34)"/>
+          <!-- back wall stub (open tailgate) + a solid bed deck that actually
+               spans from the back all the way to the cab, so the boxes read
+               as sitting IN something instead of floating disconnected
+               above the wheels -->
+          <rect class="truck-chassis" x="10" y="44" width="7" height="26" rx="2"/>
+          <rect class="truck-chassis" x="12" y="68" width="150" height="15" rx="3"/>
+          <rect class="truck-chassis" x="150" y="74" width="54" height="7" rx="2"/>
+          <!-- messy pile of plain brown boxes, stacked high and unevenly —
+               moves as its own loose group (see .truck-boxes) so it sways a
+               bit more than the rigid cab+wheels when the truck bounces -->
+          <g class="truck-boxes">
+            <rect class="truck-box" x="16" y="38" width="34" height="32" rx="3"/>
+            <line class="truck-box-fold" x1="16" y1="48" x2="50" y2="48"/>
+            <rect class="truck-box" x="52" y="32" width="32" height="38" rx="3"/>
+            <line class="truck-box-fold" x1="52" y1="42" x2="84" y2="42"/>
+            <rect class="truck-box" x="90" y="36" width="36" height="34" rx="3"/>
+            <line class="truck-box-fold" x1="90" y1="45" x2="126" y2="45"/>
+            <rect class="truck-box" x="26" y="10" width="32" height="30" rx="3" transform="rotate(-5 42 25)"/>
+            <line class="truck-box-fold" x1="26" y1="19" x2="58" y2="19" transform="rotate(-5 42 25)"/>
+            <rect class="truck-box" x="58" y="6" width="30" height="32" rx="3" transform="rotate(4 73 22)"/>
+            <line class="truck-box-fold" x1="58" y1="15" x2="88" y2="15" transform="rotate(4 73 22)"/>
+            <rect class="truck-box" x="6" y="2" width="28" height="26" rx="3" transform="rotate(-16 20 15)"/>
+            <line class="truck-box-fold" x1="6" y1="10" x2="34" y2="10" transform="rotate(-16 20 15)"/>
+          </g>
           <!-- plain boxy cab -->
           <rect class="truck-cab" x="160" y="32" width="54" height="50" rx="9"/>
           <rect class="truck-glass" x="176" y="40" width="22" height="18" rx="3"/>
@@ -3626,10 +3663,10 @@ footer.site{
             <circle class="truck-wheel" cx="172" cy="88" r="15"/>
             <circle class="truck-hub" cx="172" cy="88" r="5"/>
           </g>
-          <circle class="truck-smoke s1" cx="6" cy="62" r="6"/>
-          <circle class="truck-smoke s2" cx="6" cy="62" r="6"/>
-          <circle class="truck-smoke s3" cx="6" cy="62" r="6"/>
-          <circle class="truck-smoke s4" cx="6" cy="62" r="6"/>
+          <circle class="truck-smoke s1" cx="8" cy="66" r="6"/>
+          <circle class="truck-smoke s2" cx="8" cy="66" r="6"/>
+          <circle class="truck-smoke s3" cx="8" cy="66" r="6"/>
+          <circle class="truck-smoke s4" cx="8" cy="66" r="6"/>
         </svg>
       </div>
     </div>
@@ -5022,14 +5059,15 @@ function showCartConfirm(el){
 function hideCartConfirm(){
   cartConfirm.classList.remove('show');
 }
-/* Flashes a temporary "+1" state on whichever add-to-cart button was clicked
-   — the modal's, a single-variant card's, or an inline flavor-row icon. Just
-   the glyph (no "Agregado" label): it needs to fit the small icon-only
-   buttons too, where full text used to get clipped. */
-function flashAddedState(btnEl){
+/* Flashes a temporary confirmation state on whichever add-to-cart button was
+   clicked. Defaults to just "+1" — the modal's, a single-variant card's, and
+   the inline flavor-row icon are all small/icon-only buttons where full text
+   used to get clipped. Callers with room for real text (like the wholesale
+   flavor screen's full-width button) can pass their own markup instead. */
+function flashAddedState(btnEl, html){
   btnEl.classList.add('just-added');
   const original = btnEl.innerHTML;
-  btnEl.innerHTML = '<span class="added-plus">+1</span>';
+  btnEl.innerHTML = html || '<span class="added-plus">+1</span>';
   setTimeout(()=>{
     btnEl.innerHTML = original;
     btnEl.classList.remove('just-added');
@@ -5301,6 +5339,7 @@ const wholesaleCurrencyToggleEl = document.getElementById('wholesaleCurrencyTogg
 const wholesaleCatalogStep = document.getElementById('wholesaleCatalogStep');
 const wholesaleFlavorStep = document.getElementById('wholesaleFlavorStep');
 const wholesaleCartStep = document.getElementById('wholesaleCartStep');
+const wholesaleCartSheet = document.getElementById('wholesaleCartSheet');
 const wholesaleGrid = document.getElementById('wholesaleGrid');
 const wholesaleSearchInput = document.getElementById('wholesaleSearchInput');
 const wholesaleCartFab = document.getElementById('wholesaleCartFab');
@@ -5323,20 +5362,20 @@ const wholesaleFlavorModelPrice = document.getElementById('wholesaleFlavorModelP
 const wholesaleFlavorGlyph = document.getElementById('wholesaleFlavorGlyph');
 const wholesaleFlavorAddBtn = document.getElementById('wholesaleFlavorAddBtn');
 const wholesaleFlavorAddText = document.getElementById('wholesaleFlavorAddText');
-const wholesaleCartBackBtn = document.getElementById('wholesaleBack');
 const wholesaleCloseBtn = document.getElementById('wholesaleClose');
 const wholesaleCloseLabel = document.getElementById('wholesaleCloseLabel');
 
-/* Left slot of the persistent topbar shows one of two things depending on
-   the active step: the currency toggle (catalog) or a "back" button (cart)
-   — never both at once. The flavor step used to have its own extra "Volver
-   al catálogo" button here too, on top of the always-visible "Volver al
-   menú" up in the page header — two back buttons on screen at once. Now
-   that top button just relabels itself and doubles as the flavor step's
-   back-to-catalog action instead (see wholesaleCloseBtn's click handler). */
+/* Left slot of the persistent topbar shows the currency toggle only on the
+   catalog step now — the cart is its own floating overlay (see
+   wholesaleCartStep below) instead of a third "step" sharing this topbar,
+   so it no longer needs a slot here. The flavor step used to have its own
+   extra "Volver al catálogo" button here too, on top of the always-visible
+   "Volver al menú" up in the page header — two back buttons on screen at
+   once. Now that top button just relabels itself and doubles as the flavor
+   step's back-to-catalog action instead (see wholesaleCloseBtn's click
+   handler). */
 function setWholesaleTopbarMode(mode){
   wholesaleCurrencyToggleEl.classList.toggle('hidden', mode !== 'catalog');
-  wholesaleCartBackBtn.classList.toggle('hidden', mode !== 'cart');
   wholesaleCloseLabel.textContent = mode === 'flavor' ? 'Volver al catálogo' : 'Volver al menú';
 }
 
@@ -5527,7 +5566,7 @@ function openWholesaleFlavorStep(model){
   setWholesaleTopbarMode('flavor');
   wholesaleCatalogStep.classList.add('hidden');
   wholesaleFlavorStep.classList.remove('hidden');
-  wholesaleCartStep.classList.add('hidden');
+  wholesaleCartStep.classList.remove('open');
   updateWholesaleCartFab();
   wholesaleSheet.scrollTop = 0;
 }
@@ -5618,7 +5657,7 @@ wholesaleFlavorAddBtn.addEventListener('click', ()=>{
   updateWholesaleCartFab();
   updateWholesaleCheckoutState();
   renderWholesaleFlavorList();
-  flashAddedState(wholesaleFlavorAddBtn);
+  flashAddedState(wholesaleFlavorAddBtn, '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>¡Agregado!</span>');
 });
 
 function backToWholesaleCatalog(){
@@ -5641,11 +5680,12 @@ function wholesaleCartTotalUsd(){ return wholesaleCart.reduce((s,i)=> s + i.qty 
 function wholesaleCartCount(){ return wholesaleCart.reduce((s,i)=> s + i.qty, 0); }
 
 /* Botón flotante de carrito: oculto hasta que se agrega el primer producto,
-   y también oculto mientras se está viendo el carrito completo
-   (wholesaleCartStep) — no tiene sentido "ver carrito" estando ya en él. */
+   y también oculto mientras el carrito (ahora su propio overlay, ver
+   wholesaleCartStep) está abierto — no tiene sentido "ver carrito"
+   estando ya en él, y de todos modos el overlay lo tapa. */
 function updateWholesaleCartFab(){
   const count = wholesaleCartCount();
-  const onCartStep = !wholesaleCartStep.classList.contains('hidden');
+  const onCartStep = wholesaleCartStep.classList.contains('open');
   wholesaleCartFab.classList.toggle('visible', count > 0 && !onCartStep);
   wholesaleCartFabBadge.textContent = count;
   wholesaleCartFabBadge.classList.toggle('show', count > 0);
@@ -5735,27 +5775,28 @@ wBtnGrid.addEventListener('click', ()=>{
 
 wholesaleSearchInput.addEventListener('input', renderWholesaleGrid);
 
-wholesaleCartFab.addEventListener('click', ()=>{
-  wholesaleCatalogStep.classList.add('hidden');
-  wholesaleFlavorStep.classList.add('hidden');
-  wholesaleCartStep.classList.remove('hidden');
-  setWholesaleTopbarMode('cart');
+/* Carrito mayorista: overlay propio sobre el catálogo/sabores (que quedan
+   detrás, difuminados) en vez de otro "paso" — mismo patrón que el
+   carrito minorista (openCart/closeCart + #cartOverlay). */
+function openWholesaleCart(){
   renderWholesaleCart();
   updateWholesaleCartFab();
-  wholesaleSheet.scrollTop = 0;
-});
-wholesaleCartBackBtn.addEventListener('click', ()=>{
-  wholesaleCartStep.classList.add('hidden');
-  wholesaleCatalogStep.classList.remove('hidden');
-  setWholesaleTopbarMode('catalog');
+  wholesaleCartStep.classList.add('open');
+  wholesaleCartSheet.scrollTop = 0;
+}
+function closeWholesaleCart(){
+  wholesaleCartStep.classList.remove('open');
   updateWholesaleCartFab();
-});
+}
+wholesaleCartFab.addEventListener('click', openWholesaleCart);
+document.getElementById('wholesaleCartClose').addEventListener('click', closeWholesaleCart);
+wholesaleCartStep.addEventListener('click', (e)=>{ if(e.target === wholesaleCartStep) closeWholesaleCart(); });
 
 /* Truck transition played only when OPENING the wholesale page — see
    .truck-transition rules in <style> for the visuals. The backdrop blurs
    the real home page (same idea as the retail flavor-picker modal) instead
-   of hiding it behind a solid color. Slowed down to ~4s total so the
-   smoke/boxes/wobble are actually visible instead of a blur-past flash.
+   of hiding it behind a solid color. ~2.9s total — long enough for the
+   smoke/boxes/wobble to read, short enough not to feel sluggish.
 
    The home->wholesale swap used to happen in the *middle* of this, timed
    via setTimeout — but renderWholesaleGrid() builds dozens of product
@@ -5766,10 +5807,10 @@ wholesaleCartBackBtn.addEventListener('click', ()=>{
    its end state, or never get painted moving at all). Doing the swap
    immediately, before the truck even starts, removes that mid-flight
    blocking risk — it's still hidden the same way, under the opaque blur
-   that's about to cover the screen for the next ~4s regardless. */
+   that's about to cover the screen for the next ~2.9s regardless. */
 const truckTransition = document.getElementById('truckTransition');
 let truckTransitionTimers = [];
-const TRUCK_DRIVE_MS = 3500;
+const TRUCK_DRIVE_MS = 2400;
 const TRUCK_FADE_MS = 450;
 function playWholesaleOpenTransition(){
   truckTransitionTimers.forEach(clearTimeout);
@@ -5818,7 +5859,7 @@ function openWholesaleModal(){
   updateWholesaleCheckoutState();
   wholesaleCatalogStep.classList.remove('hidden');
   wholesaleFlavorStep.classList.add('hidden');
-  wholesaleCartStep.classList.add('hidden');
+  wholesaleCartStep.classList.remove('open');
   wholesaleOverlay.classList.add('open');
   wholesaleSheet.scrollTop = 0;
   requestAnimationFrame(()=> updateCarouselArrows(wholesaleBenefits, wBenefitsPrevBtn, wBenefitsNextBtn));
@@ -5827,6 +5868,7 @@ function openWholesaleModal(){
    the site uses (see .modal-overlay/.modal-sheet). No truck on the way out. */
 function closeWholesaleModal(){
   wholesaleOverlay.classList.remove('open');
+  wholesaleCartStep.classList.remove('open');
   unlockBodyScroll();
 }
 /* Se abre únicamente con el botón "Ver catálogo" del banner — nunca
