@@ -2279,7 +2279,7 @@ footer.site{
      screens, it overflows them. Keep in sync with the left+right margin
      above (4px + 4px = 8px). */
   width:calc(100% - 8px);
-  padding:8px 14px;
+  padding:8px 10px;
   border-radius:16px;
   border:1.5px solid rgba(255,200,87,.35);
   background:linear-gradient(135deg, rgba(255,200,87,.14), rgba(255,145,48,.05) 55%, rgba(21,45,74,.45));
@@ -2293,23 +2293,23 @@ footer.site{
    below it so all three line up on the same visual baseline. Tight gap
    between them keeps the whole banner compact. */
 .wholesale-banner-eyebrow{display:block;position:relative;z-index:1;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:3px;}
-.wholesale-banner-inner{position:relative;z-index:1;display:flex;align-items:center;gap:8px;}
+.wholesale-banner-inner{position:relative;z-index:1;display:flex;align-items:center;gap:6px;}
 .wholesale-banner-icon{
   flex:none;
-  width:34px;height:34px;
-  border-radius:10px;
+  width:30px;height:30px;
+  border-radius:9px;
   background:rgba(255,200,87,.16);
   border:1px solid rgba(255,200,87,.4);
   display:flex;align-items:center;justify-content:center;
-  font-size:16px;
+  font-size:14px;
 }
 /* Sized to always fit on one line next to the icon and CTA — a display font
    this wide needs a conservative size here or it truncates. */
-.wholesale-banner-title{flex:1;min-width:0;font-family:'Bungee',cursive;font-size:14.5px;color:var(--white-glove);letter-spacing:.2px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 0 14px rgba(255,180,90,.4);}
+.wholesale-banner-title{flex:1;min-width:0;font-family:'Bungee',cursive;font-size:clamp(10.5px, calc(1.4px + 3.1vw), 14.5px);color:var(--white-glove);letter-spacing:.2px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 0 14px rgba(255,180,90,.4);}
 .wholesale-banner-cta{
   flex:none;
   display:flex;align-items:center;gap:5px;
-  padding:8px 13px;
+  padding:8px 10px;
   border-radius:999px;
   background:var(--wholesale-grad);
   border:1.5px solid var(--wholesale-grad-border);
@@ -2952,7 +2952,7 @@ footer.site{
 }
 .truck-road{
   position:absolute;
-  left:0;right:0;top:40%;
+  left:0;right:0;top:50%;
   height:74px;
   transform:translateY(-50%);
   background:linear-gradient(180deg, #0a1626 0%, #050b16 100%);
@@ -3100,7 +3100,7 @@ footer.site{
         <div class="wholesale-banner-icon" aria-hidden="true">📦</div>
         <h2 class="wholesale-banner-title">Catálogo Mayorista</h2>
         <div class="wholesale-banner-cta">
-          Ver catálogo
+          Ver mayorista
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
       </div>
@@ -5886,7 +5886,7 @@ function closeWholesaleModal(){
   wholesaleCartStep.classList.remove('open');
   unlockBodyScroll();
 }
-/* Se abre únicamente con el botón "Ver catálogo" del banner — nunca
+/* Se abre únicamente con el botón "Ver mayorista" del banner — nunca
    automáticamente al cargar la página. */
 document.getElementById('wholesaleBannerBtn').addEventListener('click', openWholesaleModal);
 wholesaleCloseBtn.addEventListener('click', ()=>{
