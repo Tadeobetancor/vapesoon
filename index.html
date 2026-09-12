@@ -3027,12 +3027,12 @@ footer.site{
   20%{opacity:.85;}
   100%{opacity:0;transform:translate(-42px,-38px) scale(2.6);}
 }
-/* Redrawn simpler: a plain boxy cab, a bare chassis rail, two wheels (no
-   spokes), and a messy pile of brown boxes stacked unevenly in the back —
-   as few flat colors as possible, aged rust-orange cab instead of the
-   brand's brighter gold/orange, aiming for "old but still running" rather
-   than shiny. */
-.truck-cab{fill:#c9702f;}
+/* Matches the flat delivery-truck reference: white cab with a gold stripe,
+   a blue windshield, black chassis/wheels, and a neat pallet of brown boxes
+   on the flatbed instead of the earlier rust-orange cab + loose pile. */
+.truck-cab{fill:var(--white-glove);}
+.truck-stripe{fill:var(--gold);}
+.truck-pallet{fill:#c9a06a;}
 /* var(--void) was too close to the scene's own near-black backdrop to read
    as a shape at all — a visible dark grey instead, so the bed connecting
    the boxes to the cab actually shows up. */
@@ -3636,44 +3636,47 @@ footer.site{
       <div class="truck-rig-inner">
         <svg viewBox="0 0 220 120" focusable="false">
           <ellipse class="truck-shadow" cx="110" cy="104" rx="98" ry="6"/>
-          <!-- back wall stub (open tailgate) + a solid bed deck that actually
-               spans from the back all the way to the cab, so the boxes read
-               as sitting IN something instead of floating disconnected
-               above the wheels — shortened gap to the cab too. -->
+          <!-- back wall stub (open tailgate) + a solid bed deck spanning from
+               the back all the way to the cab, so the boxes read as sitting
+               IN something instead of floating disconnected above the wheels. -->
           <rect class="truck-chassis" x="10" y="44" width="7" height="26" rx="2"/>
           <rect class="truck-chassis" x="12" y="68" width="135" height="15" rx="3"/>
-          <rect class="truck-chassis" x="135" y="74" width="54" height="7" rx="2"/>
-          <!-- messy pile of plain brown boxes, stacked high and unevenly —
-               moves as its own loose group (see .truck-boxes) so it sways a
-               bit more than the rigid cab+wheels when the truck bounces.
-               The precarious tilted one now sits at the very top of the
-               pile, not off to the side. -->
+          <rect class="truck-chassis" x="135" y="74" width="55" height="7" rx="2"/>
+          <!-- pallet + a neat 2x3 grid of plain brown boxes, matching the
+               flat delivery-truck reference instead of a loose scattered
+               pile. Still its own group (see .truck-boxes) so it gets a
+               little independent sway when the truck bounces. -->
+          <rect class="truck-pallet" x="14" y="63" width="104" height="6" rx="1"/>
           <g class="truck-boxes">
-            <rect class="truck-box" x="16" y="38" width="34" height="32" rx="3"/>
-            <line class="truck-box-fold" x1="16" y1="48" x2="50" y2="48"/>
-            <rect class="truck-box" x="52" y="32" width="32" height="38" rx="3"/>
-            <line class="truck-box-fold" x1="52" y1="42" x2="84" y2="42"/>
-            <rect class="truck-box" x="90" y="36" width="36" height="34" rx="3"/>
-            <line class="truck-box-fold" x1="90" y1="45" x2="126" y2="45"/>
-            <rect class="truck-box" x="26" y="10" width="32" height="30" rx="3" transform="rotate(-5 42 25)"/>
-            <line class="truck-box-fold" x1="26" y1="19" x2="58" y2="19" transform="rotate(-5 42 25)"/>
-            <rect class="truck-box" x="58" y="6" width="30" height="32" rx="3" transform="rotate(4 73 22)"/>
-            <line class="truck-box-fold" x1="58" y1="15" x2="88" y2="15" transform="rotate(4 73 22)"/>
-            <rect class="truck-box" x="40" y="-10" width="28" height="26" rx="3" transform="rotate(-15 54 3)"/>
-            <line class="truck-box-fold" x1="40" y1="-2" x2="68" y2="-2" transform="rotate(-15 54 3)"/>
+            <rect class="truck-box" x="16" y="36" width="32" height="28" rx="3"/>
+            <line class="truck-box-fold" x1="16" y1="45" x2="48" y2="45"/>
+            <rect class="truck-box" x="50" y="36" width="32" height="28" rx="3"/>
+            <line class="truck-box-fold" x1="50" y1="45" x2="82" y2="45"/>
+            <rect class="truck-box" x="84" y="36" width="32" height="28" rx="3"/>
+            <line class="truck-box-fold" x1="84" y1="45" x2="116" y2="45"/>
+            <rect class="truck-box" x="16" y="8" width="32" height="28" rx="3"/>
+            <line class="truck-box-fold" x1="16" y1="17" x2="48" y2="17"/>
+            <rect class="truck-box" x="50" y="8" width="32" height="28" rx="3"/>
+            <line class="truck-box-fold" x1="50" y1="17" x2="82" y2="17"/>
+            <rect class="truck-box" x="84" y="8" width="32" height="28" rx="3"/>
+            <line class="truck-box-fold" x1="84" y1="17" x2="116" y2="17"/>
           </g>
-          <!-- plain boxy cab -->
-          <rect class="truck-cab" x="145" y="32" width="54" height="50" rx="9"/>
-          <rect class="truck-glass" x="161" y="40" width="22" height="18" rx="3"/>
-          <rect class="truck-chassis" x="181" y="74" width="16" height="10" rx="3"/>
+          <!-- cab: white body, gold stripe, blue windshield with a center
+               pillar, matching the reference's delivery-truck look. -->
+          <rect class="truck-cab" x="145" y="30" width="58" height="52" rx="8"/>
+          <rect class="truck-stripe" x="145" y="64" width="58" height="7"/>
+          <rect class="truck-glass" x="160" y="36" width="36" height="20" rx="3"/>
+          <rect class="truck-chassis" x="177" y="36" width="2" height="20"/>
+          <rect class="truck-chassis" x="190" y="74" width="14" height="8" rx="2"/>
+          <rect class="truck-stripe" x="196" y="58" width="6" height="6" rx="1"/>
           <!-- two wheels, no spokes -->
           <g class="truck-wheel-group">
             <circle class="truck-wheel" cx="48" cy="88" r="15"/>
             <circle class="truck-hub" cx="48" cy="88" r="5"/>
           </g>
           <g class="truck-wheel-group">
-            <circle class="truck-wheel" cx="157" cy="88" r="15"/>
-            <circle class="truck-hub" cx="157" cy="88" r="5"/>
+            <circle class="truck-wheel" cx="174" cy="88" r="15"/>
+            <circle class="truck-hub" cx="174" cy="88" r="5"/>
           </g>
           <circle class="truck-smoke s1" cx="8" cy="66" r="6"/>
           <circle class="truck-smoke s2" cx="8" cy="66" r="6"/>
