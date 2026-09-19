@@ -538,20 +538,36 @@ main{position:relative;z-index:1;}
   color:var(--void);
 }
 
-/* Filter block layout. Phone: row 1 = the two sort chips + the view toggle
-   pushed to the right; row 2 = the THC chip as a full-width bar; row 3 = the
-   hint. (All three chips + the toggle can't share a line at ~360-390px, which
-   used to leave the toggle stranded on a line of its own.) The DOM order is
-   pitadas / caro / THC / toggle / hint; `order` below only swaps THC and the
-   toggle on phones. From 560px up everything fits on one row. */
-.catalog-filters .view-toggle{order:1;margin-left:auto;padding:3px;}
-.catalog-filters .view-toggle button{width:28px;height:28px;}
-.catalog-filters .view-toggle button svg{width:14px;height:14px;}
-.catalog-filters .filter-chip--thc{order:2;flex:0 0 100%;justify-content:center;padding:9px 14px;}
-.catalog-filters .peek-hint{order:3;}
+/* Filter block layout. Phone: row 1 = the two sort chips (their normal
+   content width); row 2 = the THC chip at that same normal width, with the
+   view toggle stretched across the rest of that row so it reads as a real
+   control instead of two stray icons — each half carries its own label
+   ("Deslizar" / "Grilla") saying what tapping it does; row 3 = the hint.
+   THC and the toggle need to land on that same line together no matter how
+   much room row 1 has left over (at some widths — e.g. ~430px — all three
+   chips fit on row 1 by themselves, which would otherwise strand the toggle
+   alone on its own line, flex-stretched to the full row width). The
+   .catalog-filters-break spacer forces that line break reliably: a flex
+   item with flex-basis:100% always wraps, pushing everything after it onto
+   a fresh line. From 560px up there's room for all four on one row, so the
+   break is removed and the toggle shrinks back to a compact control. */
+.catalog-filters-break{flex:0 0 100%;height:0;}
+@media(min-width:560px){.catalog-filters-break{display:none;}}
+.catalog-filters .filter-chip--thc{flex:none;}
+.catalog-filters .view-toggle{flex:1 1 auto;min-width:0;padding:4px;}
+.catalog-filters .view-toggle button{
+  flex:1;
+  width:auto;height:auto;
+  gap:6px;
+  padding:9px 6px;
+  font-size:11.5px;
+  font-weight:700;
+  white-space:nowrap;
+}
+.catalog-filters .view-toggle button svg{width:15px;height:15px;flex:none;}
 @media(min-width:560px){
-  .catalog-filters .filter-chip--thc{order:1;flex:none;}
-  .catalog-filters .view-toggle{order:2;}
+  .catalog-filters .view-toggle{flex:none;}
+  .catalog-filters .view-toggle button{padding:8px 12px;}
 }
 
 /* catalog sort filters */
@@ -3259,15 +3275,18 @@ footer.site{
         <button class="filter-chip" id="filterPriceBtn" aria-pressed="false">
           <span class="filter-chip-icon">💰</span> Más caro
         </button>
+        <span class="catalog-filters-break" aria-hidden="true"></span>
         <button class="filter-chip filter-chip--thc" id="filterThcBtn">
           <span class="filter-chip-icon">🌿</span> Vapes c/THC
         </button>
-        <div class="view-toggle" role="group" aria-label="Cambiar vista">
-          <button id="viewCarousel" aria-label="Vista carrusel: deslizar">
+        <div class="view-toggle" role="group" aria-label="Cambiar cómo se ven los vapes">
+          <button id="viewCarousel" aria-label="Vista deslizable: un vape a la vez">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="7" height="12" rx="1.5"/><rect x="15" y="6" width="7" height="12" rx="1.5"/><rect x="9.5" y="4" width="5" height="16" rx="1.5" opacity=".4"/></svg>
+            <span>Deslizar</span>
           </button>
-          <button id="viewGrid" class="active" aria-label="Vista grilla: cuadrados">
+          <button id="viewGrid" class="active" aria-label="Vista grilla: todos los vapes juntos">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+            <span>Grilla</span>
           </button>
         </div>
         <p class="peek-hint" aria-hidden="true">
