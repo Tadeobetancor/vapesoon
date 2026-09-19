@@ -486,11 +486,16 @@ main{position:relative;z-index:1;}
   line-height:1.55;
 }
 
-/* Catalog header only: no .section-sub here anymore (removed), so the title
-   sits alone next to the view toggle — bump it up a bit and align it to the
-   toggle's vertical center instead of the shared flex-start default. */
-#catalog .section-head{align-items:center;}
-#catalog .section-title{font-size:clamp(27px,6.6vw,38px);}
+/* Screen-reader-only text (e.g. the catalog's h1, which has no visible header). */
+.sr-only{
+  position:absolute;
+  width:1px;height:1px;
+  margin:-1px;padding:0;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
+}
 
 /* view toggle */
 .view-toggle-wrap{
@@ -533,9 +538,26 @@ main{position:relative;z-index:1;}
   color:var(--void);
 }
 
+/* Filter block layout. Phone: row 1 = the two sort chips + the view toggle
+   pushed to the right; row 2 = the THC chip as a full-width bar; row 3 = the
+   hint. (All three chips + the toggle can't share a line at ~360-390px, which
+   used to leave the toggle stranded on a line of its own.) The DOM order is
+   pitadas / caro / THC / toggle / hint; `order` below only swaps THC and the
+   toggle on phones. From 560px up everything fits on one row. */
+.catalog-filters .view-toggle{order:1;margin-left:auto;padding:3px;}
+.catalog-filters .view-toggle button{width:28px;height:28px;}
+.catalog-filters .view-toggle button svg{width:14px;height:14px;}
+.catalog-filters .filter-chip--thc{order:2;flex:0 0 100%;justify-content:center;padding:9px 14px;}
+.catalog-filters .peek-hint{order:3;}
+@media(min-width:560px){
+  .catalog-filters .filter-chip--thc{order:1;flex:none;}
+  .catalog-filters .view-toggle{order:2;}
+}
+
 /* catalog sort filters */
 .catalog-filters{
   display:flex;
+  align-items:center;
   gap:8px;
   flex-wrap:wrap;
   margin:0 0 16px;
@@ -551,8 +573,8 @@ main{position:relative;z-index:1;}
   background:var(--bg-card);
   border:1px solid var(--line);
   border-radius:999px;
-  padding:8px 14px;
-  font-size:12.5px;
+  padding:8px 12px;
+  font-size:12px;
   font-weight:600;
   color:var(--ink-dim);
   transition:border-color .2s, background .2s, color .2s;
@@ -609,6 +631,12 @@ main{position:relative;z-index:1;}
 .carousel-spacer{flex:0 0 calc((100% - 88%) / 2);}
 @media(min-width:560px){.carousel-spacer{flex-basis:calc((100% - 380px) / 2);}}
 .catalog.grid-mode .carousel-spacer{display:none;}
+/* #productCarousel{padding:0} above (needed for the spacer-centered carousel)
+   out-ranks the grid-mode padding, so the grid's negative margin pulled the
+   cards flush against the screen edges. Restore the side padding in grid mode
+   so the cards line up with the filters above them. */
+#catalog.grid-mode #productCarousel{padding-left:16px;padding-right:16px;}
+@media(min-width:640px){#catalog.grid-mode #productCarousel{padding-left:24px;padding-right:24px;}}
 
 .arrow{
   position:absolute;
@@ -926,6 +954,119 @@ main{position:relative;z-index:1;}
   color:var(--green-thc);
 }
 
+/* Flavor peek: covers the card with the model's available flavors while a
+   mouse hovers it, or while a finger is held on it (touch has no hover, and a
+   plain tap already opens the modal — see wirePeek). pointer-events:none so it
+   never swallows the click that opens the modal. */
+.p-peek{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  display:flex;
+  flex-direction:column;
+  padding:18px 14px 14px;
+  border-radius:inherit;
+  /* Fully opaque on purpose: at .97 the card's name/price ghosted through. */
+  background:linear-gradient(160deg, rgb(8,18,32) 0%, rgb(5,10,20) 100%);
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(10px);
+  pointer-events:none;
+  transition:opacity .22s var(--ease), transform .22s var(--ease), visibility 0s linear .22s;
+}
+.p-peek-name{
+  font-family:'Bungee',cursive;
+  font-size:13px;
+  line-height:1.25;
+  letter-spacing:.3px;
+  color:var(--white-glove);
+}
+.p-peek-title{
+  margin:4px 0 12px;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:var(--accent);
+  white-space:nowrap;
+}
+/* One flavor per line, always: long names are cut with an ellipsis instead of
+   wrapping (wrapping made the list ragged), and the footer tells people to
+   open the card for the full names. The flavor's emoji acts as the bullet so
+   the names line up in a clean column. */
+.p-peek-list{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+.p-peek-list li{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:11.5px;
+  font-weight:600;
+  line-height:1.4;
+  color:var(--white-glove);
+}
+.p-peek-icon{flex:none;width:16px;text-align:center;font-size:13px;line-height:1;}
+.p-peek-dot{display:inline-block;width:8px;height:8px;border-radius:50%;}
+.p-peek-flavor{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.p-peek-list li.p-peek-rest{padding-left:22px;color:var(--ink-dim);font-weight:700;}
+/* Pinned to the bottom, right where the card's own "Ver sabores" button sits. */
+.p-peek-more{
+  margin-top:auto;
+  padding-top:10px;
+  border-top:1px solid var(--line);
+  text-align:center;
+  font-size:11.5px;
+  font-weight:700;
+  letter-spacing:.2px;
+  color:var(--accent);
+  white-space:nowrap;
+}
+.p-peek-more-mouse{display:none;}
+@media (hover:hover) and (pointer:fine){
+  .p-peek-more-touch{display:none;}
+  .p-peek-more-mouse{display:inline;}
+}
+.p-card.peek .p-peek{
+  opacity:1;
+  visibility:visible;
+  transform:none;
+  transition:opacity .22s var(--ease), transform .22s var(--ease), visibility 0s;
+}
+@media (hover:hover) and (pointer:fine){
+  .p-card:hover .p-peek{
+    opacity:1;
+    visibility:visible;
+    transform:none;
+    transition:opacity .22s var(--ease), transform .22s var(--ease), visibility 0s;
+  }
+}
+/* Long-press on a phone would otherwise select text / open the image save
+   callout instead of just holding the card. */
+@media (hover:none){
+  .p-card{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;}
+  .p-card img{-webkit-touch-callout:none;-webkit-user-drag:none;}
+}
+/* One-line discoverability hint under the sort chips: the peek is invisible
+   until someone tries it. Wording differs for touch vs mouse. */
+.peek-hint{
+  flex:0 0 100%;
+  margin:2px 0 0;
+  font-size:11.5px;
+  color:var(--ink-dim);
+  letter-spacing:.2px;
+}
+.peek-hint-mouse{display:none;}
+@media (hover:hover) and (pointer:fine){
+  .peek-hint-touch{display:none;}
+  .peek-hint-mouse{display:inline;}
+}
+
 /* GRID MODE */
 .catalog.grid-mode .carousel{
   display:grid;
@@ -948,7 +1089,14 @@ main{position:relative;z-index:1;}
   font-size:11px;
   padding:5px 10px;
 }
-.catalog.grid-mode .p-card{padding:20px 16px 16px;}
+.catalog.grid-mode .p-card{padding:20px 16px 16px;display:flex;flex-direction:column;}
+/* Cards in a row end up different heights of content (names wrap differently),
+   so pin the button to the bottom to keep every row's buttons on one line. */
+.catalog.grid-mode .p-cta,
+.catalog.grid-mode .p-actions-single{margin-top:auto;}
+/* Grid cards are narrow (~170px on a phone): keep the label and its chevron
+   together, centered, on a single line. */
+.catalog.grid-mode .p-cta{justify-content:center;gap:6px;white-space:nowrap;padding:10px 8px;font-size:12px;}
 .catalog.grid-mode .p-name-row{flex-wrap:wrap;}
 .catalog.grid-mode .p-price{font-size:16px;}
 .catalog.grid-mode .p-price-orig{font-size:11px;}
@@ -1634,52 +1782,44 @@ main{position:relative;z-index:1;}
   border-color:var(--blue-neon);
   background:rgba(79,195,247,.1);
 }
-.flavor-row-main{display:flex;align-items:center;gap:9px;min-width:0;}
+/* flex:1 1 0 so a long name wraps inside its own column instead of shoving the
+   stock badge onto a second line (the row itself wraps for the expanded button). */
+.flavor-row-main{display:flex;align-items:center;gap:9px;min-width:0;flex:1 1 0;}
 .flavor-dot{width:8px;height:8px;border-radius:50%;flex:none;}
 .flavor-name{font-size:13px;color:var(--ink);font-weight:700;letter-spacing:.1px;line-height:1.3;}
 .flavor-row.selected .flavor-name{color:var(--white-glove);}
 .flavor-row-stock{flex:none;}
-.flavor-row.selected .flavor-row-stock{display:none;}
-.flavor-row-actions{display:none;flex:none;align-items:center;gap:8px;}
+/* Selecting a row expands it: the stock badge stays, and a single full-width,
+   labelled "Sumar al carrito" button drops onto its own line. It replaced two
+   icon-only buttons (WhatsApp + cart) that customers couldn't tell apart —
+   the WhatsApp order now goes through the cart's "Enviar pedido" button. */
+.flavor-row{flex-wrap:wrap;}
+.flavor-row-actions{display:none;flex:1 0 100%;}
 .flavor-row.selected .flavor-row-actions{display:flex;}
-.flavor-row-icon-btn{
-  width:36px;height:36px;flex:none;
-  display:flex;align-items:center;justify-content:center;
-  border-radius:10px;
-  transition:transform .15s, background .2s, border-color .2s;
-}
-.flavor-row-icon-btn svg{width:17px;height:17px;}
-.flavor-row-icon-btn:active{transform:scale(.88);}
-.flavor-row-cart{
-  border:1.5px solid var(--line);
-  background:rgba(255,255,255,.05);
-  color:var(--white-glove);
-}
-.flavor-row-cart:hover{border-color:var(--blue-neon);background:rgba(79,195,247,.1);}
-.flavor-row-cart.just-added{border-color:var(--green-thc);background:rgba(62,207,110,.15);color:var(--green-thc);}
-.flavor-row-wpp{
+.flavor-row-add{
+  width:100%;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px 14px;
   border:none;
-  color:#fff;
-  background:#25D366;
+  border-radius:12px;
+  font-family:'Poppins',sans-serif;
+  font-size:13.5px;font-weight:700;letter-spacing:.1px;
+  color:var(--void);
+  background:linear-gradient(135deg, var(--blue-neon), var(--blue-steel));
+  transition:transform .15s, filter .2s;
 }
-.flavor-row-wpp:hover{background:#20bd5a;}
-/* Caption above the flavor list explaining, up front, what each inline icon
-   does once a flavor is tapped — added after real users tapped the WhatsApp
-   icon by accident thinking it just confirmed the selection. */
+.flavor-row-add svg{width:17px;height:17px;flex:none;}
+.flavor-row-add:hover{filter:brightness(1.08);}
+.flavor-row-add:active{transform:scale(.97);}
+.flavor-row-add.just-added{background:linear-gradient(135deg, var(--green-thc), var(--green-thc-dim));}
+/* One-line instruction above the flavor list so the buying flow is spelled
+   out before anything is tapped. */
 .flavor-legend{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:6px 10px;
-  font-size:11px;
+  text-align:center;
+  font-size:11.5px;
   color:var(--ink-dim);
   margin:2px 0 10px;
 }
-.flavor-legend-item{display:inline-flex;align-items:center;gap:5px;}
-.flavor-legend-dot{width:8px;height:8px;border-radius:50%;flex:none;}
-.flavor-legend-cart .flavor-legend-dot{background:var(--ink-dim);}
-.flavor-legend-wpp .flavor-legend-dot{background:#25D366;}
 .modal-view-cart-btn{
   display:flex;
   align-items:center;
@@ -3107,35 +3247,33 @@ footer.site{
     </button>
 
     <!-- SECTION 1: CATALOGO -->
-    <section class="section catalog" id="catalog">
-      <div class="section-head">
-        <div class="section-text">
-          <span class="eyebrow">Catálogo</span>
-          <h1 class="section-title">Elegí tu vape</h1>
-        </div>
-        <div class="view-toggle-wrap">
-          <span class="view-toggle-label">Vista</span>
-          <div class="view-toggle" role="group" aria-label="Cambiar vista">
-            <button id="viewCarousel" class="active" aria-label="Vista carrusel: deslizar">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="7" height="12" rx="1.5"/><rect x="15" y="6" width="7" height="12" rx="1.5"/><rect x="9.5" y="4" width="5" height="16" rx="1.5" opacity=".4"/></svg>
-            </button>
-            <button id="viewGrid" aria-label="Vista grilla: cuadrados">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
-            </button>
-          </div>
-        </div>
-      </div>
+    <section class="section catalog grid-mode" id="catalog">
+      <!-- No visible section header anymore (it ate vertical space above the
+           products) — the h1 stays for screen readers / SEO. -->
+      <h1 class="sr-only">Elegí tu vape</h1>
 
       <div class="catalog-filters" role="group" aria-label="Ordenar catálogo">
         <button class="filter-chip" id="filterPuffsBtn" aria-pressed="false">
           <span class="filter-chip-icon">💨</span> Más pitadas
         </button>
-        <button class="filter-chip" id="filterPopularBtn" aria-pressed="false">
-          <span class="filter-chip-icon">🔥</span> Más pedidos
+        <button class="filter-chip" id="filterPriceBtn" aria-pressed="false">
+          <span class="filter-chip-icon">💰</span> Más caro
         </button>
         <button class="filter-chip filter-chip--thc" id="filterThcBtn">
           <span class="filter-chip-icon">🌿</span> Vapes c/THC
         </button>
+        <div class="view-toggle" role="group" aria-label="Cambiar vista">
+          <button id="viewCarousel" aria-label="Vista carrusel: deslizar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="7" height="12" rx="1.5"/><rect x="15" y="6" width="7" height="12" rx="1.5"/><rect x="9.5" y="4" width="5" height="16" rx="1.5" opacity=".4"/></svg>
+          </button>
+          <button id="viewGrid" class="active" aria-label="Vista grilla: cuadrados">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+          </button>
+        </div>
+        <p class="peek-hint" aria-hidden="true">
+          <span class="peek-hint-touch">👇 Mantené apretado un vape para ver sus sabores</span>
+          <span class="peek-hint-mouse">👇 Pasá el mouse por un vape para ver sus sabores</span>
+        </p>
       </div>
 
       <div class="carousel-wrap">
@@ -3267,10 +3405,7 @@ footer.site{
         <div class="modal-divider"></div>
 
         <div class="modal-section-label" id="modalVariantLabel">Elegí tu sabor</div>
-        <p class="flavor-legend" id="flavorLegend">
-          <span class="flavor-legend-item flavor-legend-cart"><span class="flavor-legend-dot"></span>Sumar al carrito</span>
-          <span class="flavor-legend-item flavor-legend-wpp"><span class="flavor-legend-dot"></span>Compra directa</span>
-        </p>
+        <p class="flavor-legend" id="flavorLegend">Tocá un sabor y sumalo al carrito</p>
         <div class="flavor-grid" id="flavorGrid"></div>
         <button class="modal-view-cart-btn" id="modalViewCartBtn" type="button">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1.4"/><circle cx="18" cy="21" r="1.4"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -3767,13 +3902,11 @@ const ACCENTS = [
 
 const CATALOG = [
   {name:'ELFBAR ICE KING', price:26000, puffs:40000, photo:'ice_king', flavors:[
-    {name:'Baja Splash 🌊', stock:1},{name:'Blue Razz Ice 🫐', stock:2},{name:'Blueberry Ice 🫐', stock:1},
-    {name:'Dragon Strawnana 🐉', stock:1},{name:'Grape Ice 🍇', stock:1},{name:'Miami Mint 🌴', stock:1},
-    {name:'Sour Apple Ice 🍏', stock:1}
+    {name:'Dragon Strawnana 🐉', stock:1}
   ]},
   {name:'ELFBAR SWEET KING', price:26500, puffs:40000, photo:'sweet_king', outOfStock:true, flavors:[]},
   {name:'ELFBAR DUKE', price:25000, puffs:35000, photo:'duke', flavors:[
-    {name:'Watermelon Lemon Ice 🍉🍋', stock:2}
+    {name:'Watermelon Lemon Ice 🍉🍋', stock:1}
   ]},
   {name:'ELFBAR BC', price:21000, puffs:15000, photo:'bc', flavors:[
     {name:'Miami Mint 🌴', stock:1},{name:'Watermelon Ice 🍉', stock:1}
@@ -3782,12 +3915,12 @@ const CATALOG = [
     {name:'Black Mint 🌿', stock:1}
   ]},
   {name:'IGNITE V500', price:32000, puffs:50000, photo:'v500', flavors:[
-    {name:'Green Apple Peach Kiwi 🍏🍑🥝', stock:1},{name:'Mango Passionfruit 🥭', stock:2},{name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:2},
-    {name:'Strawberry Banana 🍓🍌', stock:1},{name:'Strawberry Ice 🍓', stock:2},{name:'Strawberry Kiwi 🍓🥝', stock:2},
-    {name:'Watermelon Kiwi 🍉🥝', stock:2},{name:'Watermelon Mix 🍉', stock:2}
+    {name:'Mango Passionfruit 🥭', stock:2},{name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:2},{name:'Strawberry Banana 🍓🍌', stock:1},
+    {name:'Strawberry Ice 🍓', stock:2},{name:'Strawberry Kiwi 🍓🥝', stock:1},{name:'Watermelon Kiwi 🍉🥝', stock:1},
+    {name:'Watermelon Mix 🍉', stock:1}
   ]},
   {name:'IGNITE V400 ICE', price:30000, puffs:40000, photo:'v400', flavors:[
-    {name:'Grape 🍇', stock:1},{name:'Grape Mix 🍇', stock:1},{name:'Strawberry Watermelon 🍓🍉', stock:1}
+    {name:'Grape 🍇', stock:1},{name:'Strawberry Watermelon 🍓🍉', stock:1}
   ]},
   {name:'IGNITE V300 ULTRA SLIM', price:26000, puffs:30000, photo:'v300', flavors:[
     {name:'Banana Coconut Water 🍌🥥', stock:1},{name:'Pineapple Ice 🍍', stock:1}
@@ -3811,7 +3944,7 @@ const CATALOG = [
   ]},
   {name:'BLVK JUST JUICE', price:26500, puffs:45000, photo:'blvk', outOfStock:true, flavors:[]},
   {name:'ELFBAR TRIO', price:27000, puffs:40000, photo:'trio', flavors:[
-    {name:'Blueberry Pom Slushy 🫐', stock:1},{name:'Watermelon Ice 🍉', stock:1},{name:'Raspberry Watermelon 🍓🍉', stock:1}
+    {name:'Blueberry Pom Slushy 🫐', stock:1}
   ]},
   {name:'NIKBAR 30K', price:22500, puffs:30000, photo:'nikbar30', outOfStock:true, flavors:[]},
   {name:'IGNITE VMIX', price:30000, originalPrice:32000, puffs:40000, photo:'vmix', flavors:[
@@ -3917,7 +4050,7 @@ function flavorAccent(name){
 }
 
 /* ================= STATE ================= */
-let currentView = 'carousel';
+let currentView = 'grid'; // must match the grid-mode class / active toggle button in the #catalog markup
 let activeProductIndex = null;
 let selectedFlavor = null;
 /* Timestamp for when the modal actually becomes clickable (see
@@ -3925,7 +4058,7 @@ let selectedFlavor = null;
    rows are guarded, so a stray tap landing on the buy bar right as it
    appears (Apple single-variant flow) can't fire a purchase unnoticed. */
 let modalOpenedAt = 0;
-let sortMode = null; // null | 'puffs' | 'popular'
+let sortMode = null; // null | 'puffs' | 'price' (price = most expensive first)
 const WHATSAPP_NUMBER = '5491131635898';
 
 // Some WhatsApp clients garble 4-byte "astral" emoji (most fruit/object
@@ -3960,6 +4093,50 @@ function productGlyphHTML(p){
 }
 
 function isOutOfStock(p){ return !!p.outOfStock || p.flavors.length===0; }
+
+/* Overlay listing a model's available flavors, revealed by hovering (mouse) or
+   holding (touch) the card — see .p-peek in the CSS and wirePeek below. */
+/* Older systems (e.g. Windows 10) don't have newer emoji like 🫐 and draw an
+   empty box instead. Paint the emoji on a canvas and look for color — a real
+   emoji has colored pixels, the missing-glyph box is plain black/gray. */
+const emojiRenderCache = {};
+function emojiRenders(e){
+  if(e in emojiRenderCache) return emojiRenderCache[e];
+  let ok = true; // if we can't tell, assume it renders
+  try{
+    const ctx = document.createElement('canvas').getContext('2d', {willReadFrequently:true});
+    ctx.canvas.width = ctx.canvas.height = 24;
+    ctx.font = '18px ' + getComputedStyle(document.body).fontFamily;
+    ctx.textBaseline = 'top';
+    ctx.fillText(e, 0, 0);
+    const px = ctx.getImageData(0, 0, 24, 24).data;
+    ok = false;
+    for(let i = 0; i < px.length; i += 4){
+      if(px[i+3] > 40 && (Math.abs(px[i] - px[i+1]) > 25 || Math.abs(px[i+1] - px[i+2]) > 25)){ ok = true; break; }
+    }
+  }catch(err){ /* keep ok = true */ }
+  return emojiRenderCache[e] = ok;
+}
+
+const PEEK_MAX_FLAVORS = 7; // more than this and the last row becomes "+N más"
+function flavorPeekHTML(modelName, title, flavorNames){
+  const overflow = flavorNames.length > PEEK_MAX_FLAVORS;
+  const shown = overflow ? flavorNames.slice(0, PEEK_MAX_FLAVORS - 1) : flavorNames;
+  const items = shown.map(n => {
+    // The first emoji in the name that this device can draw becomes the row's
+    // bullet (the rest are dropped — the full name is in the modal); names
+    // with none get a colored dot.
+    const emoji = (n.match(/\p{Extended_Pictographic}️?/gu) || []).find(emojiRenders);
+    const icon = emoji || `<span class="p-peek-dot" style="background:${flavorAccent(n)}"></span>`;
+    return `<li><span class="p-peek-icon">${icon}</span><span class="p-peek-flavor">${stripEmoji(n)}</span></li>`;
+  }).join('') + (overflow ? `<li class="p-peek-rest">+${flavorNames.length - shown.length} más</li>` : '');
+  return `<div class="p-peek" aria-hidden="true">
+      <div class="p-peek-name">${modelName}</div>
+      <div class="p-peek-title">${title}</div>
+      <ul class="p-peek-list">${items}</ul>
+      <div class="p-peek-more"><span class="p-peek-more-touch">Tocá para ver más</span><span class="p-peek-more-mouse">Clic para ver más</span> ›</div>
+    </div>`;
+}
 
 /* Reusable "added to cart" confirmation markup — instantiated once inside
    the modal (fixed #cartConfirm) and once per single-variant card. */
@@ -4010,7 +4187,7 @@ function productCardHTML(p, i, badgeText, showPuffs){
         ${cartConfirmHTML()}
       </div>` : `
       <div class="p-cta p-cta--solid">
-        <span>Ver ${variantWordPlural} 👀</span>
+        <span>Ver ${variantWordPlural}</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>`;
 
@@ -4029,6 +4206,7 @@ function productCardHTML(p, i, badgeText, showPuffs){
         <span>${oos ? 'Sin stock por el momento' : p.flavors.length + ' ' + variantCountWord + ' · ' + totalStock(p) + ' u.'}</span>
       </div>
       ${actionsHTML}
+      ${oos || singleVariant ? '' : flavorPeekHTML(p.name, variantWordPlural.charAt(0).toUpperCase() + variantWordPlural.slice(1), p.flavors.map(f => f.name))}
     </div>`;
 }
 
@@ -4060,11 +4238,67 @@ function thcCardHTML(p){
         <span>Ver sabores</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
+      ${flavorPeekHTML(p.name, 'Sabores', p.flavors)}
     </div>`;
+}
+
+/* Touch has no hover, and a plain tap already opens the modal — so on a phone
+   the flavor peek is tied to press-and-hold: hold ~350ms without moving and
+   the overlay shows until the finger lifts. Any real movement (a scroll or
+   carousel swipe) cancels it, and the click that follows a hold is swallowed
+   so letting go doesn't also open the modal. Mouse hover needs no JS — it's
+   pure CSS (.p-card:hover .p-peek). */
+const PEEK_HOLD_MS = 350;
+const PEEK_MOVE_TOLERANCE = 10; // px of finger drift before we treat it as a scroll
+function wirePeek(card){
+  if(!card.querySelector('.p-peek')) return;
+  let timer = null, sx = 0, sy = 0, touching = false, suppressClickUntil = 0;
+  const cancelTimer = () => { clearTimeout(timer); timer = null; };
+
+  card.addEventListener('touchstart', (e)=>{
+    cancelTimer();
+    if(e.touches.length !== 1) return;
+    touching = true;
+    sx = e.touches[0].clientX;
+    sy = e.touches[0].clientY;
+    timer = setTimeout(()=> card.classList.add('peek'), PEEK_HOLD_MS);
+  }, {passive:true});
+
+  card.addEventListener('touchmove', (e)=>{
+    const t = e.touches[0];
+    if(Math.hypot(t.clientX - sx, t.clientY - sy) > PEEK_MOVE_TOLERANCE){
+      cancelTimer();
+      card.classList.remove('peek');
+    }
+  }, {passive:true});
+
+  const release = ()=>{
+    cancelTimer();
+    touching = false;
+    if(card.classList.contains('peek')){
+      card.classList.remove('peek');
+      suppressClickUntil = Date.now() + 700;
+    }
+  };
+  card.addEventListener('touchend', release);
+  card.addEventListener('touchcancel', release);
+
+  // Capture phase + stopImmediatePropagation so this runs before (and blocks)
+  // the card's own click-to-open-modal listener.
+  card.addEventListener('click', (e)=>{
+    if(Date.now() < suppressClickUntil){
+      e.stopImmediatePropagation();
+      e.preventDefault();
+    }
+  }, true);
+
+  // Android fires a context menu on a long-press; keep it from stealing the hold.
+  card.addEventListener('contextmenu', (e)=>{ if(touching || card.classList.contains('peek')) e.preventDefault(); });
 }
 
 function wireProductCards(containerEl){
   containerEl.querySelectorAll('.p-card').forEach(card=>{
+    wirePeek(card);
     if(card.dataset.key){
       card.addEventListener('click', ()=> openThcProductDirect(card.dataset.key));
       return;
@@ -4104,15 +4338,22 @@ function renderProducts(){
   const inStockVapeIndices = vapeIndices.filter(i => !isOutOfStock(CATALOG[i])).sort((a, b) => {
     const pa = CATALOG[a], pb = CATALOG[b];
     if(sortMode === 'puffs') return (pb.puffs||0) - (pa.puffs||0);
-    if(sortMode === 'popular') return popularityRank(pa) - popularityRank(pb);
     return 0;
   });
   const thcOrdered = THC_PRODUCTS;
 
-  let cardsHTML = '';
-  let cardCount = 0;
-  inStockVapeIndices.forEach(i => { cardsHTML += productCardHTML(CATALOG[i], i, cardCount===0 ? 'Más pedido' : null, true); cardCount++; });
-  thcOrdered.forEach(p => { cardsHTML += thcCardHTML(p); cardCount++; });
+  // The "Más pedido" badge belongs to the default order only — under a sort
+  // (e.g. "Más caro") whatever lands first isn't the most ordered.
+  const entries = inStockVapeIndices.map((i, pos) => ({
+    price: CATALOG[i].price || 0,
+    html: productCardHTML(CATALOG[i], i, (pos === 0 && sortMode === null) ? 'Más pedido' : null, true)
+  })).concat(thcOrdered.map(p => ({ price: p.price || 0, html: thcCardHTML(p) })));
+  // THC vapes are the priciest items in the shop, so they take part in the
+  // "Más caro" sort (otherwise they'd sit last under a most-expensive-first
+  // filter). Every other order keeps them after the regular vapes.
+  if(sortMode === 'price') entries.sort((a, b) => b.price - a.price);
+  const cardsHTML = entries.map(e => e.html).join('');
+  const cardCount = entries.length;
 
   productCarousel.innerHTML = '<div class="carousel-spacer" aria-hidden="true"></div>' +
     cardsHTML +
@@ -4222,13 +4463,13 @@ window.addEventListener('resize', ()=>{
 
 /* ---- sort filter chips ---- */
 const filterPuffsBtn = document.getElementById('filterPuffsBtn');
-const filterPopularBtn = document.getElementById('filterPopularBtn');
+const filterPriceBtn = document.getElementById('filterPriceBtn');
 function setSortMode(mode){
   sortMode = (sortMode === mode) ? null : mode;
   filterPuffsBtn.classList.toggle('active', sortMode === 'puffs');
   filterPuffsBtn.setAttribute('aria-pressed', sortMode === 'puffs');
-  filterPopularBtn.classList.toggle('active', sortMode === 'popular');
-  filterPopularBtn.setAttribute('aria-pressed', sortMode === 'popular');
+  filterPriceBtn.classList.toggle('active', sortMode === 'price');
+  filterPriceBtn.setAttribute('aria-pressed', sortMode === 'price');
   renderProducts();
   // Jump the carousel to the new #1 card so the customer starts swiping
   // from whichever product the filter just put on top.
@@ -4236,7 +4477,7 @@ function setSortMode(mode){
   if(firstCard) firstCard.scrollIntoView({inline:'center', block:'nearest', behavior:'smooth'});
 }
 filterPuffsBtn.addEventListener('click', ()=> setSortMode('puffs'));
-filterPopularBtn.addEventListener('click', ()=> setSortMode('popular'));
+filterPriceBtn.addEventListener('click', ()=> setSortMode('price'));
 
 /* ================= RENDER: REVIEWS ================= */
 const reviewCarousel = document.getElementById('reviewCarousel');
@@ -4413,10 +4654,11 @@ function openModal(index, presetFlavor, sourceEvent){
   // a real choice — so skip the picker, show a collapsed description, and
   // keep the classic bottom buy/add-to-cart bar for that single action.
   // Vapes instead pick a flavor from the row list below, whose own inline
-  // buttons replace that bottom bar entirely (hidden for this flow).
+  // "Sumar al carrito" button replaces that bottom bar entirely (hidden for
+  // this flow).
   const skipPicker = !oos && p.category === 'apple' && p.description;
   document.getElementById('modalVariantLabel').classList.toggle('hidden', skipPicker);
-  document.getElementById('flavorLegend').classList.toggle('hidden', skipPicker);
+  document.getElementById('flavorLegend').classList.toggle('hidden', skipPicker || oos);
   flavorGrid.classList.toggle('hidden', skipPicker);
   document.getElementById('modalViewCartBtn').classList.toggle('hidden', skipPicker);
   modalInfoToggle.classList.toggle('hidden', !skipPicker);
@@ -4444,11 +4686,9 @@ function openModal(index, presetFlavor, sourceEvent){
           </div>
           <span class="stock-badge flavor-row-stock"><span class="stock-dot" style="background:${stockDotColor(f.stock)}"></span>${stockLabel(f.stock)}</span>
           <div class="flavor-row-actions">
-            <button class="flavor-row-icon-btn flavor-row-wpp" type="button" aria-label="Comprar por WhatsApp" title="Comprar por WhatsApp">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39c1.44.79 3.06 1.2 4.71 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.03c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.81-.11-.42-.13-.95-.31-1.64-.6-2.88-1.24-4.76-4.14-4.9-4.33-.14-.19-1.17-1.56-1.17-2.97 0-1.41.74-2.1 1-2.39.26-.29.57-.36.76-.36h.55c.18 0 .42-.03.65.5.24.56.8 1.94.87 2.08.07.14.12.31.02.5-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.26 1.64 2.04 1.13.99 2.07 1.31 2.36 1.46.29.15.46.13.63-.05.17-.19.72-.84.92-1.13.19-.29.39-.24.65-.14.27.1 1.7.8 1.99.95.29.15.48.22.55.34.07.13.07.72-.17 1.4z"/></svg>
-            </button>
-            <button class="flavor-row-icon-btn flavor-row-cart" type="button" aria-label="Agregar al carrito" title="Agregar al carrito">
+            <button class="flavor-row-add" type="button">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1.4"/><circle cx="18" cy="21" r="1.4"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Sumar al carrito</span>
             </button>
           </div>
         </div>`;
@@ -4462,24 +4702,22 @@ function openModal(index, presetFlavor, sourceEvent){
         row.dataset.selectedAt = Date.now();
         selectedFlavor = flavorName;
         paintImage(selectedFlavor);
+        // The row just grew to reveal "Sumar al carrito"; on a phone that can
+        // push the button below the fold, so bring the whole row into view.
+        requestAnimationFrame(()=> row.scrollIntoView({block:'nearest', behavior:'smooth'}));
       });
-      // Los botones de WhatsApp/carrito recién aparecen al seleccionar la
-      // fila, justo donde estaba el dedo un instante antes — un tap rápido
-      // (o el "ghost click" que algunos navegadores móviles disparan un
-      // poco después del touch original) puede caer sobre ellos sin que
-      // el usuario llegue a verlos, comprando por accidente. Se ignora
+      // El botón "Sumar al carrito" recién aparece al seleccionar la fila,
+      // justo donde estaba el dedo un instante antes — un tap rápido (o el
+      // "ghost click" que algunos navegadores móviles disparan un poco
+      // después del touch original) puede caer sobre él sin que el usuario
+      // llegue a verlo, sumando un producto por accidente. Se ignora
       // cualquier click ahí durante los primeros instantes después de
       // seleccionar, así el primer tap solo selecciona.
       const justSelected = ()=> Date.now() - (Number(row.dataset.selectedAt) || 0) < 350;
-      row.querySelector('.flavor-row-cart').addEventListener('click', (e)=>{
+      row.querySelector('.flavor-row-add').addEventListener('click', (e)=>{
         e.stopPropagation();
         if(justSelected()) return;
-        addProductFlavorToCart(p, flavorName, e.currentTarget);
-      });
-      row.querySelector('.flavor-row-wpp').addEventListener('click', (e)=>{
-        e.stopPropagation();
-        if(justSelected()) return;
-        buyProductDirect(p, flavorName);
+        addProductFlavorToCart(p, flavorName, e.currentTarget, FLAVOR_ADDED_HTML);
       });
     });
 
@@ -4876,7 +5114,7 @@ const THC_PRODUCTS = [
     photoScale:1.15,
     grams:'8g (8000mg)',
     description:'Vaporizador recargable (USB-C) con blend de extracto de hongos, en variedades Indica, Sativa e Híbrida para elegir el efecto que buscás.',
-    flavors:['Sour Diesel 🍋🌿 (Hybrid)', 'Skunk OG 🌲 (Sativa)', 'Watermelon 🍉 (Indica)', 'Pineapple Express 🍍', 'Lemon Haze 🍋']
+    flavors:['Sour Diesel 🍋🌿 (Hybrid)', 'Skunk OG 🌲 (Sativa)', 'Watermelon 🍉 (Indica)']
   }
 ];
 const THC_ACCENT = {main:'#3ecf6e', fade:'rgba(62,207,110,.28)', shadow:'rgba(62,207,110,.35)'};
@@ -5028,13 +5266,16 @@ const cartEmpty = document.getElementById('cartEmpty');
 const cartCheckoutBtn = document.getElementById('cartCheckoutBtn');
 const cartConfirm = document.getElementById('cartConfirm');
 
-/* Shared by modalAddCart (Apple single-model flow) and the inline cart icon
-   on each flavor row (vape flow) so both paths add the same way. */
-function addProductFlavorToCart(p, flavorName, btnEl){
+/* Shared by modalAddCart (Apple single-model flow) and the "Sumar al carrito"
+   button on each flavor row (vape flow) so both paths add the same way.
+   flashHtml is optional — buttons with room for real text pass their own
+   "added" markup instead of the default "+1". */
+const FLAVOR_ADDED_HTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>¡Sumado al carrito!</span>';
+function addProductFlavorToCart(p, flavorName, btnEl, flashHtml){
   cart.push({product:p.name, flavor:flavorName, price:p.price, category:p.category});
   updateCartBadge();
   showCartConfirm(cartConfirm);
-  flashAddedState(btnEl);
+  flashAddedState(btnEl, flashHtml);
 }
 modalAddCart.addEventListener('click', ()=>{
   if(Date.now() - modalOpenedAt < 400) return;
@@ -5075,16 +5316,20 @@ function hideCartConfirm(){
   cartConfirm.classList.remove('show');
 }
 /* Flashes a temporary confirmation state on whichever add-to-cart button was
-   clicked. Defaults to just "+1" — the modal's, a single-variant card's, and
-   the inline flavor-row icon are all small/icon-only buttons where full text
-   used to get clipped. Callers with room for real text (like the wholesale
-   flavor screen's full-width button) can pass their own markup instead. */
+   clicked. Defaults to just "+1" — the modal's bottom-bar button and a
+   single-variant card's are small buttons where full text used to get
+   clipped. Callers with room for real text (like the flavor row's full-width
+   button or the wholesale flavor screen's) can pass their own markup instead. */
 function flashAddedState(btnEl, html){
+  // A second tap mid-flash (e.g. adding two of the same flavor) must not
+  // capture the "added" markup as the button's original content, or it would
+  // get stuck showing it — keep the first original and restart the timer.
+  if(!btnEl.classList.contains('just-added')) btnEl._originalHTML = btnEl.innerHTML;
+  clearTimeout(btnEl._flashTimer);
   btnEl.classList.add('just-added');
-  const original = btnEl.innerHTML;
   btnEl.innerHTML = html || '<span class="added-plus">+1</span>';
-  setTimeout(()=>{
-    btnEl.innerHTML = original;
+  btnEl._flashTimer = setTimeout(()=>{
+    btnEl.innerHTML = btnEl._originalHTML;
     btnEl.classList.remove('just-added');
   }, 1300);
 }
