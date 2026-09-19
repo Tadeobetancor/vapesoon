@@ -538,36 +538,32 @@ main{position:relative;z-index:1;}
   color:var(--void);
 }
 
-/* Filter block layout. Phone: row 1 = the two sort chips (their normal
-   content width); row 2 = the THC chip at that same normal width, with the
-   view toggle stretched across the rest of that row so it reads as a real
-   control instead of two stray icons — each half carries its own label
-   ("Deslizar" / "Grilla") saying what tapping it does; row 3 = the hint.
-   THC and the toggle need to land on that same line together no matter how
-   much room row 1 has left over (at some widths — e.g. ~430px — all three
-   chips fit on row 1 by themselves, which would otherwise strand the toggle
-   alone on its own line, flex-stretched to the full row width). The
-   .catalog-filters-break spacer forces that line break reliably: a flex
-   item with flex-basis:100% always wraps, pushing everything after it onto
-   a fresh line. From 560px up there's room for all four on one row, so the
-   break is removed and the toggle shrinks back to a compact control. */
-.catalog-filters-break{flex:0 0 100%;height:0;}
-@media(min-width:560px){.catalog-filters-break{display:none;}}
-.catalog-filters .filter-chip--thc{flex:none;}
-.catalog-filters .view-toggle{flex:1 1 auto;min-width:0;padding:4px;}
-.catalog-filters .view-toggle button{
+/* View toggle now leads the whole catalog section, above the sort filters —
+   full width and bigger on phone so it reads as the section's main control,
+   each half labelled ("Deslizar" / "Grilla") so it's clear what tapping it
+   does. On desktop there's less need to shout, so it shrinks to a compact
+   inline pill instead of stretching across the whole row. */
+.catalog-view-row{margin:0 0 14px;}
+.catalog-view-row .view-toggle{
+  display:flex;
+  width:100%;
+  gap:6px;
+  padding:5px;
+  border-radius:14px;
+}
+.catalog-view-row .view-toggle button{
   flex:1;
   width:auto;height:auto;
-  gap:6px;
-  padding:9px 6px;
-  font-size:11.5px;
+  gap:7px;
+  padding:12px 10px;
+  border-radius:10px;
+  font-size:13px;
   font-weight:700;
-  white-space:nowrap;
 }
-.catalog-filters .view-toggle button svg{width:15px;height:15px;flex:none;}
+.catalog-view-row .view-toggle button svg{width:17px;height:17px;flex:none;}
 @media(min-width:560px){
-  .catalog-filters .view-toggle{flex:none;}
-  .catalog-filters .view-toggle button{padding:8px 12px;}
+  .catalog-view-row .view-toggle{width:auto;display:inline-flex;}
+  .catalog-view-row .view-toggle button{flex:none;padding:10px 20px;}
 }
 
 /* catalog sort filters */
@@ -791,6 +787,41 @@ main{position:relative;z-index:1;}
   box-shadow:0 18px 40px -12px rgba(232,67,58,.35);
 }
 .p-card--oos .p-cta{color:var(--red-cap);}
+
+/* Promo cards (IGNITE V500, IGNITE VMIX): red border + a slow pulsing glow so
+   the two offers stand out from the rest of the catalog at a glance. The
+   pulse is neutralized for prefers-reduced-motion by the generic rule near
+   the bottom of the file (it targets every animation except a named list). */
+.p-card--promo{
+  border:2px solid var(--red-cap);
+  box-shadow:0 0 0 1px rgba(232,67,58,.3), 0 18px 40px -12px rgba(232,67,58,.5);
+  animation:promoGlow 2.4s ease-in-out infinite;
+}
+.p-card--promo:hover{
+  border-color:var(--red-cap);
+  box-shadow:0 0 0 1px rgba(232,67,58,.5), 0 20px 46px -10px rgba(232,67,58,.65);
+}
+@keyframes promoGlow{
+  0%,100%{box-shadow:0 0 0 1px rgba(232,67,58,.3), 0 18px 40px -12px rgba(232,67,58,.5);}
+  50%{box-shadow:0 0 0 2px rgba(232,67,58,.6), 0 18px 48px -6px rgba(232,67,58,.75);}
+}
+/* Reuses the corner-badge slot (top-left in carousel mode). Grid mode hides
+   .p-badge entirely to make room for .p-puffs sitting in that same corner —
+   the promo ribbon needs to survive that, just moved to the opposite
+   (top-right) corner so it doesn't collide with the puffs count. */
+.p-badge--promo{
+  background:linear-gradient(135deg, #ff5a52, var(--red-cap));
+  color:#fff;
+  box-shadow:0 0 0 1px rgba(255,90,82,.4);
+}
+.catalog.grid-mode .p-badge--promo{
+  display:flex;
+  align-items:center;
+  gap:3px;
+  top:12px;right:12px;left:auto;
+  font-size:9px;
+  padding:4px 8px;
+}
 .p-puffs{
   position:absolute;top:14px;right:14px;
   font-size:12.5px;
@@ -3268,17 +3299,7 @@ footer.site{
            products) — the h1 stays for screen readers / SEO. -->
       <h1 class="sr-only">Elegí tu vape</h1>
 
-      <div class="catalog-filters" role="group" aria-label="Ordenar catálogo">
-        <button class="filter-chip" id="filterPuffsBtn" aria-pressed="false">
-          <span class="filter-chip-icon">💨</span> Más pitadas
-        </button>
-        <button class="filter-chip" id="filterPriceBtn" aria-pressed="false">
-          <span class="filter-chip-icon">💰</span> Más caro
-        </button>
-        <span class="catalog-filters-break" aria-hidden="true"></span>
-        <button class="filter-chip filter-chip--thc" id="filterThcBtn">
-          <span class="filter-chip-icon">🌿</span> Vapes c/THC
-        </button>
+      <div class="catalog-view-row">
         <div class="view-toggle" role="group" aria-label="Cambiar cómo se ven los vapes">
           <button id="viewCarousel" aria-label="Vista deslizable: un vape a la vez">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="7" height="12" rx="1.5"/><rect x="15" y="6" width="7" height="12" rx="1.5"/><rect x="9.5" y="4" width="5" height="16" rx="1.5" opacity=".4"/></svg>
@@ -3289,6 +3310,18 @@ footer.site{
             <span>Grilla</span>
           </button>
         </div>
+      </div>
+
+      <div class="catalog-filters" role="group" aria-label="Ordenar catálogo">
+        <button class="filter-chip" id="filterPuffsBtn" aria-pressed="false">
+          <span class="filter-chip-icon">💨</span> Más pitadas
+        </button>
+        <button class="filter-chip" id="filterPriceBtn" aria-pressed="false">
+          <span class="filter-chip-icon">💰</span> Más caro
+        </button>
+        <button class="filter-chip filter-chip--thc" id="filterThcBtn">
+          <span class="filter-chip-icon">🌿</span> Vapes c/THC
+        </button>
         <p class="peek-hint" aria-hidden="true">
           <span class="peek-hint-touch">👇 Mantené apretado un vape para ver sus sabores</span>
           <span class="peek-hint-mouse">👇 Pasá el mouse por un vape para ver sus sabores</span>
@@ -3925,24 +3958,24 @@ const CATALOG = [
   {name:'ELFBAR DUKE', price:25000, puffs:35000, photo:'duke', flavors:[
     {name:'Watermelon Lemon Ice 🍉🍋', stock:1}
   ]},
-  {name:'ELFBAR BC', price:21000, puffs:15000, photo:'bc', flavors:[
+  {name:'ELFBAR BC', price:20000, puffs:15000, photo:'bc', flavors:[
     {name:'Miami Mint 🌴', stock:1},{name:'Watermelon Ice 🍉', stock:1}
   ]},
   {name:'EBCREATE BC PRO', price:25000, puffs:40000, photo:'ebcreate', flavors:[
     {name:'Black Mint 🌿', stock:1}
   ]},
-  {name:'IGNITE V500', price:32000, puffs:50000, photo:'v500', flavors:[
+  {name:'IGNITE V500', price:29000, originalPrice:32000, promo:true, puffs:50000, photo:'v500', flavors:[
     {name:'Mango Passionfruit 🥭', stock:2},{name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:2},{name:'Strawberry Banana 🍓🍌', stock:1},
     {name:'Strawberry Ice 🍓', stock:2},{name:'Strawberry Kiwi 🍓🥝', stock:1},{name:'Watermelon Kiwi 🍉🥝', stock:1},
     {name:'Watermelon Mix 🍉', stock:1}
   ]},
-  {name:'IGNITE V400 ICE', price:30000, puffs:40000, photo:'v400', flavors:[
+  {name:'IGNITE V400 ICE', price:28000, puffs:40000, photo:'v400', flavors:[
     {name:'Grape 🍇', stock:1},{name:'Strawberry Watermelon 🍓🍉', stock:1}
   ]},
-  {name:'IGNITE V300 ULTRA SLIM', price:26000, puffs:30000, photo:'v300', flavors:[
+  {name:'IGNITE V300 ULTRA SLIM', price:24000, puffs:30000, photo:'v300', flavors:[
     {name:'Banana Coconut Water 🍌🥥', stock:1},{name:'Pineapple Ice 🍍', stock:1}
   ]},
-  {name:'IGNITE V250', price:24500, puffs:25000, photo:'v250', photoScale:1.18, flavors:[
+  {name:'IGNITE V250', price:22000, puffs:25000, photo:'v250', photoScale:1.18, flavors:[
     {name:'Menthol ❄️', stock:1}
   ]},
   {name:'BLACKSHEEP 40K', price:29000, puffs:40000, photo:'blacksheep', flavors:[
@@ -3956,7 +3989,7 @@ const CATALOG = [
   {name:'NIKBAR 10K', price:19000, puffs:10000, photo:'nikbar10', photoScale:1.18, flavors:[
     {name:'Watermelon Bubble Gum 🍉🍬', stock:1}
   ]},
-  {name:'IGNITE V150', price:22000, puffs:15000, photo:'v150', flavors:[
+  {name:'IGNITE V150', price:20000, puffs:15000, photo:'v150', flavors:[
     {name:'Pineapple Ice 🍍', stock:1}
   ]},
   {name:'BLVK JUST JUICE', price:26500, puffs:45000, photo:'blvk', outOfStock:true, flavors:[]},
@@ -3964,7 +3997,7 @@ const CATALOG = [
     {name:'Blueberry Pom Slushy 🫐', stock:1}
   ]},
   {name:'NIKBAR 30K', price:22500, puffs:30000, photo:'nikbar30', outOfStock:true, flavors:[]},
-  {name:'IGNITE VMIX', price:30000, originalPrice:32000, puffs:40000, photo:'vmix', flavors:[
+  {name:'IGNITE VMIX', price:27000, originalPrice:32000, promo:true, puffs:40000, photo:'vmix', flavors:[
     {name:'Grape Ice + Strawberry 🍇🍓', stock:1},{name:'Icy Mint + Peach Grape 🌿🍑🍇', stock:1},
     {name:'Orange Ice + Strawb Ice 🍊🍓', stock:1},{name:'Aloe Grape + Straw Watermelon 🌿🍇🍓🍉', stock:2}
   ]},
@@ -4209,8 +4242,8 @@ function productCardHTML(p, i, badgeText, showPuffs){
       </div>`;
 
   return `
-    <div class="p-card${oos ? ' p-card--oos' : ''}" data-index="${i}" style="--accent:${acc.main};--accent-fade:${acc.fade};--accent-shadow:${acc.shadow}">
-      ${oos ? '<div class="p-badge p-badge--oos">Sin stock</div>' : (badgeText ? `<div class="p-badge${badgeText === 'Más pedido' ? ' p-badge--popular' : ''}">${badgeText}</div>` : '')}
+    <div class="p-card${oos ? ' p-card--oos' : ''}${p.promo ? ' p-card--promo' : ''}" data-index="${i}" style="--accent:${acc.main};--accent-fade:${acc.fade};--accent-shadow:${acc.shadow}">
+      ${oos ? '<div class="p-badge p-badge--oos">Sin stock</div>' : p.promo ? '<div class="p-badge p-badge--promo">🔥 Oferta</div>' : (badgeText ? `<div class="p-badge${badgeText === 'Más pedido' ? ' p-badge--popular' : ''}">${badgeText}</div>` : '')}
       ${showPuffs ? `<div class="p-puffs">${formatPuffs(p.puffs)}</div>` : ''}
       <div class="p-glyph">${productGlyphHTML(p)}</div>
       <div class="p-name-row">
@@ -4352,19 +4385,35 @@ function renderProducts(){
   // left out of the catalog entirely instead of trailing behind with a
   // "Sin stock" badge — nothing to buy there, no reason to show the card.
   const vapeIndices = CATALOG.map((p, i) => i).filter(i => CATALOG[i].category !== 'apple');
+  // The two promo vapes (IGNITE V500, IGNITE VMIX — see the `promo` flag in
+  // CATALOG) always lead the default order, in that order, so they're the
+  // first thing seen on landing. An explicit sort ("Más pitadas"/"Más caro")
+  // is the customer's own choice, so it isn't overridden.
+  const PROMO_ORDER = ['IGNITE V500', 'IGNITE VMIX'];
   const inStockVapeIndices = vapeIndices.filter(i => !isOutOfStock(CATALOG[i])).sort((a, b) => {
     const pa = CATALOG[a], pb = CATALOG[b];
     if(sortMode === 'puffs') return (pb.puffs||0) - (pa.puffs||0);
+    if(sortMode === null){
+      const ia = PROMO_ORDER.indexOf(pa.name), ib = PROMO_ORDER.indexOf(pb.name);
+      if(ia !== -1 || ib !== -1){
+        return (ia === -1 ? PROMO_ORDER.length : ia) - (ib === -1 ? PROMO_ORDER.length : ib);
+      }
+    }
     return 0;
   });
   const thcOrdered = THC_PRODUCTS;
 
   // The "Más pedido" badge belongs to the default order only — under a sort
-  // (e.g. "Más caro") whatever lands first isn't the most ordered.
-  const entries = inStockVapeIndices.map((i, pos) => ({
-    price: CATALOG[i].price || 0,
-    html: productCardHTML(CATALOG[i], i, (pos === 0 && sortMode === null) ? 'Más pedido' : null, true)
-  })).concat(thcOrdered.map(p => ({ price: p.price || 0, html: thcCardHTML(p) })));
+  // (e.g. "Más caro") whatever lands first isn't the most ordered — and it
+  // skips the promo cards (their own "Oferta" ribbon already stands out),
+  // landing on the first regular card instead.
+  let popularBadgeGiven = false;
+  const entries = inStockVapeIndices.map((i) => {
+    const p = CATALOG[i];
+    const giveBadge = sortMode === null && !p.promo && !popularBadgeGiven;
+    if(giveBadge) popularBadgeGiven = true;
+    return { price: p.price || 0, html: productCardHTML(p, i, giveBadge ? 'Más pedido' : null, true) };
+  }).concat(thcOrdered.map(p => ({ price: p.price || 0, html: thcCardHTML(p) })));
   // THC vapes are the priciest items in the shop, so they take part in the
   // "Más caro" sort (otherwise they'd sit last under a most-expensive-first
   // filter). Every other order keeps them after the regular vapes.
