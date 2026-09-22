@@ -2484,14 +2484,14 @@ footer.site{
   background:var(--wholesale-grad);
   border-color:var(--wholesale-grad-border);
   color:var(--void);
-  opacity:0;
-  visibility:hidden;
-  transform:scale(.7);
-  transition:opacity .3s var(--ease), visibility .3s;
+  /* display:none instead of opacity/visibility/scale(.7): the old fade+scale
+     transition could get caught mid-way by a screenshot (or by quick add/
+     remove toggling) looking like a plain smaller button stuck at scale(.7)
+     — a hard show/hide has no in-between state to get caught in. */
+  display:none;
 }
 .wholesale-cart-fab.visible{
-  opacity:1;
-  visibility:visible;
+  display:flex;
   animation:cartFabFloat 2.6s ease-in-out infinite;
 }
 .wholesale-cart-fab:active{animation:none;transform:scale(.9);}
@@ -2974,7 +2974,11 @@ footer.site{
 .wholesale-product-box-name{font-family:'Bungee',cursive;font-size:15.5px;color:var(--white-glove);line-height:1.25;margin-bottom:4px;}
 .wholesale-product-box-price{font-family:'Poppins',sans-serif;font-weight:800;font-size:14.5px;color:var(--gold);}
 .wholesale-flavor-hint{position:relative;z-index:1;display:block;font-size:12px;color:var(--ink-dim);margin:0 0 12px;}
-.wholesale-flavor-list{position:relative;z-index:1;max-height:44vh;overflow-y:auto;padding-right:2px;display:flex;flex-direction:column;gap:8px;}
+/* Taller now that the floating WhatsApp/cart buttons hide on this screen
+   (see updateWholesaleCartFab) and there's no reason to leave room for them
+   — more of the available height goes to actually seeing flavors, scrolling
+   inside this list instead of most of it sitting empty below the footer. */
+.wholesale-flavor-list{position:relative;z-index:1;max-height:60vh;overflow-y:auto;padding-right:2px;display:flex;flex-direction:column;gap:8px;}
 /* flex-wrap so the inline "Agregar" button (.wholesale-flavor-row-actions)
    can drop onto its own full-width line within the row once selected,
    instead of squeezing into the row alongside the name and stepper. */
@@ -3012,14 +3016,19 @@ footer.site{
 .wholesale-flavor-row-add.just-added{background:linear-gradient(120deg, var(--green-thc), var(--green-thc-dim));}
 
 /* Bottom bar: no longer an "add" action (that moved to each row above) — now
-   a permanent link into the cart that doubles as a visual gauge for the USD
-   200 minimum (see updateWholesaleFlavorFooter). Below the minimum its own
+   a permanent link into the cart that doubles as a visual gauge for the
+   minimum order (see updateWholesaleFlavorFooter). Below the minimum its own
    background is set inline (in JS) to a two-stop gradient that fills in like
    a progress bar as the cart total climbs; once the minimum is reached it
    settles back to this plain gold gradient and just states the running total. */
 .wholesale-flavor-add{position:relative;z-index:1;width:100%;margin-top:14px;padding:13px;border-radius:14px;border:1.5px solid var(--wholesale-grad-border);background:var(--wholesale-grad);color:var(--void);font-weight:700;font-size:13.5px;font-family:'Poppins',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .3s, color .2s, transform .15s;}
 .wholesale-flavor-add svg{width:16px;height:16px;flex:none;}
 .wholesale-flavor-add:active{transform:scale(.98);}
+/* Below the minimum, dark text (the default, good against the plain solid
+   gold reached-minimum state) went unreadable over the dim, near-black
+   "not filled yet" portion of the progress-bar background — white text with
+   a soft dark shadow reads clearly against both the gold and the dim side. */
+.wholesale-flavor-add.progress{color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);}
 
 
 .wholesale-step{position:relative;z-index:1;}
@@ -6180,9 +6189,11 @@ function updateWholesaleFlavorFooter(){
   if(missingUsd > 0){
     const pct = Math.max(4, Math.min(100, (totalUsd / WHOLESALE_MIN_USD) * 100));
     wholesaleFlavorAddBtn.style.background = `linear-gradient(90deg, var(--gold) ${pct}%, rgba(255,255,255,.06) ${pct}%)`;
+    wholesaleFlavorAddBtn.classList.add('progress');
     wholesaleFlavorAddText.textContent = `Sumá ${formatWholesaleAmount(missingUsd)} más para el pedido mínimo`;
   } else {
     wholesaleFlavorAddBtn.style.background = '';
+    wholesaleFlavorAddBtn.classList.remove('progress');
     wholesaleFlavorAddText.textContent = `Ver carrito · ${formatWholesaleAmount(totalUsd)}`;
   }
 }
