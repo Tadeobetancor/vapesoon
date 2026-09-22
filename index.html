@@ -3593,7 +3593,7 @@ footer.site{
       <div class="fulfill-btns">
         <button class="fulfill-btn" id="fulfillPickupBtn">
           <span class="fulfill-btn-icon">🛍️</span>
-          <span>Retiro en el local</span>
+          <span>Retiro en Hurlingham</span>
         </button>
         <button class="fulfill-btn" id="fulfillDeliveryBtn">
           <span class="fulfill-btn-icon">🚚</span>
@@ -4587,6 +4587,37 @@ function updateCarouselArrows(carouselEl, prevBtn, nextBtn){
    nothing to align and that padding hack is gone.) */
 const filterPuffsBtn = document.getElementById('filterPuffsBtn');
 const filterPriceBtn = document.getElementById('filterPriceBtn');
+
+/* Scrolls the PAGE (vertically) so the Deslizar/Grilla toggle sits right
+   under the sticky header — used after sorting so the customer always lands
+   on the top of the freshly-sorted list. This used to be done by calling
+   .scrollIntoView({block:'nearest'}) on the new first card instead, which
+   also scrolls the document (not just the horizontal carousel) since
+   scrollIntoView walks every scrollable ancestor — and "nearest" picks
+   whichever direction needs the least movement, which from the very top of
+   the page often lands with the card barely peeking in at the bottom edge,
+   leaving the toggle scrolled off above the viewport. Landing on a fixed
+   anchor (the toggle) instead of the card is deterministic regardless of
+   where the page happened to be scrolled beforehand. */
+function scrollCatalogControlsIntoView(){
+  const anchor = document.querySelector('.catalog-view-row');
+  if(!anchor) return;
+  const headerH = siteHeader ? siteHeader.getBoundingClientRect().height : 0;
+  const y = anchor.getBoundingClientRect().top + window.scrollY - headerH - 10;
+  window.scrollTo({top: Math.max(0, y), behavior:'smooth'});
+}
+/* Horizontally centers a card WITHIN the carousel only (element.scrollTo
+   scrolls just that element's own scrollbar, unlike .scrollIntoView which
+   also drags ancestor scroll containers — including the page — along with
+   it), so this can run alongside the vertical scroll above without the two
+   fighting each other. */
+function centerCardHorizontally(carouselEl, cardEl){
+  if(!carouselEl || !cardEl) return;
+  const target = carouselEl.scrollLeft
+    + (cardEl.getBoundingClientRect().left - carouselEl.getBoundingClientRect().left)
+    - (carouselEl.clientWidth - cardEl.offsetWidth) / 2;
+  carouselEl.scrollTo({left: Math.max(0, target), behavior:'smooth'});
+}
 function setSortMode(mode){
   sortMode = (sortMode === mode) ? null : mode;
   filterPuffsBtn.classList.toggle('active', sortMode === 'puffs');
@@ -4594,10 +4625,11 @@ function setSortMode(mode){
   filterPriceBtn.classList.toggle('active', sortMode === 'price');
   filterPriceBtn.setAttribute('aria-pressed', sortMode === 'price');
   renderProducts();
-  // Jump the carousel to the new #1 card so the customer starts swiping
-  // from whichever product the filter just put on top.
+  scrollCatalogControlsIntoView();
+  // In carousel mode, also jump to the new #1 card so the customer starts
+  // swiping from whichever product the filter just put on top.
   const firstCard = productCarousel.querySelector('.p-card');
-  if(firstCard) firstCard.scrollIntoView({inline:'center', block:'nearest', behavior:'smooth'});
+  if(firstCard) centerCardHorizontally(productCarousel, firstCard);
 }
 filterPuffsBtn.addEventListener('click', ()=> setSortMode('puffs'));
 filterPriceBtn.addEventListener('click', ()=> setSortMode('price'));
@@ -5145,7 +5177,7 @@ document.getElementById('ticketCloseBtn').addEventListener('click', closeTicketO
 ticketOverlay.addEventListener('click', (e)=>{ if(e.target === ticketOverlay) closeTicketOverlay(); });
 
 document.getElementById('fulfillPickupBtn').addEventListener('click', ()=>{
-  sendWhatsAppOrder('\n\n*Modalidad:* Retiro en el local');
+  sendWhatsAppOrder('\n\n*Modalidad:* Retiro en Hurlingham');
 });
 document.getElementById('fulfillDeliveryBtn').addEventListener('click', ()=>{
   fulfillChoiceStep.classList.add('hidden');
