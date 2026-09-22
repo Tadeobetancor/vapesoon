@@ -4012,7 +4012,7 @@ const ACCENTS = [
 const PROMO_ACCENT = {main:'#7db2ff', fade:'rgba(125,178,255,.30)', shadow:'rgba(80,140,255,.45)'};
 
 const CATALOG = [
-  {name:'ELFBAR ICE KING', price:26000, puffs:40000, photo:'ice_king', flavors:[
+  {name:'ELFBAR ICE KING', price:25000, puffs:40000, photo:'ice_king', flavors:[
     {name:'Sour Apple Ice 🍏', stock:1},{name:'Sour Strawberry Dragon Fruit 🍓🐉', stock:1},{name:'Watermelon Ice 🍉', stock:1},
     {name:'Mango Magic 🥭', stock:1},{name:'Bubbaloo Tutti Frutti 🍬🍓', stock:1}
   ]},
@@ -4027,9 +4027,11 @@ const CATALOG = [
   {name:'IGNITE V500', price:29000, originalPrice:32000, promo:true, puffs:50000, photo:'v500', flavors:[
     {name:'Mango Passionfruit 🥭', stock:2},{name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:1},{name:'Strawberry Kiwi 🍓🥝', stock:1}
   ]},
-  /* Modelo nuevo: falta el precio (se muestra "Consultar" mientras price sea null).
-     Los 40K puffs salen de la caja que se ve en la foto ("UP TO 40K PUFFS"). */
-  {name:'IGNITE BOOST MIX', price:null, puffs:40000, photo:'ignite_boost_mix', flavors:[
+  /* Precio de oferta según cotización Italia Shop (S12019, sabores "IGNITE
+     VMIX 40K NEW" que coinciden con los de este modelo): USD 12 × 1660 =
+     $19.920 + $13.000 de ganancia = $32.920 → $33.000 de lista, menos $3.000
+     de descuento = $30.000 de oferta. */
+  {name:'IGNITE BOOST MIX', price:30000, originalPrice:33000, promo:true, puffs:40000, photo:'ignite_boost_mix', flavors:[
     {name:'Banana Cherry + Grape Ice 🍌🍒🍇', stock:1},{name:'Mango Ice + Passion Fruit Guava 🥭🍑', stock:1},
     {name:'Grape Ice + Strawberry 🍇🍓', stock:1},{name:'Raspberry Ice + Watermelon Ice 🍓🍉', stock:1},
     {name:'Blueberry + Strawberry 🫐🍓', stock:1}
@@ -4042,8 +4044,9 @@ const CATALOG = [
   {name:'IGNITE V250', price:22000, puffs:25000, photo:'v250', photoScale:1.18, flavors:[
     {name:'Menthol ❄️', stock:1}
   ]},
-  /* Modelo nuevo: falta el precio (se muestra "Consultar" mientras price sea null). */
-  {name:'BLACKSHEEP 55K', price:null, puffs:55000, photo:'blacksheep_55k', flavors:[
+  /* Precio según cotización Italia Shop (S12019): USD 12,50 × 1660 = $20.750
+     + $10.000 de margen = $30.750 → redondeado a $31.000. */
+  {name:'BLACKSHEEP 55K', price:31000, puffs:55000, photo:'blacksheep_55k', flavors:[
     {name:'Miami Mint 🌴', stock:1},{name:'Cool Mint 🌿❄️', stock:1},
     {name:'Strawberry Banana 🍓🍌', stock:1},{name:'Watermelon Ice 🍉', stock:1}
   ]},
@@ -4065,8 +4068,9 @@ const CATALOG = [
   {name:'ELFBAR TRIO', price:27000, puffs:40000, photo:'trio', flavors:[
     {name:'Blueberry Pom Slushy 🫐', stock:1}
   ]},
-  /* Modelo nuevo: falta el precio (se muestra "Consultar" mientras price sea null). */
-  {name:'LOST MARY MT20000', price:null, puffs:20000, photo:'lost_mary_mt20000', flavors:[
+  /* Precio según cotización Italia Shop (S12012): USD 7 × 1660 = $11.620
+     + $10.000 de margen = $21.620 → redondeado a $22.000. */
+  {name:'LOST MARY MT20000', price:22000, puffs:20000, photo:'lost_mary_mt20000', flavors:[
     {name:'Miami Mint ❄️', stock:1},{name:'Strawmelon Peach 🍑🍈', stock:1}
   ]},
   {name:'NIKBAR 30K', price:22500, puffs:30000, photo:'nikbar30', outOfStock:true, flavors:[]},
@@ -4462,7 +4466,7 @@ function renderProducts(){
   // CATALOG) always lead the default order, in that order, so they're the
   // first thing seen on landing. An explicit sort ("Más pitadas"/"Más caro")
   // is the customer's own choice, so it isn't overridden.
-  const PROMO_ORDER = ['IGNITE V500', 'IGNITE VMIX'];
+  const PROMO_ORDER = ['IGNITE V500', 'IGNITE VMIX', 'IGNITE BOOST MIX'];
   const inStockVapeIndices = vapeIndices.filter(i => !isOutOfStock(CATALOG[i])).sort((a, b) => {
     const pa = CATALOG[a], pb = CATALOG[b];
     if(sortMode === 'puffs') return (pb.puffs||0) - (pa.puffs||0);
