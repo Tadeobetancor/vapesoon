@@ -3736,8 +3736,8 @@ footer.site{
       </div>
 
       <div class="wholesale-filters" role="group" aria-label="Ordenar catálogo mayorista">
-        <button class="wholesale-filter-chip" id="wFilterPopularBtn" type="button" aria-pressed="false">
-          <span class="wholesale-filter-chip-icon">🔥</span> Más pedidos
+        <button class="wholesale-filter-chip" id="wFilterPriceBtn" type="button" aria-pressed="false">
+          <span class="wholesale-filter-chip-icon">💰</span> Más caro
         </button>
         <button class="wholesale-filter-chip" id="wFilterPuffsBtn" type="button" aria-pressed="false">
           <span class="wholesale-filter-chip-icon">💨</span> Más pitadas
@@ -5721,7 +5721,7 @@ const WHOLESALE_ORDERING_DISABLED = false;
 /* Cotización manual: actualizala acá cuando cambie el precio que
    nos acepta el revendedor. Todo el catálogo mayorista se calcula
    en USD a partir de este valor. */
-const USD_TO_ARS = 1650;
+const USD_TO_ARS = 1660;
 
 /* Modelos mayoristas — precio de costo del proveedor + margen mínimo de
    USD 1.50 por unidad (ver WHOLESALE_MARGIN_USD). Sabores, precio y stock
@@ -5761,10 +5761,11 @@ const WHOLESALE_CATALOG = [
   {name:'ELFBAR GH 23000', price:wholesalePrice(9.5), puffs:23000, photo:'elfbar_gh_23000', flavors:[{name:'Blueberry Pear 🫐', stock:20},{name:'Grape Ice 🍇❄️', stock:20},{name:'Kiwi Dragon Fruit 🥝🐉', stock:20},{name:'Miami Mint ❄️', stock:20},{name:'Strawberry Ice 🍓❄️', stock:20}]},
   {name:'ELFBAR DISP TE30K', price:wholesalePrice(9.75), puffs:30000, photo:'elfbar_disp_te30k', flavors:[{name:'Blueberry Ice 🫐❄️', stock:20},{name:'Bubbaloo Tutti 🍭', stock:20},{name:'Cherry Strazz 🍒', stock:20},{name:'Dragon Strawna 🐉', stock:20},{name:'Green Apple Ice 🍏❄️', stock:20},{name:'Peach Mango Water 🥭🍑', stock:20},{name:'Pineapple Ice 🍍🍏', stock:20},{name:'Pineapple Mango 🥭🍍', stock:20},{name:'Strawberry Watermelon Ice 🍓🍉', stock:20},{name:'Strawmelon Peach 🍑🍈', stock:20}]},
 ];
-const WHOLESALE_MIN_UNITS = 20;
+const WHOLESALE_MIN_USD = 200; // pedido mínimo mayorista: USD 200 en total, no una cantidad fija de unidades
 const WHOLESALE_WHATSAPP_NUMBER = '5491151244554'; // Fran — socio encargado de mayorista
 
 let wholesaleCart = []; // {model, flavor, qty, price}
+let wholesaleSortMode = null; // null | 'price' — 'price' ordena el grid por más caro primero
 let wholesaleCurrency = 'USD'; // 'USD' | 'ARS' — moneda activa al recorrer el catálogo
 let wholesaleActiveModel = null; // modelo abierto actualmente en la vista de sabores
 const wholesaleFlavorQtyState = {}; // "modelo|sabor" -> cantidad elegida en el stepper (antes de agregar), se resetea a 0 después de agregar
@@ -5849,9 +5850,10 @@ function wholesaleGlyphHTML(photoKey){
 
 function renderWholesaleGrid(){
   const query = normalize(wholesaleSearchInput.value.trim());
-  const list = query ? WHOLESALE_CATALOG.filter(m =>
+  let list = query ? WHOLESALE_CATALOG.filter(m =>
     normalize(m.name).includes(query) || m.flavors.some(f => normalize(f.name).includes(query))
-  ) : WHOLESALE_CATALOG;
+  ) : WHOLESALE_CATALOG.slice();
+  if(wholesaleSortMode === 'price') list = list.slice().sort((a,b) => b.price - a.price);
 
   if(list.length === 0){
     wholesaleGrid.innerHTML = '<div class="wholesale-empty-search">No encontramos ese modelo o sabor. Probá con otro nombre ✨</div>';
@@ -5862,7 +5864,9 @@ function renderWholesaleGrid(){
   let cardCount = 0;
   const cardsHTML = list.map(m=>{
     const oos = wholesaleModelIsOutOfStock(m);
-    const badgeHTML = (!query && !oos && cardCount === 0) ? '<div class="wholesale-card-badge">Más pedido</div>' : '';
+    // El badge "Más pedido" es del orden por defecto nada más — bajo "Más
+    // caro" lo primero de la lista no es necesariamente lo más pedido.
+    const badgeHTML = (!query && wholesaleSortMode === null && !oos && cardCount === 0) ? '<div class="wholesale-card-badge">Más pedido</div>' : '';
     cardCount++;
     return `
     <div class="wholesale-card${oos ? ' wholesale-card--oos' : ''}" data-model="${m.name}">
@@ -5967,15 +5971,31 @@ window.addEventListener('resize', ()=>{
   wholesaleBenefitsResizeTimer = setTimeout(()=> updateCarouselArrows(wholesaleBenefits, wBenefitsPrevBtn, wBenefitsNextBtn), 150);
 });
 
-/* ---- "Más pedidos" / "Más pitadas" pills — visual selection only for now,
-   real sort logic comes later. ---- */
-const wholesaleFilterChips = [document.getElementById('wFilterPopularBtn'), document.getElementById('wFilterPuffsBtn')];
-wholesaleFilterChips.forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const wasActive = btn.classList.contains('active');
-    wholesaleFilterChips.forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
-    if(!wasActive){ btn.classList.add('active'); btn.setAttribute('aria-pressed','true'); }
-  });
+/* "Más caro" actually sorts the grid by price now (see wholesaleSortMode +
+   renderWholesaleGrid). "Más pitadas" stays a purely visual toggle for now —
+   no puffs-sort logic backing it yet — but the two chips still behave as a
+   mutually exclusive pair, same look they already had. */
+const wFilterPriceBtn = document.getElementById('wFilterPriceBtn');
+const wFilterPuffsBtn = document.getElementById('wFilterPuffsBtn');
+function setWholesaleSortMode(mode){
+  wholesaleSortMode = (wholesaleSortMode === mode) ? null : mode;
+  wFilterPriceBtn.classList.toggle('active', wholesaleSortMode === 'price');
+  wFilterPriceBtn.setAttribute('aria-pressed', wholesaleSortMode === 'price');
+  wFilterPuffsBtn.classList.remove('active');
+  wFilterPuffsBtn.setAttribute('aria-pressed', 'false');
+  renderWholesaleGrid();
+}
+wFilterPriceBtn.addEventListener('click', ()=> setWholesaleSortMode('price'));
+wFilterPuffsBtn.addEventListener('click', ()=>{
+  const activating = !wFilterPuffsBtn.classList.contains('active');
+  wFilterPuffsBtn.classList.toggle('active', activating);
+  wFilterPuffsBtn.setAttribute('aria-pressed', String(activating));
+  if(activating && wholesaleSortMode !== null){
+    wholesaleSortMode = null;
+    wFilterPriceBtn.classList.remove('active');
+    wFilterPriceBtn.setAttribute('aria-pressed', 'false');
+    renderWholesaleGrid();
+  }
 });
 
 function wireWholesaleCards(){
@@ -6163,17 +6183,18 @@ function renderWholesaleCart(){
   updateWholesaleCheckoutState();
 }
 
-/* Pedido mínimo por TOTAL de unidades (no por producto individual): el botón
-   de checkout se deshabilita y muestra cuánto falta hasta llegar a
-   WHOLESALE_MIN_UNITS, actualizándose cada vez que el carrito cambia
-   (agregar, quitar, sumar/restar cantidad). */
+/* Pedido mínimo por TOTAL en dólares (no por cantidad de unidades ni por
+   producto individual): el botón de checkout se deshabilita y muestra cuánto
+   falta en USD 200, actualizándose cada vez que el carrito cambia (agregar,
+   quitar, sumar/restar cantidad). El monto que falta se muestra en la moneda
+   activa del toggle (USD/ARS), igual que el resto de los precios mayoristas. */
 function updateWholesaleCheckoutState(){
-  const count = wholesaleCartCount();
-  const missing = WHOLESALE_MIN_UNITS - count;
-  if(missing > 0){
+  const totalUsd = wholesaleCartTotalUsd();
+  const missingUsd = WHOLESALE_MIN_USD - totalUsd;
+  if(missingUsd > 0){
     wholesaleCheckoutBtn.classList.add('disabled');
     wholesaleCheckoutBtn.setAttribute('aria-disabled', 'true');
-    wholesaleCheckoutText.textContent = `Sumá ${missing} u. más para completar el pedido mínimo (${WHOLESALE_MIN_UNITS} u.)`;
+    wholesaleCheckoutText.textContent = `Sumá ${formatWholesaleAmount(missingUsd)} más para completar el pedido mínimo (${formatWholesaleAmount(WHOLESALE_MIN_USD)})`;
   } else {
     wholesaleCheckoutBtn.classList.remove('disabled');
     wholesaleCheckoutBtn.removeAttribute('aria-disabled');
@@ -6322,7 +6343,7 @@ wholesaleCloseBtn.addEventListener('click', ()=>{
 wholesaleOverlay.addEventListener('click', (e)=>{ if(e.target === wholesaleOverlay) closeWholesaleModal(); });
 
 document.getElementById('wholesaleCheckoutBtn').addEventListener('click', ()=>{
-  if(wholesaleCart.length === 0 || wholesaleCartCount() < WHOLESALE_MIN_UNITS) return;
+  if(wholesaleCart.length === 0 || wholesaleCartTotalUsd() < WHOLESALE_MIN_USD) return;
   // Sin emojis a propósito — solo *asteriscos* (negrita de WhatsApp) para
   // remarcar el modelo. Agrupado por modelo (en vez de una lista plana
   // numerada) para que un pedido con varios sabores del mismo modelo se
