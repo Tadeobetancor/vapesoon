@@ -4588,22 +4588,24 @@ function updateCarouselArrows(carouselEl, prevBtn, nextBtn){
 const filterPuffsBtn = document.getElementById('filterPuffsBtn');
 const filterPriceBtn = document.getElementById('filterPriceBtn');
 
-/* Scrolls the PAGE (vertically) so the Deslizar/Grilla toggle sits right
-   under the sticky header — used after sorting so the customer always lands
-   on the top of the freshly-sorted list. This used to be done by calling
-   .scrollIntoView({block:'nearest'}) on the new first card instead, which
-   also scrolls the document (not just the horizontal carousel) since
-   scrollIntoView walks every scrollable ancestor — and "nearest" picks
-   whichever direction needs the least movement, which from the very top of
-   the page often lands with the card barely peeking in at the bottom edge,
-   leaving the toggle scrolled off above the viewport. Landing on a fixed
-   anchor (the toggle) instead of the card is deterministic regardless of
-   where the page happened to be scrolled beforehand. */
+/* Scrolls the PAGE (vertically) so the Deslizar/Grilla toggle sits just under
+   the sticky header, with a bit of breathing room (26px) rather than flush
+   against it. Used after sorting AND after switching Deslizar/Grilla, so the
+   customer always lands on the top of the catalog regardless of which of
+   those controls they tapped or where the page happened to be scrolled
+   beforehand. Sorting used to do this by calling .scrollIntoView({block:
+   'nearest'}) on the new first card instead, which also scrolls the document
+   (not just the horizontal carousel) since scrollIntoView walks every
+   scrollable ancestor — and "nearest" picks whichever direction needs the
+   least movement, which from the very top of the page often left the card
+   barely peeking in at the bottom edge with the toggle scrolled off above the
+   viewport. Landing on a fixed anchor (the toggle) instead of the card is
+   deterministic no matter the mode or starting scroll position. */
 function scrollCatalogControlsIntoView(){
   const anchor = document.querySelector('.catalog-view-row');
   if(!anchor) return;
   const headerH = siteHeader ? siteHeader.getBoundingClientRect().height : 0;
-  const y = anchor.getBoundingClientRect().top + window.scrollY - headerH - 10;
+  const y = anchor.getBoundingClientRect().top + window.scrollY - headerH - 26;
   window.scrollTo({top: Math.max(0, y), behavior:'smooth'});
 }
 /* Horizontally centers a card WITHIN the carousel only (element.scrollTo
@@ -4702,12 +4704,14 @@ btnCarousel.addEventListener('click', ()=>{
   currentView='carousel';
   catalogSection.classList.remove('grid-mode');
   btnCarousel.classList.add('active'); btnGrid.classList.remove('active');
+  scrollCatalogControlsIntoView();
   requestAnimationFrame(()=> updateCarouselArrows(productCarousel, arrowPrevBtn, arrowNextBtn));
 });
 btnGrid.addEventListener('click', ()=>{
   currentView='grid';
   catalogSection.classList.add('grid-mode');
   btnGrid.classList.add('active'); btnCarousel.classList.remove('active');
+  scrollCatalogControlsIntoView();
 });
 
 /* ================= ARROWS ================= */
