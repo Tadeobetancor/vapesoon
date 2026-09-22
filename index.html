@@ -2459,6 +2459,10 @@ footer.site{
   gap:12px;
 }
 @media(min-width:900px){.wholesale-fab-stack{right:32px;bottom:32px;}}
+/* Bigger than the site-wide .fab default (52px) — the cart button in
+   particular read as noticeably smaller than the WhatsApp one next to it. */
+.wholesale-fab-stack .fab{width:58px;height:58px;}
+.wholesale-fab-stack .fab svg{width:26px;height:26px;}
 .wholesale-fab-wpp{
   background:
     radial-gradient(circle at 30% 25%, rgba(150,255,190,.5), transparent 60%),
@@ -2971,7 +2975,10 @@ footer.site{
 .wholesale-product-box-price{font-family:'Poppins',sans-serif;font-weight:800;font-size:14.5px;color:var(--gold);}
 .wholesale-flavor-hint{position:relative;z-index:1;display:block;font-size:12px;color:var(--ink-dim);margin:0 0 12px;}
 .wholesale-flavor-list{position:relative;z-index:1;max-height:44vh;overflow-y:auto;padding-right:2px;display:flex;flex-direction:column;gap:8px;}
-.wholesale-flavor-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;background:var(--bg-card);border:1px solid var(--line);border-radius:13px;transition:border-color .2s, background .2s;}
+/* flex-wrap so the inline "Agregar" button (.wholesale-flavor-row-actions)
+   can drop onto its own full-width line within the row once selected,
+   instead of squeezing into the row alongside the name and stepper. */
+.wholesale-flavor-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;background:var(--bg-card);border:1px solid var(--line);border-radius:13px;transition:border-color .2s, background .2s;}
 .wholesale-flavor-row.selected{border-color:rgba(255,200,87,.5);background:rgba(255,200,87,.07);}
 .wholesale-flavor-row-name{font-size:13px;font-weight:700;color:var(--white-glove);}
 
@@ -2981,11 +2988,38 @@ footer.site{
 .wholesale-qty button:disabled{opacity:.3;pointer-events:none;}
 .wholesale-qty-val{width:32px;text-align:center;font-size:12.5px;font-weight:700;color:var(--white-glove);font-family:'Poppins',sans-serif;}
 
-.wholesale-flavor-add{position:relative;z-index:1;width:100%;margin-top:14px;padding:13px;border-radius:14px;border:1.5px solid var(--wholesale-grad-border);background:var(--wholesale-grad);color:var(--void);font-weight:700;font-size:13.5px;font-family:'Poppins',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s, color .2s, transform .15s;}
+/* Per-flavor "Agregar" — appears the moment that row's quantity goes above 0
+   (same idea as the retail flavor picker's inline "Sumar al carrito"), so
+   each flavor gets added the instant the customer wants it instead of
+   waiting behind one shared bottom button covering every selected flavor. */
+.wholesale-flavor-row-actions{display:none;flex:1 0 100%;}
+.wholesale-flavor-row.selected .wholesale-flavor-row-actions{display:flex;}
+.wholesale-flavor-row-add{
+  width:100%;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:10px 12px;
+  border:none;
+  border-radius:11px;
+  font-family:'Poppins',sans-serif;
+  font-size:12.5px;font-weight:700;
+  color:var(--void);
+  background:var(--wholesale-grad);
+  transition:transform .15s, filter .2s;
+}
+.wholesale-flavor-row-add svg{width:15px;height:15px;flex:none;}
+.wholesale-flavor-row-add:hover{filter:brightness(1.06);}
+.wholesale-flavor-row-add:active{transform:scale(.97);}
+.wholesale-flavor-row-add.just-added{background:linear-gradient(120deg, var(--green-thc), var(--green-thc-dim));}
+
+/* Bottom bar: no longer an "add" action (that moved to each row above) — now
+   a permanent link into the cart that doubles as a visual gauge for the USD
+   200 minimum (see updateWholesaleFlavorFooter). Below the minimum its own
+   background is set inline (in JS) to a two-stop gradient that fills in like
+   a progress bar as the cart total climbs; once the minimum is reached it
+   settles back to this plain gold gradient and just states the running total. */
+.wholesale-flavor-add{position:relative;z-index:1;width:100%;margin-top:14px;padding:13px;border-radius:14px;border:1.5px solid var(--wholesale-grad-border);background:var(--wholesale-grad);color:var(--void);font-weight:700;font-size:13.5px;font-family:'Poppins',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .3s, color .2s, transform .15s;}
 .wholesale-flavor-add svg{width:16px;height:16px;flex:none;}
 .wholesale-flavor-add:active{transform:scale(.98);}
-.wholesale-flavor-add:disabled,.wholesale-flavor-add.disabled{background:rgba(255,255,255,.06);border-color:var(--line);color:var(--ink-dim);pointer-events:none;cursor:not-allowed;}
-.wholesale-flavor-add.just-added{background:linear-gradient(120deg, var(--green-thc), var(--green-thc-dim));border-color:rgba(62,207,110,.6);}
 
 
 .wholesale-step{position:relative;z-index:1;}
@@ -3007,8 +3041,12 @@ footer.site{
 .wholesale-totals-value{font-family:'Poppins',sans-serif;font-weight:700;font-size:19px;color:#fff;}
 .wholesale-totals-divider{border-top:1px solid var(--line);margin:8px 0;}
 
-.wholesale-checkout-btn{width:100%;margin-top:14px;padding:14px;border-radius:14px;border:1.5px solid var(--wholesale-grad-border);background:var(--wholesale-grad);color:var(--void);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;gap:9px;font-family:'Poppins',sans-serif;text-align:center;transition:background .2s, color .2s;}
-.wholesale-checkout-btn svg{width:17px;height:17px;flex:none;}
+/* Green, not the wholesale gold/orange — this one's action is specifically
+   "send via WhatsApp," same reasoning as the retail cart's #cartCheckoutBtn. */
+.wholesale-checkout-btn{width:100%;margin-top:14px;padding:14px;border-radius:14px;border:1.5px solid rgba(31,184,92,.55);background:linear-gradient(120deg, #1fb85c, #17a34d 55%, #0f8a3e);color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;gap:9px;font-family:'Poppins',sans-serif;text-align:center;transition:background .2s, color .2s;}
+/* The WhatsApp glyph is inlined with fill="#25D366" (fine against gold/navy),
+   which vanished against this green background — paint it white here. */
+.wholesale-checkout-btn svg{width:17px;height:17px;flex:none;fill:#fff;}
 .wholesale-checkout-btn.disabled{background:rgba(255,255,255,.06);border-color:var(--line);color:var(--ink-dim);pointer-events:none;cursor:not-allowed;}
 .wholesale-checkout-btn.disabled svg{display:none;}
 .wholesale-cart-empty{text-align:center;padding:36px 10px;color:var(--ink-dim);font-size:13px;line-height:1.6;}
@@ -3811,11 +3849,14 @@ footer.site{
           <div class="wholesale-product-box-price" id="wholesaleFlavorModelPrice"></div>
         </div>
       </div>
-      <p class="wholesale-flavor-hint">Elegí cantidad por sabor y agregalos todos juntos</p>
+      <p class="wholesale-flavor-hint">Elegí cantidad por sabor y agregalos uno por uno</p>
       <div class="wholesale-flavor-list" id="wholesaleFlavorList"></div>
-      <button class="wholesale-flavor-add" id="wholesaleFlavorAddBtn" type="button" disabled>
+      <!-- Ya no es un botón "agregar": es un acceso permanente al carrito que
+           además funciona de medidor visual del pedido mínimo (ver
+           updateWholesaleFlavorFooter) — siempre clickeable. -->
+      <button class="wholesale-flavor-add" id="wholesaleFlavorAddBtn" type="button" aria-label="Ver carrito mayorista">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1.4"/><circle cx="18" cy="21" r="1.4"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span id="wholesaleFlavorAddText">Elegí al menos un sabor</span>
+        <span id="wholesaleFlavorAddText">Ver carrito</span>
       </button>
     </div>
 
@@ -3857,7 +3898,7 @@ footer.site{
     </div>
   </div>
 
-  <div class="wholesale-fab-stack">
+  <div class="wholesale-fab-stack" id="wholesaleFabStack">
   <button class="fab wholesale-cart-fab" id="wholesaleCartFab" type="button" aria-label="Ver carrito mayorista">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1.4"/><circle cx="18" cy="21" r="1.4"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <span class="cart-badge" id="wholesaleCartFabBadge">0</span>
@@ -5763,7 +5804,7 @@ const WHOLESALE_CATALOG = [
   {name:'ELFBAR GH 23000', price:wholesalePrice(9.5), puffs:23000, photo:'elfbar_gh_23000', flavors:[{name:'Blueberry Pear 🫐', stock:20},{name:'Grape Ice 🍇❄️', stock:20},{name:'Kiwi Dragon Fruit 🥝🐉', stock:20},{name:'Miami Mint ❄️', stock:20},{name:'Strawberry Ice 🍓❄️', stock:20}]},
   {name:'ELFBAR DISP TE30K', price:wholesalePrice(9.75), puffs:30000, photo:'elfbar_disp_te30k', flavors:[{name:'Blueberry Ice 🫐❄️', stock:20},{name:'Bubbaloo Tutti 🍭', stock:20},{name:'Cherry Strazz 🍒', stock:20},{name:'Dragon Strawna 🐉', stock:20},{name:'Green Apple Ice 🍏❄️', stock:20},{name:'Peach Mango Water 🥭🍑', stock:20},{name:'Pineapple Ice 🍍🍏', stock:20},{name:'Pineapple Mango 🥭🍍', stock:20},{name:'Strawberry Watermelon Ice 🍓🍉', stock:20},{name:'Strawmelon Peach 🍑🍈', stock:20}]},
 ];
-const WHOLESALE_MIN_USD = 200; // pedido mínimo mayorista: USD 200 en total, no una cantidad fija de unidades
+const WHOLESALE_MIN_USD = 300; // pedido mínimo mayorista: USD 300 en total, no una cantidad fija de unidades
 const WHOLESALE_WHATSAPP_NUMBER = '5491151244554'; // Fran — socio encargado de mayorista
 
 let wholesaleCart = []; // {model, flavor, qty, price}
@@ -5782,6 +5823,7 @@ const wholesaleCartStep = document.getElementById('wholesaleCartStep');
 const wholesaleCartSheet = document.getElementById('wholesaleCartSheet');
 const wholesaleGrid = document.getElementById('wholesaleGrid');
 const wholesaleSearchInput = document.getElementById('wholesaleSearchInput');
+const wholesaleFabStackEl = document.getElementById('wholesaleFabStack');
 const wholesaleCartFab = document.getElementById('wholesaleCartFab');
 const wholesaleCartFabBadge = document.getElementById('wholesaleCartFabBadge');
 const wholesaleCartList = document.getElementById('wholesaleCartList');
@@ -6063,11 +6105,17 @@ function renderWholesaleFlavorList(){
         <span class="wholesale-qty-val wf-qty-val">${qty}</span>
         <button type="button" class="wf-qty-plus" aria-label="Sumar" ${qty >= f.stock ? 'disabled' : ''}>+</button>
       </div>
+      <div class="wholesale-flavor-row-actions">
+        <button type="button" class="wholesale-flavor-row-add">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1.4"/><circle cx="18" cy="21" r="1.4"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Agregar</span>
+        </button>
+      </div>
     </div>`;
   }).join('');
 
   wireWholesaleFlavorRows();
-  updateWholesaleFlavorAddState();
+  updateWholesaleFlavorFooter();
 }
 
 function wireWholesaleFlavorRows(){
@@ -6080,6 +6128,7 @@ function wireWholesaleFlavorRows(){
     const valEl = row.querySelector('.wf-qty-val');
     const minusBtn = row.querySelector('.wf-qty-minus');
     const plusBtn = row.querySelector('.wf-qty-plus');
+    const addBtn = row.querySelector('.wholesale-flavor-row-add');
 
     minusBtn.addEventListener('click', ()=>{
       const q = Math.max(0, (wholesaleFlavorQtyState[key] || 0) - 1);
@@ -6088,7 +6137,6 @@ function wireWholesaleFlavorRows(){
       minusBtn.disabled = q <= 0;
       plusBtn.disabled = q >= f.stock;
       row.classList.toggle('selected', q > 0);
-      updateWholesaleFlavorAddState();
     });
     plusBtn.addEventListener('click', ()=>{
       const q = Math.min(f.stock, (wholesaleFlavorQtyState[key] || 0) + 1);
@@ -6097,38 +6145,48 @@ function wireWholesaleFlavorRows(){
       plusBtn.disabled = q >= f.stock;
       minusBtn.disabled = q <= 0;
       row.classList.toggle('selected', q > 0);
-      updateWholesaleFlavorAddState();
+    });
+    // Agrega SOLO este sabor (con la cantidad ya elegida en el stepper) apenas
+    // se toca — como el "Sumar al carrito" del catálogo minorista — en vez de
+    // esperar a un botón compartido abajo que junte todos los sabores tocados.
+    addBtn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const qty = wholesaleFlavorQtyState[key] || 0;
+      if(qty <= 0) return;
+      addToWholesaleCart(m, f, qty);
+      wholesaleFlavorQtyState[key] = 0;
+      updateWholesaleCartFab();
+      updateWholesaleCheckoutState();
+      flashAddedState(addBtn, '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>¡Agregado!</span>');
+      // Deja ver el flash de "¡Agregado!" antes de re-renderizar la fila
+      // (que la vuelve a dejar en 0 y esconde este mismo botón de nuevo).
+      setTimeout(renderWholesaleFlavorList, 1300);
     });
   });
 }
 
-/* Habilita el botón único "Agregar" apenas hay al menos un sabor con
-   cantidad > 0 (se llama después de cada click en +/-, así el texto y el
-   estado habilitado se actualizan en el momento). */
-function updateWholesaleFlavorAddState(){
-  const m = wholesaleActiveModel;
-  if(!m) return;
-  const hasSelection = m.flavors.some(f => (wholesaleFlavorQtyState[wholesaleFlavorKey(m.name, f.name)] || 0) > 0);
-  wholesaleFlavorAddBtn.disabled = !hasSelection;
-  wholesaleFlavorAddBtn.classList.toggle('disabled', !hasSelection);
-  wholesaleFlavorAddText.textContent = hasSelection ? 'Agregar al carrito' : 'Elegí al menos un sabor';
+/* Botón de abajo del todo en la pantalla de sabores: ya no agrega nada — es
+   un acceso permanente al carrito que además funciona de medidor visual del
+   pedido mínimo (ver WHOLESALE_MIN_USD). Por debajo del mínimo, su propio fondo se
+   reemplaza (inline, acá) por un degradé de dos tramos que lo va llenando
+   como una barra de progreso a medida que el carrito crece, y el texto dice
+   cuánto falta. Al llegar al mínimo, vuelve al degradé dorado de siempre y
+   el texto pasa a mostrar el total acumulado. Se llama después de cada
+   agregado y en updateWholesaleCartFab (cubre el caso de sacar algo del
+   carrito y volver a esta pantalla). */
+function updateWholesaleFlavorFooter(){
+  const totalUsd = wholesaleCartTotalUsd();
+  const missingUsd = WHOLESALE_MIN_USD - totalUsd;
+  if(missingUsd > 0){
+    const pct = Math.max(4, Math.min(100, (totalUsd / WHOLESALE_MIN_USD) * 100));
+    wholesaleFlavorAddBtn.style.background = `linear-gradient(90deg, var(--gold) ${pct}%, rgba(255,255,255,.06) ${pct}%)`;
+    wholesaleFlavorAddText.textContent = `Sumá ${formatWholesaleAmount(missingUsd)} más para el pedido mínimo`;
+  } else {
+    wholesaleFlavorAddBtn.style.background = '';
+    wholesaleFlavorAddText.textContent = `Ver carrito · ${formatWholesaleAmount(totalUsd)}`;
+  }
 }
-
-wholesaleFlavorAddBtn.addEventListener('click', ()=>{
-  const m = wholesaleActiveModel;
-  if(!m) return;
-  const selected = m.flavors.filter(f => (wholesaleFlavorQtyState[wholesaleFlavorKey(m.name, f.name)] || 0) > 0);
-  if(selected.length === 0) return;
-  selected.forEach(f=>{
-    const key = wholesaleFlavorKey(m.name, f.name);
-    addToWholesaleCart(m, f, wholesaleFlavorQtyState[key]);
-    wholesaleFlavorQtyState[key] = 0;
-  });
-  updateWholesaleCartFab();
-  updateWholesaleCheckoutState();
-  renderWholesaleFlavorList();
-  flashAddedState(wholesaleFlavorAddBtn, '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>¡Agregado!</span>');
-});
+wholesaleFlavorAddBtn.addEventListener('click', openWholesaleCart);
 
 function backToWholesaleCatalog(){
   wholesaleFlavorStep.classList.add('hidden');
@@ -6152,13 +6210,22 @@ function wholesaleCartCount(){ return wholesaleCart.reduce((s,i)=> s + i.qty, 0)
 /* Botón flotante de carrito: oculto hasta que se agrega el primer producto,
    y también oculto mientras el carrito (ahora su propio overlay, ver
    wholesaleCartStep) está abierto — no tiene sentido "ver carrito"
-   estando ya en él, y de todos modos el overlay lo tapa. */
+   estando ya en él, y de todos modos el overlay lo tapa. En la pantalla de
+   sabores (wholesaleFlavorStep) se esconden AMBOS flotantes (este y el de
+   WhatsApp, agrupados en el mismo .wholesale-fab-stack) para que la lista de
+   sabores tenga toda la pantalla libre — ese botón ya tiene su propio acceso
+   al carrito abajo de todo (ver updateWholesaleFlavorFooter). Se llama en
+   cada transición de paso, así que también es el lugar central para
+   mantener sincronizado ese medidor del pedido mínimo. */
 function updateWholesaleCartFab(){
   const count = wholesaleCartCount();
   const onCartStep = wholesaleCartStep.classList.contains('open');
-  wholesaleCartFab.classList.toggle('visible', count > 0 && !onCartStep);
+  const onFlavorStep = !wholesaleFlavorStep.classList.contains('hidden');
+  wholesaleFabStackEl.classList.toggle('hidden', onFlavorStep);
+  wholesaleCartFab.classList.toggle('visible', count > 0 && !onCartStep && !onFlavorStep);
   wholesaleCartFabBadge.textContent = count;
   wholesaleCartFabBadge.classList.toggle('show', count > 0);
+  updateWholesaleFlavorFooter();
 }
 
 function renderWholesaleCart(){
