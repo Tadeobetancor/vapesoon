@@ -4013,33 +4013,34 @@ const PROMO_ACCENT = {main:'#7db2ff', fade:'rgba(125,178,255,.30)', shadow:'rgba
 
 const CATALOG = [
   {name:'ELFBAR ICE KING', price:25000, puffs:40000, photo:'ice_king', flavors:[
-    {name:'Sour Apple Ice 🍏', stock:1},{name:'Sour Strawberry Dragon Fruit 🍓🐉', stock:1},{name:'Watermelon Ice 🍉', stock:1},
-    {name:'Mango Magic 🥭', stock:1},{name:'Bubbaloo Tutti Frutti 🍬🍓', stock:1}
+    {name:'Watermelon Ice 🍉', stock:1},{name:'Sour Strawberry Dragon Fruit 🍓🐉', stock:1},
+    {name:'Bubbaloo Tutti Frutti 🍬🍓', stock:1},{name:'Mango Magic 🥭', stock:1}
   ]},
   {name:'ELFBAR SWEET KING', price:26500, puffs:40000, photo:'sweet_king', outOfStock:true, flavors:[]},
   {name:'ELFBAR DUKE', price:25000, puffs:35000, photo:'duke', flavors:[
-    {name:'Blue Razz Ice 🫐', stock:2},{name:'Watermelon Lemon Ice 🍉🍋', stock:1}
+    {name:'Watermelon Lemon Ice 🍉🍋', stock:1}
   ]},
   {name:'ELFBAR BC', price:20000, puffs:15000, photo:'bc', flavors:[
     {name:'Miami Mint 🌴', stock:1},{name:'Watermelon Ice 🍉', stock:1}
   ]},
-  {name:'EBCREATE BC PRO', price:25000, puffs:40000, photo:'ebcreate', outOfStock:true, flavors:[]},
+  {name:'EBCREATE BC PRO', price:25000, puffs:40000, photo:'ebcreate', flavors:[
+    {name:'Black Mint 🌿', stock:1}
+  ]},
   {name:'IGNITE V500', price:29000, originalPrice:32000, promo:true, puffs:50000, photo:'v500', flavors:[
-    {name:'Mango Passionfruit 🥭', stock:2},{name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:1},{name:'Strawberry Kiwi 🍓🥝', stock:1}
+    {name:'Watermelon Kiwi 🍉🥝', stock:1},{name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:1}
   ]},
   /* Precio de oferta según cotización Italia Shop (S12019, sabores "IGNITE
      VMIX 40K NEW" que coinciden con los de este modelo): USD 12 × 1660 =
      $19.920 + $13.000 de ganancia = $32.920 → $33.000 de lista, menos $3.000
      de descuento = $30.000 de oferta. */
   {name:'IGNITE BOOST MIX', price:30000, originalPrice:33000, promo:true, puffs:40000, photo:'ignite_boost_mix', flavors:[
-    {name:'Banana Cherry + Grape Ice 🍌🍒🍇', stock:1},{name:'Mango Ice + Passion Fruit Guava 🥭🍑', stock:1},
-    {name:'Grape Ice + Strawberry 🍇🍓', stock:1},{name:'Raspberry Ice + Watermelon Ice 🍓🍉', stock:1},
-    {name:'Blueberry + Strawberry 🫐🍓', stock:1}
+    {name:'Raspberry Ice + Watermelon Ice 🍓🍉', stock:1},{name:'Cherry + Grape 🍒🍇', stock:1}
   ]},
-  {name:'IGNITE V400 ICE', price:28000, puffs:40000, photo:'v400', outOfStock:true, flavors:[]},
+  {name:'IGNITE V400 ICE', price:28000, puffs:40000, photo:'v400', flavors:[
+    {name:'Grape 🍇', stock:1},{name:'Strawberry Watermelon 🍓🍉', stock:1}
+  ]},
   {name:'IGNITE V300 ULTRA SLIM', price:24000, puffs:30000, photo:'v300', flavors:[
-    {name:'Banana Coconut Water 🍌🥥', stock:1},{name:'Strawberry Kiwi 🍓🥝', stock:1},
-    {name:'Watermelon Ice 🍉', stock:1},{name:'Watermelon Mix 🍉', stock:1}
+    {name:'Pineapple Ice 🍍', stock:1},{name:'Peach Mango 🍑🥭', stock:1},{name:'Banana Ice 🍌❄️', stock:1}
   ]},
   {name:'IGNITE V250', price:22000, puffs:25000, photo:'v250', photoScale:1.18, flavors:[
     {name:'Menthol ❄️', stock:1}
@@ -4047,11 +4048,10 @@ const CATALOG = [
   /* Precio según cotización Italia Shop (S12019): USD 12,50 × 1660 = $20.750
      + $10.000 de margen = $30.750 → redondeado a $31.000. */
   {name:'BLACKSHEEP 55K', price:31000, puffs:55000, photo:'blacksheep_55k', flavors:[
-    {name:'Miami Mint 🌴', stock:1},{name:'Cool Mint 🌿❄️', stock:1},
-    {name:'Strawberry Banana 🍓🍌', stock:1},{name:'Watermelon Ice 🍉', stock:1}
+    {name:'Blueberry Watermelon 🫐🍉', stock:1},{name:'Strawberry Ice 🍓', stock:1}
   ]},
   {name:'BLACKSHEEP 40K', price:29000, puffs:40000, photo:'blacksheep', flavors:[
-    {name:'Grape + Grape Mango 🍇🥭', stock:1},{name:'Strawberry Kiwi + Fresh Mint 🍓🥝🌿', stock:1},
+    {name:'Passion Fruit + Watermelon Strawberry 🥭🍉🍓', stock:1},{name:'Grape + Menthol 🍇❄️', stock:1},
     {name:'Blueberry Bubble + Sour Green Apple 🫐🍬🍏', stock:1}
   ]},
   {name:'BLACKSHEEP ICE 40K', price:29000, puffs:40000, photo:'blacksheep_ice', flavors:[
@@ -4060,10 +4060,12 @@ const CATALOG = [
   {name:'NIKBAR 10K', price:19000, puffs:10000, photo:'nikbar10', photoScale:1.18, flavors:[
     {name:'Watermelon Bubble Gum 🍉🍬', stock:1}
   ]},
-  {name:'IGNITE V150', price:20000, puffs:15000, photo:'v150', outOfStock:true, flavors:[]},
+  {name:'IGNITE V150', price:20000, puffs:15000, photo:'v150', flavors:[
+    {name:'Pineapple Ice 🍍', stock:1}
+  ]},
   {name:'BLVK JUST JUICE', price:26500, puffs:45000, photo:'blvk', flavors:[
-    {name:'Strawberry Mango 🍓🥭', stock:2},{name:'Strawberry Ice 🍓', stock:2},{name:'Strawberry Kiwi 🍓🥝', stock:1},
-    {name:'Strawberry Watermelon 🍓🍉', stock:1},{name:'Watermelon Ice 🍉', stock:1}
+    {name:'Strawberry Watermelon 🍓🍉', stock:1},{name:'Strawberry Kiwi 🍓🥝', stock:1},
+    {name:'Watermelon Ice 🍉', stock:1},{name:'Menthol ❄️', stock:1}
   ]},
   {name:'ELFBAR TRIO', price:27000, puffs:40000, photo:'trio', flavors:[
     {name:'Blueberry Pom Slushy 🫐', stock:1}
@@ -4071,11 +4073,11 @@ const CATALOG = [
   /* Precio según cotización Italia Shop (S12012): USD 7 × 1660 = $11.620
      + $10.000 de margen = $21.620 → redondeado a $22.000. */
   {name:'LOST MARY MT20000', price:22000, puffs:20000, photo:'lost_mary_mt20000', flavors:[
-    {name:'Miami Mint ❄️', stock:1},{name:'Strawmelon Peach 🍑🍈', stock:1}
+    {name:'Miami Mint ❄️', stock:1},{name:'Hawaiian Juice ❄️', stock:1},{name:'Strawmelon Peach 🍑🍈', stock:1}
   ]},
   {name:'NIKBAR 30K', price:22500, puffs:30000, photo:'nikbar30', outOfStock:true, flavors:[]},
   {name:'IGNITE VMIX', price:27000, originalPrice:32000, promo:true, puffs:40000, photo:'vmix', flavors:[
-    {name:'Strawberry Watermelon Ice + Aloe Grape 🍓🍉🌿🍇', stock:1},{name:'Orange Ice + Strawberry Ice 🍊🍓', stock:1}
+    {name:'Strawberry Watermelon Ice + Aloe Grape 🍓🍉🌿🍇', stock:1}
   ]},
   {name:'HOOKALIT', price:24000, puffs:40000, photo:'hookalit', outOfStock:true, flavors:[]},
   {name:'AirPods', price:25000, photo:'airpods', category:'apple', variantWord:'modelo', variantWordPlural:'modelos',
@@ -5257,12 +5259,14 @@ const THC_PRODUCTS = [
   {
     key:'phenom',
     name:'Phenom',
-    outOfStock:true, // sin stock: no se muestra ni en el catálogo ni en el modal THC (sacar esta línea al reponer)
     price:65000,
     photo:'phenom',
-    grams:'6g (6000mg)',
+    // Gramaje corregido: dos listas de stock independientes (Tade y Fran)
+    // coinciden en que es al revés de como estaba (Phenom 8g, Shroomz 6g) —
+    // estaban invertidos entre sí desde el principio.
+    grams:'8g (8000mg)',
     description:'Vaporizador descartable y recargable (USB-C) de la línea Phenom Miami. Blend de extractos pensado para una experiencia relajante y prolongada.',
-    flavors:['24k Gold 🪙', 'Vanilla 🌼', 'Ice Cream Cake 🍦🍪']
+    flavors:['24k Gold 🪙', 'Ice Cream Cake 🍦🍪'] // sin Vanilla por ahora: no figura en el stock de Fran
   },
   {
     key:'shroomz',
@@ -5270,9 +5274,9 @@ const THC_PRODUCTS = [
     price:70000,
     photo:'shroomz',
     photoScale:1.15,
-    grams:'8g (8000mg)',
+    grams:'6g (6000mg)',
     description:'Vaporizador recargable (USB-C) con blend de extracto de hongos, en variedades Indica, Sativa e Híbrida para elegir el efecto que buscás.',
-    flavors:['Skunk OG 🌲 (Sativa)', 'Watermelon 🍉 (Indica)']
+    flavors:['Sour Diesel 🍋🌿 (Hybrid)', 'Skunk OG 🌲 (Sativa)', 'Watermelon 🍉 (Indica)']
   }
 ];
 const THC_ACCENT = {main:'#3ecf6e', fade:'rgba(62,207,110,.28)', shadow:'rgba(62,207,110,.35)'};
