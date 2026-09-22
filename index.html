@@ -500,21 +500,9 @@ main{position:relative;z-index:1;}
   border:0;
 }
 
-/* view toggle */
-.view-toggle-wrap{
-  flex:none;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:5px;
-}
-.view-toggle-label{
-  font-size:10px;
-  font-weight:600;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  color:var(--ink-dim);
-}
+/* view toggle — base look shared by the retail (.catalog-view-row .view-toggle)
+   and wholesale (.wholesale-sheet-topbar .view-toggle) buttons; each context
+   overrides sizing on top of this. */
 .view-toggle{
   flex:none;
   display:flex;
@@ -2756,10 +2744,20 @@ footer.site{
 /* Persistent header row, outside the step containers so it's visible across
    all three steps. The left slot swaps content per step: currency toggle on
    the catalog, a "back" button on the flavor/cart steps (only one of the
-   three is ever un-hidden at a time — see setWholesaleTopbarMode). */
+   three is ever un-hidden at a time — see setWholesaleTopbarMode). The
+   Deslizar/Grilla toggle sits on the right, next to the currency selector —
+   space-between pushes it there automatically since it's the only other
+   direct child. It's only meaningful on the catalog step (there's no product
+   grid to switch on flavor/cart), so setWholesaleTopbarMode hides it there too. */
 .wholesale-sheet-topbar{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px;}
 .wholesale-sheet-topbar-left{display:flex;align-items:center;min-width:0;}
 #wholesaleClose{flex:none;position:relative;}
+/* Compact, icon-only (no text labels, unlike the retail catalog's toggle) —
+   it has to share this row with the currency selector, which leaves little
+   room on narrow phones once both are on screen at once. */
+.wholesale-sheet-topbar .view-toggle{flex:none;padding:3px;}
+.wholesale-sheet-topbar .view-toggle button{width:32px;height:32px;}
+.wholesale-sheet-topbar .view-toggle button svg{width:15px;height:15px;}
 
 /* Sole heading of the cart step — centered and sized up as the screen's
    main title now that the topbar carries no duplicate label. */
@@ -2778,30 +2776,28 @@ footer.site{
    legible while still carrying both flag colors. */
 #wCurrencyUsd.active{background:linear-gradient(135deg, #3C3B6E, #2a2950);border-color:#B22234;color:#fff;}
 
-/* search + list/grid toggle share one compact row so the search bar keeps a
-   small footprint without losing space or prominence — finding a flavor fast
-   stays the priority, only the vertical room it takes shrinks. */
-/* flex-end, not center: the "VISTA" toggle has a label sitting above its
-   buttons while the search bar doesn't, so centering the row left the
-   search input and the toggle buttons visibly off-line — aligning to the
-   bottom edge lines up the two actual controls instead. */
-.wholesale-toolbar{position:relative;z-index:1;margin-top:0;display:flex;align-items:flex-end;gap:8px;}
-.wholesale-search{position:relative;flex:1;min-width:0;}
-.wholesale-search input{width:100%;background:var(--bg-card);border:1px solid var(--line);border-radius:12px;padding:8px 12px 8px 34px;color:var(--white-glove);font-size:13px;font-family:'Poppins',sans-serif;outline:none;transition:border-color .2s;}
+/* The list/grid toggle moved up next to the currency selector (see
+   .wholesale-sheet-topbar), so the search bar now has this whole row to
+   itself — bigger and more prominent than before. */
+.wholesale-toolbar{position:relative;z-index:1;margin-top:0;}
+.wholesale-search{position:relative;}
+.wholesale-search input{width:100%;background:var(--bg-card);border:1px solid var(--line);border-radius:14px;padding:12px 14px 12px 38px;color:var(--white-glove);font-size:14px;font-family:'Poppins',sans-serif;outline:none;transition:border-color .2s;}
 .wholesale-search input:focus{border-color:var(--gold);}
-.wholesale-search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--ink-dim);pointer-events:none;}
-.wholesale-toolbar .view-toggle{flex:none;padding:3px;}
-.wholesale-toolbar .view-toggle button{width:30px;height:30px;}
-.wholesale-toolbar .view-toggle button svg{width:14px;height:14px;}
+.wholesale-search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink-dim);pointer-events:none;}
 /* keeps the wholesale flow orange even though .view-toggle is shared with the
    retail catalog (whose active state is blue) — retail's rule is untouched. */
 .wholesale-sheet .view-toggle button.active{background:var(--wholesale-grad);border:1px solid var(--wholesale-grad-border);color:var(--void);}
 
-/* "Más pedidos" / "Más pitadas" pills — visual only for now, styled like the
-   retail catalog's sort chips but in the wholesale orange accent. */
-.wholesale-filters{position:relative;z-index:1;display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0;}
-.wholesale-filter-chip{display:flex;align-items:center;gap:6px;background:var(--bg-card);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-size:12px;font-weight:600;color:var(--ink-dim);transition:border-color .2s, background .2s, color .2s;}
-.wholesale-filter-chip-icon{font-size:13px;line-height:1;}
+/* "Más caro" / "Más barato" / "Más pitadas" — three equal-width chips, same
+   responsive grid the retail catalog's .catalog-filters uses: always one
+   row, font size and icon visibility scale down on narrow phones instead of
+   wrapping or overflowing. "Más caro" and "Más barato" actually sort the
+   grid now (see wholesaleSortMode); "Más pitadas" stays a visual-only toggle. */
+.wholesale-filters{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:8px;margin:10px 0 0;}
+.wholesale-filter-chip{display:flex;align-items:center;justify-content:center;gap:4px;min-width:0;background:var(--bg-card);border:1px solid var(--line);border-radius:999px;padding:9px 5px;font-size:clamp(10.5px, 3vw, 12px);font-weight:600;color:var(--ink-dim);transition:border-color .2s, background .2s, color .2s;}
+.wholesale-filter-chip-icon{flex:none;font-size:13px;line-height:1;}
+.wholesale-filter-chip-label{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+@media(max-width:350px){.wholesale-filter-chip-icon{display:none;}}
 .wholesale-filter-chip:hover{border-color:var(--orange-pulp);}
 .wholesale-filter-chip.active{background:var(--wholesale-grad);border-color:var(--wholesale-grad-border);color:var(--void);}
 
@@ -3713,6 +3709,14 @@ footer.site{
           <button id="wCurrencyArs" type="button">🇦🇷 ARS</button>
         </div>
       </div>
+      <div class="view-toggle" id="wholesaleViewToggle" role="group" aria-label="Cambiar vista">
+        <button id="wViewCarousel" class="active" aria-label="Vista carrusel: deslizar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="7" height="12" rx="1.5"/><rect x="15" y="6" width="7" height="12" rx="1.5"/><rect x="9.5" y="4" width="5" height="16" rx="1.5" opacity=".4"/></svg>
+        </button>
+        <button id="wViewGrid" aria-label="Vista grilla: cuadrados">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
+        </button>
+      </div>
     </div>
 
     <!-- Vista catálogo: modelos de vape (igual que el catálogo minorista) -->
@@ -3722,25 +3726,17 @@ footer.site{
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg>
           <input id="wholesaleSearchInput" type="text" placeholder="Buscá un modelo o sabor..." autocomplete="off">
         </div>
-        <div class="view-toggle-wrap">
-          <span class="view-toggle-label">Vista</span>
-          <div class="view-toggle" role="group" aria-label="Cambiar vista">
-            <button id="wViewCarousel" class="active" aria-label="Vista carrusel: deslizar">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="7" height="12" rx="1.5"/><rect x="15" y="6" width="7" height="12" rx="1.5"/><rect x="9.5" y="4" width="5" height="16" rx="1.5" opacity=".4"/></svg>
-            </button>
-            <button id="wViewGrid" aria-label="Vista grilla: cuadrados">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
-            </button>
-          </div>
-        </div>
       </div>
 
       <div class="wholesale-filters" role="group" aria-label="Ordenar catálogo mayorista">
         <button class="wholesale-filter-chip" id="wFilterPriceBtn" type="button" aria-pressed="false">
-          <span class="wholesale-filter-chip-icon">💰</span> Más caro
+          <span class="wholesale-filter-chip-icon">💰</span><span class="wholesale-filter-chip-label">Más caro</span>
+        </button>
+        <button class="wholesale-filter-chip" id="wFilterCheapBtn" type="button" aria-pressed="false">
+          <span class="wholesale-filter-chip-icon">🏷️</span><span class="wholesale-filter-chip-label">Más barato</span>
         </button>
         <button class="wholesale-filter-chip" id="wFilterPuffsBtn" type="button" aria-pressed="false">
-          <span class="wholesale-filter-chip-icon">💨</span> Más pitadas
+          <span class="wholesale-filter-chip-icon">💨</span><span class="wholesale-filter-chip-label">Más pitadas</span>
         </button>
       </div>
 
@@ -4040,7 +4036,7 @@ const CATALOG = [
   {name:'IGNITE V400 ICE', price:28000, puffs:40000, photo:'v400', flavors:[
     {name:'Grape 🍇', stock:1},{name:'Strawberry Watermelon 🍓🍉', stock:1}
   ]},
-  {name:'IGNITE V300 ULTRA SLIM', price:24000, puffs:30000, photo:'v300', flavors:[
+  {name:'IGNITE V300 ULTRA SLIM', price:24000, puffs:30000, photo:'wholesale_v300_ultra_slim', flavors:[
     {name:'Banana Coconut Water 🍌🥥', stock:1},{name:'Strawberry Kiwi 🍓🥝', stock:1},
     {name:'Watermelon Ice 🍉', stock:1},{name:'Watermelon Mix 🍉', stock:1},
     {name:'Pineapple Ice 🍍', stock:1},{name:'Peach Mango 🍑🥭', stock:1},{name:'Banana Ice 🍌❄️', stock:1}
@@ -5773,6 +5769,7 @@ const wholesaleFlavorQtyState = {}; // "modelo|sabor" -> cantidad elegida en el 
 const wholesaleOverlay = document.getElementById('wholesaleOverlay');
 const wholesaleSheet = document.getElementById('wholesaleSheet');
 const wholesaleCurrencyToggleEl = document.getElementById('wholesaleCurrencyToggle');
+const wholesaleViewToggleEl = document.getElementById('wholesaleViewToggle');
 const wholesaleCatalogStep = document.getElementById('wholesaleCatalogStep');
 const wholesaleFlavorStep = document.getElementById('wholesaleFlavorStep');
 const wholesaleCartStep = document.getElementById('wholesaleCartStep');
@@ -5813,6 +5810,9 @@ const wholesaleCloseLabel = document.getElementById('wholesaleCloseLabel');
    handler). */
 function setWholesaleTopbarMode(mode){
   wholesaleCurrencyToggleEl.classList.toggle('hidden', mode !== 'catalog');
+  // Same story as the currency toggle: only meaningful on the catalog step,
+  // where the product grid it switches actually lives.
+  wholesaleViewToggleEl.classList.toggle('hidden', mode !== 'catalog');
   wholesaleCloseLabel.textContent = mode === 'flavor' ? 'Volver al catálogo' : 'Volver al menú';
 }
 
@@ -5853,7 +5853,8 @@ function renderWholesaleGrid(){
   let list = query ? WHOLESALE_CATALOG.filter(m =>
     normalize(m.name).includes(query) || m.flavors.some(f => normalize(f.name).includes(query))
   ) : WHOLESALE_CATALOG.slice();
-  if(wholesaleSortMode === 'price') list = list.slice().sort((a,b) => b.price - a.price);
+  if(wholesaleSortMode === 'priceDesc') list = list.slice().sort((a,b) => b.price - a.price);
+  else if(wholesaleSortMode === 'priceAsc') list = list.slice().sort((a,b) => a.price - b.price);
 
   if(list.length === 0){
     wholesaleGrid.innerHTML = '<div class="wholesale-empty-search">No encontramos ese modelo o sabor. Probá con otro nombre ✨</div>';
@@ -5971,21 +5972,26 @@ window.addEventListener('resize', ()=>{
   wholesaleBenefitsResizeTimer = setTimeout(()=> updateCarouselArrows(wholesaleBenefits, wBenefitsPrevBtn, wBenefitsNextBtn), 150);
 });
 
-/* "Más caro" actually sorts the grid by price now (see wholesaleSortMode +
-   renderWholesaleGrid). "Más pitadas" stays a purely visual toggle for now —
-   no puffs-sort logic backing it yet — but the two chips still behave as a
-   mutually exclusive pair, same look they already had. */
+/* "Más caro" and "Más barato" actually sort the grid by price now (see
+   wholesaleSortMode + renderWholesaleGrid) — 'priceDesc' / 'priceAsc'.
+   "Más pitadas" stays a purely visual toggle for now — no puffs-sort logic
+   backing it yet — but all three chips behave as a mutually exclusive group,
+   same look they already had as a pair. */
 const wFilterPriceBtn = document.getElementById('wFilterPriceBtn');
+const wFilterCheapBtn = document.getElementById('wFilterCheapBtn');
 const wFilterPuffsBtn = document.getElementById('wFilterPuffsBtn');
 function setWholesaleSortMode(mode){
   wholesaleSortMode = (wholesaleSortMode === mode) ? null : mode;
-  wFilterPriceBtn.classList.toggle('active', wholesaleSortMode === 'price');
-  wFilterPriceBtn.setAttribute('aria-pressed', wholesaleSortMode === 'price');
+  wFilterPriceBtn.classList.toggle('active', wholesaleSortMode === 'priceDesc');
+  wFilterPriceBtn.setAttribute('aria-pressed', wholesaleSortMode === 'priceDesc');
+  wFilterCheapBtn.classList.toggle('active', wholesaleSortMode === 'priceAsc');
+  wFilterCheapBtn.setAttribute('aria-pressed', wholesaleSortMode === 'priceAsc');
   wFilterPuffsBtn.classList.remove('active');
   wFilterPuffsBtn.setAttribute('aria-pressed', 'false');
   renderWholesaleGrid();
 }
-wFilterPriceBtn.addEventListener('click', ()=> setWholesaleSortMode('price'));
+wFilterPriceBtn.addEventListener('click', ()=> setWholesaleSortMode('priceDesc'));
+wFilterCheapBtn.addEventListener('click', ()=> setWholesaleSortMode('priceAsc'));
 wFilterPuffsBtn.addEventListener('click', ()=>{
   const activating = !wFilterPuffsBtn.classList.contains('active');
   wFilterPuffsBtn.classList.toggle('active', activating);
@@ -5994,6 +6000,8 @@ wFilterPuffsBtn.addEventListener('click', ()=>{
     wholesaleSortMode = null;
     wFilterPriceBtn.classList.remove('active');
     wFilterPriceBtn.setAttribute('aria-pressed', 'false');
+    wFilterCheapBtn.classList.remove('active');
+    wFilterCheapBtn.setAttribute('aria-pressed', 'false');
     renderWholesaleGrid();
   }
 });
