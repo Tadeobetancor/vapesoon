@@ -786,7 +786,7 @@ main{position:relative;z-index:1;}
 }
 .p-card--oos .p-cta{color:var(--red-cap);}
 
-/* Promo cards (IGNITE V500, IGNITE VMIX): the WHOLE card gets its own, richer
+/* Promo cards (IGNITE V500, IGNITE BOOST MIX, BLVK JUST JUICE): the WHOLE card gets its own, richer
    shade of blue (cobalt instead of the regular navy) with a light-blue edge
    and a soft glow, plus a big blurred "OFERTA" written behind the photo — so
    the two offers read as different from the rest in both carousel and grid
@@ -4080,11 +4080,7 @@ const CATALOG = [
     {name:'Mango Passionfruit 🥭', stock:2},{name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:2},
     {name:'Strawberry Kiwi 🍓🥝', stock:1},{name:'Watermelon Kiwi 🍉🥝', stock:1}
   ]},
-  /* Precio de oferta según cotización Italia Shop (S12019, sabores "IGNITE
-     VMIX 40K NEW" que coinciden con los de este modelo): USD 12 × 1660 =
-     $19.920 + $13.000 de ganancia = $32.920 → $33.000 de lista, menos $3.000
-     de descuento = $30.000 de oferta. */
-  {name:'IGNITE BOOST MIX', price:30000, originalPrice:33000, promo:true, puffs:40000, photo:'ignite_boost_mix', flavors:[
+  {name:'IGNITE BOOST MIX', price:28000, originalPrice:30000, promo:true, puffs:40000, photo:'ignite_boost_mix', flavors:[
     {name:'Banana Cherry + Grape Ice 🍌🍒🍇', stock:1},{name:'Mango Ice + Passion Fruit Guava 🥭🍑', stock:1},
     {name:'Grape Ice + Strawberry 🍇🍓', stock:1},{name:'Raspberry Ice + Watermelon Ice 🍓🍉', stock:2},
     {name:'Blueberry + Strawberry 🫐🍓', stock:1},{name:'Cherry + Grape 🍒🍇', stock:1}
@@ -4121,7 +4117,7 @@ const CATALOG = [
   {name:'IGNITE V150', price:20000, puffs:15000, photo:'v150', flavors:[
     {name:'Pineapple Ice 🍍', stock:1}
   ]},
-  {name:'BLVK JUST JUICE', price:26500, puffs:45000, photo:'blvk', flavors:[
+  {name:'BLVK JUST JUICE', price:25000, originalPrice:26500, promo:true, puffs:45000, photo:'blvk', flavors:[
     {name:'Strawberry Mango 🍓🥭', stock:2},{name:'Strawberry Ice 🍓', stock:2},{name:'Strawberry Kiwi 🍓🥝', stock:2},
     {name:'Strawberry Watermelon 🍓🍉', stock:2},{name:'Watermelon Ice 🍉', stock:2},{name:'Menthol ❄️', stock:1}
   ]},
@@ -4134,7 +4130,7 @@ const CATALOG = [
     {name:'Miami Mint ❄️', stock:2},{name:'Strawmelon Peach 🍑🍈', stock:2},{name:'Hawaiian Juice ❄️', stock:1}
   ]},
   {name:'NIKBAR 30K', price:22500, puffs:30000, photo:'nikbar30', outOfStock:true, flavors:[]},
-  {name:'IGNITE VMIX', price:27000, originalPrice:32000, promo:true, puffs:40000, photo:'vmix', flavors:[
+  {name:'IGNITE VMIX', price:32000, puffs:40000, photo:'vmix', flavors:[
     {name:'Strawberry Watermelon Ice + Aloe Grape 🍓🍉🌿🍇', stock:2},{name:'Orange Ice + Strawberry Ice 🍊🍓', stock:1}
   ]},
   {name:'HOOKALIT', price:24000, puffs:40000, photo:'hookalit', outOfStock:true, flavors:[]},
@@ -4527,11 +4523,11 @@ function renderProducts(){
   // left out of the catalog entirely instead of trailing behind with a
   // "Sin stock" badge — nothing to buy there, no reason to show the card.
   const vapeIndices = CATALOG.map((p, i) => i).filter(i => CATALOG[i].category !== 'apple');
-  // The two promo vapes (IGNITE V500, IGNITE VMIX — see the `promo` flag in
+  // The promo vapes (IGNITE V500, IGNITE BOOST MIX, BLVK JUST JUICE — see the `promo` flag in
   // CATALOG) always lead the default order, in that order, so they're the
   // first thing seen on landing. An explicit sort ("Más pitadas"/"Más caro")
   // is the customer's own choice, so it isn't overridden.
-  const PROMO_ORDER = ['IGNITE V500', 'IGNITE VMIX', 'IGNITE BOOST MIX'];
+  const PROMO_ORDER = ['BLVK JUST JUICE', 'IGNITE V500', 'IGNITE BOOST MIX'];
   const inStockVapeIndices = vapeIndices.filter(i => !isOutOfStock(CATALOG[i])).sort((a, b) => {
     const pa = CATALOG[a], pb = CATALOG[b];
     if(sortMode === 'puffs') return (pb.puffs||0) - (pa.puffs||0);
