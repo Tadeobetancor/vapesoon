@@ -4063,8 +4063,8 @@ const PROMO_ACCENT = {main:'#7db2ff', fade:'rgba(125,178,255,.30)', shadow:'rgba
 
 const CATALOG = [
   {name:'ELFBAR ICE KING', price:25000, puffs:40000, photo:'ice_king', flagship:true, flavors:[
-    {name:'Sour Strawberry Dragon Fruit 🍓🐉', stock:2},{name:'Watermelon Ice 🍉', stock:2},
-    {name:'Mango Magic 🥭', stock:2},{name:'Bubbaloo Tutti Frutti 🍬🍓', stock:2}
+    {name:'Sour Strawberry Dragon Fruit 🍓🐉', stock:1},{name:'Watermelon Ice 🍉', stock:2},
+    {name:'Mango Magic 🥭', stock:2},{name:'Bubbaloo Tutti Frutti 🍬🍓', stock:1}
   ]},
   {name:'ELFBAR SWEET KING', price:26500, puffs:40000, photo:'sweet_king', outOfStock:true, flavors:[]},
   {name:'ELFBAR DUKE', price:25000, puffs:35000, photo:'duke', flavors:[
@@ -4077,7 +4077,7 @@ const CATALOG = [
     {name:'Black Mint 🌿', stock:1}
   ]},
   {name:'IGNITE V500', price:29000, originalPrice:32000, promo:true, puffs:50000, photo:'v500', flavors:[
-    {name:'Mango Passionfruit 🥭', stock:2},{name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:2},
+    {name:'Mango Passionfruit 🥭', stock:2},{name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:1},
     {name:'Strawberry Kiwi 🍓🥝', stock:1},{name:'Watermelon Kiwi 🍉🥝', stock:1}
   ]},
   {name:'IGNITE BOOST MIX', price:28000, originalPrice:30000, promo:true, puffs:40000, photo:'ignite_boost_mix', flavors:[
@@ -4099,12 +4099,11 @@ const CATALOG = [
   /* Precio según cotización Italia Shop (S12019): USD 12,50 × 1660 = $20.750
      + $10.000 de margen = $30.750 → redondeado a $31.000. */
   {name:'BLACKSHEEP 55K', price:31000, puffs:55000, photo:'blacksheep_55k', flavors:[
-    {name:'Miami Mint 🌴', stock:1},{name:'Cool Mint 🌿❄️', stock:1},
-    {name:'Strawberry Banana 🍓🍌', stock:1},{name:'Watermelon Ice 🍉', stock:1},
-    {name:'Blueberry Watermelon 🫐🍉', stock:1},{name:'Strawberry Ice 🍓', stock:1}
+    {name:'Cool Mint 🌿❄️', stock:1},{name:'Strawberry Banana 🍓🍌', stock:1},
+    {name:'Watermelon Ice 🍉', stock:1}
   ]},
   {name:'BLACKSHEEP 40K', price:29000, puffs:40000, photo:'blacksheep', flavors:[
-    {name:'Grape + Grape Mango 🍇🥭', stock:1},{name:'Strawberry Kiwi + Fresh Mint 🍓🥝🌿', stock:1},
+    {name:'Strawberry Kiwi + Fresh Mint 🍓🥝🌿', stock:1},
     {name:'Blueberry Bubble + Sour Green Apple 🫐🍬🍏', stock:2},
     {name:'Passion Fruit + Watermelon Strawberry 🥭🍉🍓', stock:1},{name:'Grape + Menthol 🍇❄️', stock:1}
   ]},
@@ -4118,8 +4117,8 @@ const CATALOG = [
     {name:'Pineapple Ice 🍍', stock:1}
   ]},
   {name:'BLVK JUST JUICE', price:25000, originalPrice:26500, promo:true, puffs:45000, photo:'blvk', flavors:[
-    {name:'Strawberry Mango 🍓🥭', stock:2},{name:'Strawberry Ice 🍓', stock:2},{name:'Strawberry Kiwi 🍓🥝', stock:2},
-    {name:'Strawberry Watermelon 🍓🍉', stock:2},{name:'Watermelon Ice 🍉', stock:2},{name:'Menthol ❄️', stock:1}
+    {name:'Strawberry Mango 🍓🥭', stock:2},{name:'Strawberry Ice 🍓', stock:1},{name:'Strawberry Kiwi 🍓🥝', stock:1},
+    {name:'Strawberry Watermelon 🍓🍉', stock:1},{name:'Watermelon Ice 🍉', stock:2}
   ]},
   {name:'ELFBAR TRIO', price:27000, puffs:40000, photo:'trio', flavors:[
     {name:'Blueberry Pom Slushy 🫐', stock:1}
@@ -4551,12 +4550,11 @@ function renderProducts(){
     const p = CATALOG[i];
     const giveBadge = sortMode === null && !p.promo && !p.flagship && !popularBadgeGiven;
     if(giveBadge) popularBadgeGiven = true;
-    return { price: p.price || 0, html: productCardHTML(p, i, giveBadge ? 'Más pedido' : null, true) };
-  }).concat(thcOrdered.map(p => ({ price: p.price || 0, html: thcCardHTML(p) })));
-  // THC vapes are the priciest items in the shop, so they take part in the
-  // "Más caro" sort (otherwise they'd sit last under a most-expensive-first
-  // filter). Every other order keeps them after the regular vapes.
-  if(sortMode === 'price') entries.sort((a, b) => b.price - a.price);
+    return { thc: false, price: p.price || 0, html: productCardHTML(p, i, giveBadge ? 'Más pedido' : null, true) };
+  }).concat(thcOrdered.map(p => ({ thc: true, price: p.price || 0, html: thcCardHTML(p) })));
+  // "Más caro" sorts by price, but THC vapes always stay after the regular
+  // vapes (even though they're the priciest) — every order keeps them last.
+  if(sortMode === 'price') entries.sort((a, b) => (a.thc - b.thc) || (b.price - a.price));
   const cardsHTML = entries.map(e => e.html).join('');
   const cardCount = entries.length;
 
@@ -5323,7 +5321,7 @@ const THC_PRODUCTS = [
     photo:'phenom',
     grams:'6g (6000mg)',
     description:'Viene precargado con 6 gramos de un blend premium de THC-A y THC-M, combinados para potenciarse entre sí: un efecto potente, parejo y duradero, con sabor intenso de la primera a la última pitada. Descartable y recargable por USB-C, así lo aprovechás hasta el final. Rinde muchísimo: calidad y duración en un solo equipo.',
-    flavors:['24k Gold 🪙', 'Vanilla 🌼', 'Ice Cream Cake 🍦🍪']
+    flavors:['24k Gold 🪙', 'Ice Cream Cake 🍦🍪']
   },
   {
     key:'shroomz',
