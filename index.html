@@ -792,7 +792,7 @@ main{position:relative;z-index:1;}
 }
 .p-card--oos .p-cta{color:var(--red-cap);}
 
-/* Promo cards (IGNITE V500, IGNITE BOOST MIX, BLVK JUST JUICE): the WHOLE card gets its own, richer
+/* Promo cards (BLVK JUST JUICE, IGNITE V300 ULTRA SLIM, IGNITE BOOST MIX): the WHOLE card gets its own, richer
    shade of blue (cobalt instead of the regular navy) with a light-blue edge
    and a soft glow, plus a big blurred "OFERTA" written behind the photo — so
    the two offers read as different from the rest in both carousel and grid
@@ -4171,7 +4171,7 @@ const CATALOG = [
   {name:'EBCREATE BC PRO', price:25000, puffs:40000, photo:'ebcreate', flavors:[
     {name:'Black Mint 🌿', stock:1}
   ]},
-  {name:'IGNITE V500', price:29000, originalPrice:32000, promo:true, puffs:50000, photo:'v500', flavors:[
+  {name:'IGNITE V500', price:32000, puffs:50000, photo:'v500', flavors:[
     {name:'Mango Passionfruit 🥭', stock:2},{name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:1},
     {name:'Strawberry Kiwi 🍓🥝', stock:1},{name:'Watermelon Kiwi 🍉🥝', stock:1}
   ]},
@@ -4183,7 +4183,7 @@ const CATALOG = [
   {name:'IGNITE V400 ICE', price:28000, puffs:40000, photo:'v400', flavors:[
     {name:'Grape 🍇', stock:1},{name:'Strawberry Watermelon 🍓🍉', stock:1}
   ]},
-  {name:'IGNITE V300 ULTRA SLIM', price:24000, puffs:30000, photo:'wholesale_v300_ultra_slim', flavors:[
+  {name:'IGNITE V300 ULTRA SLIM', price:22000, originalPrice:24000, promo:true, puffs:30000, photo:'wholesale_v300_ultra_slim', flavors:[
     {name:'Banana Coconut Water 🍌🥥', stock:1},{name:'Strawberry Kiwi 🍓🥝', stock:1},
     {name:'Watermelon Ice 🍉', stock:1},{name:'Watermelon Mix 🍉', stock:1},
     {name:'Pineapple Ice 🍍', stock:1},{name:'Peach Mango 🍑🥭', stock:1},{name:'Banana Ice 🍌❄️', stock:1}
@@ -4617,11 +4617,11 @@ function renderProducts(){
   // left out of the catalog entirely instead of trailing behind with a
   // "Sin stock" badge — nothing to buy there, no reason to show the card.
   const vapeIndices = CATALOG.map((p, i) => i).filter(i => CATALOG[i].category !== 'apple');
-  // The promo vapes (IGNITE V500, IGNITE BOOST MIX, BLVK JUST JUICE — see the `promo` flag in
+  // The promo vapes (BLVK JUST JUICE, IGNITE V300 ULTRA SLIM, IGNITE BOOST MIX — see the `promo` flag in
   // CATALOG) always lead the default order, in that order, so they're the
   // first thing seen on landing. An explicit sort ("Más pitadas"/"Más caro")
   // is the customer's own choice, so it isn't overridden.
-  const PROMO_ORDER = ['BLVK JUST JUICE', 'IGNITE V500', 'IGNITE BOOST MIX'];
+  const PROMO_ORDER = ['BLVK JUST JUICE', 'IGNITE V300 ULTRA SLIM', 'IGNITE BOOST MIX'];
   const inStockVapeIndices = vapeIndices.filter(i => !isOutOfStock(CATALOG[i])).sort((a, b) => {
     const pa = CATALOG[a], pb = CATALOG[b];
     if(sortMode === 'puffs') return (pb.puffs||0) - (pa.puffs||0);
