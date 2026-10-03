@@ -4158,8 +4158,7 @@ const PROMO_ACCENT = {main:'#7db2ff', fade:'rgba(125,178,255,.30)', shadow:'rgba
 
 const CATALOG = [
   {name:'ELFBAR ICE KING', price:25000, puffs:40000, photo:'ice_king', flagship:true, flavors:[
-    {name:'Watermelon Ice 🍉', stock:1},
-    {name:'Mango Magic 🥭', stock:2}
+    {name:'Mango Magic 🥭', stock:1}
   ]},
   {name:'ELFBAR SWEET KING', price:26500, puffs:40000, photo:'sweet_king', outOfStock:true, flavors:[]},
   {name:'ELFBAR DUKE', price:25000, puffs:35000, photo:'duke', flavors:[
@@ -4171,21 +4170,16 @@ const CATALOG = [
   {name:'EBCREATE BC PRO', price:25000, puffs:40000, photo:'ebcreate', flavors:[
     {name:'Black Mint 🌿', stock:1}
   ]},
-  {name:'IGNITE V500', price:32000, puffs:50000, photo:'v500', flavors:[
-    {name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:1},{name:'Watermelon Kiwi 🍉🥝', stock:1}
-  ]},
+  {name:'IGNITE V500', price:32000, puffs:50000, photo:'v500', outOfStock:true, flavors:[]},
   {name:'IGNITE BOOST MIX', price:28000, originalPrice:30000, promo:true, puffs:40000, photo:'ignite_boost_mix', flavors:[
-    {name:'Mango Ice + Passion Fruit Guava 🥭🍑', stock:1},
-    {name:'Grape Ice + Strawberry 🍇🍓', stock:1},{name:'Raspberry Ice + Watermelon Ice 🍓🍉', stock:2},
+    {name:'Raspberry Ice + Watermelon Ice 🍓🍉', stock:2},
     {name:'Blueberry + Strawberry 🫐🍓', stock:1},{name:'Cherry + Grape 🍒🍇', stock:1}
   ]},
   {name:'IGNITE V400 ICE', price:28000, puffs:40000, photo:'v400', flavors:[
     {name:'Grape 🍇', stock:1},{name:'Strawberry Watermelon 🍓🍉', stock:1}
   ]},
   {name:'IGNITE V300 ULTRA SLIM', price:22000, originalPrice:24000, promo:true, puffs:30000, photo:'wholesale_v300_ultra_slim', flavors:[
-    {name:'Strawberry Kiwi 🍓🥝', stock:1},
-    {name:'Watermelon Ice 🍉', stock:1},{name:'Watermelon Mix 🍉', stock:1},
-    {name:'Pineapple Ice 🍍', stock:1},{name:'Banana Ice 🍌❄️', stock:1}
+    {name:'Banana Ice 🍌❄️', stock:1}
   ]},
   {name:'IGNITE V250', price:22000, puffs:25000, photo:'v250', photoScale:1.18, flavors:[
     {name:'Menthol ❄️', stock:1}
@@ -4193,8 +4187,7 @@ const CATALOG = [
   /* Precio según cotización Italia Shop (S12019): USD 12,50 × 1660 = $20.750
      + $10.000 de margen = $30.750 → redondeado a $31.000. */
   {name:'BLACKSHEEP 55K', price:31000, puffs:55000, photo:'blacksheep_55k', flavors:[
-    {name:'Cool Mint 🌿❄️', stock:1},{name:'Strawberry Banana 🍓🍌', stock:1},
-    {name:'Watermelon Ice 🍉', stock:1}
+    {name:'Cool Mint 🌿❄️', stock:1},{name:'Strawberry Banana 🍓🍌', stock:1}
   ]},
   {name:'BLACKSHEEP 40K', price:29000, puffs:40000, photo:'blacksheep', flavors:[
     {name:'Strawberry Kiwi + Fresh Mint 🍓🥝🌿', stock:1},
@@ -4210,10 +4203,7 @@ const CATALOG = [
   {name:'IGNITE V150', price:20000, puffs:15000, photo:'v150', flavors:[
     {name:'Pineapple Ice 🍍', stock:1}
   ]},
-  {name:'BLVK JUST JUICE', price:25000, originalPrice:26500, promo:true, puffs:45000, photo:'blvk', flavors:[
-    {name:'Strawberry Mango 🍓🥭', stock:1},{name:'Strawberry Ice 🍓', stock:1},{name:'Strawberry Kiwi 🍓🥝', stock:1},
-    {name:'Strawberry Watermelon 🍓🍉', stock:1},{name:'Watermelon Ice 🍉', stock:1}
-  ]},
+  {name:'BLVK JUST JUICE', price:25000, originalPrice:26500, promo:true, puffs:45000, photo:'blvk', outOfStock:true, flavors:[]},
   {name:'ELFBAR TRIO', price:27000, puffs:40000, photo:'trio', outOfStock:true, flavors:[]},
   /* Precio según cotización Italia Shop (S12012): USD 7 × 1660 = $11.620
      + $10.000 de margen = $21.620 → redondeado a $22.000. */
@@ -5423,7 +5413,7 @@ const THC_PRODUCTS = [
     photoScale:1.15,
     grams:'8g (8000mg)',
     description:'Viví una experiencia de otro nivel: 8 gramos de Live Resin de THC de primera calidad combinados con un blend único de hongos mágicos. Sabor real, efecto intenso y una sensación distinta a cualquier otro vape. Recargable por USB-C y disponible en Indica, Sativa e Híbrida para que elijas tu efecto: relajarte, activarte o el punto justo entre los dos.',
-    flavors:['Skunk OG 🌲 (Sativa)', 'Watermelon 🍉 (Indica)']
+    flavors:['Pineapple Express 🍍 (Hybrid)', 'Watermelon 🍉 (Indica)']
   }
 ];
 const THC_ACCENT = {main:'#3ecf6e', fade:'rgba(62,207,110,.28)', shadow:'rgba(62,207,110,.35)'};
