@@ -792,7 +792,7 @@ main{position:relative;z-index:1;}
 }
 .p-card--oos .p-cta{color:var(--red-cap);}
 
-/* Promo cards (BLACKSHEEP 40K, IGNITE BOOST MIX, BLVK JUST JUICE): the WHOLE card gets its own, richer
+/* Promo cards (BLACKSHEEP 40K, LOST MARY MT20000, BLVK JUST JUICE): the WHOLE card gets its own, richer
    shade of blue (cobalt instead of the regular navy) with a light-blue edge
    and a soft glow, plus a big blurred "OFERTA" written behind the photo — so
    the two offers read as different from the rest in both carousel and grid
@@ -4237,7 +4237,7 @@ const CATALOG = [
     {name:'Black Mint 🌿', stock:1}
   ]},
   {name:'IGNITE V500', price:32000, puffs:50000, photo:'v500', outOfStock:true, flavors:[]},
-  {name:'IGNITE BOOST MIX', price:28000, originalPrice:30000, promo:true, puffs:40000, photo:'ignite_boost_mix', flavors:[
+  {name:'IGNITE BOOST MIX', price:29000, puffs:40000, photo:'ignite_boost_mix', flavors:[
     {name:'Raspberry Ice + Watermelon Ice 🍓🍉', stock:1}
   ]},
   {name:'IGNITE V400 ICE', price:28000, puffs:40000, photo:'v400', flavors:[
@@ -4272,7 +4272,7 @@ const CATALOG = [
   {name:'ELFBAR TRIO', price:27000, puffs:40000, photo:'trio', outOfStock:true, flavors:[]},
   /* Precio según cotización Italia Shop (S12012): USD 7 × 1660 = $11.620
      + $10.000 de margen = $21.620 → redondeado a $22.000. */
-  {name:'LOST MARY MT20000', price:22000, puffs:20000, photo:'lost_mary_mt20000', flavors:[
+  {name:'LOST MARY MT20000', price:19000, originalPrice:22000, promo:true, puffs:20000, photo:'lost_mary_mt20000', flavors:[
     {name:'Miami Mint ❄️', stock:1},{name:'Strawmelon Peach 🍑🍈', stock:2},{name:'Hawaiian Juice ❄️', stock:1}
   ]},
   {name:'NIKBAR 30K', price:22500, puffs:30000, photo:'nikbar30', outOfStock:true, flavors:[]},
@@ -4669,11 +4669,11 @@ function renderProducts(){
   // left out of the catalog entirely instead of trailing behind with a
   // "Sin stock" badge — nothing to buy there, no reason to show the card.
   const vapeIndices = CATALOG.map((p, i) => i).filter(i => CATALOG[i].category !== 'apple');
-  // The promo vapes (BLACKSHEEP 40K, IGNITE BOOST MIX, BLVK JUST JUICE — see the `promo` flag in
+  // The promo vapes (BLACKSHEEP 40K, LOST MARY MT20000, BLVK JUST JUICE — see the `promo` flag in
   // CATALOG) always lead the default order, in that order, so they're the
   // first thing seen on landing. An explicit sort ("Más pitadas"/"Más caro")
   // is the customer's own choice, so it isn't overridden.
-  const PROMO_ORDER = ['BLACKSHEEP 40K', 'IGNITE BOOST MIX', 'BLVK JUST JUICE'];
+  const PROMO_ORDER = ['BLACKSHEEP 40K', 'LOST MARY MT20000', 'BLVK JUST JUICE'];
   const inStockVapeIndices = vapeIndices.filter(i => !isOutOfStock(CATALOG[i])).sort((a, b) => {
     const pa = CATALOG[a], pb = CATALOG[b];
     if(sortMode === 'puffs') return (pb.puffs||0) - (pa.puffs||0);
