@@ -1390,7 +1390,7 @@ main{position:relative;z-index:1;}
 .fz-item-name{font-size:13.5px;color:var(--white-glove);}
 .fz-item-badge{flex:none;font-size:9px;font-weight:700;letter-spacing:.2px;padding:3px 8px;border-radius:999px;text-transform:uppercase;white-space:nowrap;}
 .fz-item-badge.same-day{background:rgba(62,207,110,.16);color:var(--green-thc);}
-.fz-item-badge.next-day{background:rgba(255,145,48,.16);color:var(--orange-pulp);}
+.fz-item-badge.next-day{background:rgba(79,195,247,.16);color:var(--blue-bright);}
 .fz-empty{padding:16px 14px;text-align:center;color:var(--ink-dim);font-size:13px;}
 .fulfill-zone-note{
   margin-top:10px;
@@ -1401,10 +1401,8 @@ main{position:relative;z-index:1;}
   border:1px solid var(--line);
 }
 .fulfill-zone-note.same-day{background:rgba(62,207,110,.1);border-color:rgba(62,207,110,.3);color:var(--green-thc);}
-.fulfill-zone-note.next-day{background:rgba(255,145,48,.1);border-color:rgba(255,145,48,.3);color:var(--orange-pulp);}
+.fulfill-zone-note.next-day{background:rgba(79,195,247,.1);border-color:rgba(79,195,247,.3);color:var(--blue-bright);}
 .fulfill-sheet .modal-cta{margin-top:16px;}
-#fulfillClose{position:absolute;top:10px;right:10px;z-index:2;width:24px;height:24px;}
-#fulfillClose svg{width:10px;height:10px;}
 .fulfill-step .modal-eyebrow,
 .fulfill-step .modal-name{padding-right:0;}
 
@@ -1412,9 +1410,15 @@ main{position:relative;z-index:1;}
   margin-top:18px;
   padding:14px;
   border-radius:16px;
-  background:var(--bg-card);
-  border:1px solid var(--line);
+  background:linear-gradient(135deg, rgba(255,200,87,.12), rgba(232,67,58,.10)), var(--bg-card);
+  border:1.5px solid rgba(255,200,87,.55);
+  box-shadow:0 0 22px rgba(255,200,87,.18);
   text-align:left;
+  animation:offerGlow 2.2s ease-in-out infinite;
+}
+@keyframes offerGlow{
+  0%,100%{box-shadow:0 0 14px rgba(255,200,87,.14);}
+  50%{box-shadow:0 0 28px rgba(255,200,87,.38);}
 }
 .offer-card.hidden{display:none;}
 .offer-card-head{
@@ -1425,11 +1429,11 @@ main{position:relative;z-index:1;}
   margin-bottom:12px;
 }
 .offer-card-badge{
-  font-size:10px;
-  font-weight:700;
+  font-size:10.5px;
+  font-weight:800;
   letter-spacing:.3px;
   text-transform:uppercase;
-  color:var(--ink-dim);
+  color:var(--gold);
 }
 .offer-card-timer{
   flex:none;
@@ -1469,22 +1473,33 @@ main{position:relative;z-index:1;}
 }
 .offer-card-prices{display:flex;align-items:baseline;gap:8px;}
 .offer-card-price-orig{
-  font-size:11.5px;
+  font-size:12.5px;
   font-weight:600;
   color:var(--ink-dim);
   text-decoration:line-through;
   text-decoration-color:var(--red-cap);
 }
 .offer-card-price-now{
-  font-size:16px;
+  font-family:'Poppins',sans-serif;
+  font-size:23px;
   font-weight:800;
-  color:var(--red-cap);
+  line-height:1.1;
+  color:var(--gold);
+  text-shadow:0 0 14px rgba(255,200,87,.45);
 }
 .offer-card-note{
+  display:inline-block;
   font-size:10.5px;
-  color:var(--ink-dim);
-  margin-top:2px;
+  font-weight:800;
+  letter-spacing:.3px;
+  text-transform:uppercase;
+  color:#fff;
+  background:var(--red-cap);
+  border-radius:999px;
+  padding:3px 9px;
+  margin-top:6px;
 }
+@media (prefers-reduced-motion: reduce){ .offer-card{animation:none;} }
 .offer-card-btns{
   display:flex;
   gap:10px;
@@ -1648,25 +1663,38 @@ main{position:relative;z-index:1;}
   color:var(--ink-dim);
 }
 .modal-close svg{width:15px;height:15px;}
-#modalClose{
-  position:absolute;
-  top:18px;right:18px;
-  z-index:2;
+/* "Volver" — replaces the old small X on every section. Sticky inside the
+   sheet (each .modal-sheet is its own scroll container), so it stays pinned
+   top-right while the customer scrolls a long flavor list and never has to
+   scroll back up to leave. Its own row, so it never sits on top of titles. */
+.modal-close.back-btn{
+  position:sticky;
+  top:10px;
+  z-index:6;
+  width:max-content;
+  height:38px;
+  margin:-8px -6px 10px auto;
+  padding:0 15px 0 11px;
+  gap:6px;
+  border-radius:999px;
+  background:rgba(13,26,47,.92);
+  border:1px solid rgba(143,227,255,.35);
+  color:var(--white-glove);
+  font-family:'Poppins',sans-serif;
+  font-size:13px;
+  font-weight:700;
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+  box-shadow:0 6px 18px rgba(0,0,0,.45);
+  transition:background .2s, border-color .2s, transform .15s;
 }
-#thcClose{
-  position:absolute;
-  top:18px;right:18px;
-  z-index:2;
-}
-#wholesaleCartClose{
-  position:absolute;
-  top:18px;right:18px;
-  z-index:2;
-}
+.modal-close.back-btn svg{width:15px;height:15px;}
+.modal-close.back-btn:hover{border-color:var(--blue-neon);background:rgba(20,40,70,.95);}
+.modal-close.back-btn:active{transform:scale(.95);}
 /* Smaller than the base .wholesale-title clamp — at the default size,
    "CARRITO MAYORISTA ✈️" plus the padding-right needed to clear the close
    button didn't leave room for the emoji, so it wrapped onto its own line. */
-.wholesale-cart-sheet .wholesale-title{padding-right:36px;font-size:clamp(17px,4.6vw,24px);white-space:nowrap;}
+.wholesale-cart-sheet .wholesale-title{font-size:clamp(17px,4.6vw,24px);white-space:nowrap;}
 
 /* Layout: single column on mobile, two columns from 820px up.
    position+z-index lift this above #modalSheet::after's drifting dots. */
@@ -1929,6 +1957,20 @@ main{position:relative;z-index:1;}
 .modal-view-cart-btn:hover{filter:brightness(1.08);}
 .modal-view-cart-btn:active{transform:scale(.98);}
 .modal-view-cart-btn svg{width:16px;height:16px;flex:none;}
+/* With something in the cart, "Ver carrito" blinks (glow ring + flash) so
+   it reads as the next step and not just another button. */
+.modal-view-cart-btn.has-items{animation:viewCartBlink 1.2s ease-in-out infinite;}
+@keyframes viewCartBlink{
+  0%,100%{box-shadow:0 0 0 0 rgba(79,195,247,.75);filter:brightness(1);}
+  50%{box-shadow:0 0 0 7px rgba(79,195,247,0), 0 0 22px rgba(143,227,255,.65);filter:brightness(1.25);}
+}
+/* Extra jolt right after adding a product. */
+.modal-view-cart-btn.bump{animation:viewCartBump .5s var(--ease), viewCartBlink 1.2s ease-in-out .5s infinite;}
+@keyframes viewCartBump{
+  0%{transform:scale(1);}
+  35%{transform:scale(1.06);filter:brightness(1.35);}
+  100%{transform:scale(1);}
+}
 .modal-view-cart-count{
   display:inline-flex;
   flex:none;
@@ -2139,6 +2181,20 @@ main{position:relative;z-index:1;}
 .cart-fab svg{width:24px;height:24px;}
 .cart-fab:active{animation:none;transform:scale(.92);}
 .cart-fab.has-items{border-color:rgba(255,255,255,.4);}
+/* Pulsing ring around the floating cart while it has items. */
+.cart-fab.has-items::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius:50%;
+  border:2px solid rgba(143,227,255,.9);
+  pointer-events:none;
+  animation:cartFabRing 1.3s ease-out infinite;
+}
+@keyframes cartFabRing{
+  0%{transform:scale(1);opacity:.9;}
+  100%{transform:scale(1.55);opacity:0;}
+}
 @keyframes cartFabFloat{
   0%,100%{transform:scale(1) translateY(0);}
   50%{transform:scale(1) translateY(-9px);}
@@ -3189,8 +3245,14 @@ footer.site{
    sabores, carrito) so it always reads as its own screen: "Catálogo
    Mayorista", not a popup on top of the shop. The "back" button sits in its
    own row above it, pinned top-right. */
-.wholesale-page-header{position:relative;z-index:2;margin:2px 4px 20px;}
-.wholesale-page-header-top{display:flex;justify-content:flex-end;margin-bottom:14px;}
+.wholesale-page-header{position:relative;z-index:7;margin:2px 4px 20px;}
+.wholesale-page-header-top{display:flex;justify-content:flex-end;margin-bottom:14px;min-height:38px;}
+/* Pinned (fixed) so "Volver" stays reachable while scrolling the catalog or
+   a long flavor list. The overlay is itself a fixed, full-viewport box, so
+   this lands top-right of the screen, where the button already sat. */
+.wholesale-page-header-top .wholesale-back{position:fixed;top:14px;right:16px;z-index:6;height:38px;background:rgba(13,26,47,.92);border-color:rgba(255,200,87,.45);color:var(--white-glove);font-size:13px;font-weight:700;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 6px 18px rgba(0,0,0,.45);}
+@media(min-width:820px){.wholesale-page-header-top .wholesale-back{top:22px;right:34px;}}
+@media(min-width:1080px){.wholesale-page-header-top .wholesale-back{right:46px;}}
 /* Plain centered text (not a flex row) so the emoji flows right after the
    last word instead of sitting off to the side as its own item — that was
    what threw the whole title off-center. Sized to stay on one line on
@@ -3630,8 +3692,9 @@ footer.site{
 <!-- PRODUCT MODAL -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-sheet" id="modalSheet">
-    <button class="modal-close" id="modalClose" aria-label="Cerrar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+    <button class="modal-close back-btn" id="modalClose" aria-label="Volver">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Volver</span>
     </button>
     <div class="modal-layout">
       <!-- LEFT: product image (prepared for future per-flavor swapping via data-flavor-img) -->
@@ -3696,6 +3759,10 @@ footer.site{
 <!-- CART DRAWER -->
 <div class="modal-overlay" id="cartOverlay">
   <div class="modal-sheet cart-sheet" id="cartSheet">
+    <button class="modal-close back-btn" id="cartClose" aria-label="Volver">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Volver</span>
+    </button>
     <div class="modal-top">
       <div class="modal-glyph cart-glyph">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1.4"/><circle cx="18" cy="21" r="1.4"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -3704,9 +3771,6 @@ footer.site{
         <div class="modal-eyebrow">Vapesoon</div>
         <div class="modal-name">Tu carrito</div>
       </div>
-      <button class="modal-close" id="cartClose" aria-label="Cerrar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
-      </button>
     </div>
     <div id="cartItemsList"></div>
     <div class="cart-empty" id="cartEmpty">
@@ -3724,8 +3788,9 @@ footer.site{
 <!-- FULFILLMENT CHOICE MODAL (retiro / envío, shown before every WhatsApp order) -->
 <div class="modal-overlay fulfill-overlay" id="fulfillOverlay">
   <div class="modal-sheet fulfill-sheet" id="fulfillSheet">
-    <button class="modal-close" id="fulfillClose" aria-label="Cerrar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+    <button class="modal-close back-btn" id="fulfillClose" aria-label="Volver">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Volver</span>
     </button>
     <div class="fulfill-step" id="fulfillChoiceStep">
       <div class="modal-eyebrow">Vapesoon</div>
@@ -3743,7 +3808,7 @@ footer.site{
 
       <div class="offer-card" id="offerCard">
         <div class="offer-card-head">
-          <span class="offer-card-badge">Oferta por tiempo limitado</span>
+          <span class="offer-card-badge">⚡ Oferta por tiempo limitado</span>
           <span class="offer-card-timer" id="offerTimer">01:00</span>
         </div>
         <div class="offer-card-body">
@@ -3754,9 +3819,9 @@ footer.site{
             <div class="offer-card-name">AirPods</div>
             <div class="offer-card-prices">
               <span class="offer-card-price-orig">$25.000</span>
-              <span class="offer-card-price-now">$20.000</span>
+              <span class="offer-card-price-now">$19.900</span>
             </div>
-            <div class="offer-card-note">Solo en esta compra</div>
+            <div class="offer-card-note">🔥 Solo en esta compra</div>
           </div>
         </div>
         <div class="offer-card-btns">
@@ -3792,8 +3857,9 @@ footer.site{
 <!-- THC LINE MODAL -->
 <div class="modal-overlay thc-overlay" id="thcOverlay">
   <div class="modal-sheet thc-sheet" id="thcSheet">
-    <button class="modal-close" id="thcClose" aria-label="Cerrar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+    <button class="modal-close back-btn" id="thcClose" aria-label="Volver">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Volver</span>
     </button>
 
     <div class="thc-step" id="thcListStep">
@@ -3972,8 +4038,9 @@ footer.site{
        "paso" dentro de la misma pantalla de siempre. -->
   <div class="modal-overlay" id="wholesaleCartStep">
     <div class="modal-sheet wholesale-cart-sheet" id="wholesaleCartSheet">
-      <button class="modal-close" id="wholesaleCartClose" aria-label="Cerrar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+      <button class="modal-close back-btn" id="wholesaleCartClose" aria-label="Volver">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Volver</span>
       </button>
       <h2 class="wholesale-title">Carrito mayorista ✈️</h2>
 
@@ -4162,7 +4229,7 @@ const CATALOG = [
   ]},
   {name:'ELFBAR SWEET KING', price:26500, puffs:40000, photo:'sweet_king', outOfStock:true, flavors:[]},
   {name:'ELFBAR DUKE', price:25000, puffs:35000, photo:'duke', flavors:[
-    {name:'Blue Razz Ice 🫐', stock:2},{name:'Watermelon Lemon Ice 🍉🍋', stock:2}
+    {name:'Blue Razz Ice 🫐', stock:1},{name:'Watermelon Lemon Ice 🍉🍋', stock:2}
   ]},
   {name:'ELFBAR BC', price:20000, puffs:15000, photo:'bc', flavors:[
     {name:'Miami Mint 🌴', stock:1},{name:'Watermelon Ice 🍉', stock:1}
@@ -4172,11 +4239,10 @@ const CATALOG = [
   ]},
   {name:'IGNITE V500', price:32000, puffs:50000, photo:'v500', outOfStock:true, flavors:[]},
   {name:'IGNITE BOOST MIX', price:28000, originalPrice:30000, promo:true, puffs:40000, photo:'ignite_boost_mix', flavors:[
-    {name:'Raspberry Ice + Watermelon Ice 🍓🍉', stock:2},
-    {name:'Blueberry + Strawberry 🫐🍓', stock:1},{name:'Cherry + Grape 🍒🍇', stock:1}
+    {name:'Raspberry Ice + Watermelon Ice 🍓🍉', stock:1}
   ]},
   {name:'IGNITE V400 ICE', price:28000, puffs:40000, photo:'v400', flavors:[
-    {name:'Grape 🍇', stock:1},{name:'Strawberry Watermelon 🍓🍉', stock:1}
+    {name:'Grape 🍇', stock:1}
   ]},
   {name:'IGNITE V300 ULTRA SLIM', price:24000, puffs:30000, photo:'wholesale_v300_ultra_slim', flavors:[
     {name:'Banana Ice 🍌❄️', stock:1}
@@ -4192,7 +4258,7 @@ const CATALOG = [
   {name:'BLACKSHEEP 40K', price:27000, originalPrice:29000, promo:true, puffs:40000, photo:'blacksheep', flavors:[
     {name:'Strawberry Kiwi + Fresh Mint 🍓🥝🌿', stock:1},
     {name:'Blueberry Bubble + Sour Green Apple 🫐🍬🍏', stock:2},
-    {name:'Passion Fruit + Watermelon Strawberry 🥭🍉🍓', stock:1},{name:'Grape + Menthol 🍇❄️', stock:1}
+    {name:'Grape + Menthol 🍇❄️', stock:1}
   ]},
   {name:'BLACKSHEEP ICE 40K', price:29000, puffs:40000, photo:'blacksheep_ice', flavors:[
     {name:'Kiwi Grape Starfruit + Acai Straw Banana 🥝🍇⭐🍓🍌', stock:1}
@@ -4212,7 +4278,7 @@ const CATALOG = [
   ]},
   {name:'NIKBAR 30K', price:22500, puffs:30000, photo:'nikbar30', outOfStock:true, flavors:[]},
   {name:'IGNITE VMIX', price:32000, puffs:40000, photo:'vmix', flavors:[
-    {name:'Strawberry Watermelon Ice + Aloe Grape 🍓🍉🌿🍇', stock:2},{name:'Orange Ice + Strawberry Ice 🍊🍓', stock:1}
+    {name:'Strawberry Watermelon Ice + Aloe Grape 🍓🍉🌿🍇', stock:1},{name:'Orange Ice + Strawberry Ice 🍊🍓', stock:1}
   ]},
   {name:'HOOKALIT', price:24000, puffs:40000, photo:'hookalit', outOfStock:true, flavors:[]},
   {name:'AirPods', price:25000, photo:'airpods', category:'apple', variantWord:'modelo', variantWordPlural:'modelos',
@@ -5205,10 +5271,10 @@ function selectLocality(name){
   fulfillZoneNote.classList.remove('hidden', 'same-day', 'next-day');
   if(sameDay){
     fulfillZoneNote.classList.add('same-day');
-    fulfillZoneNote.textContent = `✅ ¡Buenas noticias! En ${name} entregamos en el día.`;
+    fulfillZoneNote.textContent = `✅ En ${name} entregamos en el día.`;
   } else {
     fulfillZoneNote.classList.add('next-day');
-    fulfillZoneNote.textContent = `📦 En ${name} el envío llega al día siguiente, entre las 17 y las 22 hs. Te pedimos estar disponible en ese horario.`;
+    fulfillZoneNote.textContent = `🚚 El envío llegará al día siguiente, entre las 17 y las 22 hs.`;
   }
 }
 
@@ -5358,7 +5424,7 @@ function stopOfferCountdown(){
   offerCountdownInterval = null;
   offerCard.classList.add('hidden');
 }
-const OFFER_AIRPODS_PRICE = 20000; // special one-time price, only through this upsell — not the regular catalog price
+const OFFER_AIRPODS_PRICE = 19900; // special one-time price, only through this upsell — not the regular catalog price
 document.getElementById('offerAcceptBtn').addEventListener('click', ()=>{
   const airpods = CATALOG.find(p => p.photo === 'airpods');
   if(airpods){
@@ -5391,7 +5457,18 @@ fulfillAddressOk.addEventListener('click', ()=>{
 fulfillAddressInput.addEventListener('keydown', (e)=>{
   if(e.key === 'Enter') fulfillAddressOk.click();
 });
-document.getElementById('fulfillClose').addEventListener('click', closeFulfillmentModal);
+// "Volver": from the address step it goes back to the pickup/delivery
+// choice; from the choice step it closes and leaves whatever was underneath.
+document.getElementById('fulfillClose').addEventListener('click', ()=>{
+  if(!fulfillAddressStep.classList.contains('hidden')){
+    fulfillAddressStep.classList.add('hidden');
+    fulfillChoiceStep.classList.remove('hidden');
+    fulfillZoneSuggestions.classList.remove('open');
+    document.getElementById('fulfillSheet').scrollTop = 0;
+    return;
+  }
+  closeFulfillmentModal();
+});
 fulfillOverlay.addEventListener('click', (e)=>{ if(e.target === fulfillOverlay) closeFulfillmentModal(); });
 
 /* ================= THC LINE (separate from the main catalog) ================= */
@@ -5460,7 +5537,9 @@ function renderThcCarousel(){
 
 /* Entry point for a THC card clicked from the main catalog scroll — opens
    the dedicated THC modal straight at the detail step, skipping its list. */
+let thcOpenedDirect = false; // detail opened straight from a catalog card (no list step behind it)
 function openThcProductDirect(key){
+  thcOpenedDirect = true;
   thcOverlay.classList.add('open');
   document.body.style.overflow = 'hidden';
   openThcDetail(key);
@@ -5539,6 +5618,7 @@ thcCarousel.addEventListener('scroll', ()=>{
 }, {passive:true});
 
 function openThcModal(){
+  thcOpenedDirect = false;
   renderThcCarousel();
   thcListStep.classList.remove('hidden');
   thcDetailStep.classList.add('hidden');
@@ -5551,7 +5631,17 @@ function closeThcModal(){
   document.body.style.overflow = '';
 }
 document.getElementById('filterThcBtn').addEventListener('click', openThcModal);
-document.getElementById('thcClose').addEventListener('click', closeThcModal);
+// "Volver": from a product opened via the THC list it returns to that list;
+// otherwise it closes back to the catalog.
+document.getElementById('thcClose').addEventListener('click', ()=>{
+  if(!thcOpenedDirect && !thcDetailStep.classList.contains('hidden')){
+    thcDetailStep.classList.add('hidden');
+    thcListStep.classList.remove('hidden');
+    thcSheet.scrollTop = 0;
+    return;
+  }
+  closeThcModal();
+});
 thcOverlay.addEventListener('click', (e)=>{ if(e.target === thcOverlay) closeThcModal(); });
 
 /* ================= CART ================= */
@@ -5582,8 +5672,19 @@ modalAddCart.addEventListener('click', ()=>{
   addProductFlavorToCart(CATALOG[activeProductIndex], selectedFlavor, modalAddCart);
 });
 
+let lastCartCount = 0;
 function updateCartBadge(){
   const modalViewCartCount = document.getElementById('modalViewCartCount');
+  const viewCartBtn = document.getElementById('modalViewCartBtn');
+  viewCartBtn.classList.toggle('has-items', cart.length > 0);
+  if(cart.length > lastCartCount){
+    viewCartBtn.classList.remove('bump');
+    void viewCartBtn.offsetWidth; // reflow so the bump restarts on every add
+    viewCartBtn.classList.add('bump');
+  } else if(cart.length === 0){
+    viewCartBtn.classList.remove('bump');
+  }
+  lastCartCount = cart.length;
   if(cart.length > 0){
     cartBadge.textContent = cart.length;
     cartBadge.classList.add('show');
@@ -5597,10 +5698,7 @@ function updateCartBadge(){
     modalViewCartCount.classList.add('hidden');
   }
 }
-document.getElementById('modalViewCartBtn').addEventListener('click', ()=>{
-  closeModal();
-  openCart();
-});
+document.getElementById('modalViewCartBtn').addEventListener('click', openCart);
 
 /* ---- reusable "added to cart" confirmation: works for the modal's fixed
    #cartConfirm and for the dynamically generated ones on single-variant
@@ -5636,7 +5734,6 @@ document.addEventListener('click', (e)=>{
   const link = e.target.closest('.cart-confirm-link');
   if(!link) return;
   e.preventDefault();
-  closeModal();
   openCart();
 });
 
@@ -5696,7 +5793,9 @@ function openCart(){
 }
 function closeCart(){
   cartOverlay.classList.remove('open');
-  document.body.style.overflow = '';
+  // Opened from a product's "Ver carrito", the product modal is still open
+  // underneath — "Volver" lands back on it, so keep the page scroll locked.
+  if(!modalOverlay.classList.contains('open')) document.body.style.overflow = '';
 }
 cartFab.addEventListener('click', openCart);
 document.getElementById('cartClose').addEventListener('click', closeCart);
