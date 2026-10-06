@@ -1967,15 +1967,15 @@ main{position:relative;z-index:1;}
 .modal-view-cart-btn:hover{filter:brightness(1.08);}
 .modal-view-cart-btn:active{transform:scale(.98);}
 .modal-view-cart-btn svg{width:16px;height:16px;flex:none;}
-/* With something in the cart, "Ver carrito" blinks (glow ring + flash) so
-   it reads as the next step and not just another button. */
-.modal-view-cart-btn.has-items{animation:viewCartBlink 1.2s ease-in-out infinite;}
+/* With something in the cart, "Ver mi carrito" blinks softly (fades a bit
+   and glows back) so it reads as the next step, not just another button. */
+.modal-view-cart-btn.has-items{animation:viewCartBlink 1.6s ease-in-out infinite;}
 @keyframes viewCartBlink{
-  0%,100%{box-shadow:0 0 0 0 rgba(79,195,247,.75);filter:brightness(1);}
-  50%{box-shadow:0 0 0 7px rgba(79,195,247,0), 0 0 22px rgba(143,227,255,.65);filter:brightness(1.25);}
+  0%,100%{opacity:1;box-shadow:0 0 18px rgba(143,227,255,.55), 0 0 0 1px rgba(143,227,255,.5);filter:brightness(1.12);}
+  50%{opacity:.62;box-shadow:0 0 0 rgba(143,227,255,0), 0 0 0 1px rgba(143,227,255,0);filter:brightness(1);}
 }
 /* Extra jolt right after adding a product. */
-.modal-view-cart-btn.bump{animation:viewCartBump .5s var(--ease), viewCartBlink 1.2s ease-in-out .5s infinite;}
+.modal-view-cart-btn.bump{animation:viewCartBump .5s var(--ease), viewCartBlink 1.6s ease-in-out .5s infinite;}
 @keyframes viewCartBump{
   0%{transform:scale(1);}
   35%{transform:scale(1.06);filter:brightness(1.35);}
@@ -1986,12 +1986,13 @@ main{position:relative;z-index:1;}
   flex:none;
   align-items:center;
   justify-content:center;
-  min-width:20px;
-  height:20px;
-  padding:0 4px;
-  border-radius:50%;
-  background:rgba(255,255,255,.3);
-  border:1px solid rgba(5,10,20,.3);
+  min-width:22px;
+  height:22px;
+  padding:0 5px;
+  border-radius:999px;
+  background:#ffffff;
+  border:none;
+  box-shadow:0 2px 6px rgba(5,10,20,.35);
   color:var(--void);
   font-size:11px;
   font-weight:800;
@@ -2470,7 +2471,7 @@ footer.site{
 .footer-credit a svg{width:12px;height:12px;flex:none;}
 
 @media (prefers-reduced-motion: reduce){
-  *:not(.ticker-track):not(.ticker-track *):not(.smoke):not(.modal-smoke-transition):not(.modal-smoke-transition *):not(.cart-fab){animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+  *:not(.ticker-track):not(.ticker-track *):not(.smoke):not(.modal-smoke-transition):not(.modal-smoke-transition *):not(.cart-fab):not(.modal-view-cart-btn){animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
 }
 
 /* ---------- FLOATING ACTION BUTTONS ---------- */
@@ -3728,7 +3729,8 @@ footer.site{
         <div class="flavor-grid" id="flavorGrid"></div>
         <button class="modal-view-cart-btn" id="modalViewCartBtn" type="button">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1.4"/><circle cx="18" cy="21" r="1.4"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span id="modalViewCartLabel">Ver carrito</span>
+          Ver mi carrito
+          <span class="modal-view-cart-count hidden" id="modalViewCartCount">0</span>
         </button>
         <button class="modal-info-toggle hidden" id="modalInfoToggle" type="button">
           <span>Ver descripción</span>
@@ -5664,10 +5666,9 @@ modalAddCart.addEventListener('click', ()=>{
 
 let lastCartCount = 0;
 function updateCartBadge(){
-  const modalViewCartLabel = document.getElementById('modalViewCartLabel');
-  modalViewCartLabel.textContent = cart.length > 0
-    ? `Ver carrito (${cart.length} ${cart.length === 1 ? 'producto' : 'productos'})`
-    : 'Ver carrito';
+  const modalViewCartCount = document.getElementById('modalViewCartCount');
+  modalViewCartCount.textContent = cart.length;
+  modalViewCartCount.classList.toggle('hidden', cart.length === 0);
   const viewCartBtn = document.getElementById('modalViewCartBtn');
   viewCartBtn.classList.toggle('has-items', cart.length > 0);
   if(cart.length > lastCartCount){
