@@ -1369,7 +1369,7 @@ main{position:relative;z-index:1;}
   border-radius:14px;
   overflow:hidden;
   box-shadow:0 20px 45px rgba(0,0,0,.5);
-  max-height:196px; /* fits inside the sheet, so opening it never makes the sheet scroll */
+  max-height:160px; /* fits inside the sheet, so opening it never makes the sheet scroll */
   overflow-y:auto;
   opacity:0;
   transform:translateY(-6px);
@@ -1402,10 +1402,10 @@ main{position:relative;z-index:1;}
   line-height:1.5;
   border:1px solid var(--line);
 }
-/* The note's slot is always reserved (just invisible until a locality is
-   picked), so choosing a zone never changes the sheet's size or position. */
-.fulfill-zone-note{min-height:58px;display:flex;align-items:center;justify-content:center;}
-.fulfill-zone-note.hidden{display:flex !important;visibility:hidden;}
+/* Collapsed (no empty gap) until a locality is picked, then it slides open
+   smoothly instead of popping in and jolting the sheet. */
+.fulfill-zone-note{max-height:90px;overflow:hidden;transition:max-height .28s var(--ease), opacity .22s, margin-top .28s var(--ease), padding .28s var(--ease);}
+.fulfill-zone-note.hidden{display:block !important;max-height:0;opacity:0;margin-top:0;padding-top:0;padding-bottom:0;border-width:0;}
 .fulfill-zone-note.same-day{background:rgba(62,207,110,.1);border-color:rgba(62,207,110,.3);color:var(--green-thc);}
 .fulfill-zone-note.next-day{background:rgba(79,195,247,.1);border-color:rgba(79,195,247,.3);color:var(--blue-bright);}
 .fulfill-sheet .modal-cta{margin-top:16px;}
@@ -1537,7 +1537,7 @@ main{position:relative;z-index:1;}
 .thc-overlay{z-index:210;}
 .thc-sheet{max-width:420px;}
 .thc-sheet .modal-eyebrow,
-.thc-sheet .modal-name{padding-right:44px;}
+.thc-sheet .modal-name{padding-right:84px;}
 .thc-disclaimer{font-size:11px;color:var(--ink-dim);margin-top:2px;}
 
 /* Same drifting-dots background used on the retail flavor picker
@@ -1669,35 +1669,37 @@ main{position:relative;z-index:1;}
   color:var(--ink-dim);
 }
 .modal-close svg{width:15px;height:15px;}
-/* "Volver" — replaces the old small X on every section. Sticky inside the
-   sheet (each .modal-sheet is its own scroll container), so it stays pinned
-   top-right while the customer scrolls a long flavor list and never has to
-   scroll back up to leave. Its own row, so it never sits on top of titles. */
+/* "Volver" — replaces the old small X on every section. Floats in the
+   sheet's top-right corner (takes no layout space: the negative margins
+   cancel its height) and is sticky, so it stays pinned to that corner while
+   a long flavor list scrolls. Chrome measures a sticky offset from inside
+   the scroll container's padding, hence top = 8px minus the sheet padding. */
 .modal-close.back-btn{
   position:sticky;
-  top:8px;
+  top:-16px;
   z-index:6;
   width:max-content;
-  height:38px;
-  margin:-16px -14px 6px auto;
-  padding:0 15px 0 11px;
-  gap:6px;
+  height:32px;
+  margin:-16px -14px -16px auto;
+  padding:0 12px 0 8px;
+  gap:4px;
   border-radius:999px;
-  background:rgba(13,26,47,.92);
-  border:1px solid rgba(143,227,255,.35);
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.16);
   color:var(--white-glove);
   font-family:'Poppins',sans-serif;
-  font-size:13px;
-  font-weight:700;
-  -webkit-backdrop-filter:blur(8px);
-  backdrop-filter:blur(8px);
-  box-shadow:0 6px 18px rgba(0,0,0,.45);
+  font-size:12px;
+  font-weight:600;
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);
   transition:background .2s, border-color .2s, transform .15s;
 }
-.modal-close.back-btn svg{width:15px;height:15px;}
-@media(min-width:820px){.modal-close.back-btn{margin:-22px -22px 6px auto;}}
-.fulfill-sheet .modal-close.back-btn{margin:-22px -16px 6px auto;}
-.modal-close.back-btn:hover{border-color:var(--blue-neon);background:rgba(20,40,70,.95);}
+.modal-close.back-btn svg{width:13px;height:13px;}
+@media(min-width:820px){.modal-close.back-btn{top:-22px;margin:-22px -22px -10px auto;}}
+.fulfill-sheet .modal-close.back-btn{top:-22px;margin:-22px -16px -10px auto;}
+/* The wholesale cart title sits right at the top, so here it keeps a row of its own. */
+.wholesale-cart-sheet .modal-close.back-btn{margin-bottom:8px;}
+.modal-close.back-btn:hover{background:rgba(255,255,255,.14);border-color:rgba(143,227,255,.45);}
 .modal-close.back-btn:active{transform:scale(.95);}
 /* Smaller than the base .wholesale-title clamp — at the default size,
    "CARRITO MAYORISTA ✈️" plus the padding-right needed to clear the close
