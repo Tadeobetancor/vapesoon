@@ -1301,8 +1301,10 @@ main{position:relative;z-index:1;}
 }
 
 .fulfill-overlay{z-index:220;}
-.fulfill-sheet{max-width:380px;text-align:center;padding:30px 24px 26px;}
-.fulfill-sheet .modal-name{margin-top:4px;margin-bottom:4px;}
+.fulfill-sheet{max-width:380px;text-align:center;padding:30px 24px 26px;scrollbar-width:none;}
+.fulfill-sheet::-webkit-scrollbar{display:none;}
+/* One line, always — the sheet's width must never make the title reflow. */
+.fulfill-sheet .modal-name{margin-top:4px;margin-bottom:4px;white-space:nowrap;font-size:clamp(17px,5.4vw,22px);}
 .fulfill-btns{display:flex;flex-direction:column;gap:12px;margin-top:22px;}
 .fulfill-btn{
   display:flex;
@@ -1367,7 +1369,7 @@ main{position:relative;z-index:1;}
   border-radius:14px;
   overflow:hidden;
   box-shadow:0 20px 45px rgba(0,0,0,.5);
-  max-height:220px;
+  max-height:196px; /* fits inside the sheet, so opening it never makes the sheet scroll */
   overflow-y:auto;
   opacity:0;
   transform:translateY(-6px);
@@ -1400,6 +1402,10 @@ main{position:relative;z-index:1;}
   line-height:1.5;
   border:1px solid var(--line);
 }
+/* The note's slot is always reserved (just invisible until a locality is
+   picked), so choosing a zone never changes the sheet's size or position. */
+.fulfill-zone-note{min-height:58px;display:flex;align-items:center;justify-content:center;}
+.fulfill-zone-note.hidden{display:flex !important;visibility:hidden;}
 .fulfill-zone-note.same-day{background:rgba(62,207,110,.1);border-color:rgba(62,207,110,.3);color:var(--green-thc);}
 .fulfill-zone-note.next-day{background:rgba(79,195,247,.1);border-color:rgba(79,195,247,.3);color:var(--blue-bright);}
 .fulfill-sheet .modal-cta{margin-top:16px;}
@@ -1669,11 +1675,11 @@ main{position:relative;z-index:1;}
    scroll back up to leave. Its own row, so it never sits on top of titles. */
 .modal-close.back-btn{
   position:sticky;
-  top:10px;
+  top:8px;
   z-index:6;
   width:max-content;
   height:38px;
-  margin:-8px -6px 10px auto;
+  margin:-16px -14px 6px auto;
   padding:0 15px 0 11px;
   gap:6px;
   border-radius:999px;
@@ -1689,6 +1695,8 @@ main{position:relative;z-index:1;}
   transition:background .2s, border-color .2s, transform .15s;
 }
 .modal-close.back-btn svg{width:15px;height:15px;}
+@media(min-width:820px){.modal-close.back-btn{margin:-22px -22px 6px auto;}}
+.fulfill-sheet .modal-close.back-btn{margin:-22px -16px 6px auto;}
 .modal-close.back-btn:hover{border-color:var(--blue-neon);background:rgba(20,40,70,.95);}
 .modal-close.back-btn:active{transform:scale(.95);}
 /* Smaller than the base .wholesale-title clamp — at the default size,
@@ -3718,8 +3726,7 @@ footer.site{
         <div class="flavor-grid" id="flavorGrid"></div>
         <button class="modal-view-cart-btn" id="modalViewCartBtn" type="button">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1.4"/><circle cx="18" cy="21" r="1.4"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Ver carrito
-          <span class="modal-view-cart-count hidden" id="modalViewCartCount">0</span>
+          <span id="modalViewCartLabel">Ver carrito</span>
         </button>
         <button class="modal-info-toggle hidden" id="modalInfoToggle" type="button">
           <span>Ver descripción</span>
@@ -3727,18 +3734,6 @@ footer.site{
         </button>
         <p class="modal-description hidden" id="modalDescription"></p>
 
-        <p class="color-note" id="colorNote"></p>
-
-        <div class="cart-confirm" id="cartConfirm">
-          <span class="cart-confirm-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </span>
-          <span class="cart-confirm-text">Agregado · <span class="cart-confirm-count">1</span> <span class="cart-confirm-word">producto</span></span>
-          <a class="cart-confirm-link" href="#">
-            Ver carrito
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-        </div>
 
         <div class="modal-actions" id="modalActions">
           <button class="modal-cta" id="modalCta">
@@ -4467,8 +4462,8 @@ function flavorPeekHTML(modelName, title, flavorNames){
     </div>`;
 }
 
-/* Reusable "added to cart" confirmation markup — instantiated once inside
-   the modal (fixed #cartConfirm) and once per single-variant card. */
+/* Reusable "added to cart" confirmation markup — instantiated once per
+   single-variant card (the product modal relies on its "Ver carrito" button). */
 function cartConfirmHTML(){
   return `<div class="cart-confirm">
       <span class="cart-confirm-icon">
@@ -4985,7 +4980,6 @@ const modalHint = document.getElementById('modalHint');
 function openModal(index, presetFlavor, sourceEvent){
   activeProductIndex = index;
   selectedFlavor = null;
-  hideCartConfirm();
   const p = CATALOG[index];
   const acc = ACCENTS[index % ACCENTS.length];
   modalGlyph.style.background = acc.fade;
@@ -5092,10 +5086,6 @@ function openModal(index, presetFlavor, sourceEvent){
     }
   }
   updateCta();
-  const colorNote = document.getElementById('colorNote');
-  colorNote.classList.toggle('hidden', p.category === 'apple');
-  colorNote.textContent = p.category === 'apple' ? '' :
-    '🎨 El color del dispositivo puede variar según el sabor elegido.';
 
   playSmokeBurst();
 }
@@ -5653,7 +5643,6 @@ const cartOverlay = document.getElementById('cartOverlay');
 const cartItemsList = document.getElementById('cartItemsList');
 const cartEmpty = document.getElementById('cartEmpty');
 const cartCheckoutBtn = document.getElementById('cartCheckoutBtn');
-const cartConfirm = document.getElementById('cartConfirm');
 
 /* Shared by modalAddCart (Apple single-model flow) and the "Sumar al carrito"
    button on each flavor row (vape flow) so both paths add the same way.
@@ -5663,7 +5652,6 @@ const FLAVOR_ADDED_HTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentC
 function addProductFlavorToCart(p, flavorName, btnEl, flashHtml){
   cart.push({product:p.name, flavor:flavorName, price:p.price, category:p.category});
   updateCartBadge();
-  showCartConfirm(cartConfirm);
   flashAddedState(btnEl, flashHtml);
 }
 modalAddCart.addEventListener('click', ()=>{
@@ -5674,7 +5662,10 @@ modalAddCart.addEventListener('click', ()=>{
 
 let lastCartCount = 0;
 function updateCartBadge(){
-  const modalViewCartCount = document.getElementById('modalViewCartCount');
+  const modalViewCartLabel = document.getElementById('modalViewCartLabel');
+  modalViewCartLabel.textContent = cart.length > 0
+    ? `Ver carrito (${cart.length} ${cart.length === 1 ? 'producto' : 'productos'})`
+    : 'Ver carrito';
   const viewCartBtn = document.getElementById('modalViewCartBtn');
   viewCartBtn.classList.toggle('has-items', cart.length > 0);
   if(cart.length > lastCartCount){
@@ -5690,27 +5681,20 @@ function updateCartBadge(){
     cartBadge.classList.add('show');
     cartFab.classList.add('has-items');
     cartFab.classList.add('visible');
-    modalViewCartCount.textContent = cart.length;
-    modalViewCartCount.classList.remove('hidden');
   } else {
     cartBadge.classList.remove('show');
     cartFab.classList.remove('has-items');
-    modalViewCartCount.classList.add('hidden');
   }
 }
 document.getElementById('modalViewCartBtn').addEventListener('click', openCart);
 
-/* ---- reusable "added to cart" confirmation: works for the modal's fixed
-   #cartConfirm and for the dynamically generated ones on single-variant
-   cards alike, since both share the same .cart-confirm-* markup ---- */
+/* ---- "added to cart" confirmation for the dynamically generated
+   .cart-confirm-* blocks on single-variant cards ---- */
 function showCartConfirm(el){
   if(!el) return;
   el.querySelector('.cart-confirm-count').textContent = cart.length;
   el.querySelector('.cart-confirm-word').textContent = cart.length === 1 ? 'producto' : 'productos';
   el.classList.add('show');
-}
-function hideCartConfirm(){
-  cartConfirm.classList.remove('show');
 }
 /* Flashes a temporary confirmation state on whichever add-to-cart button was
    clicked. Defaults to just "+1" — the modal's bottom-bar button and a
