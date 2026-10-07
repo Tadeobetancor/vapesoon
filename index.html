@@ -792,7 +792,7 @@ main{position:relative;z-index:1;}
 }
 .p-card--oos .p-cta{color:var(--red-cap);}
 
-/* Promo cards (BLACKSHEEP 40K, LOST MARY MT20000, BLVK JUST JUICE): the WHOLE card gets its own, richer
+/* Promo cards (DINNER LADY LUMA, IGNITE VMIX): the WHOLE card gets its own, richer
    shade of blue (cobalt instead of the regular navy) with a light-blue edge
    and a soft glow, plus a big blurred "OFERTA" written behind the photo — so
    the two offers read as different from the rest in both carousel and grid
@@ -4180,6 +4180,7 @@ window.__PRODUCT_PHOTOS__ = {
   'lost_mary_mt20000': 'img/productos/lost_mary_mt20000.webp',
   'elfbar_gh_23000': 'img/productos/elfbar_gh_23000.webp',
   'elfbar_disp_te30k': 'img/productos/elfbar_disp_te30k.webp',
+  'dinner_lady_luma': 'img/productos/dinner_lady_luma.webp',
 
   'trio': 'img/productos/trio.webp',
   'v250': 'img/productos/v250.webp',
@@ -4224,7 +4225,11 @@ const PROMO_ACCENT = {main:'#7db2ff', fade:'rgba(125,178,255,.30)', shadow:'rgba
 
 const CATALOG = [
   {name:'ELFBAR ICE KING', price:25000, puffs:40000, photo:'ice_king', flagship:true, flavors:[
-    {name:'Mango Magic 🥭', stock:1}
+    {name:'Blue Razz Ice 🫐❄️', stock:2},{name:'Blueberry Ice 🫐', stock:1},{name:'Bubaloo Tutti Frutti 🍬', stock:3},
+    {name:'Cherry Strazz 🍒🍓', stock:1},{name:'Grape Ice 🍇', stock:2},{name:'Green Apple 🍏', stock:2},
+    {name:'Mango Magic 🥭', stock:3},{name:'Miami Mint 🌴', stock:2},{name:'Peach Mango Watermelon 🍑🥭🍉', stock:2},
+    {name:'Sour Apple Ice 🍏❄️', stock:2},{name:'Sour Straw Dragon 🍓🐉', stock:2},{name:'Strawberry Ice 🍓', stock:2},
+    {name:'Watermelon Ice 🍉', stock:3},{name:'Strawberry Watermelon 🍓🍉', stock:2}
   ]},
   {name:'ELFBAR SWEET KING', price:26500, puffs:40000, photo:'sweet_king', outOfStock:true, flavors:[]},
   {name:'ELFBAR DUKE', price:25000, puffs:35000, photo:'duke', flavors:[
@@ -4232,6 +4237,14 @@ const CATALOG = [
   ]},
   {name:'ELFBAR BC', price:20000, puffs:15000, photo:'bc', flavors:[
     {name:'Miami Mint 🌴', stock:1},{name:'Watermelon Ice 🍉', stock:1}
+  ]},
+  /* Precio según cotización Italia Shop (S12211): USD 10,50 × 1660 = $17.430
+     + ~$13.000 de margen → $30.500; en oferta de lanzamiento a $28.500
+     por ser nuevo. */
+  {name:'DINNER LADY LUMA', price:28500, originalPrice:30500, promo:true, puffs:40000, photo:'dinner_lady_luma', flavors:[
+    {name:'Blue Mint 🫐🌿', stock:1},{name:'Grape Ice 🍇', stock:1},{name:'Mango Ice 🥭', stock:2},
+    {name:'Peach Mango Watermelon 🍑🥭🍉', stock:2},{name:'Sour Mango Pineapple 🥭🍍', stock:1},
+    {name:'Strawberry Ice 🍓', stock:2},{name:'Watermelon Ice 🍉', stock:2}
   ]},
   {name:'EBCREATE BC PRO', price:25000, puffs:40000, photo:'ebcreate', flavors:[
     {name:'Black Mint 🌿', stock:1}
@@ -4241,7 +4254,8 @@ const CATALOG = [
     {name:'Raspberry Ice + Watermelon Ice 🍓🍉', stock:1}
   ]},
   {name:'IGNITE V400 ICE', price:28000, puffs:40000, photo:'v400', flavors:[
-    {name:'Grape 🍇', stock:1}
+    {name:'Grape 🍇', stock:1},{name:'Strawberry 🍓', stock:1},{name:'Strawberry Kiwi 🍓🥝', stock:1},
+    {name:'Strawberry Watermelon 🍓🍉', stock:1},{name:'Watermelon Ice 🍉', stock:1}
   ]},
   {name:'IGNITE V300 ULTRA SLIM', price:24000, puffs:30000, photo:'wholesale_v300_ultra_slim', flavors:[
     {name:'Banana Ice 🍌❄️', stock:1}
@@ -4252,12 +4266,11 @@ const CATALOG = [
   /* Precio según cotización Italia Shop (S12019): USD 12,50 × 1660 = $20.750
      + $10.000 de margen = $30.750 → redondeado a $31.000. */
   {name:'BLACKSHEEP 55K', price:31000, puffs:55000, photo:'blacksheep_55k', flavors:[
-    {name:'Cool Mint 🌿❄️', stock:1},{name:'Strawberry Banana 🍓🍌', stock:1}
+    {name:'Cool Mint 🌿❄️', stock:1},{name:'Blue Razz Ice 🫐❄️', stock:2},
+    {name:'Strawberry Ice 🍓', stock:2},{name:'Watermelon Ice 🍉', stock:2}
   ]},
-  {name:'BLACKSHEEP 40K', price:27000, originalPrice:29000, promo:true, puffs:40000, photo:'blacksheep', flavors:[
-    {name:'Strawberry Kiwi + Fresh Mint 🍓🥝🌿', stock:1},
-    {name:'Blueberry Bubble + Sour Green Apple 🫐🍬🍏', stock:2},
-    {name:'Grape + Menthol 🍇❄️', stock:1}
+  {name:'BLACKSHEEP 40K', price:29000, puffs:40000, photo:'blacksheep', flavors:[
+    {name:'Grape + Energy Drink 🍇⚡', stock:1},{name:'Grape + Menthol 🍇❄️', stock:1}
   ]},
   {name:'BLACKSHEEP ICE 40K', price:29000, puffs:40000, photo:'blacksheep_ice', flavors:[
     {name:'Kiwi Grape Starfruit + Acai Straw Banana 🥝🍇⭐🍓🍌', stock:1}
@@ -4268,16 +4281,20 @@ const CATALOG = [
   {name:'IGNITE V150', price:20000, puffs:15000, photo:'v150', flavors:[
     {name:'Pineapple Ice 🍍', stock:1}
   ]},
-  {name:'BLVK JUST JUICE', price:25000, originalPrice:26500, promo:true, puffs:45000, photo:'blvk', outOfStock:true, flavors:[]},
+  {name:'BLVK JUST JUICE', price:26500, puffs:45000, photo:'blvk', flavors:[
+    {name:'Strawberry Ice 🍓', stock:2},{name:'Menthol ❄️', stock:1},{name:'Strawberry Kiwi 🍓🥝', stock:1}
+  ]},
   {name:'ELFBAR TRIO', price:27000, puffs:40000, photo:'trio', outOfStock:true, flavors:[]},
   /* Precio según cotización Italia Shop (S12012): USD 7 × 1660 = $11.620
      + $10.000 de margen = $21.620 → redondeado a $22.000. */
-  {name:'LOST MARY MT20000', price:19000, originalPrice:22000, promo:true, puffs:20000, photo:'lost_mary_mt20000', flavors:[
-    {name:'Miami Mint ❄️', stock:1},{name:'Strawmelon Peach 🍑🍈', stock:2},{name:'Hawaiian Juice ❄️', stock:1}
+  {name:'LOST MARY MT20000', price:22000, puffs:20000, photo:'lost_mary_mt20000', flavors:[
+    {name:'Strawmelon Peach 🍑🍈', stock:2},{name:'Hawaiian Juice ❄️', stock:1}
   ]},
   {name:'NIKBAR 30K', price:22500, puffs:30000, photo:'nikbar30', outOfStock:true, flavors:[]},
-  {name:'IGNITE VMIX', price:29000, puffs:40000, photo:'vmix', flavors:[
-    {name:'Strawberry Watermelon Ice + Aloe Grape 🍓🍉🌿🍇', stock:1},{name:'Orange Ice + Strawberry Ice 🍊🍓', stock:1}
+  {name:'IGNITE VMIX', price:27000, originalPrice:29000, promo:true, puffs:40000, photo:'vmix', flavors:[
+    {name:'Strawberry Watermelon Ice + Aloe Grape 🍓🍉🌿🍇', stock:1},{name:'Orange Ice + Strawberry Ice 🍊🍓', stock:1},
+    {name:'Blueberry + Strawberry 🫐🍓', stock:1},{name:'Grape Ice + Strawberry 🍇🍓', stock:1},
+    {name:'Raspberry Ice + Watermelon Ice 🍓🍉', stock:1}
   ]},
   {name:'HOOKALIT', price:24000, puffs:40000, photo:'hookalit', outOfStock:true, flavors:[]},
   {name:'AirPods', price:25000, photo:'airpods', category:'apple', variantWord:'modelo', variantWordPlural:'modelos',
@@ -4669,11 +4686,11 @@ function renderProducts(){
   // left out of the catalog entirely instead of trailing behind with a
   // "Sin stock" badge — nothing to buy there, no reason to show the card.
   const vapeIndices = CATALOG.map((p, i) => i).filter(i => CATALOG[i].category !== 'apple');
-  // The promo vapes (BLACKSHEEP 40K, LOST MARY MT20000, BLVK JUST JUICE — see the `promo` flag in
+  // The promo vapes (DINNER LADY LUMA, IGNITE VMIX — see the `promo` flag in
   // CATALOG) always lead the default order, in that order, so they're the
   // first thing seen on landing. An explicit sort ("Más pitadas"/"Más caro")
   // is the customer's own choice, so it isn't overridden.
-  const PROMO_ORDER = ['BLACKSHEEP 40K', 'LOST MARY MT20000', 'BLVK JUST JUICE'];
+  const PROMO_ORDER = ['DINNER LADY LUMA', 'IGNITE VMIX'];
   const inStockVapeIndices = vapeIndices.filter(i => !isOutOfStock(CATALOG[i])).sort((a, b) => {
     const pa = CATALOG[a], pb = CATALOG[b];
     if(sortMode === 'puffs') return (pb.puffs||0) - (pa.puffs||0);
