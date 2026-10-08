@@ -781,6 +781,16 @@ main{position:relative;z-index:1;}
   background:var(--green-thc);
   color:var(--void);
 }
+.p-card--flagship.reveal{
+  animation:cardIn .6s var(--ease) forwards, flagshipGlow 2.6s ease-in-out .6s infinite;
+}
+@keyframes flagshipGlow{
+  0%, 100%{border-color:var(--line);box-shadow:0 0 0 0 rgba(79,195,247,0);}
+  50%{border-color:rgba(79,195,247,.75);box-shadow:0 0 22px -2px rgba(79,195,247,.45), 0 16px 38px -16px rgba(79,195,247,.5);}
+}
+@media (prefers-reduced-motion: reduce){
+  .p-card--flagship.reveal{animation:cardIn .6s var(--ease) forwards;border-color:rgba(79,195,247,.6);}
+}
 .p-card--oos{
   opacity:.6;
   filter:grayscale(.6);
@@ -792,7 +802,7 @@ main{position:relative;z-index:1;}
 }
 .p-card--oos .p-cta{color:var(--red-cap);}
 
-/* Promo cards (DINNER LADY LUMA, IGNITE VMIX): the WHOLE card gets its own, richer
+/* Promo cards (DINNER LADY LUMA, IGNITE V400 ICE): the WHOLE card gets its own, richer
    shade of blue (cobalt instead of the regular navy) with a light-blue edge
    and a soft glow, plus a big blurred "OFERTA" written behind the photo — so
    the two offers read as different from the rest in both carousel and grid
@@ -4225,10 +4235,10 @@ const PROMO_ACCENT = {main:'#7db2ff', fade:'rgba(125,178,255,.30)', shadow:'rgba
 
 const CATALOG = [
   {name:'ELFBAR ICE KING', price:25000, puffs:40000, photo:'ice_king', flagship:true, flavors:[
-    {name:'Blue Razz Ice 🫐❄️', stock:2},{name:'Blueberry Ice 🫐', stock:1},{name:'Bubaloo Tutti Frutti 🍬', stock:3},
+    {name:'Blue Razz Ice 🫐❄️', stock:1},{name:'Blueberry Ice 🫐', stock:1},{name:'Bubaloo Tutti Frutti 🍬', stock:3},
     {name:'Cherry Strazz 🍒🍓', stock:1},{name:'Grape Ice 🍇', stock:2},{name:'Green Apple 🍏', stock:2},
     {name:'Mango Magic 🥭', stock:3},{name:'Miami Mint 🌴', stock:2},{name:'Peach Mango Watermelon 🍑🥭🍉', stock:2},
-    {name:'Sour Apple Ice 🍏❄️', stock:2},{name:'Sour Straw Dragon 🍓🐉', stock:2},{name:'Strawberry Ice 🍓', stock:2},
+    {name:'Sour Apple Ice 🍏❄️', stock:2},{name:'Sour Straw Dragon 🍓🐉', stock:1},{name:'Strawberry Ice 🍓', stock:2},
     {name:'Watermelon Ice 🍉', stock:3},{name:'Strawberry Watermelon 🍓🍉', stock:2}
   ]},
   {name:'ELFBAR SWEET KING', price:26500, puffs:40000, photo:'sweet_king', outOfStock:true, flavors:[]},
@@ -4243,17 +4253,17 @@ const CATALOG = [
      por ser nuevo. */
   {name:'DINNER LADY LUMA', price:27500, originalPrice:29500, promo:true, puffs:40000, photo:'dinner_lady_luma', flavors:[
     {name:'Blue Mint 🫐🌿', stock:1},{name:'Grape Ice 🍇', stock:1},{name:'Mango Ice 🥭', stock:2},
-    {name:'Peach Mango Watermelon 🍑🥭🍉', stock:2},{name:'Sour Mango Pineapple 🥭🍍', stock:1},
-    {name:'Strawberry Ice 🍓', stock:2},{name:'Watermelon Ice 🍉', stock:2}
+    {name:'Peach Mango Watermelon 🍑🥭🍉', stock:1},{name:'Sour Mango Pineapple 🥭🍍', stock:1},{name:'Strawberry Ice 🍓', stock:2},
+    {name:'Watermelon Ice 🍉', stock:1}
   ]},
   {name:'EBCREATE BC PRO', price:25000, puffs:40000, photo:'ebcreate', flavors:[
     {name:'Black Mint 🌿', stock:1}
   ]},
   {name:'IGNITE V500', price:32000, puffs:50000, photo:'v500', outOfStock:true, flavors:[]},
   {name:'IGNITE BOOST MIX', price:29000, puffs:40000, photo:'ignite_boost_mix', flavors:[
-    {name:'Raspberry Ice + Watermelon Ice 🍓🍉', stock:1}
+    {name:'Raspberry Ice + Watermelon Ice 🍓🍉', stock:2},{name:'Blueberry + Strawberry 🫐🍓', stock:1},{name:'Grape Ice + Strawberry 🍇🍓', stock:1}
   ]},
-  {name:'IGNITE V400 ICE', price:28000, puffs:40000, photo:'v400', flavors:[
+  {name:'IGNITE V400 ICE', price:26000, originalPrice:28000, promo:true, puffs:40000, photo:'v400', flavors:[
     {name:'Grape 🍇', stock:1},{name:'Strawberry 🍓', stock:1},{name:'Strawberry Kiwi 🍓🥝', stock:1},
     {name:'Strawberry Watermelon 🍓🍉', stock:1},{name:'Watermelon Ice 🍉', stock:1}
   ]},
@@ -4266,8 +4276,8 @@ const CATALOG = [
   /* Precio según cotización Italia Shop (S12019): USD 12,50 × 1660 = $20.750
      + $10.000 de margen = $30.750 → redondeado a $31.000. */
   {name:'BLACKSHEEP 55K', price:31000, puffs:55000, photo:'blacksheep_55k', flavors:[
-    {name:'Cool Mint 🌿❄️', stock:1},{name:'Blue Razz Ice 🫐❄️', stock:2},
-    {name:'Strawberry Ice 🍓', stock:2},{name:'Watermelon Ice 🍉', stock:2}
+    {name:'Cool Mint 🌿❄️', stock:1},{name:'Blue Razz Ice 🫐❄️', stock:2},{name:'Strawberry Ice 🍓', stock:2},
+    {name:'Watermelon Ice 🍉', stock:2}
   ]},
   {name:'BLACKSHEEP 40K', price:29000, puffs:40000, photo:'blacksheep', flavors:[
     {name:'Grape + Energy Drink 🍇⚡', stock:1},{name:'Grape + Menthol 🍇❄️', stock:1}
@@ -4281,7 +4291,7 @@ const CATALOG = [
   {name:'IGNITE V150', price:20000, puffs:15000, photo:'v150', flavors:[
     {name:'Pineapple Ice 🍍', stock:1}
   ]},
-  {name:'BLVK JUST JUICE', price:26500, puffs:45000, photo:'blvk', flavors:[
+  {name:'BLVK JUST JUICE', price:27000, puffs:45000, photo:'blvk', flavors:[
     {name:'Strawberry Ice 🍓', stock:2},{name:'Menthol ❄️', stock:1},{name:'Strawberry Kiwi 🍓🥝', stock:1}
   ]},
   {name:'ELFBAR TRIO', price:27000, puffs:40000, photo:'trio', outOfStock:true, flavors:[]},
@@ -4291,10 +4301,8 @@ const CATALOG = [
     {name:'Strawmelon Peach 🍑🍈', stock:2},{name:'Hawaiian Juice ❄️', stock:1}
   ]},
   {name:'NIKBAR 30K', price:22500, puffs:30000, photo:'nikbar30', outOfStock:true, flavors:[]},
-  {name:'IGNITE VMIX', price:27000, originalPrice:29000, promo:true, puffs:40000, photo:'vmix', flavors:[
-    {name:'Strawberry Watermelon Ice + Aloe Grape 🍓🍉🌿🍇', stock:1},{name:'Orange Ice + Strawberry Ice 🍊🍓', stock:1},
-    {name:'Blueberry + Strawberry 🫐🍓', stock:1},{name:'Grape Ice + Strawberry 🍇🍓', stock:1},
-    {name:'Raspberry Ice + Watermelon Ice 🍓🍉', stock:1}
+  {name:'IGNITE VMIX', price:29000, puffs:40000, photo:'vmix', flavors:[
+    {name:'Strawberry Watermelon Ice + Aloe Grape 🍓🍉🌿🍇', stock:1},{name:'Orange Ice + Strawberry Ice 🍊🍓', stock:1}
   ]},
   {name:'HOOKALIT', price:24000, puffs:40000, photo:'hookalit', outOfStock:true, flavors:[]},
   {name:'AirPods', price:25000, photo:'airpods', category:'apple', variantWord:'modelo', variantWordPlural:'modelos',
@@ -4543,7 +4551,7 @@ function productCardHTML(p, i, badgeText, showPuffs){
       </div>`;
 
   return `
-    <div class="p-card${oos ? ' p-card--oos' : ''}${promo ? ' p-card--promo' : ''}" data-index="${i}" style="--accent:${acc.main};--accent-fade:${acc.fade};--accent-shadow:${acc.shadow}">
+    <div class="p-card${oos ? ' p-card--oos' : ''}${promo ? ' p-card--promo' : ''}${flagship ? ' p-card--flagship' : ''}" data-index="${i}" style="--accent:${acc.main};--accent-fade:${acc.fade};--accent-shadow:${acc.shadow}">
       ${oos ? '<div class="p-badge p-badge--oos">Sin stock</div>' : (promo || flagship) ? '' : (badgeText ? `<div class="p-badge${badgeText === 'Más pedido' ? ' p-badge--popular' : ''}">${badgeText}</div>` : '')}
       ${showPuffs && p.puffs != null ? `<div class="p-puffs">${formatPuffs(p.puffs)}</div>` : ''}
       <div class="p-glyph">${promo ? '<span class="p-promo-mark" aria-hidden="true">Oferta</span><div class="p-badge p-badge--promo">🔥 Oferta</div>' : flagship ? '<div class="p-badge p-badge--flagship">⭐ Favorito</div>' : ''}${productGlyphHTML(p)}</div>
@@ -4686,23 +4694,20 @@ function renderProducts(){
   // left out of the catalog entirely instead of trailing behind with a
   // "Sin stock" badge — nothing to buy there, no reason to show the card.
   const vapeIndices = CATALOG.map((p, i) => i).filter(i => CATALOG[i].category !== 'apple');
-  // The promo vapes (DINNER LADY LUMA, IGNITE VMIX — see the `promo` flag in
-  // CATALOG) always lead the default order, in that order, so they're the
-  // first thing seen on landing. An explicit sort ("Más pitadas"/"Más caro")
-  // is the customer's own choice, so it isn't overridden.
-  const PROMO_ORDER = ['DINNER LADY LUMA', 'IGNITE VMIX'];
+  // Default order: the promo vapes (see the `promo` flag in CATALOG) lead, the
+  // flagship (Elfbar Ice King) comes right after them, and the rest follow by
+  // how many flavors they have available, most first. An explicit sort ("Más
+  // pitadas"/"Más caro") is the customer's own choice, so it isn't overridden.
+  const defaultRank = p => p.promo ? 0 : p.flagship ? 1 : 2;
   const inStockVapeIndices = vapeIndices.filter(i => !isOutOfStock(CATALOG[i])).sort((a, b) => {
     const pa = CATALOG[a], pb = CATALOG[b];
     if(sortMode === 'puffs') return (pb.puffs||0) - (pa.puffs||0);
     if(sortMode === null){
-      const ia = PROMO_ORDER.indexOf(pa.name), ib = PROMO_ORDER.indexOf(pb.name);
-      if(ia !== -1 || ib !== -1){
-        return (ia === -1 ? PROMO_ORDER.length : ia) - (ib === -1 ? PROMO_ORDER.length : ib);
-      }
+      return (defaultRank(pa) - defaultRank(pb)) || (pb.flavors.length - pa.flavors.length);
     }
     return 0;
   });
-  const thcOrdered = THC_PRODUCTS.filter(p => !p.outOfStock);
+  const thcOrdered = THC_SHUFFLED.filter(p => !p.outOfStock);
 
   // The "Más pedido" badge belongs to the default order only — under a sort
   // (e.g. "Más caro") whatever lands first isn't the most ordered — and it
@@ -5504,6 +5509,14 @@ const THC_PRODUCTS = [
     flavors:['Pineapple Express 🍍 (Hybrid)', 'Watermelon 🍉 (Indica)']
   }
 ];
+// THC vapes show up in a random order, shuffled once per page load so the
+// order doesn't jump around when the customer toggles a sort.
+const THC_SHUFFLED = THC_PRODUCTS.slice();
+for(let i = THC_SHUFFLED.length - 1; i > 0; i--){
+  const j = Math.floor(Math.random() * (i + 1));
+  [THC_SHUFFLED[i], THC_SHUFFLED[j]] = [THC_SHUFFLED[j], THC_SHUFFLED[i]];
+}
+
 const THC_ACCENT = {main:'#3ecf6e', fade:'rgba(62,207,110,.28)', shadow:'rgba(62,207,110,.35)'};
 
 const thcOverlay = document.getElementById('thcOverlay');
@@ -5527,7 +5540,7 @@ let thcActiveProduct = null;
 let thcDetailOpenedAt = 0;
 
 function renderThcCarousel(){
-  thcCarousel.innerHTML = '<div class="carousel-spacer" aria-hidden="true"></div>' + THC_PRODUCTS.filter(p => !p.outOfStock).map(p => `
+  thcCarousel.innerHTML = '<div class="carousel-spacer" aria-hidden="true"></div>' + THC_SHUFFLED.filter(p => !p.outOfStock).map(p => `
     <div class="p-card reveal" data-key="${p.key}" style="--accent:${THC_ACCENT.main};--accent-fade:${THC_ACCENT.fade};--accent-shadow:${THC_ACCENT.shadow}">
       <div class="p-puffs">${p.grams.toUpperCase()}</div>
       <div class="p-glyph">${productGlyphHTML(p)}</div>
