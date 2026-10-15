@@ -5217,13 +5217,13 @@ const fulfillAddressOk = document.getElementById('fulfillAddressOk');
    cualquier otra localidad de DELIVERY_ZONES se entrega al día siguiente
    de 17 a 22hs (se le avisa al cliente apenas la elige). */
 const DELIVERY_ZONES = [
-  {region:'Zona Norte', localities:['Tigre','Garín','Nordelta','Maschwitz','Escobar','Del Viso','Villa Rosa','Derqui','Pilar','Malvinas Argentinas','José C. Paz','San Miguel','General San Martín','Vicente López','Zárate','Campana']},
-  {region:'Zona Oeste', localities:['Moreno','Hurlingham','Morón','Tres de Febrero','Marcos Paz','Rodríguez','Luján']},
+  {region:'Zona Norte', localities:['Tigre','Garín','Nordelta','Maschwitz','Escobar','Del Viso','Villa Rosa','Derqui','Pilar','Malvinas Argentinas','José C. Paz','San Miguel','Bella Vista','General San Martín','Vicente López','Zárate','Campana']},
+  {region:'Zona Oeste', localities:['Moreno','Hurlingham','William Morris','Morón','Tres de Febrero','Marcos Paz','Rodríguez','Luján']},
   {region:'Zona Sur', localities:['Cañuelas','Alejandro Korn','San Vicente','Guernica','La Matanza','Avellaneda','Lanús','Lomas de Zamora','Esteban Echeverría','Berazategui','Florencio Varela','Almirante Brown','Presidente Perón']},
   {region:'La Plata / Gran La Plata', localities:['La Plata','Berisso','Ensenada']},
   {region:'CABA', localities:['Agronomía','Almagro','Balvanera','Barracas','Belgrano','Boedo','Caballito','Chacarita','Coghlan','Colegiales','Constitución','Flores','Floresta','La Boca','La Paternal','Liniers','Mataderos','Monte Castro','Monserrat','Nueva Pompeya','Núñez','Palermo','Parque Avellaneda','Parque Chacabuco','Parque Chas','Parque Patricios','Puerto Madero','Recoleta','Retiro','Saavedra','San Cristóbal','San Nicolás','San Telmo','Vélez Sarsfield','Versalles','Villa Crespo','Villa del Parque','Villa Devoto','Villa General Mitre','Villa Lugano','Villa Luro','Villa Ortúzar','Villa Pueyrredón','Villa Real','Villa Riachuelo','Villa Santa Rita','Villa Soldati','Villa Urquiza']},
 ];
-const SAME_DAY_LOCALITIES = ['Hurlingham','Morón','Tres de Febrero','José C. Paz','San Miguel'];
+const SAME_DAY_LOCALITIES = ['Hurlingham','Morón','Tres de Febrero','José C. Paz','San Miguel','Bella Vista','William Morris'];
 const LOCALITY_INDEX = DELIVERY_ZONES.flatMap(z => z.localities.map(name => ({name, region:z.region})));
 function isSameDayLocality(name){
   return SAME_DAY_LOCALITIES.some(l => normalize(l) === normalize(name));
