@@ -1066,7 +1066,7 @@ main{position:relative;z-index:1;}
 }
 .p-card--oos .p-cta{color:var(--red-cap);}
 
-/* Promo cards (LUMA, IGNITE V400 ICE, BLACKSHEEP 55K): a richer cobalt-to-
+/* Promo cards (LUMA, IGNITE V500, BLACKSHEEP 55K): a richer cobalt-to-
    violet card with a spotlight behind the photo, a slowly spinning gradient
    border (::after), a light sweep every few seconds (.p-shine) and a warm
    "-X%" tag — the only warm color on the card, so the discount is what the
@@ -5102,47 +5102,62 @@ const PROMO_ACCENT = {main:'#7db2ff', fade:'rgba(125,178,255,.30)', shadow:'rgba
 
 const CATALOG = [
   {name:'ELFBAR ICE KING', price:25000, puffs:40000, photo:'ice_king', flagship:true, flavors:[
-    {name:'Green Apple 🍏', stock:2},{name:'Miami Mint 🌴', stock:1},{name:'Sour Apple Ice 🍏❄️', stock:2}
+    {name:'Green Apple 🍏', stock:4},{name:'Miami Mint 🌴', stock:2},{name:'Sour Apple Ice 🍏❄️', stock:2},
+    {name:'Blue Razz Ice 💙❄️', stock:2},{name:'Blueberry Ice 🫐❄️', stock:2}
   ]},
   {name:'ELFBAR SWEET KING', price:26500, puffs:40000, photo:'sweet_king', outOfStock:true, flavors:[]},
   {name:'ELFBAR DUKE', price:25000, puffs:35000, photo:'duke', flavors:[
     {name:'Watermelon Lemon Ice 🍉🍋', stock:1}
   ]},
   {name:'ELFBAR BC', price:20000, puffs:15000, photo:'bc', flavors:[
-    {name:'Miami Mint 🌴', stock:1}
+    {name:'Miami Mint 🌴', stock:2}
   ]},
   /* Precio según cotización Italia Shop (S12211): USD 10,50 × 1660 = $17.430
      + ~$12.000 de margen → $29.500; en oferta de lanzamiento a $26.500
      por ser nuevo. */
   {name:'LUMA', price:26500, originalPrice:29500, promo:true, puffs:40000, photo:'dinner_lady_luma', photoScale:0.85, flavors:[
-    {name:'Blue Mint 🫐🌿', stock:1},{name:'Mango Ice 🥭', stock:2}
+    {name:'Blue Mint 🫐🌿', stock:2},{name:'Mango Ice 🥭', stock:4},{name:'Sour Strawberry Ice 🍓❄️', stock:2},
+    {name:'Strawberry Ice 🍓', stock:3},{name:'Watermelon Ice 🍉', stock:3}
   ]},
   {name:'EBCREATE BC PRO', price:25000, puffs:40000, photo:'ebcreate', flavors:[
     {name:'Black Mint 🌿', stock:1}
   ]},
-  {name:'IGNITE V500', price:32000, puffs:50000, photo:'v500', outOfStock:true, flavors:[]},
-  {name:'IGNITE BOOST MIX', price:29000, puffs:40000, photo:'ignite_boost_mix', outOfStock:true, flavors:[]},
-  {name:'IGNITE V400 ICE', price:26000, originalPrice:28000, promo:true, puffs:40000, photo:'v400', flavors:[
-    {name:'Strawberry Kiwi 🍓🥝', stock:1}
+  {name:'IGNITE V500', price:30000, originalPrice:32000, promo:true, promoFirst:true, puffs:50000, photo:'v500', flavors:[
+    {name:'Banana Cherry 🍌🍒', stock:1},{name:'Blueberry Ice 🫐❄️', stock:1},{name:'Pineapple Mango 🍍🥭', stock:1},
+    {name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:1},{name:'Strawberry Banana 🍓🍌', stock:1},{name:'Strawberry Ice 🍓', stock:2},
+    {name:'Strawberry Kiwi 🍓🥝', stock:2},{name:'Strawberry Watermelon 🍓🍉', stock:3},{name:'Watermelon Ice 🍉', stock:3},
+    {name:'Watermelon Kiwi 🍉🥝', stock:2},{name:'Watermelon Mix 🍉', stock:2}
+  ]},
+  {name:'IGNITE BOOST MIX', price:28000, puffs:40000, photo:'ignite_boost_mix', flavors:[
+    {name:'Blueberry + Strawberry 🫐🍓', stock:2},{name:'Cherry + Grape Ice 🍒🍇', stock:2},{name:'Grape Ice + Strawberry 🍇🍓', stock:2},
+    {name:'Strawberry Grape Ice + Kiwi Watermelon Ice 🍓🍇🥝🍉', stock:2},{name:'Strawberry Kiwi Ice + Grape Kiwi Ice 🍓🥝🍇', stock:1},{name:'Watermelon Ice + Grape Ice 🍉🍇', stock:2}
+  ]},
+  {name:'IGNITE V400 ICE', price:28000, puffs:40000, photo:'v400', flavors:[
+    {name:'Strawberry Kiwi 🍓🥝', stock:3},{name:'Strawberry Watermelon 🍓🍉', stock:1}
   ]},
   {name:'IGNITE V300 ULTRA SLIM', price:24000, puffs:30000, photo:'wholesale_v300_ultra_slim', outOfStock:true, flavors:[]},
   {name:'IGNITE V250', price:22000, puffs:25000, photo:'v250', photoScale:1.18, flavors:[
-    {name:'Menthol ❄️', stock:1}
+    {name:'Menthol ❄️', stock:2}
   ]},
   /* Precio según cotización Italia Shop (S12019): USD 12,50 × 1660 = $20.750
      + $10.000 de margen = $30.750 → redondeado a $31.000. */
-  {name:'BLACKSHEEP 55K', price:29000, originalPrice:31000, promo:true, promoFirst:true, puffs:55000, photo:'blacksheep_55k', outOfStock:true, flavors:[]},
+  {name:'BLACKSHEEP 55K', price:29000, originalPrice:31000, promo:true, puffs:55000, photo:'blacksheep_55k', flavors:[
+    {name:'Blue Razz Ice 💙❄️', stock:2},{name:'Strawberry Banana 🍓🍌', stock:2},{name:'Mixed Berry 🫐🍓', stock:1},
+    {name:'Watermelon Ice 🍉', stock:1}
+  ]},
   {name:'BLACKSHEEP 40K', price:29000, puffs:40000, photo:'blacksheep', flavors:[
-    {name:'Grape + Energy Drink 🍇⚡', stock:1},{name:'Grape + Menthol 🍇❄️', stock:1}
+    {name:'Grape + Energy Drink 🍇⚡', stock:2},{name:'Grape + Menthol 🍇❄️', stock:1}
   ]},
   {name:'BLACKSHEEP ICE 40K', price:29000, puffs:40000, photo:'blacksheep_ice', flavors:[
-    {name:'Kiwi Grape Starfruit + Acai Straw Banana 🥝🍇⭐🍓🍌', stock:1}
+    {name:'Kiwi Grape Starfruit + Acai Straw Banana 🥝🍇⭐🍓🍌', stock:2}
   ]},
   {name:'NIKBAR 10K', price:19000, puffs:10000, photo:'nikbar10', photoScale:1.18, outOfStock:true, flavors:[]},
   {name:'IGNITE V150', price:20000, puffs:15000, photo:'v150', flavors:[
     {name:'Pineapple Ice 🍍', stock:1}
   ]},
-  {name:'BLVK JUST JUICE', price:27000, puffs:45000, photo:'blvk', outOfStock:true, flavors:[]},
+  {name:'BLVK JUST JUICE', price:27500, puffs:45000, photo:'blvk', flavors:[
+    {name:'Menthol ❄️', stock:2},{name:'Strawberry Ice 🍓', stock:3},{name:'Strawberry Kiwi 🍓🥝', stock:3}
+  ]},
   {name:'ELFBAR TRIO', price:27000, puffs:40000, photo:'trio', outOfStock:true, flavors:[]},
   /* Precio según cotización Italia Shop (S12012): USD 7 × 1660 = $11.620
      + $10.000 de margen = $21.620 → redondeado a $22.000. */
@@ -5151,7 +5166,7 @@ const CATALOG = [
   ]},
   {name:'NIKBAR 30K', price:22500, puffs:30000, photo:'nikbar30', outOfStock:true, flavors:[]},
   {name:'IGNITE VMIX', price:29000, puffs:40000, photo:'vmix', flavors:[
-    {name:'Strawberry Watermelon Ice + Aloe Grape 🍓🍉🌿🍇', stock:1}
+    {name:'Strawberry Watermelon Ice + Aloe Grape 🍓🍉🌿🍇', stock:2}
   ]},
   {name:'HOOKALIT', price:24000, puffs:40000, photo:'hookalit', outOfStock:true, flavors:[]},
   {name:'AirPods', price:22000, photo:'airpods', category:'apple', variantWord:'modelo', variantWordPlural:'modelos',
