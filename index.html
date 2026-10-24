@@ -55,7 +55,22 @@
   --line:rgba(255,255,255,0.14);
   --shadow-glow:0 0 40px rgba(79,195,247,0.25);
   --ease:cubic-bezier(.22,.9,.32,1);
+  /* Overshoots a little before settling: modals, chips and stickers "pop". */
+  --ease-spring:cubic-bezier(.34,1.56,.64,1);
+  /* Cyan -> periwinkle: the site's main button gradient. Light enough that
+     the dark --void text on top keeps good contrast at both ends. */
+  --violet:#7b61ff;
+  --grad-btn:linear-gradient(120deg, var(--blue-bright) 0%, var(--blue-neon) 40%, #7b8cff 75%, var(--blue-neon) 100%);
+  /* Darker "pressed" edge under 3D buttons (the solid shadow below them). */
+  --btn-edge:#1f4f9e;
+  /* Warm accent reserved for discounts only, so offers pop on the blue page. */
+  --grad-hot:linear-gradient(135deg, var(--gold) 0%, var(--orange-pulp) 45%, var(--red-cap) 100%);
+  --shadow-soft:0 18px 40px -18px rgba(0,0,0,.8);
 }
+
+/* Lets the promo cards' gradient border spin (see .p-card--promo::after). */
+@property --spin{syntax:'<angle>';inherits:false;initial-value:0deg;}
+@keyframes spin{to{--spin:360deg;}}
 
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;overflow-anchor:none;overscroll-behavior-y:none;}
@@ -88,6 +103,26 @@ a{color:inherit;text-decoration:none;}
     radial-gradient(ellipse 60% 45% at 10% 60%, rgba(255,255,255,0.03), transparent 60%),
     linear-gradient(180deg, var(--void) 0%, var(--bg-deep) 35%, var(--bg-mid) 70%, var(--bg-deep) 100%);
 }
+/* Slow aurora behind the top of the page. The ticker, header and catalog used
+   to read as three separate colored bands; now they're all transparent over
+   this one continuous glow, so the first screen is a single blended surface.
+   Only transform is animated (cheap, no repaint). */
+.nebula-bg::after{
+  content:"";
+  position:absolute;
+  inset:-20% -10% auto;
+  height:110vh;
+  background:
+    radial-gradient(ellipse 55% 45% at 50% 18%, rgba(79,195,247,.20), transparent 70%),
+    radial-gradient(ellipse 40% 35% at 85% 10%, rgba(123,97,255,.16), transparent 70%),
+    radial-gradient(ellipse 45% 40% at 12% 30%, rgba(77,141,255,.12), transparent 70%);
+  animation:aurora 18s ease-in-out infinite alternate;
+}
+@keyframes aurora{
+  from{transform:translate3d(-3%,0,0) scale(1);}
+  to{transform:translate3d(3%,4%,0) scale(1.08);}
+}
+@media (prefers-reduced-motion: reduce){ .nebula-bg::after{animation:none;} }
 .nebula-bg::before{
   content:"";
   position:absolute;
@@ -119,7 +154,12 @@ a{color:inherit;text-decoration:none;}
   50%{opacity:.55;}
 }
 
-/* ---------- INTRO LOADER ---------- */
+/* ---------- INTRO LOADER ----------
+   ~3s: the logo comes into focus with a pulsing light ring behind it, a
+   loading bar fills and a tagline fades in; then a line of light flashes
+   across the middle and the screen opens like a curtain (top half up,
+   bottom half down) onto the page. Timing lives in initIntro/dismissIntro.
+   With reduced motion it's a plain fade instead (see the media query below). */
 #intro{
   position:fixed;
   inset:0;
@@ -128,13 +168,60 @@ a{color:inherit;text-decoration:none;}
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  background:var(--void);
   overflow:hidden;
-  transition:opacity .45s var(--ease), filter .45s var(--ease), transform .45s var(--ease);
 }
-#intro .nebula-bg{opacity:0;animation:introNebulaIn .6s var(--ease) forwards;}
+#intro.leaving{pointer-events:none;}
+.intro-curtain{
+  position:absolute;
+  left:0;right:0;
+  height:50.5%;
+  z-index:0;
+  overflow:hidden;
+  background:var(--void);
+  transition:transform .95s cubic-bezier(.77,0,.18,1);
+}
+.intro-curtain--top{top:0;}
+.intro-curtain--bottom{bottom:0;}
+/* The aurora + stars live inside each half so they travel with it. */
+.intro-curtain .nebula-bg{position:absolute;height:200%;opacity:0;animation:introNebulaIn .8s var(--ease) forwards;}
+.intro-curtain--bottom .nebula-bg{top:auto;bottom:0;}
+/* faint tech grid + a glow along the edge where the halves meet */
+.intro-curtain::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(rgba(143,227,255,.05) 1px, transparent 1px) 0 0/100% 34px,
+    linear-gradient(90deg, rgba(143,227,255,.05) 1px, transparent 1px) 0 0/34px 100%;
+  -webkit-mask-image:radial-gradient(ellipse 70% 90% at 50% 100%, #000, transparent 75%);
+  mask-image:radial-gradient(ellipse 70% 90% at 50% 100%, #000, transparent 75%);
+}
+.intro-curtain--bottom::after{
+  -webkit-mask-image:radial-gradient(ellipse 70% 90% at 50% 0%, #000, transparent 75%);
+  mask-image:radial-gradient(ellipse 70% 90% at 50% 0%, #000, transparent 75%);
+}
+#intro.leaving .intro-curtain--top{transform:translateY(-101%);transition-delay:.28s;}
+#intro.leaving .intro-curtain--bottom{transform:translateY(101%);transition-delay:.28s;}
 @keyframes introNebulaIn{to{opacity:1;}}
-#intro.leaving{opacity:0;filter:blur(10px);transform:scale(1.04);pointer-events:none;}
+/* line of light that flashes across the middle right before it opens */
+.intro-seam{
+  position:absolute;
+  top:50%;left:0;right:0;
+  z-index:3;
+  height:2px;
+  margin-top:-1px;
+  background:linear-gradient(90deg, transparent, var(--blue-bright) 20%, #fff 50%, var(--violet) 80%, transparent);
+  box-shadow:0 0 18px 3px rgba(143,227,255,.7), 0 0 60px 8px rgba(123,97,255,.45);
+  transform:scaleX(0);
+  opacity:0;
+  pointer-events:none;
+}
+#intro.leaving .intro-seam{animation:introSeam .9s cubic-bezier(.65,0,.35,1) forwards;}
+@keyframes introSeam{
+  0%{transform:scaleX(0);opacity:1;}
+  35%{transform:scaleX(1);opacity:1;}
+  100%{transform:scaleX(1);opacity:0;}
+}
 
 .modal-smoke-transition{
   position:fixed;
@@ -187,8 +274,31 @@ a{color:inherit;text-decoration:none;}
   position:relative;
   z-index:2;
   display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
+  gap:22px;
+  transition:opacity .35s ease, transform .45s cubic-bezier(.65,0,.35,1), filter .35s ease;
+}
+#intro.leaving .intro-mark{opacity:0;transform:scale(1.08);filter:blur(6px);}
+/* pulsing light ring behind the logo */
+.intro-mark::before{
+  content:"";
+  position:absolute;
+  top:42%;left:50%;
+  width:min(70vw, 340px);
+  aspect-ratio:1;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(79,195,247,.28), rgba(123,97,255,.12) 45%, transparent 70%);
+  transform:translate(-50%,-50%) scale(.6);
+  opacity:0;
+  animation:introRing 2.6s ease-in-out .3s infinite;
+  z-index:-1;
+}
+@keyframes introRing{
+  0%{transform:translate(-50%,-50%) scale(.6);opacity:0;}
+  40%{opacity:1;}
+  100%{transform:translate(-50%,-50%) scale(1.25);opacity:0;}
 }
 .intro-logo{
   width:auto;
@@ -198,12 +308,57 @@ a{color:inherit;text-decoration:none;}
   object-fit:contain;
   opacity:0;
   filter:drop-shadow(0 0 30px rgba(79,195,247,.5));
-  animation:introLogoIn 1s ease-out forwards;
+  animation:introLogoIn 1.3s cubic-bezier(.2,.8,.2,1) .15s forwards;
 }
 @keyframes introLogoIn{
-  0%{opacity:0;transform:scale(.75);}
-  60%{opacity:1;transform:scale(1.03);}
-  100%{opacity:1;transform:scale(1);}
+  0%{opacity:0;transform:scale(.82) translateY(10px);filter:blur(14px) drop-shadow(0 0 30px rgba(79,195,247,.5));}
+  100%{opacity:1;transform:none;filter:blur(0) drop-shadow(0 0 30px rgba(79,195,247,.5));}
+}
+.intro-bar{
+  position:relative;
+  width:min(56vw, 220px);
+  height:3px;
+  border-radius:999px;
+  overflow:hidden;
+  background:rgba(143,227,255,.12);
+  opacity:0;
+  animation:introFadeIn .5s ease .5s forwards;
+}
+.intro-bar span{
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background:linear-gradient(90deg, var(--blue-neon), var(--blue-bright), var(--violet));
+  box-shadow:0 0 12px rgba(143,227,255,.8);
+  transform:scaleX(0);
+  transform-origin:left;
+  animation:introLoad 1.6s cubic-bezier(.45,0,.2,1) .55s forwards;
+}
+@keyframes introLoad{to{transform:scaleX(1);}}
+.intro-tag{
+  margin:-8px 0 0;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+  color:var(--ink-dim);
+  opacity:0;
+  animation:introFadeIn .6s ease .9s forwards;
+}
+@keyframes introFadeIn{to{opacity:1;}}
+/* Reduced motion: no zoom, blur or sliding — the logo fades in and the whole
+   intro fades out (these override the global "kill all animations" rule). */
+@media (prefers-reduced-motion: reduce){
+  #intro .intro-logo{animation:introFadeIn 1s ease .15s forwards !important;}
+  #intro .intro-bar, #intro .intro-tag{animation:introFadeIn .6s ease .5s forwards !important;}
+  #intro .intro-bar span{animation:none !important;transform:scaleX(1);}
+  #intro .intro-mark::before{display:none;}
+  #intro .intro-curtain .nebula-bg{animation:none !important;opacity:1;}
+  #intro{transition:opacity .7s ease !important;}
+  #intro.leaving{opacity:0;}
+  #intro.leaving .intro-curtain{transform:none;}
+  #intro.leaving .intro-seam{animation:none !important;}
+  #intro.leaving .intro-mark{transform:none;filter:none;transition:opacity .5s ease !important;}
 }
 
 
@@ -214,20 +369,41 @@ a{color:inherit;text-decoration:none;}
   max-width:520px;
   margin:0 auto;
 }
+/* Tablets: the grid switches to 3 columns at 640px, so give it room
+   instead of squeezing three cards into the 520px phone column. */
+@media(min-width:640px){
+  .wrap{max-width:720px;}
+}
 @media(min-width:900px){
   .wrap{max-width:960px;}
 }
 
 /* ---------- HEADER ---------- */
+/* At the top of the page the header has no background or border of its own —
+   it sits on the same aurora as the catalog, so there's no visible band.
+   Its background (::before) fades in with the scroll, so the cards scrolling
+   under it never show through the logo/search. */
 header.site{
+  --hdr:0; /* 0 at the very top -> 1 after ~60px of scroll (handleHeaderScroll) */
   position:sticky;
   top:0;
   z-index:50;
-  backdrop-filter:blur(8px) saturate(130%);
-  background:rgba(5,10,20,0.82);
-  border-bottom:1px solid var(--line);
-  transition:background .3s ease;
+  background:transparent;
   contain:layout style;
+}
+/* The header's background fades in gradually as you scroll instead of
+   switching on all at once, and melts into the page at its bottom edge
+   (the last 28px are a fade) instead of ending in a hard line. */
+header.site::before{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:0;
+  bottom:-28px;
+  z-index:-1;
+  pointer-events:none;
+  background:linear-gradient(180deg, rgba(5,10,20,.99) 0%, rgba(5,10,20,.97) calc(100% - 28px), rgba(5,10,20,0) 100%);
+  opacity:var(--hdr);
+  transition:opacity .2s linear;
 }
 .ticker{
   overflow:hidden;
@@ -303,18 +479,22 @@ header.site.compact .search-box{
   overflow:hidden;
 }
 
+/* No solid strip: a faint glow that fades out at both ends (mask), so the
+   ticker melts into the aurora instead of being its own colored band. */
 .ticker{
   overflow:hidden;
   width:100%;
-  background:linear-gradient(90deg, rgba(79,195,247,.16), rgba(255,145,48,.12));
-  border-bottom:1px solid var(--line);
-  padding:5px 0;
+  background:linear-gradient(90deg, transparent, rgba(79,195,247,.10) 25%, rgba(123,97,255,.10) 75%, transparent);
+  border-bottom:1px solid transparent;
+  padding:6px 0;
+  -webkit-mask-image:linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image:linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
 }
 .ticker-track{
   display:flex;
   width:max-content;
-  /* 6 copies of the phrase pair (3 per half) so the strip is wider than any
-     desktop screen; 60s keeps the same px/second the old 2-copy/20s had. */
+  /* 4 copies of the three phrases (2 per half, the halves must match for the
+     -50% loop) so the strip is wider than any desktop screen. */
   animation:tickerRight 60s linear infinite;
   will-change:transform;
   backface-visibility:hidden;
@@ -386,15 +566,17 @@ header.site.compact .search-box{
   display:flex;
   align-items:center;
   gap:9px;
-  background:var(--bg-card);
-  border:1px solid var(--line);
+  background:linear-gradient(160deg, rgba(17,34,64,.75), rgba(13,26,47,.6));
+  border:1px solid rgba(143,227,255,.14);
   border-radius:14px;
   padding:9px 13px;
-  transition:border-color .25s var(--ease), box-shadow .25s var(--ease);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 10px 26px -14px rgba(0,0,0,.8);
+  transition:border-color .25s var(--ease), box-shadow .25s var(--ease), transform .25s var(--ease);
 }
 .search-field:focus-within{
   border-color:var(--blue-neon);
-  box-shadow:0 0 0 3px rgba(79,195,247,0.15);
+  box-shadow:0 0 0 3px rgba(79,195,247,0.15), 0 14px 34px -14px rgba(79,195,247,.45);
+  transform:translateY(-1px);
 }
 .search-field svg{flex:none;width:16px;height:16px;color:var(--blue-neon);}
 .search-field input{
@@ -432,6 +614,16 @@ header.site.compact .search-box{
   z-index:60;
 }
 .autocomplete.open{opacity:1;transform:translateY(0);pointer-events:auto;}
+/* Results cascade in one after another instead of appearing as a block. */
+.autocomplete.open .ac-item{animation:riseIn .35s var(--ease) backwards;}
+.autocomplete.open .ac-item:nth-child(2){animation-delay:.04s;}
+.autocomplete.open .ac-item:nth-child(3){animation-delay:.08s;}
+.autocomplete.open .ac-item:nth-child(4){animation-delay:.12s;}
+.autocomplete.open .ac-item:nth-child(n+5){animation-delay:.16s;}
+/* Shared "slide up into place" entrance (cards, modal content, list rows).
+   Only a `from` keyframe + backwards fill: once it ends the element falls
+   back to its normal styles, so hover/active transforms keep working. */
+@keyframes riseIn{from{opacity:0;transform:translateY(14px);}}
 .ac-item{
   display:flex;
   align-items:center;
@@ -486,7 +678,16 @@ main{position:relative;z-index:1;}
   color:var(--white-glove);
   line-height:1.05;
   letter-spacing:.5px;
+  background:linear-gradient(180deg, #ffffff 30%, var(--blue-bright) 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 6px 18px rgba(79,195,247,.25));
 }
+/* Section headings slide in the first time they scroll into view
+   (.in-view is added by revealSectionHeads). */
+.section-head.will-reveal{opacity:0;transform:translateY(18px);}
+.section-head.will-reveal.in-view{opacity:1;transform:none;transition:opacity .7s var(--ease), transform .7s var(--ease);}
 .section-sub{
   font-size:13.5px;
   color:var(--ink-dim);
@@ -548,13 +749,33 @@ main{position:relative;z-index:1;}
    does. */
 .catalog-view-row{margin:0 0 10px;}
 .catalog-view-row .view-toggle{
+  position:relative;
   display:flex;
   width:100%;
   gap:6px;
   padding:5px;
   border-radius:14px;
+  background:linear-gradient(160deg, rgba(17,34,64,.7), rgba(8,17,31,.7));
+  border-color:rgba(143,227,255,.12);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04), var(--shadow-soft);
 }
+/* One highlight pill that slides between "Grilla" and "Deslizar" instead of
+   the color just jumping from one button to the other. */
+.catalog-view-row .view-toggle::before{
+  content:"";
+  position:absolute;
+  top:5px;bottom:5px;left:5px;
+  width:calc(50% - 8px);
+  border-radius:10px;
+  background:var(--grad-btn);
+  background-size:200% 100%;
+  box-shadow:0 3px 0 var(--btn-edge), 0 10px 24px -8px rgba(79,195,247,.7);
+  transition:transform .45s var(--ease-spring);
+}
+.catalog-view-row .view-toggle:has(#viewCarousel.active)::before{transform:translateX(calc(100% + 6px));}
 .catalog-view-row .view-toggle button{
+  position:relative;
+  z-index:1;
   flex:1;
   width:auto;height:auto;
   gap:7px;
@@ -562,7 +783,11 @@ main{position:relative;z-index:1;}
   border-radius:10px;
   font-size:13px;
   font-weight:700;
+  transition:color .3s, transform .15s;
 }
+.catalog-view-row .view-toggle button.active{background:none;}
+.catalog-view-row .view-toggle button:not(.active):hover{color:var(--white-glove);}
+.catalog-view-row .view-toggle button:active{transform:scale(.96);}
 .catalog-view-row .view-toggle button svg{width:17px;height:17px;flex:none;}
 
 /* catalog sort filters: always one row of three equal-width chips (a grid,
@@ -580,15 +805,18 @@ main{position:relative;z-index:1;}
   justify-content:center;
   gap:4px;
   min-width:0;
-  background:var(--bg-card);
-  border:1px solid var(--line);
+  background:linear-gradient(160deg, rgba(17,34,64,.8), rgba(13,26,47,.8));
+  border:1px solid rgba(143,227,255,.12);
   border-radius:999px;
   padding:9px 5px;
   font-size:clamp(10.5px, 3vw, 12.5px);
   font-weight:600;
   color:var(--ink-dim);
-  transition:border-color .2s, background .2s, color .2s;
+  box-shadow:0 3px 0 rgba(0,0,0,.35), 0 10px 22px -14px rgba(0,0,0,.9);
+  transition:border-color .2s, background .2s, color .2s, transform .25s var(--ease-spring), box-shadow .25s var(--ease);
 }
+.filter-chip:hover{transform:translateY(-2px);color:var(--white-glove);box-shadow:0 5px 0 rgba(0,0,0,.35), 0 14px 26px -12px rgba(79,195,247,.45);}
+.filter-chip:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.35);transition-duration:.06s;}
 .filter-chip-icon{flex:none;font-size:13px;line-height:1;}
 /* Last-resort safety net: if a label ever can't fit it gets an ellipsis
    rather than spilling out of its chip. */
@@ -598,9 +826,17 @@ main{position:relative;z-index:1;}
 @media(max-width:350px){.filter-chip-icon{display:none;}}
 .filter-chip:hover{border-color:var(--blue-neon);}
 .filter-chip.active{
-  background:linear-gradient(135deg, var(--blue-neon), var(--blue-steel));
+  background:var(--grad-btn);
+  background-size:200% 100%;
   border-color:transparent;
   color:var(--void);
+  font-weight:700;
+  box-shadow:0 3px 0 var(--btn-edge), 0 10px 24px -8px rgba(79,195,247,.7);
+  animation:chipPop .4s var(--ease-spring);
+}
+@keyframes chipPop{
+  0%{transform:scale(.92);}
+  60%{transform:scale(1.05);}
 }
 /* This one isn't a sort toggle like its siblings — it jumps into a whole
    separate THC flow — so it needs to read as more than "just another
@@ -614,6 +850,20 @@ main{position:relative;z-index:1;}
   box-shadow:0 0 0 1px rgba(62,207,110,.12), 0 4px 14px rgba(62,207,110,.2);
 }
 .filter-chip--thc:hover{border-color:var(--green-thc);background:linear-gradient(135deg, rgba(62,207,110,.32), rgba(62,207,110,.14));}
+
+/* Switching Deslizar/Grilla: the cards slide back in (class set by playViewSwap). */
+.carousel.swap{animation:riseIn .45s var(--ease) backwards;}
+
+/* Light sweep across promo cards and the main card buttons (.p-shine,
+   .p-cta--solid::after). */
+@keyframes shine{
+  0%,55%{transform:skewX(-18deg) translateX(0);}
+  85%,100%{transform:skewX(-18deg) translateX(420%);}
+}
+@keyframes flicker{
+  0%,100%{transform:scale(1) rotate(-4deg);}
+  50%{transform:scale(1.15) rotate(4deg);}
+}
 
 /* ---------- HEADER SEARCH ---------- */
 .search-row{
@@ -670,7 +920,8 @@ main{position:relative;z-index:1;}
   backdrop-filter:blur(6px);
   transition:background .2s, transform .15s;
 }
-.arrow:hover{background:rgba(79,195,247,.18);}
+.arrow{box-shadow:0 10px 24px -10px rgba(0,0,0,.9);transition:background .2s, transform .25s var(--ease-spring), box-shadow .25s, border-color .2s;}
+.arrow:hover{background:rgba(79,195,247,.18);border-color:rgba(143,227,255,.5);transform:translateY(-50%) scale(1.1);box-shadow:0 12px 28px -10px rgba(79,195,247,.6);}
 .arrow:active{transform:translateY(-50%) scale(.88);}
 .arrow svg{width:17px;height:17px;}
 .arrow.prev{left:2px;}
@@ -705,20 +956,33 @@ main{position:relative;z-index:1;}
 /* ---------- PRODUCT CARD ---------- */
 .p-card{
   position:relative;
-  background:linear-gradient(160deg, var(--bg-card) 0%, var(--bg-card-2) 100%);
-  border:1px solid var(--line);
+  background:
+    radial-gradient(120% 70% at 50% 0%, rgba(79,195,247,.10), transparent 65%),
+    linear-gradient(165deg, var(--bg-card-2) 0%, var(--bg-card) 55%, var(--bg-mid) 100%);
+  border:1px solid rgba(143,227,255,.10);
   border-radius:24px;
   padding:20px 18px 18px;
   overflow:hidden;
   cursor:pointer;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05), var(--shadow-soft);
   transition:transform .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
   opacity:0;
   transform:translateY(24px);
 }
-.p-card.reveal{animation:cardIn .6s var(--ease) forwards;}
-@keyframes cardIn{to{opacity:1;transform:translateY(0);}}
+/* cardRise with a backwards fill: once the entrance
+   ends the card goes back to its own transform, so the hover lift and the
+   press-down below actually apply (a `forwards` fill kept overriding them). */
+.p-card.reveal{opacity:1;transform:none;animation:cardRise .6s var(--ease) backwards;}
+.p-card--oos.reveal{opacity:.6;}
+@keyframes cardRise{from{opacity:0;transform:translateY(24px);}}
 .p-card:active{transform:scale(.97);}
-.p-card:hover{border-color:var(--accent);box-shadow:0 18px 40px -12px var(--accent-shadow);}
+.p-card:hover{border-color:var(--accent);box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 26px 50px -18px rgba(0,0,0,.9), 0 18px 40px -14px var(--accent-shadow);}
+@media (hover:hover){
+  .p-card:hover{transform:translateY(-6px);}
+  .p-card:active{transform:translateY(-2px) scale(.98);}
+  .p-glyph{transition:transform .5s var(--ease);}
+  .p-card:hover .p-glyph{transform:translateY(-4px) scale(1.05);}
+}
 
 .p-card::before{
   content:"";
@@ -782,14 +1046,14 @@ main{position:relative;z-index:1;}
   color:var(--void);
 }
 .p-card--flagship.reveal{
-  animation:cardIn .6s var(--ease) forwards, flagshipGlow 2.6s ease-in-out .6s infinite;
+  animation:cardRise .6s var(--ease) backwards, flagshipGlow 2.6s ease-in-out .6s infinite;
 }
 @keyframes flagshipGlow{
   0%, 100%{border-color:var(--line);box-shadow:0 0 0 0 rgba(79,195,247,0);}
   50%{border-color:rgba(79,195,247,.75);box-shadow:0 0 22px -2px rgba(79,195,247,.45), 0 16px 38px -16px rgba(79,195,247,.5);}
 }
 @media (prefers-reduced-motion: reduce){
-  .p-card--flagship.reveal{animation:cardIn .6s var(--ease) forwards;border-color:rgba(79,195,247,.6);}
+  .p-card--flagship.reveal{animation:cardRise .6s var(--ease) backwards;border-color:rgba(79,195,247,.6);}
 }
 .p-card--oos{
   opacity:.6;
@@ -802,45 +1066,67 @@ main{position:relative;z-index:1;}
 }
 .p-card--oos .p-cta{color:var(--red-cap);}
 
-/* Promo cards (LUMA, IGNITE V400 ICE, BLACKSHEEP 55K): the WHOLE card gets its own, richer
-   shade of blue (cobalt instead of the regular navy) with a light-blue edge
-   and a soft glow, plus a big blurred "OFERTA" written behind the photo — so
-   the two offers read as different from the rest in both carousel and grid
-   view without being loud. Same hue family as the site, no red, no motion. */
+/* Promo cards (LUMA, IGNITE V400 ICE, BLACKSHEEP 55K): a richer cobalt-to-
+   violet card with a spotlight behind the photo, a slowly spinning gradient
+   border (::after), a light sweep every few seconds (.p-shine) and a warm
+   "-X%" tag — the only warm color on the card, so the discount is what the
+   eye lands on first. (Replaces the old blurred "OFERTA" watermark.) */
 .p-card--promo{
-  background:linear-gradient(160deg, #1d4a9a 0%, #12295c 100%);
-  border-color:rgba(140,185,255,.5);
-  box-shadow:0 16px 38px -16px rgba(74,134,255,.6);
+  background:
+    radial-gradient(70% 45% at 50% 22%, rgba(143,227,255,.30), transparent 70%),
+    radial-gradient(80% 50% at 100% 100%, rgba(123,97,255,.35), transparent 70%),
+    linear-gradient(165deg, #1d4a9a 0%, #142f6c 50%, #0e1d45 100%);
+  border-color:transparent;
+  box-shadow:0 22px 46px -20px rgba(0,0,0,.9), 0 14px 38px -16px rgba(74,134,255,.7);
 }
 .p-card--promo:hover{
-  border-color:rgba(170,205,255,.85);
-  box-shadow:0 18px 42px -14px rgba(90,150,255,.75);
+  border-color:transparent;
+  box-shadow:0 30px 56px -20px rgba(0,0,0,.95), 0 18px 46px -14px rgba(110,150,255,.85);
+}
+.p-card--promo::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:5;
+  border-radius:inherit;
+  padding:1.5px;
+  background:conic-gradient(from var(--spin), rgba(143,227,255,.18), var(--blue-bright), var(--violet), var(--orange-pulp), rgba(143,227,255,.18) 70%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  animation:spin 5s linear infinite;
+  pointer-events:none;
+}
+.p-shine{
+  position:absolute;
+  top:0;bottom:0;left:-60%;
+  width:45%;
+  z-index:3;
+  background:linear-gradient(100deg, transparent, rgba(255,255,255,.13), transparent);
+  transform:skewX(-18deg);
+  animation:shine 5s ease-in-out infinite;
+  pointer-events:none;
 }
 /* The regular grey-blue secondary text gets lost on the brighter cobalt. */
 .p-card--promo .p-meta{color:#bcd2f2;}
-
-/* "OFERTA" written large and slightly blurred BEHIND the product photo. It
-   lives inside .p-glyph (which is position:relative); the photo is lifted
-   above it with z-index. */
-.p-promo-mark{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:'Bungee',cursive;
-  font-size:56px;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  white-space:nowrap;
-  color:rgba(170,205,255,.18);
-  filter:blur(1.6px);
-  transform:rotate(-8deg);
-  pointer-events:none;
-  user-select:none;
-}
-@media(min-width:560px){.p-promo-mark{font-size:64px;}}
 .p-card--promo .p-glyph .mascot-hero{position:relative;z-index:1;}
+.p-save{
+  align-self:flex-start;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  margin:-2px 0 8px;
+  padding:3px 9px;
+  border-radius:999px;
+  font-size:10.5px;
+  font-weight:800;
+  color:#ffd9a8;
+  background:rgba(255,145,48,.14);
+  border:1px solid rgba(255,145,48,.4);
+}
+@media (prefers-reduced-motion: reduce){
+  .p-card--promo::after, .p-shine{animation:none;}
+}
 
 /* The "🔥 Oferta" tag sits inside .p-glyph too, so it can be placed relative
    to the photo area in both views: top-left in carousel mode (where the
@@ -856,7 +1142,12 @@ main{position:relative;z-index:1;}
   color:#fff;
   z-index:2;
 }
-.p-badge--promo{background:var(--cobalt-btn);box-shadow:0 2px 10px -2px rgba(70,120,255,.6);}
+.p-badge--promo{background:var(--grad-hot);box-shadow:0 4px 14px -4px rgba(232,67,58,.75);animation:badgePulse 2.4s ease-in-out infinite;}
+@keyframes badgePulse{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.07);}
+}
+@media (prefers-reduced-motion: reduce){ .p-badge--promo{animation:none;} }
 .p-badge--flagship{background:linear-gradient(135deg, #ffd873, var(--gold));color:var(--void);box-shadow:0 2px 10px -2px rgba(255,200,87,.6);}
 .p-glyph .p-badge--promo, .p-glyph .p-badge--flagship{top:-6px;left:-4px;}
 .catalog.grid-mode .p-glyph .p-badge--promo, .catalog.grid-mode .p-glyph .p-badge--flagship{
@@ -867,8 +1158,6 @@ main{position:relative;z-index:1;}
   font-size:9px;
   padding:4px 8px;
 }
-.catalog.grid-mode .p-promo-mark{font-size:27px;letter-spacing:1px;}
-@media(min-width:640px){.catalog.grid-mode .p-promo-mark{font-size:30px;}}
 .p-puffs{
   position:absolute;top:14px;right:14px;
   font-size:12.5px;
@@ -977,12 +1266,32 @@ main{position:relative;z-index:1;}
 }
 .p-cta svg{width:15px;height:15px;transition:transform .25s var(--ease);}
 .p-card:hover .p-cta svg{transform:translateX(4px);}
+/* Main card button: moving gradient, a solid "edge" shadow that makes it look
+   raised (it sinks onto it when pressed) and a light sweep every few
+   seconds, so it never sits there looking flat. */
 .p-cta--solid{
-  background:linear-gradient(135deg, var(--blue-neon), var(--blue-steel));
+  overflow:hidden;
+  background:var(--grad-btn);
+  background-size:200% 100%;
   border-color:transparent;
   color:var(--void);
   font-weight:700;
+  box-shadow:0 4px 0 var(--btn-edge), 0 12px 24px -10px rgba(79,195,247,.65);
+  transition:background-position .5s var(--ease), transform .15s var(--ease), box-shadow .15s var(--ease);
 }
+.p-cta--solid::after{
+  content:"";
+  position:absolute;
+  top:0;bottom:0;left:-60%;
+  width:40%;
+  background:linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent);
+  transform:skewX(-18deg);
+  animation:shine 4.5s ease-in-out infinite;
+  pointer-events:none;
+}
+.p-card:hover .p-cta--solid{background-position:100% 0;box-shadow:0 5px 0 var(--btn-edge), 0 16px 30px -10px rgba(79,195,247,.8);}
+.p-card:active .p-cta--solid{transform:translateY(3px);box-shadow:0 1px 0 var(--btn-edge), 0 6px 14px -8px rgba(79,195,247,.6);transition-duration:.06s;}
+@media (prefers-reduced-motion: reduce){ .p-cta--solid::after{animation:none;} }
 /* Same solid-button treatment as .p-cta--solid, tinted THC green instead of
    the retail blue — used on THC cards so their CTA carries the same visual
    weight as every other card's, just branded for that section. */
@@ -991,7 +1300,10 @@ main{position:relative;z-index:1;}
   border-color:transparent;
   color:var(--void);
   font-weight:700;
+  box-shadow:0 4px 0 #1d6b39, 0 12px 24px -10px rgba(62,207,110,.55);
+  transition:transform .15s var(--ease), box-shadow .15s var(--ease);
 }
+.p-card:active .p-cta--thc{transform:translateY(3px);box-shadow:0 1px 0 #1d6b39;transition-duration:.06s;}
 
 /* Single-variant products (one flavor/model only) skip the "Ver sabores"
    picker step and act directly from the card — same visual language as the
@@ -1146,21 +1458,17 @@ main{position:relative;z-index:1;}
   .p-card{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;}
   .p-card img{-webkit-touch-callout:none;-webkit-user-drag:none;}
 }
-/* One-line discoverability hint under the sort chips: the peek is invisible
-   until someone tries it. Wording differs for touch vs mouse. */
+/* One line under the sort chips with what the customer gains: the combo
+   discount and low-cost shipping (text set in JS from COMBO_SIZE/COMBO_DISCOUNT). */
 .peek-hint{
   grid-column:1 / -1; /* spans all three filter columns */
   margin:2px 0 0;
   text-align:center;
   font-size:11.5px;
-  color:var(--ink-dim);
+  color:var(--ink);
   letter-spacing:.2px;
 }
-.peek-hint-mouse{display:none;}
-@media (hover:hover) and (pointer:fine){
-  .peek-hint-touch{display:none;}
-  .peek-hint-mouse{display:inline;}
-}
+.peek-hint b{color:#ffd9a8;}
 
 /* GRID MODE */
 .catalog.grid-mode .carousel{
@@ -1217,6 +1525,44 @@ main{position:relative;z-index:1;}
 }
 .catalog.grid-mode .swipe-hint{display:none;}
 
+/* "Ver más": the grid starts with a few rows so people actually reach the
+   reviews and footer; the button says how many models are left and shows
+   more rows each tap (applyGridLimit). The swipe view always shows all. */
+.catalog.grid-mode .p-card--more{display:none;}
+.grid-more{display:flex;justify-content:center;margin-top:22px;}
+.grid-more[hidden], .catalog:not(.grid-mode) .grid-more{display:none;}
+.grid-more-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:13px 22px;
+  border-radius:999px;
+  border:1px solid transparent;
+  background:
+    linear-gradient(160deg, rgba(17,34,64,.95), rgba(8,17,31,.95)) padding-box,
+    linear-gradient(120deg, var(--blue-bright), var(--violet), var(--blue-neon)) border-box;
+  color:var(--white-glove);
+  font-size:14px;
+  font-weight:700;
+  box-shadow:0 4px 0 rgba(0,0,0,.4), 0 14px 30px -12px rgba(79,195,247,.55);
+  transition:transform .25s var(--ease-spring), box-shadow .25s var(--ease);
+}
+.grid-more-btn small{
+  padding:3px 9px;
+  border-radius:999px;
+  background:var(--grad-btn);
+  color:var(--void);
+  font-size:11px;
+  font-weight:800;
+}
+.grid-more-btn svg{width:17px;height:17px;color:var(--blue-bright);animation:moreBounce 1.6s ease-in-out infinite;}
+@keyframes moreBounce{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(3px);}
+}
+.grid-more-btn:hover{transform:translateY(-2px);box-shadow:0 6px 0 rgba(0,0,0,.4), 0 18px 36px -12px rgba(79,195,247,.75);}
+.grid-more-btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.4);transition-duration:.06s;}
+
 .trust-bar{
   display:flex;
   justify-content:center;
@@ -1224,7 +1570,8 @@ main{position:relative;z-index:1;}
   gap:18px;
   margin-top:18px;
   padding-top:16px;
-  border-top:1px solid var(--line);
+  border-top:1px solid transparent;
+  border-image:linear-gradient(90deg, transparent, var(--line), transparent) 1;
 }
 .trust-item{
   display:flex;
@@ -1267,10 +1614,12 @@ main{position:relative;z-index:1;}
      this sheet's scroll limit on some mobile browsers lets the page behind
      the modal peek through for as long as the finger is still down. */
   overscroll-behavior:contain;
-  transform:translate(-50%,-50%) scale(.9);
+  /* Opens from slightly below and smaller, with a little spring overshoot;
+     closes faster and without the bounce (see .modal-overlay.open below). */
+  transform:translate(-50%,-44%) scale(.92);
   opacity:0;
-  transition:transform .36s var(--ease), opacity .28s ease;
-  box-shadow:0 30px 80px rgba(0,0,0,.6);
+  transition:transform .26s var(--ease), opacity .2s ease;
+  box-shadow:0 40px 90px -20px rgba(0,0,0,.85), 0 0 0 1px rgba(143,227,255,.06), 0 -10px 60px -30px rgba(79,195,247,.45);
 }
 @media(min-width:820px){
   .modal-sheet{max-width:780px;padding:30px;}
@@ -1278,7 +1627,53 @@ main{position:relative;z-index:1;}
 @media(min-width:1080px){
   .modal-sheet{max-width:860px;}
 }
-.modal-overlay.open .modal-sheet{transform:translate(-50%,-50%) scale(1);opacity:1;}
+.modal-overlay.open .modal-sheet{transform:translate(-50%,-50%) scale(1);opacity:1;transition:transform .55s var(--ease-spring), opacity .3s ease;}
+/* Everything inside the sheet cascades in right after it opens. */
+.modal-overlay.open .modal-info > *,
+.modal-overlay.open .modal-media,
+.modal-overlay.open .modal-top,
+.modal-overlay.open .intro .cart-item,
+.modal-overlay.open .intro .cart-total-row,
+.modal-overlay.open .intro .cart-combo-nudge,
+.modal-overlay.open .fulfill-btn{animation:riseIn .5s var(--ease) backwards;animation-delay:.12s;}
+.modal-overlay.open .modal-info > :nth-child(2),
+.modal-overlay.open .intro .cart-item:nth-child(2),
+.modal-overlay.open .fulfill-btn:nth-child(2){animation-delay:.17s;}
+.modal-overlay.open .modal-info > :nth-child(3),
+.modal-overlay.open .intro .cart-item:nth-child(3){animation-delay:.22s;}
+.modal-overlay.open .modal-info > :nth-child(4),
+.modal-overlay.open .intro .cart-item:nth-child(4){animation-delay:.27s;}
+.modal-overlay.open .modal-info > :nth-child(5),
+.modal-overlay.open .intro .cart-item:nth-child(5){animation-delay:.32s;}
+.modal-overlay.open .modal-info > :nth-child(n+6),
+.modal-overlay.open .intro .cart-item:nth-child(n+6),
+.modal-overlay.open .intro .cart-total-row,
+.modal-overlay.open .intro .cart-combo-nudge{animation-delay:.37s;}
+
+/* Stacked steps (product -> "Ver carrito" -> retiro/envío): the sheet that
+   gets covered steps back — smaller, dimmer, a little blurred — instead of
+   just sitting there under the new one, and comes forward again on return. */
+.modal-overlay .modal-sheet{transition:transform .26s var(--ease), opacity .2s ease, filter .35s ease;}
+#modalOverlay.open:has(~ #cartOverlay.open) .modal-sheet,
+#cartOverlay.open:has(~ #fulfillOverlay.open) .modal-sheet{
+  transform:translate(-50%,-50%) scale(.92);
+  opacity:.45;
+  filter:blur(3px);
+  transition:transform .5s var(--ease), opacity .4s ease, filter .4s ease;
+}
+/* Removing a product: it slides out and the list closes the gap. */
+.cart-item.removing{animation:cartItemOut .3s var(--ease) forwards;pointer-events:none;}
+@keyframes cartItemOut{
+  to{opacity:0;transform:translateX(40px);max-height:0;margin-top:0;margin-bottom:0;padding-top:0;padding-bottom:0;}
+}
+.cart-item{max-height:160px;}
+/* Retiro / envío: the next step slides in from the side. */
+.fulfill-step:not(.hidden){animation:stepIn .4s var(--ease) backwards;}
+@keyframes stepIn{from{opacity:0;transform:translateX(26px);}}
+@media (prefers-reduced-motion: reduce){
+  .modal-overlay.open .modal-sheet{transition:opacity .2s ease;}
+  .modal-overlay.open *{animation-delay:0s !important;}
+}
 
 /* Drifting dots behind the flavor picker only (#modalSheet specifically,
    not every .modal-sheet — the cart drawer and other sheets don't need
@@ -1314,7 +1709,9 @@ main{position:relative;z-index:1;}
 .fulfill-sheet{max-width:380px;text-align:center;padding:30px 24px 26px;scrollbar-width:none;}
 .fulfill-sheet::-webkit-scrollbar{display:none;}
 /* One line, always — the sheet's width must never make the title reflow. */
-.fulfill-sheet .modal-name{margin-top:4px;margin-bottom:4px;white-space:nowrap;font-size:clamp(17px,5.4vw,22px);}
+/* Sized to always fit on one line: the title's gradient (.modal-name) only
+   paints inside its box, so text running past the edge would vanish. */
+.fulfill-sheet .modal-name{margin-top:4px;margin-bottom:4px;white-space:nowrap;font-size:clamp(14px,4.3vw,20px);}
 .fulfill-btns{display:flex;flex-direction:column;gap:12px;margin-top:22px;}
 .fulfill-btn{
   display:flex;
@@ -1422,19 +1819,18 @@ main{position:relative;z-index:1;}
 .fulfill-step .modal-eyebrow,
 .fulfill-step .modal-name{padding-right:0;}
 
+/* AirPods upsell: kept deliberately calm and "Apple-like" (glass card, the
+   product on a light tile, white type, white button). The old gold/red
+   pulsing look made genuine AirPods read as a cheap replica. */
 .offer-card{
   margin-top:18px;
   padding:14px;
-  border-radius:16px;
-  background:linear-gradient(135deg, rgba(255,200,87,.12), rgba(232,67,58,.10)), var(--bg-card);
-  border:1.5px solid rgba(255,200,87,.55);
-  box-shadow:0 0 22px rgba(255,200,87,.18);
+  border-radius:18px;
+  background:linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.025));
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08), 0 18px 36px -22px rgba(0,0,0,.9);
   text-align:left;
-  animation:offerGlow 2.2s ease-in-out infinite;
-}
-@keyframes offerGlow{
-  0%,100%{box-shadow:0 0 14px rgba(255,200,87,.14);}
-  50%{box-shadow:0 0 28px rgba(255,200,87,.38);}
+  animation:riseIn .5s var(--ease) .25s backwards;
 }
 .offer-card.hidden{display:none;}
 .offer-card-head{
@@ -1446,19 +1842,20 @@ main{position:relative;z-index:1;}
 }
 .offer-card-badge{
   font-size:10.5px;
-  font-weight:800;
-  letter-spacing:.3px;
+  font-weight:600;
+  letter-spacing:.8px;
   text-transform:uppercase;
-  color:var(--gold);
+  color:#b9c6d6;
 }
 .offer-card-timer{
   flex:none;
   font-family:'Poppins',sans-serif;
-  font-weight:800;
-  font-size:14px;
-  color:var(--red-cap);
-  background:rgba(232,67,58,.12);
-  border:1px solid rgba(232,67,58,.35);
+  font-weight:600;
+  font-size:12.5px;
+  font-variant-numeric:tabular-nums;
+  color:#e8eef5;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.14);
   border-radius:999px;
   padding:3px 10px;
   min-width:50px;
@@ -1471,9 +1868,11 @@ main{position:relative;z-index:1;}
 }
 .offer-card-photo{
   flex:none;
-  width:60px;height:60px;
-  border-radius:14px;
-  background:rgba(255,255,255,.04);
+  width:64px;height:64px;
+  padding:6px;
+  border-radius:16px;
+  background:radial-gradient(circle at 50% 35%, #ffffff, #dde3ea);
+  box-shadow:0 8px 18px -10px rgba(0,0,0,.8);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -1482,40 +1881,34 @@ main{position:relative;z-index:1;}
 .offer-card-photo img{width:100%;height:100%;object-fit:contain;}
 .offer-card-info{flex:1;min-width:0;text-align:left;}
 .offer-card-name{
-  font-family:'Bungee',cursive;
-  font-size:13.5px;
-  color:var(--white-glove);
-  margin-bottom:4px;
+  font-family:'Poppins',sans-serif;
+  font-size:15px;
+  font-weight:600;
+  letter-spacing:-.1px;
+  color:#fff;
+  margin-bottom:2px;
 }
 .offer-card-prices{display:flex;align-items:baseline;gap:8px;}
 .offer-card-price-orig{
   font-size:12.5px;
-  font-weight:600;
-  color:var(--ink-dim);
+  font-weight:500;
+  color:#8e9bab;
   text-decoration:line-through;
-  text-decoration-color:var(--red-cap);
 }
 .offer-card-price-now{
   font-family:'Poppins',sans-serif;
-  font-size:23px;
-  font-weight:800;
-  line-height:1.1;
-  color:var(--gold);
-  text-shadow:0 0 14px rgba(255,200,87,.45);
+  font-size:21px;
+  font-weight:700;
+  line-height:1.15;
+  letter-spacing:-.3px;
+  color:#fff;
 }
 .offer-card-note{
-  display:inline-block;
-  font-size:10.5px;
-  font-weight:800;
-  letter-spacing:.3px;
-  text-transform:uppercase;
-  color:#fff;
-  background:var(--red-cap);
-  border-radius:999px;
-  padding:3px 9px;
-  margin-top:6px;
+  margin-top:3px;
+  font-size:11px;
+  font-weight:500;
+  color:#9fb0c3;
 }
-@media (prefers-reduced-motion: reduce){ .offer-card{animation:none;} }
 .offer-card-btns{
   display:flex;
   gap:10px;
@@ -1526,7 +1919,7 @@ main{position:relative;z-index:1;}
   padding:11px;
   border-radius:12px;
   font-family:'Poppins',sans-serif;
-  font-weight:700;
+  font-weight:600;
   font-size:12.5px;
   letter-spacing:.2px;
   transition:transform .15s, background .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease);
@@ -1534,15 +1927,16 @@ main{position:relative;z-index:1;}
 .offer-btn:active{transform:scale(.96);}
 .offer-btn-accept{
   border:none;
-  background:linear-gradient(135deg, var(--blue-neon), var(--blue-steel));
-  color:var(--void);
+  background:#f5f7fa;
+  color:#0b1220;
 }
+.offer-btn-accept:hover{background:#fff;}
 .offer-btn-decline{
-  border:1.5px solid var(--line);
-  background:rgba(255,255,255,.04);
-  color:var(--ink-dim);
+  border:1px solid rgba(255,255,255,.16);
+  background:transparent;
+  color:#b9c6d6;
 }
-.offer-btn-decline:hover{border-color:var(--blue-neon);color:var(--blue-bright);}
+.offer-btn-decline:hover{border-color:rgba(255,255,255,.35);color:#fff;}
 
 .thc-overlay{z-index:210;}
 .thc-sheet{max-width:420px;}
@@ -1746,13 +2140,97 @@ main{position:relative;z-index:1;}
     max-width:340px;
   }
 }
+/* Product "showcase": dark stage with a cyan spotlight, a glowing pedestal
+   under the vape, a holographic grid floor (::before) and a spinning gradient
+   border (::after); .modal-media adds HUD corner brackets and a scan line
+   sweeping down. Replaces the old flat light-blue box. */
 .modal-media-frame{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
   width:100%;
   min-height:200px;
   border-radius:22px;
   display:flex;align-items:center;justify-content:center;
-  background:var(--accent-fade);
+  background:
+    radial-gradient(45% 12% at 50% 86%, rgba(143,227,255,.55), rgba(79,195,247,.18) 55%, transparent 75%),
+    radial-gradient(60% 55% at 50% 42%, rgba(79,195,247,.32), transparent 70%),
+    radial-gradient(70% 60% at 100% 0%, rgba(123,97,255,.28), transparent 70%),
+    linear-gradient(170deg, #0f2347 0%, #08142a 60%, #050a14 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08), inset 0 -30px 60px -30px rgba(79,195,247,.35), 0 24px 50px -24px rgba(0,0,0,.9);
   padding:18px;
+}
+.modal-media-frame::before{
+  content:"";
+  position:absolute;
+  left:-40%;right:-40%;bottom:-8%;
+  height:55%;
+  z-index:-1;
+  background-image:
+    linear-gradient(rgba(143,227,255,.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(143,227,255,.22) 1px, transparent 1px);
+  background-size:30px 30px;
+  transform:perspective(260px) rotateX(62deg);
+  transform-origin:bottom;
+  -webkit-mask-image:linear-gradient(0deg, #000 10%, transparent 85%);
+  mask-image:linear-gradient(0deg, #000 10%, transparent 85%);
+  animation:gridFlow 3.5s linear infinite;
+}
+@keyframes gridFlow{to{background-position:0 30px;}}
+.modal-media-frame::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  border-radius:inherit;
+  padding:1.5px;
+  background:conic-gradient(from var(--spin), rgba(143,227,255,.12), var(--blue-bright), var(--violet), rgba(143,227,255,.12) 60%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  animation:spin 6s linear infinite;
+  pointer-events:none;
+}
+.modal-media-frame img{position:relative;animation:floaty 4.5s ease-in-out infinite;}
+/* HUD corner brackets */
+.modal-media::before{
+  content:"";
+  position:absolute;
+  inset:10px;
+  z-index:3;
+  pointer-events:none;
+  --c:rgba(143,227,255,.7);
+  background:
+    linear-gradient(var(--c),var(--c)) top left/16px 2px,
+    linear-gradient(var(--c),var(--c)) top left/2px 16px,
+    linear-gradient(var(--c),var(--c)) top right/16px 2px,
+    linear-gradient(var(--c),var(--c)) top right/2px 16px,
+    linear-gradient(var(--c),var(--c)) bottom left/16px 2px,
+    linear-gradient(var(--c),var(--c)) bottom left/2px 16px;
+  background-repeat:no-repeat;
+  opacity:.8;
+}
+/* Scan line passing over the product every few seconds */
+.modal-media::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:0;
+  height:30%;
+  z-index:3;
+  border-radius:22px;
+  pointer-events:none;
+  background:linear-gradient(180deg, transparent, rgba(143,227,255,.10) 70%, rgba(143,227,255,.55) 98%, transparent);
+  opacity:0;
+  animation:scanDown 4.5s ease-in-out 1s infinite;
+}
+@keyframes scanDown{
+  0%{transform:translateY(-100%);opacity:0;}
+  10%{opacity:1;}
+  45%{transform:translateY(240%);opacity:1;}
+  55%,100%{transform:translateY(240%);opacity:0;}
+}
+@media (prefers-reduced-motion: reduce){
+  .modal-media-frame::before, .modal-media-frame::after, .modal-media-frame img, .modal-media::after{animation:none;}
 }
 /* Small brand watermark pinned to a corner of the flavor-picker product
    image — the area felt anonymous without it. Reuses the header's own logo
@@ -1815,6 +2293,29 @@ main{position:relative;z-index:1;}
 @media(min-width:820px){
   .modal-name{font-size:30px;}
 }
+.modal-name{
+  background:linear-gradient(180deg, #ffffff 35%, var(--blue-bright) 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 4px 16px rgba(79,195,247,.3));
+}
+/* Product modal only: the stock line reads like a live status with a pulsing dot. */
+#modalEyebrow{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;color:var(--blue-bright);}
+#modalEyebrow::before{
+  content:"";
+  width:7px;height:7px;
+  border-radius:50%;
+  background:var(--green-thc);
+  box-shadow:0 0 0 0 rgba(62,207,110,.6);
+  animation:livePulse 1.8s ease-out infinite;
+}
+#modalEyebrow.is-oos{color:var(--red-cap);}
+#modalEyebrow.is-oos::before{background:var(--red-cap);animation:none;}
+@keyframes livePulse{
+  0%{box-shadow:0 0 0 0 rgba(62,207,110,.6);}
+  100%{box-shadow:0 0 0 8px rgba(62,207,110,0);}
+}
 
 /* Price: the star of the show, right under the name */
 .modal-price-row{
@@ -1837,6 +2338,18 @@ main{position:relative;z-index:1;}
   font-size:32px;
   letter-spacing:-.5px;
   color:#ffffff;
+  text-shadow:0 0 22px rgba(143,227,255,.45);
+}
+.modal-price-off{
+  align-self:center;
+  padding:4px 10px;
+  border-radius:999px;
+  background:var(--grad-hot);
+  color:#fff;
+  font-size:12px;
+  font-weight:800;
+  box-shadow:0 6px 16px -6px rgba(232,67,58,.7);
+  animation:badgePulse 2.4s ease-in-out infinite;
 }
 .modal-price-consult{
   font-family:'Poppins',sans-serif;
@@ -1857,14 +2370,17 @@ main{position:relative;z-index:1;}
   letter-spacing:.2px;
   padding:6px 13px;
   border-radius:999px;
-  background:rgba(255,255,255,.05);
-  border:1px solid var(--line);
-  color:var(--ink);
+  background:
+    linear-gradient(var(--bg-mid), var(--bg-mid)) padding-box,
+    linear-gradient(120deg, var(--blue-bright), var(--violet)) border-box;
+  border:1px solid transparent;
+  color:var(--white-glove);
+  box-shadow:0 8px 20px -10px rgba(79,195,247,.6);
 }
 
 .modal-divider{
   height:1px;
-  background:var(--line);
+  background:linear-gradient(90deg, rgba(143,227,255,.5), rgba(123,97,255,.35), transparent);
   margin:14px 0 12px;
 }
 
@@ -1896,7 +2412,8 @@ main{position:relative;z-index:1;}
 }
 .modal-info-chevron{width:11px;height:11px;transition:transform .2s var(--ease);}
 .modal-info-toggle.open .modal-info-chevron{transform:rotate(180deg);}
-.modal-description{font-size:12.5px;color:var(--ink);line-height:1.55;margin-top:8px;}
+.modal-description{font-size:12.5px;color:var(--ink);line-height:1.55;margin-top:8px;animation:riseIn .35s var(--ease) backwards;}
+.thc-detail-desc{animation:riseIn .35s var(--ease) backwards;}
 .flavor-row{
   display:flex;
   align-items:center;
@@ -1928,7 +2445,7 @@ main{position:relative;z-index:1;}
    the WhatsApp order now goes through the cart's "Enviar pedido" button. */
 .flavor-row{flex-wrap:wrap;}
 .flavor-row-actions{display:none;flex:1 0 100%;}
-.flavor-row.selected .flavor-row-actions{display:flex;}
+.flavor-row.selected .flavor-row-actions{display:flex;animation:riseIn .35s var(--ease) backwards;}
 .flavor-row-add{
   width:100%;
   display:flex;align-items:center;justify-content:center;gap:8px;
@@ -2064,13 +2581,14 @@ main{position:relative;z-index:1;}
   color:var(--void);
   background:linear-gradient(120deg, var(--blue-bright), var(--blue-neon) 55%, var(--orange-pulp));
   background-size:200% 100%;
-  transition:background-position .5s var(--ease), transform .15s, opacity .25s;
+  transition:background-position .5s var(--ease), transform .15s var(--ease), box-shadow .15s var(--ease), opacity .25s;
   opacity:.45;
   pointer-events:none;
 }
-.modal-cta.ready{opacity:1;pointer-events:auto;}
-.modal-cta.ready:hover{background-position:100% 0;}
-.modal-cta:active{transform:scale(.98);}
+.modal-cta.ready{opacity:1;pointer-events:auto;box-shadow:0 4px 0 rgba(0,0,0,.35), 0 14px 28px -12px rgba(79,195,247,.6);}
+.modal-cta.ready:hover{background-position:100% 0;transform:translateY(-2px);box-shadow:0 6px 0 rgba(0,0,0,.35), 0 18px 34px -12px rgba(79,195,247,.75);}
+.modal-cta:active,
+.modal-cta.ready:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.35);transition-duration:.06s;}
 .modal-cta svg{width:17px;height:17px;flex:none;}
 /* Carrito → "Enviar pedido por WhatsApp": verde WhatsApp en vez del degradé
    azul/naranja general, para que se lea claramente como la acción de WhatsApp. */
@@ -2333,57 +2851,217 @@ main{position:relative;z-index:1;}
 }
 .cart-total-label{font-size:12.5px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.5px;}
 .cart-total-value{font-family:'Poppins',sans-serif;font-weight:800;font-size:18px;color:#fff;}
+/* "Llevá 2 y ahorrá" in the cart: subtotal + discount rows above the total,
+   and a nudge when one more vape would complete a combo. */
+.cart-total-row--sub{padding-bottom:0;}
+.cart-total-row--sub .cart-total-value{font-size:14px;font-weight:700;color:var(--ink);}
+.cart-total-row--combo{border-top:none;margin-top:0;padding-top:6px;}
+.cart-total-row--combo .cart-total-label{color:#ffd9a8;font-weight:700;text-transform:none;letter-spacing:0;}
+.cart-total-row--combo .cart-total-value{font-size:15px;background:var(--grad-hot);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.cart-total-row--sub + .cart-total-row--combo + .cart-total-row{margin-top:8px;}
+.cart-combo-nudge{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:12px;
+  padding:11px 13px;
+  border-radius:14px;
+  font-size:12px;
+  line-height:1.45;
+  color:#ffe2c2;
+  background:linear-gradient(135deg, rgba(255,145,48,.16), rgba(123,97,255,.14));
+  border:1px solid rgba(255,145,48,.4);
+}
+.cart-combo-nudge b{color:#fff;}
+.cart-combo-nudge-icon{flex:none;font-size:20px;animation:flicker 1.6s ease-in-out infinite;}
 
 
-/* ---------- REVIEWS ---------- */
+/* ---------- REVIEWS ----------
+   A strip of story-style cards (photo fills the card, quote and name on top
+   of it) that scrolls by itself in a loop (startReviewMarquee) and pauses
+   while it's touched or hovered. Tapping a card opens .rv-overlay. */
+#reviewCarousel{
+  gap:14px;
+  scroll-snap-type:none;
+  padding-top:10px;
+  padding-bottom:26px;
+  -webkit-mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
 .review-card{
-  scroll-snap-align:center;
-  flex:0 0 68%;
-  background:var(--bg-card);
-  border:1px solid var(--line);
+  position:relative;
+  flex:0 0 214px;
+  aspect-ratio:3/4;
+  padding:0;
+  border:none;
   border-radius:22px;
   overflow:hidden;
-  opacity:0;
-  transform:translateY(20px);
+  cursor:pointer;
+  text-align:left;
+  color:inherit;
+  font:inherit;
+  background:linear-gradient(150deg, var(--bg-card-2), var(--bg-card));
+  box-shadow:var(--shadow-soft), 0 0 0 1px rgba(143,227,255,.12);
+  transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+  -webkit-tap-highlight-color:transparent;
 }
-@media(min-width:560px){.review-card{flex:0 0 280px;}}
-@media(min-width:900px){.review-card{flex:0 0 280px;}}
-.review-card.reveal{animation:cardIn .6s var(--ease) forwards;}
-.review-photo{
-  position:relative;
-  width:100%;
-  aspect-ratio:4/5;
-  overflow:hidden;
-  background:linear-gradient(150deg, var(--accent-fade), var(--bg-card-2));
+@media(min-width:900px){.review-card{flex-basis:250px;}}
+.review-card > img{
+  position:absolute;
+  inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  transition:transform .6s var(--ease);
 }
-.review-photo img{width:100%;height:100%;object-fit:cover;}
-.review-photo-placeholder{
-  position:absolute;inset:0;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
+.review-shade{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(3,7,14,.15) 0%, transparent 30%, rgba(3,7,14,.6) 58%, rgba(3,7,14,.96) 100%);
+}
+.review-zoom{
+  position:absolute;
+  top:10px;right:10px;
+  display:grid;
+  place-items:center;
+  width:32px;height:32px;
+  border-radius:50%;
+  color:#fff;
+  background:rgba(5,10,20,.45);
+  border:1px solid rgba(255,255,255,.25);
+  backdrop-filter:blur(8px);
+  transition:transform .3s var(--ease-spring), background .2s;
+}
+.review-zoom svg{width:15px;height:15px;}
+.review-info{
+  position:absolute;
+  left:0;right:0;bottom:0;
+  display:flex;
+  flex-direction:column;
   gap:8px;
-  color:var(--ink-dim);
-}
-.review-photo-placeholder svg{width:30px;height:30px;opacity:.7;}
-.review-photo-placeholder span{font-size:10.5px;letter-spacing:.5px;text-align:center;padding:0 14px;}
-.review-photo-overlay{
-  position:absolute;left:0;right:0;bottom:0;
-  padding:28px 14px 12px;
-  background:linear-gradient(0deg, rgba(3,7,14,.92), transparent);
-  display:flex;align-items:center;gap:8px;
+  padding:14px;
 }
 .review-stars{display:flex;gap:2px;}
-.review-stars svg{width:11px;height:11px;color:var(--orange-pulp);}
-.review-body{padding:13px 14px 16px;}
-.review-text{font-size:12.5px;line-height:1.55;color:var(--ink);margin-bottom:12px;}
+.review-stars svg{width:12px;height:12px;color:var(--gold);filter:drop-shadow(0 0 4px rgba(255,200,87,.5));}
+.review-text{
+  margin:0;
+  font-size:12.5px;
+  font-weight:500;
+  line-height:1.45;
+  color:var(--white-glove);
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+}
 .review-foot{display:flex;align-items:center;gap:9px;}
 .review-avatar{
   width:28px;height:28px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
   font-family:'Bungee',cursive;font-size:11px;color:var(--void);
   flex:none;
+  box-shadow:0 0 0 2px rgba(5,10,20,.6), 0 4px 12px -4px rgba(79,195,247,.7);
 }
-.review-name{font-size:12.5px;color:var(--white-glove);font-weight:600;}
+.review-name{font-size:12.5px;color:var(--white-glove);font-weight:700;}
 .review-flavor{font-size:10.5px;color:var(--ink-dim);}
+.review-card .review-name, .review-card .review-flavor{display:block;}
+.review-card .review-flavor{max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+@media (hover:hover){
+  .review-card:hover{transform:translateY(-6px);box-shadow:0 26px 50px -20px rgba(0,0,0,.95), 0 0 0 1px rgba(143,227,255,.45), 0 18px 40px -16px rgba(79,195,247,.6);}
+  .review-card:hover > img{transform:scale(1.07);}
+  .review-card:hover .review-zoom{transform:scale(1.12);background:rgba(79,195,247,.45);}
+}
+.review-card:active{transform:scale(.97);}
+
+/* Review opened big: the photo grows out of its thumbnail into a card that
+   floats over the blurred page (still visible behind it), with the stars,
+   comment and name on the bottom of the photo. Swipe (or arrow keys / the
+   edge arrows on a computer) for the next one. The grow/shrink is done in
+   JS (flipReviewCard) so it starts exactly from the tapped thumbnail. */
+.rv-overlay{z-index:230;background:rgba(3,7,14,.42);transition:opacity .25s ease;}
+.modal-overlay.rv-overlay{backdrop-filter:blur(16px) saturate(120%);-webkit-backdrop-filter:blur(16px) saturate(120%);}
+.rv-stage{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:72px 16px 28px;
+  touch-action:pan-y;
+}
+.rv-card{
+  position:relative;
+  margin:0;
+  border-radius:24px;
+  overflow:hidden;
+  background:var(--bg-card);
+  box-shadow:0 40px 80px -30px rgba(0,0,0,.95), 0 0 0 1px rgba(255,255,255,.14);
+  transform-origin:top left;
+}
+.rv-card img{
+  display:block;
+  width:auto;height:auto;
+  max-width:min(440px, calc(100vw - 32px));
+  max-height:calc(100svh - 110px);
+  -webkit-user-drag:none;
+  user-select:none;
+}
+.rv-top{
+  position:absolute;
+  left:0;right:0;bottom:0;
+  padding:46px 16px 14px;
+  background:linear-gradient(0deg, rgba(3,7,14,.94) 0%, rgba(3,7,14,.7) 50%, transparent 100%);
+  pointer-events:none;
+}
+.rv-top.show{animation:riseIn .4s var(--ease) backwards;}
+.rv-top .review-stars svg{width:12px;height:12px;}
+.rv-quote{
+  margin:5px 0 3px;
+  font-size:13.5px;
+  font-weight:600;
+  line-height:1.4;
+  color:#fff;
+}
+.rv-name{font-size:11.5px;font-weight:600;color:rgba(255,255,255,.7);}
+.rv-close{
+  position:absolute;
+  top:max(14px, env(safe-area-inset-top));
+  right:14px;
+  z-index:2;
+  display:grid;
+  place-items:center;
+  width:42px;height:42px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(5,10,20,.55);
+  color:#fff;
+  transition:background .2s, transform .25s var(--ease-spring);
+}
+.rv-close:hover{background:rgba(255,255,255,.22);transform:rotate(90deg);}
+.rv-close svg{width:18px;height:18px;}
+/* Edge arrows only where there's a mouse; on a phone you swipe. */
+.rv-arrow{
+  position:absolute;
+  top:50%;
+  z-index:2;
+  display:none;
+  place-items:center;
+  width:46px;height:46px;
+  margin-top:-23px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(5,10,20,.55);
+  color:#fff;
+  transition:background .2s, transform .2s var(--ease);
+}
+.rv-arrow:hover{background:rgba(79,195,247,.35);}
+.rv-arrow:active{transform:scale(.92);}
+.rv-arrow svg{width:20px;height:20px;}
+.rv-arrow--prev{left:22px;}
+.rv-arrow--next{right:22px;}
+@media (hover:hover) and (pointer:fine){ .rv-arrow{display:grid;} }
+/* Moving to the next review: the card slides in again. */
+.rv-overlay.swap .rv-card{animation:riseIn .35s var(--ease) backwards;}
+
 
 /* ---------- FOOTER ---------- */
 footer.site{
@@ -2391,94 +3069,208 @@ footer.site{
   z-index:1;
   margin-top:30px;
   padding:38px 20px 26px;
-  border-top:1px solid var(--line);
-  background:linear-gradient(180deg, transparent, rgba(0,0,0,.35));
+  background:
+    radial-gradient(60% 50% at 50% 100%, rgba(79,195,247,.10), transparent 70%),
+    linear-gradient(180deg, transparent, rgba(0,0,0,.35));
 }
-.footer-inner{max-width:520px;margin:0 auto;text-align:center;}
-@media(min-width:900px){.footer-inner{max-width:640px;}}
+/* A glow line that fades out at the sides instead of a hard full-width border. */
+footer.site::before{
+  content:"";
+  position:absolute;
+  top:0;left:10%;right:10%;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(143,227,255,.45), rgba(123,97,255,.45), transparent);
+}
+.footer-inner{max-width:520px;margin:0 auto;}
+@media(min-width:900px){.footer-inner{max-width:960px;}}
+
+/* Instagram-story benefit: one clickable card, text on the left and the
+   mascot peeking in from the right, instead of a centered box with the
+   mascot floating alone below it. */
+.footer-promo{
+  position:relative;
+  isolation:isolate;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  gap:6px;
+  padding:20px 18px 20px 22px;
+  border-radius:24px;
+  overflow:hidden;
+  color:var(--white-glove);
+  background:
+    radial-gradient(70% 90% at 100% 50%, rgba(79,195,247,.28), transparent 70%),
+    radial-gradient(60% 80% at 0% 0%, rgba(123,97,255,.22), transparent 70%),
+    linear-gradient(150deg, #13295a 0%, #0c1b3a 60%, #08132a 100%);
+  box-shadow:0 26px 50px -26px rgba(0,0,0,.95), 0 14px 40px -22px rgba(79,195,247,.6);
+  transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+}
+.footer-promo::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  border-radius:inherit;
+  padding:1.5px;
+  background:conic-gradient(from var(--spin), rgba(143,227,255,.15), var(--blue-bright), var(--violet), var(--orange-pulp), rgba(143,227,255,.15) 70%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  animation:spin 6s linear infinite;
+  pointer-events:none;
+}
+@media (hover:hover){
+  .footer-promo:hover{transform:translateY(-4px);box-shadow:0 32px 60px -26px rgba(0,0,0,.95), 0 18px 46px -18px rgba(79,195,247,.75);}
+  .footer-promo:hover .footer-promo-cta svg{transform:translateX(4px);}
+}
+.footer-promo:active{transform:scale(.98);}
+.footer-promo-tag{
+  display:inline-block;
+  font-size:10.5px;
+  font-weight:800;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+  color:var(--void);
+  background:var(--grad-btn);
+  padding:4px 11px;
+  border-radius:999px;
+}
+.footer-promo-title{
+  margin:10px 0 4px;
+  font-family:'Bungee',cursive;
+  font-size:clamp(17px,5vw,22px);
+  line-height:1.15;
+  letter-spacing:.3px;
+}
+.promo-discount{
+  background:var(--grad-hot);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 2px 10px rgba(255,120,60,.45));
+}
+.footer-promo-sub{margin:0;font-size:12.5px;line-height:1.5;color:#c3d3ea;}
+.footer-promo-sub b{color:var(--blue-bright);font-weight:700;}
+.footer-promo-cta{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  margin-top:12px;
+  font-size:12.5px;
+  font-weight:700;
+  color:var(--blue-bright);
+}
+.footer-promo-cta svg{width:14px;height:14px;transition:transform .25s var(--ease);}
 .footer-mascot{
-  width:100px;height:100px;
+  width:96px;height:96px;
   object-fit:contain;
-  margin:26px auto 20px;
+  margin-right:-6px;
   filter:drop-shadow(0 0 22px rgba(79,195,247,.5));
   animation:logoFloat 3.6s ease-in-out infinite;
 }
-.footer-promo{
-  position:relative;
-  max-width:42ch;
-  margin:0 auto;
-  padding:24px 26px 22px;
-  border-radius:22px;
-  background:linear-gradient(135deg, rgba(79,195,247,.20), rgba(143,227,255,.14));
-  border:1.5px solid rgba(79,195,247,.4);
-  box-shadow:0 0 0 rgba(79,195,247,.0);
-  animation:promoPulse 2.6s ease-in-out infinite;
+
+/* Brand (centered) + contact, side by side from tablet up. */
+.footer-grid{
+  display:grid;
+  gap:26px;
+  margin-top:34px;
 }
-@keyframes promoPulse{
-  0%,100%{box-shadow:0 0 0 rgba(79,195,247,.0);border-color:rgba(79,195,247,.4);}
-  50%{box-shadow:0 0 24px rgba(79,195,247,.3);border-color:rgba(143,227,255,.75);}
-}
-.footer-promo-tag{
-  display:inline-block;
-  font-size:11.5px;
-  font-weight:800;
-  letter-spacing:1.5px;
+@media(min-width:640px){.footer-grid{grid-template-columns:1.3fr 1fr;align-items:start;}}
+.footer-brand{display:flex;flex-direction:column;align-items:center;text-align:center;}
+.footer-logo{width:150px;height:auto;filter:drop-shadow(0 4px 16px rgba(79,195,247,.35));}
+.footer-brand p{margin:12px 0 0;max-width:36ch;font-size:13px;line-height:1.6;color:var(--ink-dim);}
+.footer-col-title{
+  margin:0 0 12px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:2px;
   text-transform:uppercase;
-  color:var(--void);
-  background:linear-gradient(120deg, var(--blue-neon), var(--blue-bright));
-  padding:5px 14px;
-  border-radius:999px;
-  margin-bottom:10px;
+  color:var(--blue-bright);
 }
-.footer-promo p{
-  font-size:16px;
-  line-height:1.65;
-  color:var(--white-glove);
-  font-weight:500;
-  margin:0;
-}
-.footer-promo b{color:var(--blue-bright);font-weight:800;}
-.promo-discount{
-  color:var(--red-cap);
-  font-weight:800;
-  text-shadow:0 0 14px rgba(232,67,58,.5);
-}
-.footer-divider{height:1px;background:var(--line);margin:22px 0;}
-.footer-verse{
-  margin-top:14px;
-  font-size:11.5px;
-  font-style:italic;
-  color:var(--ink-dim);
-  letter-spacing:.3px;
-}
-.footer-copy{
-  margin-top:16px;
-  font-size:10.5px;
-  letter-spacing:1px;
-  color:#4c5f74;
-  text-transform:uppercase;
-}
-.footer-credit{
+.footer-link{
   display:flex;
   align-items:center;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:6px 10px;
-  margin-top:14px;
-  font-size:10.5px;
-  letter-spacing:.3px;
-  color:#3d4e60;
+  gap:12px;
+  padding:10px 12px;
+  margin-bottom:10px;
+  border-radius:16px;
+  border:1px solid rgba(143,227,255,.10);
+  background:linear-gradient(160deg, rgba(17,34,64,.6), rgba(8,17,31,.6));
+  box-shadow:0 12px 26px -18px rgba(0,0,0,.9);
+  transition:transform .25s var(--ease), border-color .25s, box-shadow .25s;
 }
-.footer-credit a{
+.footer-link:hover{transform:translateX(4px);border-color:rgba(143,227,255,.35);box-shadow:0 14px 30px -16px rgba(79,195,247,.45);}
+.footer-link:active{transform:scale(.98);}
+.footer-link-icon{
+  flex:none;
+  display:grid;
+  place-items:center;
+  width:38px;height:38px;
+  border-radius:12px;
+  color:#fff;
+}
+.footer-link-icon svg{width:19px;height:19px;}
+.footer-link--wpp .footer-link-icon{background:linear-gradient(140deg, #25d366, #0f8a3e);box-shadow:0 6px 16px -6px rgba(37,211,102,.7);}
+.footer-link--ig .footer-link-icon{background:linear-gradient(45deg, #f9ce34, #ee2a7b 50%, #6228d7);box-shadow:0 6px 16px -6px rgba(238,42,123,.7);}
+.footer-link b{display:block;font-size:13.5px;color:var(--white-glove);}
+.footer-link small{display:block;font-size:11px;color:var(--ink-dim);}
+
+/* Bottom bar: "made by" card, the two people behind it and the copyright,
+   stacked and centered on a phone, in one row from tablet up. */
+.footer-bottom{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+  margin-top:24px;
+  padding:18px 0 8px;
+  border-top:1px solid transparent;
+  border-image:linear-gradient(90deg, transparent, rgba(143,227,255,.3), rgba(123,97,255,.25), transparent) 1;
+}
+@media(min-width:900px){
+  .footer-bottom{flex-direction:row;flex-wrap:wrap;justify-content:space-between;}
+}
+.footer-team{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;}
+.footer-team a{
   display:inline-flex;
   align-items:center;
   gap:5px;
-  color:var(--ink-dim);
+  padding:6px 11px;
+  border-radius:999px;
+  font-size:11.5px;
   font-weight:600;
-  transition:color .2s;
+  color:var(--ink);
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.10);
+  transition:color .2s, border-color .2s, transform .2s var(--ease);
 }
-.footer-credit a:hover{color:var(--blue-neon);}
-.footer-credit a svg{width:12px;height:12px;flex:none;}
+.footer-team a:hover{color:#fff;border-color:rgba(238,42,123,.6);transform:translateY(-2px);}
+.footer-team svg{width:13px;height:13px;flex:none;}
+.footer-copy{margin:0;font-size:10.5px;letter-spacing:1px;color:#5b6f86;text-transform:uppercase;}
+.footer-made{
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 14px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.10);
+  background:linear-gradient(160deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  transition:transform .25s var(--ease), border-color .25s, box-shadow .25s;
+}
+.footer-made:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.3);box-shadow:0 14px 30px -14px rgba(255,255,255,.25);}
+.footer-made:active{transform:scale(.97);}
+.footer-made-label{font-size:10.5px;letter-spacing:.5px;color:var(--ink-dim);}
+.footer-made img{width:62px;height:auto;transition:transform .35s var(--ease-spring);}
+.footer-made:hover img{transform:rotate(-4deg) scale(1.06);}
+.footer-made-handle{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  font-size:11px;
+  font-weight:700;
+  color:var(--white-glove);
+}
+.footer-made-handle svg{width:12px;height:12px;}
 
 @media (prefers-reduced-motion: reduce){
   *:not(.ticker-track):not(.ticker-track *):not(.smoke):not(.modal-smoke-transition):not(.modal-smoke-transition *):not(.cart-fab):not(.modal-view-cart-btn){animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
@@ -2519,6 +3311,44 @@ footer.site{
 }
 .fab-wpp:hover{box-shadow:0 12px 30px rgba(37,211,102,.4);transform:translateY(-2px);}
 .fab-wpp:active{transform:scale(.9);}
+/* "¿Dudas? Escribinos" label to the left of the WhatsApp button: shows on
+   hover/focus, and once on its own a few seconds after the page loads
+   (.tip-show, see showWppTip) so people on a phone see it too. */
+.fab-wpp{position:relative;}
+.fab-tip{
+  position:absolute;
+  right:calc(100% + 12px);
+  top:50%;
+  padding:9px 14px;
+  border-radius:14px;
+  white-space:nowrap;
+  font-size:13px;
+  font-weight:600;
+  color:var(--white-glove);
+  background:linear-gradient(140deg, rgba(17,34,64,.96), rgba(8,17,31,.96));
+  border:1px solid rgba(37,211,102,.45);
+  box-shadow:0 14px 30px -12px rgba(0,0,0,.9), 0 0 22px -8px rgba(37,211,102,.6);
+  opacity:0;
+  transform:translate(10px,-50%) scale(.9);
+  transform-origin:right center;
+  pointer-events:none;
+  transition:opacity .25s var(--ease), transform .35s var(--ease-spring);
+}
+.fab-tip b{color:#5ee08f;}
+/* little arrow pointing at the button */
+.fab-tip::after{
+  content:"";
+  position:absolute;
+  right:-6px;top:50%;
+  width:10px;height:10px;
+  background:#0c1a33;
+  border-top:1px solid rgba(37,211,102,.45);
+  border-right:1px solid rgba(37,211,102,.45);
+  transform:translateY(-50%) rotate(45deg);
+}
+.fab-wpp:hover .fab-tip,
+.fab-wpp:focus-visible .fab-tip,
+.fab-wpp.tip-show .fab-tip{opacity:1;transform:translate(0,-50%) scale(1);}
 @media(min-width:900px){
   .fab-stack{right:32px;bottom:32px;}
   .fab{width:58px;height:58px;}
@@ -3429,15 +4259,13 @@ footer.site{
    2) Size: the layout was capped at 960px, so on a PC everything looked
       tiny. Widen the column and scale up the text/cards. */
 @media (hover:hover) and (pointer:fine) and (min-width:1024px){
-  header.site{backdrop-filter:none;background:rgba(5,10,20,.94);}
   .arrow, .wholesale-arrow{backdrop-filter:none;background:rgba(8,18,32,.95);}
   .p-puffs, .wholesale-card-puffs{backdrop-filter:none;background:rgba(5,10,20,.82);}
   .modal-overlay{backdrop-filter:none;background:rgba(3,7,14,.84);}
   .cart-fab, .fab-wpp, .wholesale-fab-wpp{backdrop-filter:none;}
   .truck-transition-bg{backdrop-filter:none;-webkit-backdrop-filter:none;}
-  /* Blurring the full-screen intro while it fades is very heavy on big
-     screens; fade + zoom alone reads the same. */
-  #intro.leaving{filter:none;}
+  /* Blurring the full-screen logo while it fades is heavy on big screens. */
+  #intro.leaving .intro-mark{filter:none;}
   /* The star layer slides up 340px per loop; make it 340px taller so its
      bottom edge never shows an empty strip. */
   .nebula-bg::before{bottom:-340px;}
@@ -3495,7 +4323,7 @@ footer.site{
   .catalog.grid-mode .p-cta{font-size:14.5px;padding:13px 10px;}
   .catalog.grid-mode .p-puffs{font-size:12.5px;padding:6px 12px;}
   .catalog.grid-mode .p-glyph .p-badge--promo, .catalog.grid-mode .p-glyph .p-badge--flagship{font-size:11px;padding:5px 10px;}
-  .catalog.grid-mode .p-promo-mark{font-size:38px;}
+  .p-save{font-size:12px;}
 }
 </style>
 </head>
@@ -3505,27 +4333,31 @@ footer.site{
 
 <!-- INTRO LOADER -->
 <div id="intro">
-  <div class="nebula-bg"></div>
+  <div class="intro-curtain intro-curtain--top"><div class="nebula-bg"></div></div>
+  <div class="intro-curtain intro-curtain--bottom"><div class="nebula-bg"></div></div>
   <div class="intro-mark">
     <img class="intro-logo" fetchpriority="high" src="img/logo.webp" alt="Vapesoon">
+    <div class="intro-bar" aria-hidden="true"><span></span></div>
+    <p class="intro-tag">Envíos low cost · La mejor atención</p>
   </div>
+  <div class="intro-seam" aria-hidden="true"></div>
 </div>
 
 <!-- HEADER -->
 <header class="site">
   <div class="ticker">
     <div class="ticker-track">
-      <span>🚚 Envío GRATIS para todas las personas de Hurlingham</span>
+      <span>🚚 Envíos low cost</span>
+      <span>💬 La mejor atención que vas a encontrar</span>
       <span>🔥 Más de 100 clientes y sumando</span>
-      <span>🚚 Envío GRATIS para todas las personas de Hurlingham</span>
+      <span>🚚 Envíos low cost</span>
+      <span>💬 La mejor atención que vas a encontrar</span>
       <span>🔥 Más de 100 clientes y sumando</span>
-      <span>🚚 Envío GRATIS para todas las personas de Hurlingham</span>
+      <span>🚚 Envíos low cost</span>
+      <span>💬 La mejor atención que vas a encontrar</span>
       <span>🔥 Más de 100 clientes y sumando</span>
-      <span>🚚 Envío GRATIS para todas las personas de Hurlingham</span>
-      <span>🔥 Más de 100 clientes y sumando</span>
-      <span>🚚 Envío GRATIS para todas las personas de Hurlingham</span>
-      <span>🔥 Más de 100 clientes y sumando</span>
-      <span>🚚 Envío GRATIS para todas las personas de Hurlingham</span>
+      <span>🚚 Envíos low cost</span>
+      <span>💬 La mejor atención que vas a encontrar</span>
       <span>🔥 Más de 100 clientes y sumando</span>
     </div>
   </div>
@@ -3577,13 +4409,13 @@ footer.site{
       <div class="catalog-controls">
         <div class="catalog-view-row">
           <div class="view-toggle" role="group" aria-label="Cambiar cómo se ven los vapes">
-            <button id="viewCarousel" aria-label="Vista deslizable: un vape a la vez">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="7" height="12" rx="1.5"/><rect x="15" y="6" width="7" height="12" rx="1.5"/><rect x="9.5" y="4" width="5" height="16" rx="1.5" opacity=".4"/></svg>
-              <span>Deslizar</span>
-            </button>
             <button id="viewGrid" class="active" aria-label="Vista grilla: todos los vapes juntos">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
               <span>Grilla</span>
+            </button>
+            <button id="viewCarousel" aria-label="Vista deslizable: un vape a la vez">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="7" height="12" rx="1.5"/><rect x="15" y="6" width="7" height="12" rx="1.5"/><rect x="9.5" y="4" width="5" height="16" rx="1.5" opacity=".4"/></svg>
+              <span>Deslizar</span>
             </button>
           </div>
         </div>
@@ -3598,10 +4430,7 @@ footer.site{
           <button class="filter-chip filter-chip--thc" id="filterThcBtn">
             <span class="filter-chip-icon">🌿</span><span class="filter-chip-label">Vapes c/THC</span>
           </button>
-          <p class="peek-hint" aria-hidden="true">
-            <span class="peek-hint-touch">👇 Mantené apretado un vape para ver sus sabores</span>
-            <span class="peek-hint-mouse">👇 Pasá el mouse por un vape para ver sus sabores</span>
-          </p>
+          <p class="peek-hint" id="catalogHint"></p>
         </div>
       </div>
 
@@ -3615,6 +4444,13 @@ footer.site{
         </button>
       </div>
       <div class="carousel-dots" id="productDots" role="tablist" aria-label="Posición en el catálogo"></div>
+      <div class="grid-more" id="gridMore" hidden>
+        <button class="grid-more-btn" id="gridMoreBtn" type="button">
+          <span>Ver más vapes</span>
+          <small id="gridMoreCount"></small>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
       <div class="swipe-hint" id="swipeHint">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16M14 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Deslizá para ver más modelos
@@ -3667,13 +4503,7 @@ footer.site{
         </div>
       </div>
       <div class="carousel-wrap">
-        <button class="arrow prev" id="reviewPrev" aria-label="Reseña anterior">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
         <div class="carousel" id="reviewCarousel"></div>
-        <button class="arrow next" id="reviewNext" aria-label="Siguiente reseña">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
       </div>
     </section>
 
@@ -3683,29 +4513,65 @@ footer.site{
 <!-- FOOTER -->
 <footer class="site">
   <div class="footer-inner">
-    <div class="footer-promo">
-      <span class="footer-promo-tag">Oferta</span>
-      <p>Subí una historia 📸 etiquetándonos a <b>@vapesoon.arg</b> y conseguí un descuento del <span class="promo-discount">20% OFF</span> en tu próxima compra.</p>
+    <a class="footer-promo" href="https://instagram.com/vapesoon.arg" target="_blank" rel="noopener">
+      <div class="footer-promo-text">
+        <span class="footer-promo-tag">📸 Beneficio</span>
+        <p class="footer-promo-title"><span class="promo-discount">20% OFF</span> en tu próxima compra</p>
+        <p class="footer-promo-sub">Subí una historia etiquetándonos a <b>@vapesoon.arg</b> y te lo aplicamos en tu próximo pedido.</p>
+        <span class="footer-promo-cta">Ir a Instagram
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </div>
+      <img class="footer-mascot" loading="lazy" decoding="async" src="img/mascota.webp" alt="">
+    </a>
+
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img class="footer-logo" loading="lazy" decoding="async" src="img/logo.webp" alt="Vapesoon">
+        <p>Vapes originales en Zona Oeste, con envíos low cost y la mejor atención que vas a encontrar.</p>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-col-title">Hablemos</h3>
+        <a class="footer-link footer-link--wpp" href="https://wa.me/5491131635898?text=%C2%A1Hola%20Vapesoon!%20Quiero%20hacer%20una%20consulta" target="_blank" rel="noopener">
+          <span class="footer-link-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39c1.44.79 3.06 1.2 4.71 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.03c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.81-.11-.42-.13-.95-.31-1.64-.6-2.88-1.24-4.76-4.14-4.9-4.33-.14-.19-1.17-1.56-1.17-2.97 0-1.41.74-2.1 1-2.39.26-.29.57-.36.76-.36h.55c.18 0 .42-.03.65.5.24.56.8 1.94.87 2.08.07.14.12.31.02.5-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.26 1.64 2.04 1.13.99 2.07 1.31 2.36 1.46.29.15.46.13.63-.05.17-.19.72-.84.92-1.13.19-.29.39-.24.65-.14.27.1 1.7.8 1.99.95.29.15.48.22.55.34.07.13.07.72-.17 1.4z"/></svg></span>
+          <span><b>WhatsApp</b><small>Respondemos rápido</small></span>
+        </a>
+        <a class="footer-link footer-link--ig" href="https://instagram.com/vapesoon.arg" target="_blank" rel="noopener">
+          <span class="footer-link-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></svg></span>
+          <span><b>@vapesoon.arg</b><small>Novedades y sorteos</small></span>
+        </a>
+      </div>
     </div>
-    <img class="footer-mascot" loading="lazy" decoding="async" src="img/mascota.webp" alt="Vapesoon">
-    <div class="footer-divider"></div>
-    <p class="footer-copy">Vapesoon.Arg · Buenos Aires</p>
-    <div class="footer-credit">
-      <a href="https://instagram.com/vapesoon.arg" target="_blank" rel="noopener" aria-label="Instagram Vapesoon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></svg>
-        @vapesoon.arg
+
+    <div class="footer-bottom">
+      <a class="footer-made" href="https://instagram.com/desdecero.labs" target="_blank" rel="noopener" aria-label="Página hecha por Desde Cero Labs, ver su Instagram">
+        <span class="footer-made-label">Página hecha por</span>
+        <img src="img/desdecero.webp" alt="Desde Cero" width="360" height="198" loading="lazy" decoding="async">
+        <span class="footer-made-handle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></svg> @desdecero.labs</span>
       </a>
+      <div class="footer-team">
+        <a href="https://instagram.com/tadeobetancor_" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></svg>@tadeobetancor_</a>
+        <a href="https://instagram.com/_franpardo_" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></svg>@_franpardo_</a>
+      </div>
+      <p class="footer-copy">© Vapesoon.Arg · Buenos Aires</p>
     </div>
-    <div class="footer-credit">
-      <span>Página creada por Tadeo Betancor</span>
-      <a href="https://instagram.com/tadeobetancor__" target="_blank" rel="noopener" aria-label="Instagram de Tadeo Betancor">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></svg>
-        @tadeobetancor__
-      </a>
-    </div>
-    <p class="footer-verse">"Todo lo puedo en Cristo que me fortalece" — Filipenses 4:13</p>
   </div>
 </footer>
+
+<!-- RESEÑA AMPLIADA: la foto crece hasta una tarjeta sobre la página borrosa (openReview) -->
+<div class="modal-overlay rv-overlay" id="rvOverlay" role="dialog" aria-modal="true" aria-label="Reseña de cliente">
+  <div class="rv-stage" id="rvStage">
+    <figure class="rv-card" id="rvCard">
+      <img id="rvImg" alt="">
+      <figcaption class="rv-top" id="rvTop"></figcaption>
+    </figure>
+  </div>
+  <button class="rv-close" id="rvClose" type="button" aria-label="Cerrar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+  </button>
+  <button class="rv-arrow rv-arrow--prev" id="rvPrev" type="button" aria-label="Reseña anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button class="rv-arrow rv-arrow--next" id="rvNext" type="button" aria-label="Reseña siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+</div>
 
 <!-- SMOKE TRANSITION OVERLAY -->
 <div class="modal-smoke-transition" id="modalSmokeTransition"></div>
@@ -3817,7 +4683,7 @@ footer.site{
 
       <div class="offer-card" id="offerCard">
         <div class="offer-card-head">
-          <span class="offer-card-badge">⚡ Oferta por tiempo limitado</span>
+          <span class="offer-card-badge">Oferta por tiempo limitado</span>
           <span class="offer-card-timer" id="offerTimer">01:00</span>
         </div>
         <div class="offer-card-body">
@@ -3827,10 +4693,10 @@ footer.site{
           <div class="offer-card-info">
             <div class="offer-card-name">AirPods</div>
             <div class="offer-card-prices">
-              <span class="offer-card-price-orig">$25.000</span>
-              <span class="offer-card-price-now">$19.900</span>
+              <span class="offer-card-price-orig" id="offerPriceOrig"></span>
+              <span class="offer-card-price-now" id="offerPriceNow"></span>
             </div>
-            <div class="offer-card-note">🔥 Solo en esta compra</div>
+            <div class="offer-card-note">Precio especial, solo en esta compra</div>
           </div>
         </div>
         <div class="offer-card-btns">
@@ -4156,7 +5022,8 @@ footer.site{
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1.4"/><circle cx="18" cy="21" r="1.4"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <span class="cart-badge" id="cartBadge">0</span>
   </button>
-  <a class="fab fab-wpp" href="https://wa.me/5491131635898?text=%C2%A1Hola%20Vapesoon!%20Quiero%20hacer%20una%20consulta" target="_blank" rel="noopener" aria-label="WhatsApp Vapesoon">
+  <a class="fab fab-wpp" id="fabWpp" href="https://wa.me/5491131635898?text=%C2%A1Hola%20Vapesoon!%20Quiero%20hacer%20una%20consulta" target="_blank" rel="noopener" aria-label="¿Dudas? Escribinos por WhatsApp">
+    <span class="fab-tip" aria-hidden="true">¿Dudas? <b>Escribinos</b> 💬</span>
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39c1.44.79 3.06 1.2 4.71 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.03c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.81-.11-.42-.13-.95-.31-1.64-.6-2.88-1.24-4.76-4.14-4.9-4.33-.14-.19-1.17-1.56-1.17-2.97 0-1.41.74-2.1 1-2.39.26-.29.57-.36.76-.36h.55c.18 0 .42-.03.65.5.24.56.8 1.94.87 2.08.07.14.12.31.02.5-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.26 1.64 2.04 1.13.99 2.07 1.31 2.36 1.46.29.15.46.13.63-.05.17-.19.72-.84.92-1.13.19-.29.39-.24.65-.14.27.1 1.7.8 1.99.95.29.15.48.22.55.34.07.13.07.72-.17 1.4z"/></svg>
   </a>
 </div>
@@ -4219,7 +5086,7 @@ window.__CUSTOMER_PHOTOS__ = {
   'abrill': 'img/clientes/abrill.webp',
   'tile': 'img/clientes/tile.webp',
   'summer': 'img/clientes/summer.webp',
-  'bw': 'img/clientes/bw.webp',
+  'bw': 'img/clientes/bw-color.webp', // original was black & white; tinted to the site's blues
   'geekbar': 'img/clientes/geekbar.webp',
 };
 /* ================= DATA ================= */
@@ -4239,7 +5106,7 @@ const CATALOG = [
   ]},
   {name:'ELFBAR SWEET KING', price:26500, puffs:40000, photo:'sweet_king', outOfStock:true, flavors:[]},
   {name:'ELFBAR DUKE', price:25000, puffs:35000, photo:'duke', flavors:[
-    {name:'Watermelon Lemon Ice 🍉🍋', stock:2}
+    {name:'Watermelon Lemon Ice 🍉🍋', stock:1}
   ]},
   {name:'ELFBAR BC', price:20000, puffs:15000, photo:'bc', flavors:[
     {name:'Miami Mint 🌴', stock:1}
@@ -4248,8 +5115,7 @@ const CATALOG = [
      + ~$12.000 de margen → $29.500; en oferta de lanzamiento a $26.500
      por ser nuevo. */
   {name:'LUMA', price:26500, originalPrice:29500, promo:true, puffs:40000, photo:'dinner_lady_luma', photoScale:0.85, flavors:[
-    {name:'Blue Mint 🫐🌿', stock:1},{name:'Grape Ice 🍇', stock:1},{name:'Mango Ice 🥭', stock:2},
-    {name:'Peach Mango Watermelon 🍑🥭🍉', stock:1}
+    {name:'Blue Mint 🫐🌿', stock:1},{name:'Mango Ice 🥭', stock:2}
   ]},
   {name:'EBCREATE BC PRO', price:25000, puffs:40000, photo:'ebcreate', flavors:[
     {name:'Black Mint 🌿', stock:1}
@@ -4257,7 +5123,7 @@ const CATALOG = [
   {name:'IGNITE V500', price:32000, puffs:50000, photo:'v500', outOfStock:true, flavors:[]},
   {name:'IGNITE BOOST MIX', price:29000, puffs:40000, photo:'ignite_boost_mix', outOfStock:true, flavors:[]},
   {name:'IGNITE V400 ICE', price:26000, originalPrice:28000, promo:true, puffs:40000, photo:'v400', flavors:[
-    {name:'Strawberry Kiwi 🍓🥝', stock:1},{name:'Strawberry Watermelon 🍓🍉', stock:1},{name:'Watermelon Ice 🍉', stock:1}
+    {name:'Strawberry Kiwi 🍓🥝', stock:1}
   ]},
   {name:'IGNITE V300 ULTRA SLIM', price:24000, puffs:30000, photo:'wholesale_v300_ultra_slim', outOfStock:true, flavors:[]},
   {name:'IGNITE V250', price:22000, puffs:25000, photo:'v250', photoScale:1.18, flavors:[
@@ -4265,9 +5131,7 @@ const CATALOG = [
   ]},
   /* Precio según cotización Italia Shop (S12019): USD 12,50 × 1660 = $20.750
      + $10.000 de margen = $30.750 → redondeado a $31.000. */
-  {name:'BLACKSHEEP 55K', price:29000, originalPrice:31000, promo:true, promoFirst:true, puffs:55000, photo:'blacksheep_55k', flavors:[
-    {name:'Strawberry Ice 🍓', stock:1},{name:'Watermelon Ice 🍉', stock:2}
-  ]},
+  {name:'BLACKSHEEP 55K', price:29000, originalPrice:31000, promo:true, promoFirst:true, puffs:55000, photo:'blacksheep_55k', outOfStock:true, flavors:[]},
   {name:'BLACKSHEEP 40K', price:29000, puffs:40000, photo:'blacksheep', flavors:[
     {name:'Grape + Energy Drink 🍇⚡', stock:1},{name:'Grape + Menthol 🍇❄️', stock:1}
   ]},
@@ -4290,12 +5154,12 @@ const CATALOG = [
     {name:'Strawberry Watermelon Ice + Aloe Grape 🍓🍉🌿🍇', stock:1}
   ]},
   {name:'HOOKALIT', price:24000, puffs:40000, photo:'hookalit', outOfStock:true, flavors:[]},
-  {name:'AirPods', price:25000, photo:'airpods', category:'apple', variantWord:'modelo', variantWordPlural:'modelos',
+  {name:'AirPods', price:22000, photo:'airpods', category:'apple', variantWord:'modelo', variantWordPlural:'modelos',
     description:'Auriculares inalámbricos con estuche de carga, Bluetooth estable y compatibilidad con Find My.',
     flavors:[
       {name:'Blanco', stock:12}
     ]},
-  {name:'Cargador Apple', price:15000, photo:'cargador_apple', category:'apple', variantWord:'modelo', variantWordPlural:'modelos',
+  {name:'Cargador Apple', price:12000, photo:'cargador_apple', category:'apple', variantWord:'modelo', variantWordPlural:'modelos',
     description:'Cargador de pared con entrada circular y potencia de 20W, compatible con iPhone y iPad.',
     flavors:[
       {name:'20W', stock:10}
@@ -4325,6 +5189,18 @@ function formatPuffsPlain(n){
   return (n/1000) + 'K PUFFS';
 }
 
+function discountPct(p){
+  return p.originalPrice ? Math.round((p.originalPrice - p.price) / p.originalPrice * 100) : 0;
+}
+
+/* "Llevá 2 y ahorrá": every COMBO_SIZE vapes in the cart (any model, promos
+   included; Apple accessories don't count) takes COMBO_DISCOUNT off the
+   total. Applied automatically in the cart and in the WhatsApp message. */
+const COMBO_SIZE = 2;
+const COMBO_DISCOUNT = 3000;
+function cartVapeCount(items){ return items.filter(i => i.category !== 'apple' && i.price).length; }
+function comboDiscount(items){ return Math.floor(cartVapeCount(items) / COMBO_SIZE) * COMBO_DISCOUNT; }
+
 function formatPrice(price, originalPrice){
   if(price == null) return '<span class="p-price consult">Consultar</span>';
   const main = '$' + price.toLocaleString('es-AR');
@@ -4342,7 +5218,8 @@ function renderModalPrice(price, originalPrice){
   const main = '$' + price.toLocaleString('es-AR');
   if(originalPrice){
     const orig = '$' + originalPrice.toLocaleString('es-AR');
-    return '<span class="modal-price-orig">'+orig+'</span><span class="modal-price-main">'+main+'</span>';
+    const off = Math.round((originalPrice - price) / originalPrice * 100);
+    return '<span class="modal-price-orig">'+orig+'</span><span class="modal-price-main">'+main+'</span><span class="modal-price-off">-'+off+'%</span>';
   }
   return '<span class="modal-price-main">' + main + '</span>';
 }
@@ -4372,7 +5249,7 @@ function stockLabel(stock){
 const REVIEWS = [
   {name:'Abril P.', rating:5, flavor:'Sour Strawberry Dragonfruit · Ice King', text:'Llego al otro dia todo bien, buen sabor la verdad', photo:'abrill'},
   {name:'Lucas R.', rating:5, flavor:'Watermelon Ice · Ice King', text:'Pedi a la tarde y a la noche ya lo tenia, todo joya', photo:'tile'},
-  {name:'Vale G.', rating:4, flavor:'Edición Summer · Elfbar', text:'Buena atencion, el diseño del vape esta lindo no tuve drama', photo:'summer'},
+  {name:'Vale G.', rating:5, flavor:'Edición Summer · Elfbar', text:'Buena atencion, el diseño del vape esta lindo no tuve drama', photo:'summer'},
   {name:'Naty A.', rating:5, flavor:'Menthol · V250', text:'Entrega rapida por la zona, cumplieron horario', photo:'bw'},
   {name:'Flor M.', rating:5, flavor:'Miami Mint · Geek Bar Pulse X', text:'Pedi tipo 20 y llego re rapido, el diseño esta tremendo', photo:'geekbar'}
 ];
@@ -4538,12 +5415,14 @@ function productCardHTML(p, i, badgeText, showPuffs){
   return `
     <div class="p-card${oos ? ' p-card--oos' : ''}${promo ? ' p-card--promo' : ''}${flagship ? ' p-card--flagship' : ''}" data-index="${i}" style="--accent:${acc.main};--accent-fade:${acc.fade};--accent-shadow:${acc.shadow}">
       ${oos ? '<div class="p-badge p-badge--oos">Sin stock</div>' : (promo || flagship) ? '' : (badgeText ? `<div class="p-badge${badgeText === 'Más pedido' ? ' p-badge--popular' : ''}">${badgeText}</div>` : '')}
+      ${promo ? '<span class="p-shine" aria-hidden="true"></span>' : ''}
       ${showPuffs && p.puffs != null ? `<div class="p-puffs">${formatPuffs(p.puffs)}</div>` : ''}
-      <div class="p-glyph">${promo ? '<span class="p-promo-mark" aria-hidden="true">Oferta</span><div class="p-badge p-badge--promo">🔥 Oferta</div>' : flagship ? '<div class="p-badge p-badge--flagship">⭐ Favorito</div>' : ''}${productGlyphHTML(p)}</div>
+      <div class="p-glyph">${promo ? `<div class="p-badge p-badge--promo">🔥 ${p.originalPrice ? '-' + discountPct(p) + '% OFF' : 'Oferta'}</div>` : flagship ? '<div class="p-badge p-badge--flagship">⭐ Favorito</div>' : ''}${productGlyphHTML(p)}</div>
       <div class="p-name-row">
         <div class="p-name">${p.name}</div>
         ${formatPrice(p.price, p.originalPrice)}
       </div>
+      ${promo && p.originalPrice ? `<div class="p-save">Ahorrás $${(p.originalPrice - p.price).toLocaleString('es-AR')}</div>` : ''}
       ${oos ? '' : '<div class="p-trust"><span class="p-trust-dot"></span>Envío hoy · en stock</div>'}
       <div class="p-meta">
         <div class="dots">${dots}</div>
@@ -4719,12 +5598,34 @@ function renderProducts(){
 
   wireProductCards(productCarousel);
   revealOnScroll(productCarousel, '.p-card');
+  if(!gridVisible) gridVisible = gridColumns() * GRID_ROWS_PER_STEP;
+  applyGridLimit();
   renderCarouselDots(productDots, productCarousel, cardCount);
   requestAnimationFrame(()=>{
     updateActiveDot(productCarousel, productDots);
     updateCarouselArrows(productCarousel, arrowPrevBtn, arrowNextBtn);
   });
 }
+
+/* ---- "Ver más" in grid view ---- */
+const GRID_ROWS_PER_STEP = 3;
+const gridMore = document.getElementById('gridMore');
+const gridMoreCount = document.getElementById('gridMoreCount');
+let gridVisible = 0; // how many cards the grid shows; set on first render, grows with "Ver más"
+function gridColumns(){ return innerWidth >= 1024 ? 4 : innerWidth >= 640 ? 3 : 2; } // matches .catalog.grid-mode .carousel
+function applyGridLimit(){
+  const cards = productCarousel.querySelectorAll('.p-card');
+  // Less than a full row left: just show them, a button for 1 card is silly.
+  if(cards.length - gridVisible < gridColumns()) gridVisible = cards.length;
+  cards.forEach((card, i) => card.classList.toggle('p-card--more', i >= gridVisible));
+  const left = Math.max(0, cards.length - gridVisible);
+  gridMore.hidden = left === 0;
+  gridMoreCount.textContent = left === 1 ? 'queda 1' : `quedan ${left}`;
+}
+document.getElementById('gridMoreBtn').addEventListener('click', ()=>{
+  gridVisible += gridColumns() * GRID_ROWS_PER_STEP;
+  applyGridLimit();
+});
 
 /* ================= RENDER: APPLE ACCESSORIES ================= */
 const appleCarousel = document.getElementById('appleCarousel');
@@ -4860,62 +5761,224 @@ function starsSVG(n){
   }
   return s;
 }
+function reviewAvatarHTML(r, i){
+  const initials = r.name.split(' ').map(w=>w[0]).join('').slice(0,2);
+  return `<div class="review-avatar" style="background:${ACCENTS[i % ACCENTS.length].main}">${initials}</div>`;
+}
+function reviewPhotoUrl(r){
+  return r.photo && window.__CUSTOMER_PHOTOS__ ? window.__CUSTOMER_PHOTOS__[r.photo] : null;
+}
+/* The list is rendered twice in a row so the auto-scroll can loop seamlessly
+   (startReviewMarquee jumps back by one copy's width); the second copy is
+   hidden from screen readers and keyboard focus. */
 function renderReviews(){
-  reviewCarousel.innerHTML = REVIEWS.map((r,i)=>{
-    const acc = ACCENTS[i % ACCENTS.length];
-    const initials = r.name.split(' ').map(w=>w[0]).join('').slice(0,2);
-    const photoUrl = r.photo && window.__CUSTOMER_PHOTOS__ ? window.__CUSTOMER_PHOTOS__[r.photo] : null;
-    const photoInner = photoUrl
-      ? `<img loading="lazy" decoding="async" src="${photoUrl}" alt="Foto de ${r.name}">`
-      : `<div class="review-photo-placeholder">
-           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M8 5l1.5-2h5L16 5"/></svg>
-           <span>Foto de cliente<br>próximamente</span>
-         </div>`;
+  const cardHTML = (r, i, copy) => {
+    const photoUrl = reviewPhotoUrl(r);
     return `
-    <div class="review-card" style="--accent-fade:${acc.fade}">
-      <div class="review-photo">
-        ${photoInner}
-        <div class="review-photo-overlay">
-          <div class="review-stars">${starsSVG(r.rating)}</div>
-        </div>
-      </div>
-      <div class="review-body">
-        <p class="review-text">"${r.text}"</p>
-        <div class="review-foot">
-          <div class="review-avatar" style="background:${acc.main}">${initials}</div>
-          <div>
-            <div class="review-name">${r.name}</div>
-            <div class="review-flavor">${r.flavor}</div>
-          </div>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-  revealOnScroll(reviewCarousel, '.review-card');
-  requestAnimationFrame(()=> updateCarouselArrows(reviewCarousel, reviewArrowPrevBtn, reviewArrowNextBtn));
+    <button class="review-card" type="button" data-review="${i}"${copy ? ' aria-hidden="true" tabindex="-1"' : ` aria-label="Ver reseña de ${r.name}"`}>
+      ${photoUrl ? `<img loading="lazy" decoding="async" src="${photoUrl}" alt="">` : ''}
+      <span class="review-shade"></span>
+      <span class="review-zoom" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="review-info">
+        <span class="review-stars">${starsSVG(r.rating)}</span>
+        <span class="review-text">"${r.text}"</span>
+        <span class="review-foot">
+          ${reviewAvatarHTML(r, i)}
+          <span>
+            <span class="review-name">${r.name}</span>
+            <span class="review-flavor">${r.flavor}</span>
+          </span>
+        </span>
+      </span>
+    </button>`;
+  };
+  reviewCarousel.innerHTML = REVIEWS.map((r, i) => cardHTML(r, i, false)).join('')
+    + REVIEWS.map((r, i) => cardHTML(r, i, true)).join('');
+}
+reviewCarousel.addEventListener('click', (e)=>{
+  const card = e.target.closest('.review-card');
+  if(card) openReview(parseInt(card.dataset.review));
+});
+
+/* Moves the strip ~35px per second on its own. Pauses while hovered (mouse),
+   touched or wheel-scrolled, then resumes 2.5s later; does nothing while the
+   strip is off screen or a review is open, or for reduced-motion users. */
+function startReviewMarquee(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const SPEED = 0.035; // px per ms
+  let paused = false, visible = false, last = 0, carry = 0, resumeTimer = null;
+  const pause = ()=>{ paused = true; clearTimeout(resumeTimer); };
+  const resumeSoon = ()=>{ clearTimeout(resumeTimer); resumeTimer = setTimeout(()=>{ paused = false; }, 2500); };
+  reviewCarousel.addEventListener('pointerenter', (e)=>{ if(e.pointerType === 'mouse') pause(); });
+  reviewCarousel.addEventListener('pointerleave', (e)=>{ if(e.pointerType === 'mouse') resumeSoon(); });
+  reviewCarousel.addEventListener('touchstart', pause, {passive:true});
+  reviewCarousel.addEventListener('touchend', resumeSoon, {passive:true});
+  reviewCarousel.addEventListener('wheel', ()=>{ pause(); resumeSoon(); }, {passive:true});
+  new IntersectionObserver(([entry])=>{ visible = entry.isIntersecting; }).observe(reviewCarousel);
+
+  function tick(t){
+    const dt = last ? Math.min(t - last, 50) : 0;
+    last = t;
+    if(visible && !paused && !rvOverlay.classList.contains('open')){
+      const cards = reviewCarousel.children;
+      const loopWidth = cards[REVIEWS.length].offsetLeft - cards[0].offsetLeft;
+      carry += dt * SPEED;
+      const step = Math.floor(carry);
+      if(step){
+        carry -= step;
+        reviewCarousel.scrollLeft += step;
+      }
+      if(reviewCarousel.scrollLeft >= loopWidth) reviewCarousel.scrollLeft -= loopWidth;
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
 }
 
+/* ---- reseña ampliada ---- */
+const rvOverlay = document.getElementById('rvOverlay');
+const rvStage = document.getElementById('rvStage');
+let rvIndex = 0;
+const rvCard = document.getElementById('rvCard');
+const rvImg = document.getElementById('rvImg');
+const rvTop = document.getElementById('rvTop');
+const rvReduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+let rvClosing = false;
+function paintReview(i){
+  rvIndex = (i + REVIEWS.length) % REVIEWS.length;
+  const r = REVIEWS[rvIndex];
+  rvImg.src = reviewPhotoUrl(r) || window.__MASCOT__;
+  rvImg.alt = 'Foto de ' + r.name;
+  rvTop.innerHTML =
+    `<div class="review-stars">${starsSVG(r.rating)}</div><p class="rv-quote">${r.text}</p><div class="rv-name">${r.name}</div>`;
+  rvTop.classList.remove('show');
+  void rvTop.offsetWidth;
+  rvTop.classList.add('show');
+}
+/* The strip card for the review on screen (the strip holds two copies of
+   each review; use whichever one is actually visible), to grow from / shrink
+   back into. */
+function visibleReviewThumb(i){
+  return [...reviewCarousel.querySelectorAll(`.review-card[data-review="${i}"]`)].find(el => {
+    const r = el.getBoundingClientRect();
+    return r.right > 0 && r.left < innerWidth && r.bottom > 0 && r.top < innerHeight;
+  });
+}
+/* Scales the card so it sits exactly on the thumbnail (same width, centered
+   on it) and animates between that and its real place. */
+function flipReviewCard(thumb, reverse){
+  if(!thumb || rvReduceMotion.matches || !rvCard.animate) return null;
+  const from = thumb.getBoundingClientRect();
+  const to = rvCard.getBoundingClientRect();
+  if(!to.width || !to.height) return null;
+  const k = from.width / to.width;
+  const dx = from.left - to.left;
+  const dy = from.top + from.height / 2 - (to.top + to.height * k / 2);
+  const frames = [
+    {transform:`translate(${dx}px, ${dy}px) scale(${k})`, borderRadius:`${22 / k}px`},
+    {transform:'none', borderRadius:'24px'}
+  ];
+  return rvCard.animate(reverse ? frames.reverse() : frames, {
+    duration: reverse ? 380 : 560,
+    easing: reverse ? 'cubic-bezier(.4,0,.2,1)' : 'cubic-bezier(.2,.9,.25,1.05)',
+    fill: reverse ? 'forwards' : 'none'
+  });
+}
+async function openReview(i){
+  rvClosing = false;
+  paintReview(i);
+  try{ await rvImg.decode(); }catch(err){ /* show it anyway */ }
+  rvOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  flipReviewCard(visibleReviewThumb(rvIndex), false);
+  document.getElementById('rvClose').focus({preventScroll:true});
+}
+function closeReview(){
+  if(rvClosing || !rvOverlay.classList.contains('open')) return;
+  rvClosing = true;
+  const anim = flipReviewCard(visibleReviewThumb(rvIndex), true);
+  const finish = ()=>{
+    rvOverlay.classList.remove('open', 'swap');
+    document.body.style.overflow = '';
+    if(anim) setTimeout(()=> anim.cancel(), 260); // after the overlay has faded out
+    rvClosing = false;
+  };
+  if(anim) anim.onfinish = finish; else finish();
+}
+function stepReview(dir){
+  paintReview(rvIndex + dir);
+  rvOverlay.classList.remove('swap');
+  void rvOverlay.offsetWidth;
+  rvOverlay.classList.add('swap');
+}
+document.getElementById('rvClose').addEventListener('click', closeReview);
+document.getElementById('rvPrev').addEventListener('click', ()=> stepReview(-1));
+document.getElementById('rvNext').addEventListener('click', ()=> stepReview(1));
+// Tapping the blurred page around the card closes it.
+rvStage.addEventListener('click', (e)=>{ if(e.target === rvStage) closeReview(); });
+// Horizontal swipe = next/previous photo.
+let rvTouchX = null, rvTouchY = 0;
+rvStage.addEventListener('touchstart', (e)=>{ rvTouchX = e.touches[0].clientX; rvTouchY = e.touches[0].clientY; }, {passive:true});
+rvStage.addEventListener('touchend', (e)=>{
+  if(rvTouchX === null) return;
+  const dx = e.changedTouches[0].clientX - rvTouchX;
+  const dy = e.changedTouches[0].clientY - rvTouchY;
+  rvTouchX = null;
+  if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) stepReview(dx < 0 ? 1 : -1);
+});
+document.addEventListener('keydown', (e)=>{
+  if(!rvOverlay.classList.contains('open')) return;
+  if(e.key === 'Escape') closeReview();
+  else if(e.key === 'ArrowLeft') stepReview(-1);
+  else if(e.key === 'ArrowRight') stepReview(1);
+});
+
+/* Cards that come into view together cascade in one after another. The delay
+   counts within each batch (not the card's position in the whole list), so a
+   card far down the grid doesn't sit invisible for a second once reached. */
 function revealOnScroll(container, selector){
   const items = container.querySelectorAll(selector);
   const io = new IntersectionObserver((entries)=>{
+    let batch = 0;
     entries.forEach(e=>{
       if(e.isIntersecting){
+        e.target.style.animationDelay = Math.min(batch++, 6) * 0.07 + 's';
         e.target.classList.add('reveal');
         io.unobserve(e.target);
       }
     });
   }, {threshold:0.15, root: null});
-  items.forEach((el,idx)=>{
-    el.style.animationDelay = (idx*0.05)+'s';
-    io.observe(el);
-  });
+  items.forEach(el => io.observe(el));
+}
+
+function revealSectionHeads(){
+  const heads = document.querySelectorAll('main .section-head');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in-view');
+        io.unobserve(e.target);
+      }
+    });
+  }, {threshold:0.3});
+  heads.forEach(h => { h.classList.add('will-reveal'); io.observe(h); });
 }
 
 /* ================= VIEW TOGGLE ================= */
 const catalogSection = document.getElementById('catalog');
 const btnCarousel = document.getElementById('viewCarousel');
 const btnGrid = document.getElementById('viewGrid');
+// Replays the slide-in on the cards container so switching views animates
+// instead of the layout just snapping.
+function playViewSwap(){
+  productCarousel.classList.remove('swap');
+  void productCarousel.offsetWidth;
+  productCarousel.classList.add('swap');
+}
 btnCarousel.addEventListener('click', ()=>{
+  if(currentView !== 'carousel') playViewSwap();
   currentView='carousel';
   catalogSection.classList.remove('grid-mode');
   btnCarousel.classList.add('active'); btnGrid.classList.remove('active');
@@ -4923,6 +5986,7 @@ btnCarousel.addEventListener('click', ()=>{
   requestAnimationFrame(()=> updateCarouselArrows(productCarousel, arrowPrevBtn, arrowNextBtn));
 });
 btnGrid.addEventListener('click', ()=>{
+  if(currentView !== 'grid') playViewSwap();
   currentView='grid';
   catalogSection.classList.add('grid-mode');
   btnGrid.classList.add('active'); btnCarousel.classList.remove('active');
@@ -4961,19 +6025,6 @@ appleCarousel.addEventListener('scroll', ()=>{
   updateCarouselArrows(appleCarousel, appleArrowPrevBtn, appleArrowNextBtn);
 }, {passive:true});
 
-const reviewArrowPrevBtn = document.getElementById('reviewPrev');
-const reviewArrowNextBtn = document.getElementById('reviewNext');
-reviewArrowPrevBtn.addEventListener('click', ()=>{
-  const card = reviewCarousel.querySelector('.review-card');
-  const w = card ? card.getBoundingClientRect().width + 14 : 260;
-  reviewCarousel.scrollBy({left:-w, behavior:'smooth'});
-});
-reviewArrowNextBtn.addEventListener('click', ()=>{
-  const card = reviewCarousel.querySelector('.review-card');
-  const w = card ? card.getBoundingClientRect().width + 14 : 260;
-  reviewCarousel.scrollBy({left:w, behavior:'smooth'});
-});
-reviewCarousel.addEventListener('scroll', ()=> updateCarouselArrows(reviewCarousel, reviewArrowPrevBtn, reviewArrowNextBtn), {passive:true});
 
 /* ================= MODAL ================= */
 const modalOverlay = document.getElementById('modalOverlay');
@@ -4993,8 +6044,6 @@ function openModal(index, presetFlavor, sourceEvent){
   activeProductIndex = index;
   selectedFlavor = null;
   const p = CATALOG[index];
-  const acc = ACCENTS[index % ACCENTS.length];
-  modalGlyph.style.background = acc.fade;
 
   const variantWord = p.variantWord || 'sabor';
   const variantWordPlural = p.variantWordPlural || 'sabores';
@@ -5012,6 +6061,7 @@ function openModal(index, presetFlavor, sourceEvent){
   const variantCountWord = p.flavors.length === 1 ? variantWord : variantWordPlural;
   const availableWord = p.flavors.length === 1 ? 'disponible' : 'disponibles';
   modalEyebrow.textContent = oos ? 'Sin stock por el momento' : p.flavors.length + ' ' + variantCountWord + ' ' + availableWord;
+  modalEyebrow.classList.toggle('is-oos', oos);
   modalName.textContent = p.name;
   document.getElementById('modalPrice').innerHTML = renderModalPrice(p.price, p.originalPrice);
   const modalPuffsEl = document.getElementById('modalPuffs');
@@ -5409,6 +6459,11 @@ let offerCountdownInterval = null;
 function startOfferCountdown(){
   const airpodsPhoto = window.__PRODUCT_PHOTOS__ && window.__PRODUCT_PHOTOS__['airpods'];
   if(airpodsPhoto) document.getElementById('offerProductImg').src = airpodsPhoto;
+  // Prices come from CATALOG / OFFER_AIRPODS_PRICE so the card can't drift
+  // from what actually gets added to the cart.
+  const airpods = CATALOG.find(p => p.name === 'AirPods');
+  document.getElementById('offerPriceOrig').textContent = airpods ? '$' + airpods.price.toLocaleString('es-AR') : '';
+  document.getElementById('offerPriceNow').textContent = '$' + OFFER_AIRPODS_PRICE.toLocaleString('es-AR');
 
   offerCard.classList.remove('hidden');
   let secondsLeft = 120;
@@ -5427,7 +6482,7 @@ function stopOfferCountdown(){
   offerCountdownInterval = null;
   offerCard.classList.add('hidden');
 }
-const OFFER_AIRPODS_PRICE = 19900; // special one-time price, only through this upsell — not the regular catalog price
+const OFFER_AIRPODS_PRICE = 18900; // special one-time price, only through this upsell — not the regular catalog price
 document.getElementById('offerAcceptBtn').addEventListener('click', ()=>{
   const airpods = CATALOG.find(p => p.photo === 'airpods');
   if(airpods){
@@ -5774,25 +6829,59 @@ function renderCart(){
 
   const hasAllPrices = cart.every(i => i.price);
   if(hasAllPrices){
-    const total = cart.reduce((s,i)=>s+i.price, 0);
+    const subtotal = cart.reduce((s,i)=>s+i.price, 0);
+    const discount = comboDiscount(cart);
+    if(discount){
+      cartItemsList.innerHTML += `
+    <div class="cart-total-row cart-total-row--sub">
+      <span class="cart-total-label">Subtotal</span>
+      <span class="cart-total-value">$${subtotal.toLocaleString('es-AR')}</span>
+    </div>
+    <div class="cart-total-row cart-total-row--combo">
+      <span class="cart-total-label">🔥 Combo ${COMBO_SIZE} vapes${discount > COMBO_DISCOUNT ? ' (x' + discount / COMBO_DISCOUNT + ')' : ''}</span>
+      <span class="cart-total-value">-$${discount.toLocaleString('es-AR')}</span>
+    </div>`;
+    }
     cartItemsList.innerHTML += `
     <div class="cart-total-row">
       <span class="cart-total-label">Total</span>
-      <span class="cart-total-value">$${total.toLocaleString('es-AR')}</span>
+      <span class="cart-total-value">$${(subtotal - discount).toLocaleString('es-AR')}</span>
+    </div>`;
+  }
+  // One vape short of the next combo: tell them how much they'd save.
+  const vapeCount = cartVapeCount(cart);
+  const missing = COMBO_SIZE - vapeCount % COMBO_SIZE;
+  if(vapeCount > 0 && missing < COMBO_SIZE){
+    cartItemsList.innerHTML += `
+    <div class="cart-combo-nudge">
+      <span class="cart-combo-nudge-icon" aria-hidden="true">🔥</span>
+      <span>Sumá <b>${missing} vape${missing > 1 ? 's' : ''} más</b> y ahorrás <b>$${COMBO_DISCOUNT.toLocaleString('es-AR')}</b> con el combo.</span>
     </div>`;
   }
 
   cartItemsList.querySelectorAll('.cart-item-remove').forEach(btn=>{
     btn.addEventListener('click', ()=>{
-      cart.splice(parseInt(btn.dataset.idx), 1);
-      renderCart();
-      updateCartBadge();
+      const row = btn.closest('.cart-item');
+      if(row.classList.contains('removing')) return;
+      row.classList.add('removing');
+      setTimeout(()=>{
+        cart.splice(parseInt(btn.dataset.idx), 1);
+        renderCart();
+        updateCartBadge();
+      }, 280);
     });
   });
 }
 
+// The rows cascade in only when the cart opens (.intro), not again every
+// time the list re-renders after removing something.
+let cartIntroTimer = null;
 function openCart(){
   renderCart();
+  const sheet = document.getElementById('cartSheet');
+  sheet.classList.add('intro');
+  clearTimeout(cartIntroTimer);
+  cartIntroTimer = setTimeout(()=> sheet.classList.remove('intro'), 1000);
   cartOverlay.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -5834,8 +6923,13 @@ cartCheckoutBtn.addEventListener('click', ()=>{
   });
   const hasAllPrices = cart.every(i => i.price);
   if(hasAllPrices){
-    const total = cart.reduce((s,i)=>s+i.price, 0);
-    msg += `Total aprox: $${total.toLocaleString('es-AR')}\n\n`;
+    const subtotal = cart.reduce((s,i)=>s+i.price, 0);
+    const discount = comboDiscount(cart);
+    if(discount){
+      msg += `Subtotal: $${subtotal.toLocaleString('es-AR')}\n`;
+      msg += `Descuento combo (llevá ${COMBO_SIZE}): -$${discount.toLocaleString('es-AR')}\n`;
+    }
+    msg += `Total aprox: $${(subtotal - discount).toLocaleString('es-AR')}\n\n`;
   }
   msg += '¿Me confirmás disponibilidad?';
   openFulfillmentChoice(msg, cart.some(item => item.category === 'apple'));
@@ -5916,23 +7010,26 @@ searchClear.addEventListener('click', ()=>{
 /* ================= INTRO ANIMATION ================= */
 const intro = document.getElementById('intro');
 
+const INTRO_HOLD_MS = 2300;  // logo + loading bar on screen
+const INTRO_EXIT_MS = 1300;  // light seam + curtain opening (see .intro-curtain)
+
 function dismissIntro(){
-  if(intro.classList.contains('leaving')) return;
+  if(!intro || intro.classList.contains('leaving')) return;
   intro.classList.add('leaving');
-  setTimeout(()=>{ intro.remove(); document.body.style.overflow=''; }, 480);
+  setTimeout(()=>{ intro.remove(); document.body.style.overflow=''; }, INTRO_EXIT_MS);
 }
 
 function initIntro(){
-  document.body.style.overflow = 'hidden';
-  const already = sessionStorage.getItem('vapesoon_intro_seen');
-  if(already){
-    intro.style.transition = 'none';
-    dismissIntro();
+  if(!intro) return;
+  // Already seen in this tab: skip it entirely, no animation.
+  if(sessionStorage.getItem('vapesoon_intro_seen')){
+    intro.remove();
     return;
   }
+  document.body.style.overflow = 'hidden';
   sessionStorage.setItem('vapesoon_intro_seen', '1');
   intro.addEventListener('click', dismissIntro);
-  setTimeout(dismissIntro, 1000);
+  setTimeout(dismissIntro, INTRO_HOLD_MS);
 }
 
 /* ================= MAYORISTA (WHOLESALE) ================= */
@@ -6660,10 +7757,29 @@ function applyWholesaleOrderingState(){
   wholesaleSheet.classList.toggle('ordering-disabled', WHOLESALE_ORDERING_DISABLED);
 }
 
+/* ================= CATALOG HINT + WHATSAPP TIP ================= */
+document.getElementById('catalogHint').innerHTML =
+  `🔥 Llevando ${COMBO_SIZE} vapes ahorrás <b>$${COMBO_DISCOUNT.toLocaleString('es-AR')}</b> · 🚚 Envíos low cost`;
+
+/* Phones have no hover, so the "¿Dudas? Escribinos" label also pops out by
+   itself once per visit, a few seconds after the intro, then tucks away. */
+function showWppTip(){
+  const fab = document.getElementById('fabWpp');
+  try{
+    if(sessionStorage.getItem('vapesoon_wpp_tip')) return;
+    sessionStorage.setItem('vapesoon_wpp_tip', '1');
+  }catch(err){ /* storage blocked: show it anyway */ }
+  setTimeout(()=> fab.classList.add('tip-show'), 3500);
+  setTimeout(()=> fab.classList.remove('tip-show'), 8500);
+}
+
 /* ================= INIT ================= */
 renderProducts();
 renderAppleProducts();
 renderReviews();
+startReviewMarquee();
+revealSectionHeads();
+showWppTip();
 initIntro();
 applyWholesaleLockState();
 applyWholesaleOrderingState();
@@ -6674,6 +7790,8 @@ let lastScrollState = false;
 let scrollTicking = false;
 function handleHeaderScroll(){
   const y = window.scrollY;
+  const t = Math.min(1, y / 60);
+  siteHeader.style.setProperty('--hdr', (t * t * (3 - 2 * t)).toFixed(3)); // smoothstep: eases in and out
   // Wide hysteresis: separate enter/exit thresholds with a big dead zone between them,
   // so scroll wobble (mouse wheel, trackpad, elastic bounce) can't flip the state back and forth.
   if(!lastScrollState && y > 110){
