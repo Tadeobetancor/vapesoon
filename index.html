@@ -180,8 +180,8 @@ a{color:inherit;text-decoration:none;}
 }
 
 /* ---------- INTRO LOADER ----------
-   ~3s: the logo comes into focus with a pulsing light ring behind it, a
-   loading bar fills and a tagline fades in; then a line of light flashes
+   ~3s: the logo comes into focus with a pulsing light ring behind it and a
+   thin loading line fills; then a line of light flashes
    across the middle and the screen opens like a curtain (top half up,
    bottom half down) onto the page. Timing lives in initIntro/dismissIntro.
    With reduced motion it's a plain fade instead (see the media query below). */
@@ -339,13 +339,15 @@ a{color:inherit;text-decoration:none;}
   0%{opacity:0;transform:scale(.82) translateY(10px);filter:blur(14px) drop-shadow(0 0 30px rgba(79,195,247,.5));}
   100%{opacity:1;transform:none;filter:blur(0) drop-shadow(0 0 30px rgba(79,195,247,.5));}
 }
+/* Minimal loading line in the page's soft cyan: a thin translucent track and
+   a light fill with a faint glow. */
 .intro-bar{
   position:relative;
-  width:min(56vw, 220px);
-  height:3px;
+  width:min(46vw, 180px);
+  height:2px;
   border-radius:999px;
   overflow:hidden;
-  background:rgba(143,227,255,.12);
+  background:rgba(255,255,255,.1);
   opacity:0;
   animation:introFadeIn .5s ease .5s forwards;
 }
@@ -353,29 +355,19 @@ a{color:inherit;text-decoration:none;}
   position:absolute;
   inset:0;
   border-radius:inherit;
-  background:linear-gradient(90deg, var(--blue-neon), var(--blue-bright), var(--violet));
-  box-shadow:0 0 12px rgba(143,227,255,.8);
+  background:linear-gradient(90deg, rgba(143,227,255,.35), var(--blue-bright));
+  box-shadow:0 0 8px rgba(143,227,255,.45);
   transform:scaleX(0);
   transform-origin:left;
   animation:introLoad 1.6s cubic-bezier(.45,0,.2,1) .55s forwards;
 }
 @keyframes introLoad{to{transform:scaleX(1);}}
-.intro-tag{
-  margin:-8px 0 0;
-  font-size:11px;
-  font-weight:600;
-  letter-spacing:2.5px;
-  text-transform:uppercase;
-  color:var(--ink-dim);
-  opacity:0;
-  animation:introFadeIn .6s ease .9s forwards;
-}
 @keyframes introFadeIn{to{opacity:1;}}
 /* Reduced motion: no zoom, blur or sliding — the logo fades in and the whole
    intro fades out (these override the global "kill all animations" rule). */
 @media (prefers-reduced-motion: reduce){
   #intro .intro-logo{animation:introFadeIn 1s ease .15s forwards !important;}
-  #intro .intro-bar, #intro .intro-tag{animation:introFadeIn .6s ease .5s forwards !important;}
+  #intro .intro-bar{animation:introFadeIn .6s ease .5s forwards !important;}
   #intro .intro-bar span{animation:none !important;transform:scaleX(1);}
   #intro .intro-mark::before{display:none;}
   #intro .intro-curtain .nebula-bg{animation:none !important;opacity:1;}
@@ -2524,12 +2516,32 @@ main{position:relative;z-index:1;}
 .modal-cta:active,
 .modal-cta.ready:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.35);transition-duration:.06s;}
 .modal-cta svg{width:17px;height:17px;flex:none;}
-/* Carrito → "Enviar pedido por WhatsApp": verde WhatsApp en vez del degradé
-   azul/naranja general, para que se lea claramente como la acción de WhatsApp. */
-#cartCheckoutBtn{background:linear-gradient(120deg, #1fb85c, #17a34d 55%, #0f8a3e);}
-/* The WhatsApp glyph is inlined with fill="#25D366" (fine on the blue buttons),
-   which vanished against this green background — paint it white here. */
-#cartCheckoutBtn svg{fill:#fff;}
+/* Carrito → "Continuar compra": the site's raised cyan button (it leads to
+   retiro/envío). WhatsApp green is kept for the step that actually opens
+   WhatsApp ("Continuar en WhatsApp", #fulfillAddressOk). */
+#cartCheckoutBtn{background:var(--grad-btn);background-size:200% 100%;box-shadow:0 4px 0 var(--btn-edge), 0 12px 24px -10px rgba(79,195,247,.65);}
+#cartCheckoutBtn svg{transition:transform .25s var(--ease);}
+#cartCheckoutBtn:hover svg{transform:translateX(4px);}
+#cartCheckoutBtn:active{box-shadow:0 1px 0 var(--btn-edge);}
+
+/* Address step: grey and locked (padlock) until a locality from the list is
+   picked and an address typed, then WhatsApp green (updateAddressOk). */
+#fulfillAddressOk{
+  opacity:1;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.12);
+  color:var(--ink-dim);
+  box-shadow:none;
+  transition:background .3s ease, color .3s ease, box-shadow .3s ease, transform .15s var(--ease);
+}
+#fulfillAddressOk.ready{
+  background:linear-gradient(120deg, #1fb85c, #17a34d 55%, #0f8a3e);
+  border-color:transparent;
+  color:#fff;
+  box-shadow:0 4px 0 rgba(0,0,0,.35), 0 14px 28px -12px rgba(37,211,102,.55);
+}
+#fulfillAddressOk .fulfill-ok-wpp, #fulfillAddressOk.ready .fulfill-ok-lock{display:none;}
+#fulfillAddressOk.ready .fulfill-ok-wpp{display:block;}
 .modal-add-cart{
   flex:none;
   width:100%;
@@ -4337,7 +4349,6 @@ footer.site::before{
   <div class="intro-mark">
     <img class="intro-logo" fetchpriority="high" src="img/logo.webp" alt="Vapesoon">
     <div class="intro-bar" aria-hidden="true"><span></span></div>
-    <p class="intro-tag">Envíos low cost · La mejor atención</p>
   </div>
   <div class="intro-seam" aria-hidden="true"></div>
 </div>
@@ -4423,8 +4434,8 @@ footer.site::before{
           <button class="filter-chip" id="filterPuffsBtn" aria-pressed="false">
             <span class="filter-chip-icon">💨</span><span class="filter-chip-label">Más pitadas</span>
           </button>
-          <button class="filter-chip" id="filterPriceBtn" aria-pressed="false">
-            <span class="filter-chip-icon">💰</span><span class="filter-chip-label">Más caro</span>
+          <button class="filter-chip" id="filterPopularBtn" aria-pressed="false">
+            <span class="filter-chip-icon">🏆</span><span class="filter-chip-label">Más vendidos</span>
           </button>
           <button class="filter-chip filter-chip--thc" id="filterThcBtn">
             <span class="filter-chip-icon">🌿</span><span class="filter-chip-label">Vapes c/THC</span>
@@ -4655,9 +4666,9 @@ footer.site::before{
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="21" r="1.4"/><circle cx="18" cy="21" r="1.4"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <p>Todavía no agregaste ningún vape.<br>Elegí un producto y sumalo al carrito.</p>
     </div>
-    <button class="modal-cta ready" id="cartCheckoutBtn">
-      <svg viewBox="0 0 24 24" fill="#25D366"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39c1.44.79 3.06 1.2 4.71 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.03c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.81-.11-.42-.13-.95-.31-1.64-.6-2.88-1.24-4.76-4.14-4.9-4.33-.14-.19-1.17-1.56-1.17-2.97 0-1.41.74-2.1 1-2.39.26-.29.57-.36.76-.36h.55c.18 0 .42-.03.65.5.24.56.8 1.94.87 2.08.07.14.12.31.02.5-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.26 1.64 2.04 1.13.99 2.07 1.31 2.36 1.46.29.15.46.13.63-.05.17-.19.72-.84.92-1.13.19-.29.39-.24.65-.14.27.1 1.7.8 1.99.95.29.15.48.22.55.34.07.13.07.72-.17 1.4z"/></svg>
-      Enviar pedido por WhatsApp
+    <button class="modal-cta ready" id="cartCheckoutBtn" type="button">
+      <span>Continuar compra</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
     <p class="cart-disclaimer hidden" id="cartDisclaimer">El monto total exhibido no incluye el costo de envío. El importe definitivo será confirmado junto con la disponibilidad a través de WhatsApp.</p>
   </div>
@@ -4725,8 +4736,10 @@ footer.site::before{
         <input type="text" id="fulfillAddressInput" placeholder="Calle y número/dpto">
       </div>
       <p class="modal-hint fulfill-address-hint" id="fulfillAddressHint">Con esto armamos el envío por WhatsApp</p>
-      <button class="modal-cta ready" id="fulfillAddressOk">
-        <span>OK, continuar por WhatsApp</span>
+      <button class="modal-cta" id="fulfillAddressOk" type="button">
+        <svg class="fulfill-ok-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke-linecap="round"/></svg>
+        <svg class="fulfill-ok-wpp" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39c1.44.79 3.06 1.2 4.71 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.03c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.81-.11-.42-.13-.95-.31-1.64-.6-2.88-1.24-4.76-4.14-4.9-4.33-.14-.19-1.17-1.56-1.17-2.97 0-1.41.74-2.1 1-2.39.26-.29.57-.36.76-.36h.55c.18 0 .42-.03.65.5.24.56.8 1.94.87 2.08.07.14.12.31.02.5-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.26 1.64 2.04 1.13.99 2.07 1.31 2.36 1.46.29.15.46.13.63-.05.17-.19.72-.84.92-1.13.19-.29.39-.24.65-.14.27.1 1.7.8 1.99.95.29.15.48.22.55.34.07.13.07.72-.17 1.4z"/></svg>
+        <span>Continuar en WhatsApp</span>
       </button>
     </div>
   </div>
@@ -5192,9 +5205,10 @@ const CATALOG = [
    que no figuran acá (p.ej. sin stock suficiente para tener un lugar fijo)
    quedan relegados al final de ese orden. */
 const POPULARITY_ORDER = [
-  'ELFBAR ICE KING', 'IGNITE VMIX', 'ELFBAR TRIO', 'IGNITE V500', 'ELFBAR DUKE', 'BLACKSHEEP 40K',
-  'EBCREATE BC PRO', 'IGNITE V400 ICE', 'BLACKSHEEP ICE 40K', 'ELFBAR BC',
-  'IGNITE V300 ULTRA SLIM', 'IGNITE V150', 'NIKBAR 10K'
+  'ELFBAR ICE KING', 'IGNITE V500', 'IGNITE BOOST MIX', 'BLACKSHEEP 55K', 'BLVK JUST JUICE',
+  'ELFBAR DUKE', 'LUMA', 'BLACKSHEEP 40K', 'EBCREATE BC PRO', 'IGNITE V400 ICE',
+  'BLACKSHEEP ICE 40K', 'ELFBAR BC', 'IGNITE V150',
+  'ELFBAR TRIO', 'IGNITE V300 ULTRA SLIM', 'NIKBAR 10K'
 ];
 function popularityRank(p){
   const i = POPULARITY_ORDER.indexOf(p.name);
@@ -5301,7 +5315,7 @@ let selectedFlavor = null;
    rows are guarded, so a stray tap landing on the buy bar right as it
    appears (Apple single-variant flow) can't fire a purchase unnoticed. */
 let modalOpenedAt = 0;
-let sortMode = null; // null | 'puffs' | 'price' (price = most expensive first)
+let sortMode = null; // null | 'puffs' | 'popular' (best sellers first, by POPULARITY_ORDER)
 const WHATSAPP_NUMBER = '5491131635898';
 
 // Some WhatsApp clients garble 4-byte "astral" emoji (most fruit/object
@@ -5644,11 +5658,15 @@ function renderProducts(){
   // with the `promoFirst` one ahead of the other promos — the
   // flagship (Elfbar Ice King) comes right after them, and the rest follow by
   // how many flavors they have available, most first. An explicit sort ("Más
-  // pitadas"/"Más caro") is the customer's own choice, so it isn't overridden.
+  // pitadas"/"Más vendidos") is the customer's own choice, so it isn't overridden.
   const defaultRank = p => p.promoFirst ? -1 : p.promo ? 0 : p.flagship ? 1 : 2;
   const inStockVapeIndices = vapeIndices.filter(i => !isOutOfStock(CATALOG[i])).sort((a, b) => {
     const pa = CATALOG[a], pb = CATALOG[b];
     if(sortMode === 'puffs') return (pb.puffs||0) - (pa.puffs||0);
+    if(sortMode === 'popular'){
+      const ra = popularityRank(pa), rb = popularityRank(pb);
+      return ra === rb ? 0 : ra - rb; // models not in the ranking (Infinity) keep their order, last
+    }
     if(sortMode === null){
       return (defaultRank(pa) - defaultRank(pb)) || (pb.flavors.length - pa.flavors.length);
     }
@@ -5657,7 +5675,7 @@ function renderProducts(){
   const thcOrdered = THC_SHUFFLED.filter(p => !p.outOfStock);
 
   // The "Más pedido" badge belongs to the default order only — under a sort
-  // (e.g. "Más caro") whatever lands first isn't the most ordered — and it
+  // (e.g. "Más pitadas") whatever lands first isn't the most ordered — and it
   // skips the promo cards (their own "Oferta" ribbon already stands out) and
   // the flagship card (its own "⭐ Favorito" tag is permanent, not tied to
   // sort position), landing on the first regular card instead.
@@ -5666,11 +5684,8 @@ function renderProducts(){
     const p = CATALOG[i];
     const giveBadge = sortMode === null && !p.promo && !p.flagship && !popularBadgeGiven;
     if(giveBadge) popularBadgeGiven = true;
-    return { thc: false, price: p.price || 0, html: productCardHTML(p, i, giveBadge ? 'Más pedido' : null, true) };
-  }).concat(thcOrdered.map(p => ({ thc: true, price: p.price || 0, html: thcCardHTML(p) })));
-  // "Más caro" sorts by price, but THC vapes always stay after the regular
-  // vapes (even though they're the priciest) — every order keeps them last.
-  if(sortMode === 'price') entries.sort((a, b) => (a.thc - b.thc) || (b.price - a.price));
+    return { html: productCardHTML(p, i, giveBadge ? 'Más pedido' : null, true) };
+  }).concat(thcOrdered.map(p => ({ html: thcCardHTML(p) }))); // THC vapes always last
   const cardsHTML = entries.map(e => e.html).join('');
   const cardCount = entries.length;
 
@@ -5787,7 +5802,7 @@ function updateCarouselArrows(carouselEl, prevBtn, nextBtn){
    carousel mode; the controls are now one centered column instead, so there's
    nothing to align and that padding hack is gone.) */
 const filterPuffsBtn = document.getElementById('filterPuffsBtn');
-const filterPriceBtn = document.getElementById('filterPriceBtn');
+const filterPopularBtn = document.getElementById('filterPopularBtn');
 
 /* Scrolls the PAGE (vertically) so the Deslizar/Grilla toggle sits just under
    the sticky header, with a bit of breathing room (26px) rather than flush
@@ -5825,8 +5840,8 @@ function setSortMode(mode){
   sortMode = (sortMode === mode) ? null : mode;
   filterPuffsBtn.classList.toggle('active', sortMode === 'puffs');
   filterPuffsBtn.setAttribute('aria-pressed', sortMode === 'puffs');
-  filterPriceBtn.classList.toggle('active', sortMode === 'price');
-  filterPriceBtn.setAttribute('aria-pressed', sortMode === 'price');
+  filterPopularBtn.classList.toggle('active', sortMode === 'popular');
+  filterPopularBtn.setAttribute('aria-pressed', sortMode === 'popular');
   renderProducts();
   scrollCatalogControlsIntoView();
   // In carousel mode, also jump to the new #1 card so the customer starts
@@ -5835,7 +5850,7 @@ function setSortMode(mode){
   if(firstCard) centerCardHorizontally(productCarousel, firstCard);
 }
 filterPuffsBtn.addEventListener('click', ()=> setSortMode('puffs'));
-filterPriceBtn.addEventListener('click', ()=> setSortMode('price'));
+filterPopularBtn.addEventListener('click', ()=> setSortMode('popular'));
 
 /* ================= RENDER: REVIEWS ================= */
 const reviewCarousel = document.getElementById('reviewCarousel');
@@ -6404,6 +6419,8 @@ function selectLocality(name){
   const sameDay = isSameDayLocality(name);
   selectedLocality = {name, sameDay};
   fulfillZoneInput.value = name;
+  // after the hint reset below
+  setTimeout(updateAddressOk);
   fulfillZoneSuggestions.classList.remove('open');
   fulfillAddressHint.classList.remove('error');
   fulfillAddressHint.textContent = 'Con esto armamos el envío por WhatsApp';
@@ -6419,6 +6436,7 @@ function selectLocality(name){
 
 fulfillZoneInput.addEventListener('input', (e)=>{
   selectedLocality = null;
+  updateAddressOk();
   fulfillZoneNote.classList.add('hidden');
   renderZoneSuggestions(e.target.value);
 });
@@ -6443,8 +6461,8 @@ function openFulfillmentChoice(baseMessage, skipOffer){
   selectedLocality = null;
   fulfillZoneNote.classList.add('hidden');
   fulfillZoneSuggestions.classList.remove('open');
-  fulfillAddressHint.textContent = 'Con esto armamos el envío por WhatsApp';
   fulfillAddressHint.classList.remove('error');
+  updateAddressOk();
   fulfillOverlay.classList.add('open');
   // The AirPods upsell only makes sense when the purchase is a vape — offering
   // a discount on AirPods/chargers to someone already buying AirPods or a
@@ -6582,6 +6600,20 @@ document.getElementById('offerAcceptBtn').addEventListener('click', ()=>{
   stopOfferCountdown();
 });
 document.getElementById('offerDeclineBtn').addEventListener('click', stopOfferCountdown);
+// Unlocks "Continuar en WhatsApp" only with a locality picked from the list
+// and an address typed (the click handler below still explains what's missing
+// if Enter is pressed early).
+function updateAddressOk(){
+  const ok = !!selectedLocality && !!fulfillAddressInput.value.trim();
+  fulfillAddressOk.classList.toggle('ready', ok);
+  if(!fulfillAddressHint.classList.contains('error')){
+    fulfillAddressHint.textContent = ok ? 'Con esto armamos el envío por WhatsApp' : 'Completá tu localidad y dirección para continuar';
+  }
+}
+fulfillAddressInput.addEventListener('input', ()=>{
+  fulfillAddressHint.classList.remove('error');
+  updateAddressOk();
+});
 fulfillAddressOk.addEventListener('click', ()=>{
   const address = fulfillAddressInput.value.trim();
   if(!selectedLocality){
