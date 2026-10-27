@@ -1904,6 +1904,45 @@ main{position:relative;z-index:1;}
   color:#b9c6d6;
 }
 .offer-btn-decline:hover{border-color:rgba(255,255,255,.35);color:#fff;}
+/* Swipeable offers: each slide snaps into place and the next one peeks in
+   from the right, so it's obvious there's more than one. */
+.offer-track{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-x:contain;
+}
+.offer-track::-webkit-scrollbar{display:none;}
+.offer-slide{
+  flex:0 0 100%;
+  scroll-snap-align:start;
+  padding:12px;
+  border-radius:14px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+}
+.offer-track.multi .offer-slide{flex-basis:88%;}
+.offer-slide .offer-card-btns{margin-top:12px;}
+/* Bigger product photo in the slides: the tile grows and the image fills it
+   edge to edge (the shop photos carry their own white margin). */
+.offer-slide .offer-card-body{gap:12px;}
+.offer-slide .offer-card-photo{width:104px;height:104px;padding:0;border-radius:18px;}
+.offer-slide .offer-card-photo img{transform:scale(1.2);}
+.offer-dots{display:flex;justify-content:center;gap:6px;margin-top:10px;}
+.offer-dots:empty{display:none;}
+.offer-dot{
+  width:6px;height:6px;
+  padding:0;
+  border:none;
+  border-radius:999px;
+  background:rgba(255,255,255,.25);
+  cursor:pointer;
+  transition:width .25s var(--ease), background .25s var(--ease);
+}
+.offer-dot.active{width:18px;background:#f5f7fa;}
 
 .thc-overlay{z-index:210;}
 .thc-sheet{max-width:420px;}
@@ -4695,28 +4734,14 @@ footer.site::before{
         </button>
       </div>
 
-      <div class="offer-card" id="offerCard">
+      <div class="offer-card hidden" id="offerCard">
         <div class="offer-card-head">
-          <span class="offer-card-badge">Oferta por tiempo limitado</span>
-          <span class="offer-card-timer" id="offerTimer">01:00</span>
+          <span class="offer-card-badge">⚡ Ofertas de tiempo limitado</span>
+          <span class="offer-card-timer" id="offerTimer">02:00</span>
         </div>
-        <div class="offer-card-body">
-          <div class="offer-card-photo">
-            <img id="offerProductImg" src="" alt="AirPods">
-          </div>
-          <div class="offer-card-info">
-            <div class="offer-card-name">AirPods</div>
-            <div class="offer-card-prices">
-              <span class="offer-card-price-orig" id="offerPriceOrig"></span>
-              <span class="offer-card-price-now" id="offerPriceNow"></span>
-            </div>
-            <div class="offer-card-note">Precio especial, solo en esta compra</div>
-          </div>
-        </div>
-        <div class="offer-card-btns">
-          <button class="offer-btn offer-btn-accept" id="offerAcceptBtn">Agregar</button>
-          <button class="offer-btn offer-btn-decline" id="offerDeclineBtn">No, gracias</button>
-        </div>
+        <!-- One slide per offer (built in JS from CHECKOUT_OFFERS), swiped sideways. -->
+        <div class="offer-track" id="offerTrack"></div>
+        <div class="offer-dots" id="offerDots"></div>
       </div>
     </div>
     <div class="fulfill-step hidden" id="fulfillAddressStep">
@@ -5121,7 +5146,7 @@ const PROMO_ACCENT = {main:'#7db2ff', fade:'rgba(125,178,255,.30)', shadow:'rgba
    on its photo that opens it. (Instagram doesn't allow embedding these
    reels in the page — the embed answers "publicación no disponible".) */
 const CATALOG = [
-  {name:'ELFBAR ICE KING', price:25000, puffs:40000, photo:'ice_king', flagship:true, reel:'DcZkRJvKemD', flavors:[
+  {name:'ELFBAR ICE KING', price:26000, puffs:40000, photo:'ice_king', flagship:true, reel:'DcZkRJvKemD', flavors:[
     {name:'Blue Razz Ice 💙❄️', stock:2},{name:'Sour Apple Ice 🍏❄️', stock:2},{name:'Blueberry Ice 🫐❄️', stock:2}
   ]},
   {name:'ELFBAR SWEET KING', price:26500, puffs:40000, photo:'sweet_king', outOfStock:true, flavors:[]},
@@ -6342,7 +6367,7 @@ modalCta.addEventListener('click', ()=>{
 function buyProductDirect(p, flavorName){
   const priceLine = p.price != null ? ` — $${p.price.toLocaleString('es-AR')}` : '';
   const msg = `¡Hola Vapesoon! Quiero comprar un *${p.name}* ${p.variantWord || 'sabor'} *${stripEmoji(flavorName)}*${priceLine} ¿Me confirmás disponibilidad?`;
-  openFulfillmentChoice(msg, p.category === 'apple');
+  openFulfillmentChoice(msg, [{product: p.name, category: p.category}]);
 }
 
 /* ================= FULFILLMENT (retiro / envío) ================= */
@@ -6446,7 +6471,9 @@ document.addEventListener('click', (e)=>{
   if(!e.target.closest('.fulfill-zone-field')) fulfillZoneSuggestions.classList.remove('open');
 });
 
-function openFulfillmentChoice(baseMessage, skipOffer){
+/* items: what's being bought ({product, category}), used to pick which
+   checkout offers make sense. */
+function openFulfillmentChoice(baseMessage, items){
   pendingCheckoutMessage = baseMessage;
   fulfillChoiceStep.classList.remove('hidden');
   fulfillAddressStep.classList.add('hidden');
@@ -6458,14 +6485,7 @@ function openFulfillmentChoice(baseMessage, skipOffer){
   fulfillAddressHint.classList.remove('error');
   updateAddressOk();
   fulfillOverlay.classList.add('open');
-  // The AirPods upsell only makes sense when the purchase is a vape — offering
-  // a discount on AirPods/chargers to someone already buying AirPods or a
-  // charger is a non-sequitur, so skip it whenever an Apple item is involved.
-  if(skipOffer){
-    offerCard.classList.add('hidden');
-  } else {
-    startOfferCountdown();
-  }
+  startOfferCountdown(items || []);
 }
 function closeFulfillmentModal(){
   fulfillOverlay.classList.remove('open');
@@ -6550,21 +6570,58 @@ document.getElementById('fulfillDeliveryBtn').addEventListener('click', ()=>{
   stopOfferCountdown();
 });
 
-/* ---- 2min upsell offer shown alongside the pickup/delivery choice; never
-   blocks checkout — it just disappears on accept, decline, or timeout ---- */
+/* ---- 2min upsell offers shown alongside the pickup/delivery choice; never
+   block checkout — each slide goes away on accept or decline, and the whole
+   card on timeout ---- */
+const OFFER_CHARGER_PRICE = 9000; // $3.000 off, only through this upsell — not the regular catalog price
+const OFFER_AIRPODS_PRICE = 18900; // special one-time price, only through this upsell — not the regular catalog price
+// Prices come from CATALOG / these constants so the slides can't drift from
+// what actually gets added to the cart.
+const CHECKOUT_OFFERS = [
+  {photo:'airpods', title:'AirPods', price:OFFER_AIRPODS_PRICE},
+  {photo:'cargador_apple', title:'Cargador Apple 20W', price:OFFER_CHARGER_PRICE}
+];
 const offerCard = document.getElementById('offerCard');
 const offerTimerEl = document.getElementById('offerTimer');
+const offerTrack = document.getElementById('offerTrack');
+const offerDots = document.getElementById('offerDots');
 let offerCountdownInterval = null;
-function startOfferCountdown(){
-  const airpodsPhoto = window.__PRODUCT_PHOTOS__ && window.__PRODUCT_PHOTOS__['airpods'];
-  if(airpodsPhoto) document.getElementById('offerProductImg').src = airpodsPhoto;
-  // Prices come from CATALOG / OFFER_AIRPODS_PRICE so the card can't drift
-  // from what actually gets added to the cart.
-  const airpods = CATALOG.find(p => p.name === 'AirPods');
-  document.getElementById('offerPriceOrig').textContent = airpods ? '$' + airpods.price.toLocaleString('es-AR') : '';
-  document.getElementById('offerPriceNow').textContent = '$' + OFFER_AIRPODS_PRICE.toLocaleString('es-AR');
+function startOfferCountdown(items){
+  // Only offered next to a vape (or THC), and never something already in
+  // the order.
+  const hasNonApple = items.some(i => i.category !== 'apple');
+  const offers = !hasNonApple ? [] : CHECKOUT_OFFERS.filter(o=>{
+    const p = CATALOG.find(c => c.photo === o.photo);
+    return p && !isOutOfStock(p) && !items.some(i => i.product === p.name);
+  });
+  if(offers.length === 0){ stopOfferCountdown(); return; }
 
+  offerTrack.innerHTML = offers.map(o=>{
+    const p = CATALOG.find(c => c.photo === o.photo);
+    const photo = window.__PRODUCT_PHOTOS__ && window.__PRODUCT_PHOTOS__[o.photo];
+    return `
+    <div class="offer-slide" data-photo="${o.photo}">
+      <div class="offer-card-body">
+        <div class="offer-card-photo">${photo ? `<img src="${photo}" alt="${o.title}">` : ''}</div>
+        <div class="offer-card-info">
+          <div class="offer-card-name">${o.title}</div>
+          <div class="offer-card-prices">
+            <span class="offer-card-price-orig">$${p.price.toLocaleString('es-AR')}</span>
+            <span class="offer-card-price-now">$${o.price.toLocaleString('es-AR')}</span>
+          </div>
+          <div class="offer-card-note">Precio especial, solo en esta compra</div>
+        </div>
+      </div>
+      <div class="offer-card-btns">
+        <button class="offer-btn offer-btn-accept" type="button">Agregar</button>
+        <button class="offer-btn offer-btn-decline" type="button">No, gracias</button>
+      </div>
+    </div>`;
+  }).join('');
   offerCard.classList.remove('hidden');
+  offerTrack.scrollLeft = 0;
+  refreshOfferDots();
+
   let secondsLeft = 120;
   offerTimerEl.textContent = '02:00';
   clearInterval(offerCountdownInterval);
@@ -6581,19 +6638,53 @@ function stopOfferCountdown(){
   offerCountdownInterval = null;
   offerCard.classList.add('hidden');
 }
-const OFFER_AIRPODS_PRICE = 18900; // special one-time price, only through this upsell — not the regular catalog price
-document.getElementById('offerAcceptBtn').addEventListener('click', ()=>{
-  const airpods = CATALOG.find(p => p.photo === 'airpods');
-  if(airpods){
-    cart.push({product: airpods.name, flavor: airpods.flavors[0].name, price: OFFER_AIRPODS_PRICE, category: airpods.category});
+// One dot per slide (none for a single offer); the active one follows the swipe.
+function refreshOfferDots(){
+  const slides = offerTrack.querySelectorAll('.offer-slide');
+  offerTrack.classList.toggle('multi', slides.length > 1);
+  offerDots.innerHTML = slides.length > 1
+    ? Array.from(slides, (_, i)=>`<button class="offer-dot" type="button" data-idx="${i}" aria-label="Oferta ${i + 1}"></button>`).join('')
+    : '';
+  updateActiveOfferDot();
+}
+function updateActiveOfferDot(){
+  const slides = Array.from(offerTrack.querySelectorAll('.offer-slide'));
+  let active = 0, best = Infinity;
+  slides.forEach((sl, i)=>{
+    const d = Math.abs(sl.offsetLeft - offerTrack.offsetLeft - offerTrack.scrollLeft);
+    if(d < best){ best = d; active = i; }
+  });
+  offerDots.querySelectorAll('.offer-dot').forEach((dot, i)=> dot.classList.toggle('active', i === active));
+}
+offerTrack.addEventListener('scroll', updateActiveOfferDot, {passive:true});
+offerDots.addEventListener('click', (e)=>{
+  const dot = e.target.closest('.offer-dot');
+  if(!dot) return;
+  const slide = offerTrack.querySelectorAll('.offer-slide')[Number(dot.dataset.idx)];
+  if(slide) offerTrack.scrollTo({left: slide.offsetLeft - offerTrack.offsetLeft, behavior:'smooth'});
+});
+function removeOfferSlide(slide){
+  slide.remove();
+  if(!offerTrack.querySelector('.offer-slide')){ stopOfferCountdown(); return; }
+  refreshOfferDots();
+}
+offerTrack.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.offer-btn');
+  if(!btn) return;
+  const slide = btn.closest('.offer-slide');
+  if(btn.classList.contains('offer-btn-accept')){
+    const offer = CHECKOUT_OFFERS.find(o => o.photo === slide.dataset.photo);
+    const p = CATALOG.find(c => c.photo === offer.photo);
+    // Its own "(oferta)" variant, so the WhatsApp message (grouped by
+    // flavor) never merges it with a unit bought at the regular price.
+    cart.push({product: p.name, flavor: p.flavors[0].name + ' (oferta)', price: offer.price, category: p.category});
     updateCartBadge();
     if(pendingCheckoutMessage){
-      pendingCheckoutMessage += `\n\n*+ Oferta agregada:* ${airpods.name} — $${OFFER_AIRPODS_PRICE.toLocaleString('es-AR')}`;
+      pendingCheckoutMessage += `\n\n*+ Oferta agregada:* ${offer.title} — $${offer.price.toLocaleString('es-AR')}`;
     }
   }
-  stopOfferCountdown();
+  removeOfferSlide(slide);
 });
-document.getElementById('offerDeclineBtn').addEventListener('click', stopOfferCountdown);
 // Unlocks "Continuar en WhatsApp" only with a locality picked from the list
 // and an address typed (the click handler below still explains what's missing
 // if Enter is pressed early).
@@ -6772,7 +6863,7 @@ thcDetailBuyBtn.addEventListener('click', ()=>{
   if(!thcSelectedFlavor || !thcActiveProduct) return;
   const priceLine = ` — $${thcActiveProduct.price.toLocaleString('es-AR')}`;
   const msg = `¡Hola Vapesoon! Quiero comprar un *${thcActiveProduct.name}* sabor *${stripEmoji(thcSelectedFlavor)}*${priceLine} ¿Me confirmás disponibilidad?`;
-  openFulfillmentChoice(msg);
+  openFulfillmentChoice(msg, [{product: thcActiveProduct.name, category: thcActiveProduct.category}]);
 });
 
 document.getElementById('thcBack').addEventListener('click', ()=>{
@@ -7062,7 +7153,7 @@ cartCheckoutBtn.addEventListener('click', ()=>{
     msg += `Total aprox: $${(subtotal - discount).toLocaleString('es-AR')}\n\n`;
   }
   msg += '¿Me confirmás disponibilidad?';
-  openFulfillmentChoice(msg, cart.some(item => item.category === 'apple'));
+  openFulfillmentChoice(msg, cart);
 });
 
 /* ================= SEARCH / AUTOCOMPLETE ================= */
