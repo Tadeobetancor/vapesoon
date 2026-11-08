@@ -4599,7 +4599,6 @@ body.has-cart .fab-stack{transform:translateY(-80px);}
 .cs-track{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
 .cs-seg{height:5px;border-radius:999px;background:rgba(255,255,255,.14);overflow:hidden;}
 .cs-seg i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#9dbdff,#fff);transform:scaleX(0);transform-origin:left;transition:transform .7s var(--ease);}
-.cs-seg.half i{transform:scaleX(.5);}
 .cs-seg.done i{transform:scaleX(1);}
 .cs-labels{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0 0;padding:0;list-style:none;}
 .cs-labels li{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:rgba(230,238,255,.45);transition:color .4s;}
@@ -4608,42 +4607,7 @@ body.has-cart .fab-stack{transform:translateY(-80px);}
 .cs-labels li.on span{background:#fff;color:var(--royal);}
 .fulfill-sheet .checkout-steps{margin-top:14px;}
 
-/* ---------- COMBO: más grande y que se entienda ---------- */
-.peek-hint{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin:6px 0 0;
-  padding:12px 16px;
-  border-radius:18px;
-  text-align:left;
-  font-size:14.5px;
-  font-weight:600;
-  line-height:1.3;
-  color:#fff;
-  border:1.5px solid rgba(255,170,90,.7);
-  background:
-    radial-gradient(120% 160% at 0% 0%, rgba(255,145,48,.40), transparent 60%),
-    linear-gradient(135deg, rgba(255,145,48,.22), rgba(232,67,58,.18));
-  box-shadow:0 14px 30px -16px rgba(255,120,60,.9), inset 0 1px 0 rgba(255,255,255,.18);
-}
-.peek-hint:empty{display:none;}
-.peek-hint .ph-fire{flex:none;font-size:30px;line-height:1;animation:flicker 1.6s ease-in-out infinite;}
-.peek-hint .ph-text{flex:1;min-width:0;}
-.peek-hint .ph-text b{display:block;font-family:'Bungee',cursive;font-weight:400;font-size:16px;letter-spacing:.4px;color:var(--gold);}
-.peek-hint .ph-amt{flex:none;font-family:'Bungee',cursive;font-size:24px;line-height:1;color:#fff;text-shadow:0 0 16px rgba(255,200,87,.7);}
-@media(min-width:900px){ .peek-hint{font-size:15.5px;} }
 
-.cart-combo-nudge{padding:18px 16px;gap:14px;border-width:1.5px;border-radius:20px;margin-top:16px;}
-.cart-combo-nudge-icon{font-size:36px;}
-.cart-combo-nudge-text{gap:4px;}
-.cart-combo-nudge-text b{font-size:18px;line-height:1.2;}
-.cart-combo-nudge-text small{font-size:13.5px;}
-.cart-combo-nudge-amount{font-size:26px;}
-.cart-combo-nudge-amount svg{width:20px;height:20px;}
-.cart-combo-dots{display:flex;gap:5px;margin-top:4px;}
-.cart-combo-dots i{width:22px;height:6px;border-radius:999px;background:rgba(255,255,255,.25);}
-.cart-combo-dots i.on{background:var(--gold);box-shadow:0 0 8px rgba(255,200,87,.8);}
 
 /* ---------- OFERTAS DE VAPES en el checkout ---------- */
 .offer-slide--vape{
@@ -4731,25 +4695,486 @@ html.lite .fab-wpp{background:radial-gradient(circle at 34% 26%, #b9d0ff 0%, #6f
   .topbar,.cart-bar,.cart-toast{transition:opacity .2s ease;}
   .peek-hint .ph-fire,.offer-hot-tag,.fab-wpp::after{animation:none;}
 }
+
+/* =====================================================================
+   AJUSTES (ronda 2) — fondo más oscuro, primera pantalla más limpia,
+   carrito/ofertas/pasos más simples
+   ===================================================================== */
+/* Fondo: azul noche (como antes) con un brillo royal arriba, así las
+   tarjetas — más claras — vuelven a resaltar. */
+.nebula-bg{
+  background:
+    radial-gradient(ellipse 90% 42% at 50% -8%, rgba(70,120,255,.28), transparent 66%),
+    radial-gradient(ellipse 70% 40% at 105% 45%, rgba(47,107,255,.12), transparent 70%),
+    radial-gradient(ellipse 70% 40% at -5% 78%, rgba(47,107,255,.10), transparent 70%),
+    linear-gradient(180deg,#0b1b4d 0%,#09163f 35%,#071234 70%,#060e2b 100%);
+}
+body{background:#060e2b;}
+/* Tarjetas normales más oscuras; las de oferta bien más claras, para que
+   salten a la vista. */
+.p-card{
+  background:
+    radial-gradient(120% 70% at 50% 0%, rgba(91,140,255,.08), transparent 65%),
+    linear-gradient(165deg, #142c66 0%, #0f2254 55%, #0a1940 100%);
+  border-color:rgba(176,203,255,.09);
+}
+.p-card--promo{
+  background:
+    radial-gradient(70% 45% at 50% 24%, rgba(215,230,255,.55), transparent 70%),
+    radial-gradient(90% 55% at 100% 100%, rgba(120,170,255,.45), transparent 70%),
+    linear-gradient(165deg, #5b8ff5 0%, #3a6ee0 45%, #2552c0 100%);
+  box-shadow:0 22px 46px -18px rgba(3,10,38,.9), 0 16px 40px -14px rgba(90,140,255,.85);
+}
+
+
+/* ---------- PRIMERA PANTALLA ----------
+   Franja de frases arriba (incluye la ubicación), sin buscador, y la
+   grilla/deslizar + filtros en una sola fila. */
+.ticker{
+  padding:7px 0;
+  background:rgba(3,8,28,.45);
+  border-bottom:1px solid rgba(176,203,255,.08);
+  -webkit-mask-image:linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  mask-image:linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+.ticker-track span{font-size:11.5px;font-weight:700;color:var(--white-glove);padding:0 34px;}
+#searchBox{display:none;}
+.header-inner{padding-bottom:4px;}
+
+.catalog-filters{gap:6px;}
+.filter-chip{padding:9px 3px;gap:3px;}
+
+
+/* ---------- BARRA FLOTANTE: solo el logo ---------- */
+.topbar{width:auto;height:50px;padding:0 22px;justify-content:center;}
+.topbar-logo img{height:34px;}
+
+/* ---------- CARRITO ABAJO + WHATSAPP al lado (no se pisan) ---------- */
+@media(max-width:899px){
+  .cart-bar{left:12px;right:88px;width:auto;transform:translate3d(0,160%,0) rotate(-4deg);}
+  .cart-bar.show{transform:translate3d(0,0,0) rotate(0);}
+  .cart-bar:active{transform:translate3d(0,3px,0);}
+  body.has-cart .fab-stack{transform:none;bottom:calc(18px + env(safe-area-inset-bottom));}
+  .cart-bar-text small{display:none;}
+  .cart-toast{left:12px;right:88px;max-width:none;justify-content:center;transform:translate3d(0,14px,0) scale(.92);}
+  .cart-toast.show{transform:translate3d(0,0,0) scale(1);}
+}
+body.has-cart .fab-tip{display:none;}
+.cart-toast{white-space:nowrap;padding:8px 16px 8px 8px;font-size:14px;}
+.cart-toast-check{width:24px;height:24px;}
+
+/* ---------- AVISO DEL COMBO (carrito): una línea ---------- */
+.cart-combo-nudge{padding:11px 14px;gap:10px;border-radius:14px;margin-top:12px;}
+.cart-combo-nudge-icon{font-size:20px;}
+.cart-combo-nudge-text{display:block;font-size:14px;font-weight:600;line-height:1.3;}
+.cart-combo-nudge-text b{display:inline;font-size:inherit;font-weight:800;color:var(--gold);}
+.cart-combo-nudge-go{flex:none;width:18px;height:18px;color:#fff;}
+
+/* ---------- PASOS: se desbloquean enteros ---------- */
+.cs-seg i{background:#fff;}
+.cs-labels li{color:rgba(230,238,255,.38);}
+.cs-labels li.on{color:#fff;}
+.cs-labels li.pop span{animation:stepPop .5s var(--ease-spring);}
+@keyframes stepPop{0%{transform:scale(.5);}60%{transform:scale(1.25);}100%{transform:scale(1);}}
+
+/* ---------- OFERTAS en el checkout: más limpias ---------- */
+.offer-card-badge{font-size:11px;font-weight:800;color:#ffb36b;}
+.offer-slide .offer-card-photo--clear{
+  position:relative;
+  overflow:visible;
+  background:radial-gradient(circle at 50% 55%, rgba(120,165,255,.35), transparent 68%);
+  box-shadow:none;
+}
+.offer-slide .offer-card-photo--clear img{transform:none;filter:drop-shadow(0 8px 14px rgba(3,10,38,.6));}
+.offer-off{
+  position:absolute;
+  left:-4px;bottom:-2px;
+  padding:3px 8px;
+  border-radius:999px;
+  background:var(--grad-hot);
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+  box-shadow:0 6px 14px -6px rgba(255,120,60,.9);
+}
+.offer-slide--vape .offer-card-price-now{color:#ffcf6b;}
+.offer-flavors{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:10px -12px 0;padding:0 12px;}
+.offer-flavors::-webkit-scrollbar{display:none;}
+.offer-flavor{flex:none;white-space:nowrap;}
+@media (prefers-reduced-motion: reduce){ .cs-labels li.pop span{animation:none;} }
+
+/* ---------- NUBES: invisibles hasta que arranca su animación ---------- */
+.tv-puff,.tv-cloud,.tv-ring{opacity:0;}
+
+/* ---------- CARRITO: botón redondo a la izquierda (ronda 3) ----------
+   Solo el carrito, flotando como el de antes. Al sumar algo se estira y
+   muestra "Ver carrito" + total; a los 2 s vuelve a ser solo el botón. */
+.cart-bar,
+.cart-bar.show,
+.cart-bar:active{left:16px;right:auto;width:auto;max-width:none;}
+.cart-bar{
+  bottom:calc(18px + env(safe-area-inset-bottom));
+  min-height:0;
+  padding:5px;
+  gap:0;
+  border-radius:999px;
+  transform:translate3d(0,160%,0) scale(.6);
+  box-shadow:0 4px 0 var(--btn-edge), 0 16px 32px -12px rgba(20,60,200,.9), inset 0 1px 0 rgba(255,255,255,.35);
+  transition:transform .6s var(--ease-spring), opacity .3s ease, box-shadow .2s;
+}
+.cart-bar.show{transform:translate3d(0,0,0) scale(1);animation:cartBob 2.6s ease-in-out infinite;}
+.cart-bar.show.expanded{animation:none;}
+.cart-bar:active{transform:translate3d(0,3px,0) scale(.97);}
+@keyframes cartBob{0%,100%{translate:0 0;}50%{translate:0 -8px;}}
+.cart-bar-icon{width:48px;height:48px;border-radius:50%;}
+/* anillo que late alrededor, como el carrito viejo */
+.cart-bar.show:not(.expanded)::after{
+  content:"";
+  position:absolute;
+  left:3px;top:3px;
+  width:52px;height:52px;
+  border-radius:50%;
+  border:2px solid rgba(190,212,255,.9);
+  pointer-events:none;
+  animation:cartFabRing 1.6s ease-out infinite;
+}
+.cart-bar-more{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  max-width:0;
+  overflow:hidden;
+  opacity:0;
+  white-space:nowrap;
+  transition:max-width .55s var(--ease-spring), opacity .25s ease, padding .4s var(--ease);
+}
+.cart-bar.expanded .cart-bar-more{max-width:calc(100vw - 32px - 58px - 96px);padding:0 4px 0 12px;opacity:1;transition:max-width .55s var(--ease-spring), opacity .3s ease .12s, padding .4s var(--ease);}
+.cart-bar-text small{display:none;}
+.cart-bar-text b{font-size:16px;}
+.cart-bar-total{font-size:16px;}
+.cart-bar-arrow{width:30px;height:30px;}
+body.has-cart .fab-stack{transform:none;bottom:22px;}
+.cart-toast{display:none;}
+@media(min-width:900px){
+  .cart-bar,.cart-bar.show,.cart-bar:active{left:32px;}
+  .cart-bar{bottom:32px;}
+  body.has-cart .fab-stack{bottom:32px;}
+  .cart-bar.expanded .cart-bar-more{max-width:360px;}
+}
+@media (prefers-reduced-motion: reduce){ .cart-bar.show,.cart-bar.show::after{animation:none;} }
+
+/* =====================================================================
+   RONDA 4 — galaxia, logo sin brillo, carrito = WhatsApp, sabores visuales
+   ===================================================================== */
+/* ---------- FONDO GALAXIA ----------
+   Casi negro azulado, nebulosas suaves (azul + un toque violeta), una vía
+   láctea en diagonal y muchas estrellas de distintos tamaños que titilan. */
+.nebula-bg{
+  background:
+    radial-gradient(ellipse 55% 35% at 82% 6%, rgba(45,100,255,.18), transparent 70%),
+    radial-gradient(ellipse 65% 40% at 12% 26%, rgba(38,96,255,.16), transparent 70%),
+    radial-gradient(ellipse 55% 35% at 88% 62%, rgba(30,80,220,.13), transparent 70%),
+    radial-gradient(ellipse 60% 38% at 18% 90%, rgba(30,110,255,.14), transparent 70%),
+    linear-gradient(118deg, transparent 28%, rgba(140,170,255,.045) 44%, rgba(205,220,255,.075) 50%, rgba(140,170,255,.045) 56%, transparent 72%),
+    linear-gradient(180deg,#070c26 0%,#050a1c 45%,#03060f 100%);
+}
+body{background:#03060f;}
+.nebula-bg::after{
+  background:
+    radial-gradient(ellipse 45% 30% at 30% 20%, rgba(70,120,255,.16), transparent 70%),
+    radial-gradient(ellipse 35% 25% at 78% 34%, rgba(60,110,255,.10), transparent 70%);
+}
+.nebula-bg::before{
+  background-image:radial-gradient(1.0px 1.0px at 20% 51%, rgba(255,255,255,0.58) 50%, transparent 51%),
+    radial-gradient(1.1px 1.1px at 47% 75%, rgba(255,255,255,0.87) 50%, transparent 51%),
+    radial-gradient(0.9px 0.9px at 12% 56%, rgba(200,215,255,0.57) 50%, transparent 51%),
+    radial-gradient(0.8px 0.8px at 55% 8%, rgba(255,255,255,0.88) 50%, transparent 51%),
+    radial-gradient(1.1px 1.1px at 75% 8%, rgba(200,215,255,0.57) 50%, transparent 51%),
+    radial-gradient(0.9px 0.9px at 72% 18%, rgba(200,215,255,0.7) 50%, transparent 51%),
+    radial-gradient(1.1px 1.1px at 74% 40%, rgba(255,255,255,0.59) 50%, transparent 51%),
+    radial-gradient(1.1px 1.1px at 25% 48%, rgba(255,255,255,0.74) 50%, transparent 51%),
+    radial-gradient(0.8px 0.8px at 8% 80%, rgba(255,255,255,0.72) 50%, transparent 51%),
+    radial-gradient(1.1px 1.1px at 41% 60%, rgba(200,215,255,0.68) 50%, transparent 51%),
+    radial-gradient(0.9px 0.9px at 24% 90%, rgba(255,255,255,0.58) 50%, transparent 51%),
+    radial-gradient(1.0px 1.0px at 64% 44%, rgba(200,215,255,0.65) 50%, transparent 51%),
+    radial-gradient(1.3px 1.3px at 16% 66%, rgba(200,215,255,0.61) 50%, transparent 51%),
+    radial-gradient(1.0px 1.0px at 63% 54%, rgba(255,255,255,0.89) 50%, transparent 51%),
+    radial-gradient(1.4px 1.4px at 72% 74%, rgba(200,215,255,0.8) 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 64% 75%, rgba(200,215,255,0.72) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 35% 61%, rgba(255,255,255,0.72) 50%, transparent 51%),
+    radial-gradient(1.8px 1.8px at 83% 74%, rgba(200,215,255,0.79) 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 86% 45%, rgba(255,255,255,0.98) 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 79% 15%, rgba(200,215,255,0.72) 50%, transparent 51%),
+    radial-gradient(1.9px 1.9px at 17% 95%, rgba(255,255,255,0.82) 50%, transparent 51%),
+    radial-gradient(2.0px 2.0px at 64% 11%, rgba(255,255,255,0.83) 50%, transparent 51%),
+    radial-gradient(1.7px 1.7px at 18% 56%, rgba(200,215,255,0.91) 50%, transparent 51%),
+    radial-gradient(2.0px 2.0px at 88% 49%, rgba(255,255,255,0.75) 50%, transparent 51%),
+    radial-gradient(2.3px 2.3px at 30% 85%, rgba(255,255,255,0.85) 50%, transparent 51%),
+    radial-gradient(2.7px 2.7px at 24% 34%, rgba(200,215,255,0.85) 50%, transparent 51%),
+    radial-gradient(2.5px 2.5px at 48% 79%, rgba(200,215,255,0.99) 50%, transparent 51%),
+    radial-gradient(2.6px 2.6px at 66% 80%, rgba(255,255,255,0.92) 50%, transparent 51%),
+    radial-gradient(2.7px 2.7px at 88% 72%, rgba(200,215,255,0.91) 50%, transparent 51%),
+    radial-gradient(2.4px 2.4px at 62% 82%, rgba(200,215,255,0.86) 50%, transparent 51%);
+  background-size:230px 230px, 230px 230px, 230px 230px, 230px 230px, 230px 230px, 230px 230px, 230px 230px, 230px 230px, 230px 230px, 230px 230px, 230px 230px, 230px 230px, 230px 230px, 230px 230px, 345px 345px, 345px 345px, 345px 345px, 345px 345px, 345px 345px, 345px 345px, 345px 345px, 345px 345px, 345px 345px, 345px 345px, 690px 690px, 690px 690px, 690px 690px, 690px 690px, 690px 690px, 690px 690px;
+  background-repeat:repeat;
+  opacity:1;
+  bottom:-690px;
+  animation:starDrift 150s linear infinite, starTwinkle 4.5s ease-in-out infinite;
+}
+@keyframes starDrift{from{transform:translate3d(0,0,0);}to{transform:translate3d(0,-690px,0);}}
+@keyframes starTwinkle{0%,100%{opacity:1;}50%{opacity:.6;}}
+html.lite .nebula-bg::before{animation:none;}
+
+/* ---------- LOGO: sin halo ni brillo ---------- */
+.brand-logo-wrap::before{display:none;}
+.brand-logo{filter:drop-shadow(0 6px 14px rgba(0,0,0,.6));}
+
+/* ---------- Tarjetas un poco menos claras ---------- */
+/* Tarjetas: vidrio azul noche, del mismo tono que la galaxia (se ven las
+   estrellas apenas por detrás). Las de oferta, el mismo vidrio un poco más
+   claro + el borde que gira y la etiqueta -X%. */
+.p-card{
+  background:
+    radial-gradient(120% 70% at 50% 0%, rgba(91,140,255,.08), transparent 65%),
+    linear-gradient(165deg, rgba(20,38,92,.78) 0%, rgba(13,27,68,.78) 55%, rgba(8,17,46,.78) 100%);
+  border-color:rgba(176,203,255,.10);
+}
+.p-card--promo{
+  background:
+    radial-gradient(70% 45% at 50% 24%, rgba(150,185,255,.20), transparent 70%),
+    radial-gradient(90% 55% at 100% 100%, rgba(60,110,255,.16), transparent 70%),
+    linear-gradient(165deg, rgba(30,58,135,.85) 0%, rgba(20,42,104,.85) 50%, rgba(12,26,70,.85) 100%);
+  box-shadow:0 22px 46px -20px rgba(0,0,0,.9), 0 14px 36px -18px rgba(74,134,255,.55);
+}
+
+/* ---------- CARRITO: misma esfera que WhatsApp ---------- */
+.cart-bar{
+  bottom:calc(22px + env(safe-area-inset-bottom));
+  padding:0;
+  height:58px;
+  border:1px solid rgba(255,255,255,.4);
+  background:radial-gradient(circle at 34% 26%, #b9d0ff 0%, #6f9bff 26%, #3a72ff 55%, #2152e0 80%, #1a3fb8 100%);
+  background-size:auto;
+  box-shadow:inset 0 -7px 14px rgba(10,30,120,.45), inset 0 3px 6px rgba(255,255,255,.35), 0 14px 28px -10px rgba(25,70,220,.85);
+}
+.cart-bar.expanded{background:radial-gradient(120% 160% at 18% 20%, #b9d0ff 0%, #6f9bff 18%, #3a72ff 45%, #2152e0 75%, #1a3fb8 100%);}
+.cart-bar:active{box-shadow:inset 0 -7px 14px rgba(10,30,120,.45), inset 0 3px 6px rgba(255,255,255,.35), 0 8px 18px -10px rgba(25,70,220,.85);}
+.cart-bar::before{
+  content:"";
+  position:absolute;
+  top:6px;left:12px;
+  width:34px;
+  height:40%;
+  border-radius:50%;
+  background:linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,0));
+  pointer-events:none;
+}
+.cart-bar.show:not(.expanded)::after{display:none;}
+.cart-bar-icon{width:56px;height:56px;background:none;color:#fff;box-shadow:none;}
+.cart-bar-icon svg{position:relative;width:27px;height:27px;filter:drop-shadow(0 2px 3px rgba(10,30,120,.45));}
+.cart-bar-count{top:2px;right:2px;min-width:20px;height:20px;font-size:11px;}
+.cart-bar.expanded .cart-bar-more{padding:0 14px 0 2px;}
+.cart-bar-arrow{background:rgba(255,255,255,.22);}
+body.has-cart .fab-stack,.fab-stack{bottom:calc(22px + env(safe-area-inset-bottom));}
+@media(min-width:900px){
+  .cart-bar{bottom:32px;}
+  body.has-cart .fab-stack,.fab-stack{bottom:32px;}
+}
+
+/* ---------- PRODUCTO: sin "Ver mi carrito" ---------- */
+#modalViewCartBtn{display:none !important;}
+
+/* ---------- SABORES: botones grandes, mismos colores de siempre ---------- */
+.flavor-grid{gap:10px;}
+.flavor-row{padding:14px 14px 14px 16px;min-height:68px;border-radius:16px;}
+.flavor-row-main{gap:12px;}
+.flavor-dot{width:10px;height:10px;}
+.flavor-text{display:flex;flex-direction:column;gap:3px;min-width:0;}
+.flavor-row .flavor-name{font-size:15.5px;font-weight:700;color:var(--white-glove);line-height:1.25;}
+.flavor-stock{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--ink-dim);}
+.flavor-pick{
+  flex:none;
+  width:26px;height:26px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.22);
+  display:flex;align-items:center;justify-content:center;
+  color:transparent;
+  transition:background .2s, border-color .2s, color .2s;
+}
+.flavor-pick svg{width:14px;height:14px;}
+.flavor-row.selected .flavor-pick{background:#fff;border-color:#fff;color:var(--royal);}
+.flavor-row-add{padding:14px;font-size:15px;border-radius:14px;margin-top:4px;background:var(--grad-btn);border:none;box-shadow:0 4px 0 var(--btn-edge), 0 14px 26px -12px rgba(20,60,200,.9);}
+
+/* =====================================================================
+   RONDA 6 — un poco más claro, onda expansiva del carrito, modal del
+   mismo color que la página
+   ===================================================================== */
+/* Galaxia un poco más clara */
+.nebula-bg{
+  background:
+    radial-gradient(ellipse 60% 38% at 80% 6%, rgba(45,100,255,.22), transparent 70%),
+    radial-gradient(ellipse 65% 40% at 12% 26%, rgba(38,96,255,.20), transparent 70%),
+    radial-gradient(ellipse 55% 35% at 88% 62%, rgba(30,80,220,.16), transparent 70%),
+    radial-gradient(ellipse 60% 38% at 18% 90%, rgba(30,110,255,.16), transparent 70%),
+    linear-gradient(118deg, transparent 28%, rgba(140,170,255,.05) 44%, rgba(205,220,255,.085) 50%, rgba(140,170,255,.05) 56%, transparent 72%),
+    linear-gradient(180deg,#0d1a4a 0%,#0a1539 45%,#070f2a 100%);
+}
+body{background:#070f2a;}
+.p-card{
+  background:
+    radial-gradient(120% 70% at 50% 0%, rgba(91,140,255,.10), transparent 65%),
+    linear-gradient(165deg, rgba(26,50,116,.80) 0%, rgba(17,35,88,.80) 55%, rgba(11,23,60,.80) 100%);
+}
+.p-card--promo{
+  background:
+    radial-gradient(70% 45% at 50% 24%, rgba(160,195,255,.26), transparent 70%),
+    radial-gradient(90% 55% at 100% 100%, rgba(70,125,255,.22), transparent 70%),
+    linear-gradient(165deg, rgba(42,80,175,.88) 0%, rgba(28,58,138,.88) 50%, rgba(17,37,95,.88) 100%);
+}
+
+/* Producto / carrito / checkout abiertos: el mismo azul noche de la página */
+.modal-overlay{background:rgba(5,10,30,.55);}
+.modal-sheet{
+  background:
+    radial-gradient(120% 50% at 50% 0%, rgba(70,120,255,.14), transparent 70%),
+    linear-gradient(170deg, rgba(24,46,108,.95) 0%, rgba(16,32,82,.96) 55%, rgba(10,21,58,.97) 100%);
+  border-color:rgba(176,203,255,.14);
+}
+
+/* Más aire entre Grilla/Deslizar y los filtros */
+.catalog-view-row{margin:0 0 16px;}
+
+/* ---------- CARRITO: onda expansiva + abrir/cerrar animado ---------- */
+.cart-bar.show:not(.expanded)::after{
+  display:block;
+  content:"";
+  position:absolute;
+  left:0;top:0;
+  width:56px;height:56px;
+  border-radius:50%;
+  border:2px solid rgba(170,200,255,.9);
+  box-shadow:0 0 18px rgba(91,140,255,.6);
+  pointer-events:none;
+  animation:cartWave 2.4s cubic-bezier(.2,.6,.3,1) infinite;
+}
+.cart-bar.show:not(.expanded) .cart-bar-icon::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  border:2px solid rgba(170,200,255,.75);
+  pointer-events:none;
+  animation:cartWave 2.4s cubic-bezier(.2,.6,.3,1) 1.2s infinite backwards;
+}
+@keyframes cartWave{0%{transform:scale(1);opacity:.9;}100%{transform:scale(2.4);opacity:0;}}
+
+/* Abrir: la píldora se estira y el texto entra en cascada desde el ícono */
+.cart-bar-more > *{transition:transform .5s var(--ease-spring), opacity .3s ease;}
+.cart-bar:not(.expanded) .cart-bar-more > *{transform:translateX(-28px) scale(.6);opacity:0;}
+.cart-bar.expanded .cart-bar-more > *{transform:none;opacity:1;}
+.cart-bar.expanded .cart-bar-text{transition-delay:.08s;}
+.cart-bar.expanded .cart-bar-total{transition-delay:.16s;}
+.cart-bar.expanded .cart-bar-arrow{transition-delay:.24s;}
+/* Cerrar: al revés — todo se chupa hacia el carrito y la píldora se cierra */
+.cart-bar.collapsing .cart-bar-more{transition:max-width .55s cubic-bezier(.7,0,.3,1) .12s, opacity .3s ease .3s, padding .5s ease .12s;}
+.cart-bar.collapsing .cart-bar-more > *{transition:transform .4s cubic-bezier(.6,0,.6,1), opacity .3s ease;}
+.cart-bar.collapsing .cart-bar-arrow{transition-delay:0s;}
+.cart-bar.collapsing .cart-bar-total{transition-delay:.06s;}
+.cart-bar.collapsing .cart-bar-text{transition-delay:.12s;}
+.cart-bar-icon.bump{animation:cartGulp .6s var(--ease-spring);}
+@keyframes cartGulp{0%{transform:scale(1);}30%{transform:scale(.82);}65%{transform:scale(1.18);}100%{transform:scale(1);}}
+@media (prefers-reduced-motion: reduce){
+  .cart-bar::after,.cart-bar-icon::after{animation:none !important;display:none !important;}
+}
+
+/* =====================================================================
+   RONDA 7 — ofertas del checkout con un solo diseño, "Promoción" en el combo
+   ===================================================================== */
+.offer-card-badge{color:#c9d6ee;font-weight:700;}
+.offer-slide{padding:12px;}
+.offer-stage{
+  height:150px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:14px;
+  background:radial-gradient(circle at 50% 62%, rgba(110,160,255,.26), transparent 66%);
+}
+.offer-stage img{
+  max-height:138px;
+  max-width:72%;
+  width:auto;height:auto;
+  object-fit:contain;
+  filter:drop-shadow(0 10px 18px rgba(0,0,0,.55));
+}
+/* las fotos de Apple son cuadradas con mucho margen: un poco más grandes */
+.offer-slide:not(.offer-slide--vape) .offer-stage img{height:150px;max-height:none;max-width:none;}
+.offer-meta{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:10px;}
+.offer-meta .offer-card-name{margin:0;font-size:15px;font-weight:600;line-height:1.25;}
+.offer-meta .offer-card-prices{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:1px;}
+.offer-meta .offer-card-price-orig{font-size:11.5px;}
+.offer-meta .offer-card-price-now,
+.offer-slide--vape .offer-meta .offer-card-price-now{font-size:16px;font-weight:600;color:#fff;}
+.offer-flavors{margin-top:10px;}
+
+.cart-combo-tag{
+  display:block;
+  margin-bottom:1px;
+  font-size:9.5px;
+  font-weight:700;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+  color:rgba(255,222,196,.7);
+}
+
+/* =====================================================================
+   RONDA 8 — logo con estela que brilla, esferas con movimiento
+   ===================================================================== */
+/* Estela azul detrás del logo (como antes) y el logo flotando más visible */
+.brand-logo-wrap::before{display:block;}
+.brand-logo{animation:logoFloat2 3.4s ease-in-out infinite;}
+@keyframes logoFloat2{
+  0%,100%{transform:translateY(0) rotate(-1deg) scale(1);}
+  50%{transform:translateY(-9px) rotate(1deg) scale(1.02);}
+}
+@media (prefers-reduced-motion: reduce){ .brand-logo{animation:none;} }
+
+/* WhatsApp y carrito: las dos esferas flotan (desfasadas) y cada tanto
+   les pasa un brillo por encima. */
+.fab-wpp{animation:sphereBob 2.6s ease-in-out 1.3s infinite;}
+.fab-wpp:hover,.fab-wpp:active{animation-play-state:paused;}
+@keyframes sphereBob{0%,100%{translate:0 0;}50%{translate:0 -8px;}}
+.fab-wpp{overflow:visible;}
+.fab-wpp > svg{animation:sphereWiggle 5s ease-in-out 2s infinite;}
+.cart-bar.show:not(.expanded) .cart-bar-icon svg{animation:sphereWiggle 5s ease-in-out infinite;}
+@keyframes sphereWiggle{
+  0%,80%,100%{transform:rotate(0) scale(1);}
+  84%{transform:rotate(-14deg) scale(1.12);}
+  88%{transform:rotate(12deg) scale(1.12);}
+  92%{transform:rotate(-6deg) scale(1.05);}
+}
+/* onda también en WhatsApp, más suave que la del carrito */
+.fab-wpp-wave{
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  border:2px solid rgba(170,200,255,.6);
+  pointer-events:none;
+  animation:cartWave 3s cubic-bezier(.2,.6,.3,1) .6s infinite backwards;
+}
+
+/* Cerrar "Ver carrito": más rápido */
+.cart-bar.collapsing .cart-bar-more{transition:max-width .3s cubic-bezier(.7,0,.3,1) .04s, opacity .18s ease .14s, padding .3s ease .04s;}
+.cart-bar.collapsing .cart-bar-more > *{transition:transform .22s cubic-bezier(.6,0,.6,1), opacity .18s ease;}
+.cart-bar.collapsing .cart-bar-total{transition-delay:.03s;}
+.cart-bar.collapsing .cart-bar-text{transition-delay:.06s;}
+@media (prefers-reduced-motion: reduce){
+  .fab-wpp,.fab-wpp > svg,.cart-bar-icon svg,.fab-wpp-wave{animation:none !important;}
+}
 </style>
 </head>
 <body>
 
 <div class="nebula-bg"></div>
 
-<!-- BARRA FLOTANTE: baja cuando el header sale de pantalla (initTopbar) -->
-<div class="topbar" id="topbar">
-  <button class="topbar-logo" id="topbarLogo" type="button" aria-label="Volver arriba"><img src="img/logo.webp" alt="Vapesoon"></button>
-  <div class="topbar-actions">
-    <button class="topbar-btn" id="topbarSearch" type="button" aria-label="Buscar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg>
-    </button>
-    <button class="topbar-btn topbar-cart" id="topbarCart" type="button" aria-label="Ver carrito">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="9" cy="21" r="1.4"/><circle cx="18" cy="21" r="1.4"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span id="topbarCartCount">0</span>
-    </button>
-  </div>
-</div>
 
 <!-- INTRO LOADER -->
 <div id="intro">
@@ -4935,7 +5360,7 @@ html.lite .fab-wpp{background:radial-gradient(circle at 34% 26%, #b9d0ff 0%, #6f
     <a class="footer-promo" href="https://instagram.com/vapesoon.arg" target="_blank" rel="noopener">
       <div class="footer-promo-text">
         <span class="footer-promo-tag">📸 Beneficio</span>
-        <p class="footer-promo-title"><span class="promo-discount">20% OFF</span> en tu próxima compra</p>
+        <p class="footer-promo-title"><span class="promo-discount">15% OFF</span> en tu próxima compra</p>
         <p class="footer-promo-sub">Subí una historia etiquetándonos a <b>@vapesoon.arg</b> y te lo aplicamos en tu próximo pedido.</p>
         <span class="footer-promo-cta">Ir a Instagram
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -5070,9 +5495,9 @@ html.lite .fab-wpp{background:radial-gradient(circle at 34% 26%, #b9d0ff 0%, #6f
         <div class="modal-name">Tu carrito</div>
       </div>
     </div>
-    <div class="checkout-steps" data-step="1" aria-label="Paso 1 de 3: carrito">
+    <div class="checkout-steps" data-step="1" aria-label="Paso 1 de 3: tu pedido">
       <div class="cs-track"><span class="cs-seg"><i></i></span><span class="cs-seg"><i></i></span><span class="cs-seg"><i></i></span></div>
-      <ol class="cs-labels"><li><span>1</span>Carrito</li><li><span>2</span>Entrega</li><li><span>3</span>WhatsApp</li></ol>
+      <ol class="cs-labels"><li><span>1</span>Tu pedido</li><li><span>2</span>Entrega</li><li><span>3</span>Confirmar</li></ol>
     </div>
     <div id="cartItemsList"></div>
     <div class="cart-empty" id="cartEmpty">
@@ -5096,7 +5521,7 @@ html.lite .fab-wpp{background:radial-gradient(circle at 34% 26%, #b9d0ff 0%, #6f
     </button>
     <div class="checkout-steps" id="fulfillSteps" data-step="2" aria-label="Paso 2 de 3: entrega">
       <div class="cs-track"><span class="cs-seg"><i></i></span><span class="cs-seg"><i></i></span><span class="cs-seg"><i></i></span></div>
-      <ol class="cs-labels"><li><span>1</span>Carrito</li><li><span>2</span>Entrega</li><li><span>3</span>WhatsApp</li></ol>
+      <ol class="cs-labels"><li><span>1</span>Tu pedido</li><li><span>2</span>Entrega</li><li><span>3</span>Confirmar</li></ol>
     </div>
     <div class="fulfill-step" id="fulfillChoiceStep">
       <div class="modal-eyebrow">Vapesoon</div>
@@ -5114,7 +5539,7 @@ html.lite .fab-wpp{background:radial-gradient(circle at 34% 26%, #b9d0ff 0%, #6f
 
       <div class="offer-card hidden" id="offerCard">
         <div class="offer-card-head">
-          <span class="offer-card-badge">⚡ Ofertas de tiempo limitado</span>
+          <span class="offer-card-badge">🔥 Oportunidad única</span>
           <span class="offer-card-timer" id="offerTimer">02:00</span>
         </div>
         <!-- One slide per offer (built in JS from CHECKOUT_OFFERS), swiped sideways. -->
@@ -5441,9 +5866,11 @@ html.lite .fab-wpp{background:radial-gradient(circle at 34% 26%, #b9d0ff 0%, #6f
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="9" cy="21" r="1.4"/><circle cx="18" cy="21" r="1.4"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <span class="cart-bar-count" id="cartBarCount">0</span>
   </span>
-  <span class="cart-bar-text"><b>Ver carrito</b><small id="cartBarSub"></small></span>
-  <span class="cart-bar-total" id="cartBarTotal"></span>
-  <span class="cart-bar-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  <span class="cart-bar-more">
+    <span class="cart-bar-text"><b>Ver carrito</b><small id="cartBarSub"></small></span>
+    <span class="cart-bar-total" id="cartBarTotal"></span>
+    <span class="cart-bar-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </span>
 </button>
 <div class="cart-toast" id="cartToast" role="status" aria-live="polite">
   <span class="cart-toast-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -5459,6 +5886,7 @@ html.lite .fab-wpp{background:radial-gradient(circle at 34% 26%, #b9d0ff 0%, #6f
   </button>
   <a class="fab fab-wpp" id="fabWpp" href="https://wa.me/5491131635898?text=%C2%A1Hola%20Vapesoon!%20Quiero%20hacer%20una%20consulta" target="_blank" rel="noopener" aria-label="¿Dudas? Escribinos por WhatsApp">
     <span class="fab-tip" aria-hidden="true">¿Dudas? <b>Escribinos</b> 💬</span>
+    <span class="fab-wpp-wave" aria-hidden="true"></span>
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39c1.44.79 3.06 1.2 4.71 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.03c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.81-.11-.42-.13-.95-.31-1.64-.6-2.88-1.24-4.76-4.14-4.9-4.33-.14-.19-1.17-1.56-1.17-2.97 0-1.41.74-2.1 1-2.39.26-.29.57-.36.76-.36h.55c.18 0 .42-.03.65.5.24.56.8 1.94.87 2.08.07.14.12.31.02.5-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.26 1.64 2.04 1.13.99 2.07 1.31 2.36 1.46.29.15.46.13.63-.05.17-.19.72-.84.92-1.13.19-.29.39-.24.65-.14.27.1 1.7.8 1.99.95.29.15.48.22.55.34.07.13.07.72-.17 1.4z"/></svg>
   </a>
 </div>
@@ -5540,9 +5968,7 @@ const PROMO_ACCENT = {main:'#7db2ff', fade:'rgba(125,178,255,.30)', shadow:'rgba
    on its photo that opens it. (Instagram doesn't allow embedding these
    reels in the page — the embed answers "publicación no disponible".) */
 const CATALOG = [
-  {name:'ELFBAR ICE KING', price:26000, puffs:40000, photo:'ice_king', flagship:true, reel:'DcZkRJvKemD', flavors:[
-    {name:'Blueberry Ice 🫐❄️', stock:1}
-  ]},
+  {name:'ELFBAR ICE KING', price:26000, puffs:40000, photo:'ice_king', flagship:true, reel:'DcZkRJvKemD', outOfStock:true, flavors:[]},
   {name:'ELFBAR SWEET KING', price:26500, puffs:40000, photo:'sweet_king', outOfStock:true, flavors:[]},
   {name:'ELFBAR DUKE', price:25000, puffs:35000, photo:'duke', outOfStock:true, flavors:[]},
   {name:'ELFBAR BC', price:20000, puffs:15000, photo:'bc', reel:'DUBBIz3AO4S', flavors:[
@@ -5550,24 +5976,20 @@ const CATALOG = [
   ]},
   /* Precio según cotización Italia Shop (S12211): USD 10,50 × 1660 = $17.430
      + ~$12.000 de margen → $29.500; en oferta a $25.500. */
-  {name:'LUMA', price:25500, originalPrice:29500, promo:true, promoOrder:1, puffs:40000, photo:'dinner_lady_luma', photoScale:0.85, reel:'DeSItt6KCpc', flavors:[
-    {name:'Strawberry Ice 🍓', stock:1},{name:'Watermelon Ice 🍉', stock:1}
-  ]},
+  {name:'LUMA', price:25500, originalPrice:29500, promo:true, promoOrder:1, puffs:40000, photo:'dinner_lady_luma', photoScale:0.85, reel:'DeSItt6KCpc', outOfStock:true, flavors:[]},
   {name:'EBCREATE BC PRO', price:25000, puffs:40000, photo:'ebcreate', flavors:[
     {name:'Black Mint 🌿', stock:1}
   ]},
   {name:'IGNITE V500', price:30000, originalPrice:32000, promo:true, promoOrder:2, puffs:50000, photo:'v500', flavors:[
-    {name:'Strawberry Kiwi 🍓🥝', stock:1},{name:'Strawberry Watermelon 🍓🍉', stock:2},
+    {name:'Strawberry Kiwi 🍓🥝', stock:1},{name:'Strawberry Watermelon 🍓🍉', stock:1},
     {name:'Watermelon Kiwi 🍉🥝', stock:2},{name:'Watermelon Mix 🍉', stock:2}
   ]},
-  {name:'IGNITE BOOST MIX', price:27500, puffs:40000, photo:'ignite_boost_mix', flavors:[
+  {name:'IGNITE BOOST MIX', price:27500, originalPrice:29000, promo:true, promoOrder:3, puffs:40000, photo:'ignite_boost_mix', flavors:[
     {name:'Grape Ice + Strawberry 🍇🍓', stock:1},{name:'Strawberry Kiwi Ice + Grape Kiwi Ice 🍓🥝🍇', stock:1}
   ]},
   {name:'IGNITE V400 ICE', price:28000, puffs:40000, photo:'v400', outOfStock:true, flavors:[]},
   {name:'IGNITE V300 ULTRA SLIM', price:24000, puffs:30000, photo:'wholesale_v300_ultra_slim', outOfStock:true, flavors:[]},
-  {name:'IGNITE V250', price:22000, puffs:25000, photo:'v250', photoScale:1.18, flavors:[
-    {name:'Menthol ❄️', stock:1}
-  ]},
+  {name:'IGNITE V250', price:22000, puffs:25000, photo:'v250', photoScale:1.18, outOfStock:true, flavors:[]},
   /* Precio según cotización Italia Shop (S12019): USD 12,50 × 1660 = $20.750
      + $10.000 de margen = $30.750 → redondeado a $31.000. */
   {name:'BLACKSHEEP 55K', price:31000, puffs:55000, photo:'blacksheep_55k', outOfStock:true, flavors:[]},
@@ -5578,9 +6000,11 @@ const CATALOG = [
   {name:'NIKBAR 10K', price:19000, puffs:10000, photo:'nikbar10', photoScale:1.18, outOfStock:true, flavors:[]},
   {name:'IGNITE V150', price:20000, puffs:15000, photo:'v150', outOfStock:true, flavors:[]},
   {name:'BLVK JUST JUICE', price:27500, puffs:45000, photo:'blvk', reel:'Dd9LzkfKrsd', flavors:[
-    {name:'Menthol ❄️', stock:2},{name:'Strawberry Kiwi 🍓🥝', stock:1}
+    {name:'Menthol ❄️', stock:2}
   ]},
-  {name:'ELFBAR TRIO', price:27000, puffs:40000, photo:'trio', outOfStock:true, flavors:[]},
+  {name:'ELFBAR TRIO', price:27000, puffs:40000, photo:'trio', flavors:[
+    {name:'Watermelon Ice 🍉', stock:1}
+  ]},
   /* Precio según cotización Italia Shop (S12012): USD 7 × 1660 = $11.620
      + $10.000 de margen = $21.620 → redondeado a $22.000. */
   {name:'LOST MARY MT20000', price:22000, puffs:20000, photo:'lost_mary_mt20000', flavors:[
@@ -6224,7 +6648,7 @@ const filterPopularBtn = document.getElementById('filterPopularBtn');
 function scrollCatalogControlsIntoView(){
   const anchor = document.querySelector('.catalog-view-row');
   if(!anchor) return;
-  const headerH = 70; // la barra flotante (.topbar) tapa el borde de arriba
+  const headerH = 0;
   const y = anchor.getBoundingClientRect().top + window.scrollY - headerH - 26;
   window.scrollTo({top: Math.max(0, y), behavior:'smooth'});
 }
@@ -6609,9 +7033,12 @@ function openModal(index, presetFlavor, sourceEvent){
         <div class="flavor-row" data-flavor="${f.name}">
           <div class="flavor-row-main">
             <span class="flavor-dot" style="background:${c}"></span>
-            <span class="flavor-name">${f.name}</span>
+            <span class="flavor-text">
+              <span class="flavor-name">${f.name}</span>
+              <span class="flavor-stock"><span class="stock-dot" style="background:${stockDotColor(f.stock)}"></span>${stockLabel(f.stock)}</span>
+            </span>
           </div>
-          <span class="stock-badge flavor-row-stock"><span class="stock-dot" style="background:${stockDotColor(f.stock)}"></span>${stockLabel(f.stock)}</span>
+          <span class="flavor-pick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="flavor-row-actions">
             <button class="flavor-row-add" type="button">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1.4"/><circle cx="18" cy="21" r="1.4"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -6857,19 +7284,23 @@ document.addEventListener('click', (e)=>{
   if(!e.target.closest('.fulfill-zone-field')) fulfillZoneSuggestions.classList.remove('open');
 });
 
-/* Barra de pasos del pedido (Carrito → Entrega → WhatsApp). done = pasos
-   completos; half = el siguiente queda a mitad de camino. Se resetea a 0 y
-   se vuelve a llenar en el próximo frame, así siempre se ve "cargarse". */
-function setCheckoutSteps(el, done, half){
+/* Barra de pasos del pedido (Tu pedido → Entrega → Confirmar). n = pasos
+   desbloqueados: cada uno se llena entero y su número "salta" al
+   desbloquearse. Se resetea a 0 y se vuelve a llenar en el próximo frame,
+   así siempre se ve "cargarse". */
+function setCheckoutSteps(el, n){
   if(!el) return;
   const segs = el.querySelectorAll('.cs-seg');
   const labels = el.querySelectorAll('.cs-labels li');
   const paint = ()=>{
-    segs.forEach((sg, i)=>{
-      sg.classList.toggle('done', i < done);
-      sg.classList.toggle('half', !!half && i === done);
+    segs.forEach((sg, i)=> sg.classList.toggle('done', i < n));
+    labels.forEach((li, i)=>{
+      const on = i < n;
+      if(on && !li.classList.contains('on')){
+        li.classList.remove('pop'); void li.offsetWidth; li.classList.add('pop');
+      }
+      li.classList.toggle('on', on);
     });
-    labels.forEach((li, i)=> li.classList.toggle('on', i < Math.max(done, 1) || (!!half && i === done)));
   };
   if(el._painted){ paint(); return; }
   el._painted = true;
@@ -6878,7 +7309,8 @@ function setCheckoutSteps(el, done, half){
 function resetCheckoutSteps(el){
   if(!el) return;
   el._painted = false;
-  el.querySelectorAll('.cs-seg').forEach(sg => sg.classList.remove('done','half'));
+  el.querySelectorAll('.cs-seg').forEach(sg => sg.classList.remove('done'));
+  el.querySelectorAll('.cs-labels li').forEach(li => li.classList.remove('on','pop'));
 }
 const fulfillSteps = document.getElementById('fulfillSteps');
 
@@ -6886,7 +7318,7 @@ const fulfillSteps = document.getElementById('fulfillSteps');
    checkout offers make sense. */
 function openFulfillmentChoice(baseMessage, items){
   resetCheckoutSteps(fulfillSteps);
-  setCheckoutSteps(fulfillSteps, 1, true);
+  setCheckoutSteps(fulfillSteps, 2);
   pendingCheckoutMessage = baseMessage;
   fulfillChoiceStep.classList.remove('hidden');
   fulfillAddressStep.classList.add('hidden');
@@ -6898,7 +7330,8 @@ function openFulfillmentChoice(baseMessage, items){
   fulfillAddressHint.classList.remove('error');
   updateAddressOk();
   fulfillOverlay.classList.add('open');
-  startOfferCountdown(items || []);
+  // Las ofertas ya no se muestran acá (el total ya está calculado).
+  stopOfferCountdown();
 }
 function closeFulfillmentModal(){
   fulfillOverlay.classList.remove('open');
@@ -6974,6 +7407,7 @@ document.getElementById('ticketCloseBtn').addEventListener('click', closeTicketO
 ticketOverlay.addEventListener('click', (e)=>{ if(e.target === ticketOverlay) closeTicketOverlay(); });
 
 document.getElementById('fulfillPickupBtn').addEventListener('click', ()=>{
+  setCheckoutSteps(fulfillSteps, 3);
   sendWhatsAppOrder('\n\n*Modalidad:* Retiro en Hurlingham');
 });
 document.getElementById('fulfillDeliveryBtn').addEventListener('click', ()=>{
@@ -6981,7 +7415,7 @@ document.getElementById('fulfillDeliveryBtn').addEventListener('click', ()=>{
   fulfillAddressStep.classList.remove('hidden');
   fulfillZoneInput.focus();
   stopOfferCountdown();
-  setCheckoutSteps(fulfillSteps, 2, false);
+  setCheckoutSteps(fulfillSteps, 2);
 });
 
 /* ---- 2min upsell offers shown alongside the pickup/delivery choice; never
@@ -7032,43 +7466,19 @@ function startOfferCountdown(items){
   offerTrack.innerHTML = offers.map(o=>{
     const p = o.product || CATALOG.find(c => c.photo === o.photo);
     const photo = window.__PRODUCT_PHOTOS__ && window.__PRODUCT_PHOTOS__[o.photo];
-    if(o.vape){
-      const flavors = p.flavors.filter(f => f.stock > 0);
-      return `
-    <div class="offer-slide offer-slide--vape" data-photo="${o.photo}" data-flavor="${flavors[0].name}">
-      <span class="offer-hot-tag">🔥 Oportunidad única</span>
-      <div class="offer-card-body">
-        <div class="offer-card-photo">${photo ? `<img src="${photo}" alt="${o.title}">` : ''}</div>
-        <div class="offer-card-info">
-          <div class="offer-card-name">${o.title}</div>
-          <div class="offer-card-prices">
-            <span class="offer-card-price-orig">$${p.price.toLocaleString('es-AR')}</span>
-            <span class="offer-card-price-now">$${o.price.toLocaleString('es-AR')}</span>
-          </div>
-          <span class="offer-save">Ahorrás $${VAPE_OFFER_DISCOUNT.toLocaleString('es-AR')}</span>
-          <div class="offer-card-note">Solo en esta compra</div>
-        </div>
-      </div>
-      ${flavors.length > 1 ? `<div class="offer-flavors">${flavors.map((f, i)=>`<button class="offer-flavor${i === 0 ? ' selected' : ''}" type="button" data-flavor="${f.name}">${f.name}</button>`).join('')}</div>` : `<div class="offer-flavors"><span class="offer-flavor selected">${flavors[0].name}</span></div>`}
-      <div class="offer-card-btns">
-        <button class="offer-btn offer-btn-accept" type="button">Agregar</button>
-        <button class="offer-btn offer-btn-decline" type="button">No, gracias</button>
-      </div>
-    </div>`;
-    }
+    const flavors = o.vape ? p.flavors.filter(f => f.stock > 0) : [];
     return `
-    <div class="offer-slide" data-photo="${o.photo}">
-      <div class="offer-card-body">
-        <div class="offer-card-photo">${photo ? `<img src="${photo}" alt="${o.title}">` : ''}</div>
-        <div class="offer-card-info">
-          <div class="offer-card-name">${o.title}</div>
-          <div class="offer-card-prices">
-            <span class="offer-card-price-orig">$${p.price.toLocaleString('es-AR')}</span>
-            <span class="offer-card-price-now">$${o.price.toLocaleString('es-AR')}</span>
-          </div>
-          <div class="offer-card-note">Precio especial, solo en esta compra</div>
+    <div class="offer-slide${o.vape ? ' offer-slide--vape' : ''}" data-photo="${o.photo}"${o.vape ? ` data-flavor="${flavors[0].name}"` : ''}>
+      <div class="offer-stage">${photo ? `<img src="${photo}" alt="${o.title}">` : ''}</div>
+      <div class="offer-meta">
+        <div class="offer-card-name">${o.title}</div>
+        <div class="offer-card-prices">
+          <span class="offer-card-price-orig">$${p.price.toLocaleString('es-AR')}</span>
+          <span class="offer-card-price-now">$${o.price.toLocaleString('es-AR')}</span>
         </div>
       </div>
+      ${flavors.length > 1 ? `<div class="offer-flavors">${flavors.map((f, i)=>`<button class="offer-flavor${i === 0 ? ' selected' : ''}" type="button" data-flavor="${f.name}">${f.name}</button>`).join('')}</div>` : ''}
+      ${flavors.length === 1 ? `<div class="offer-flavors"><span class="offer-flavor selected">${flavors[0].name}</span></div>` : ''}
       <div class="offer-card-btns">
         <button class="offer-btn offer-btn-accept" type="button">Agregar</button>
         <button class="offer-btn offer-btn-decline" type="button">No, gracias</button>
@@ -7165,7 +7575,7 @@ offerTrack.addEventListener('click', (e)=>{
 function updateAddressOk(){
   const ok = !!selectedLocality && !!fulfillAddressInput.value.trim();
   fulfillAddressOk.classList.toggle('ready', ok);
-  if(!fulfillAddressStep.classList.contains('hidden')) setCheckoutSteps(fulfillSteps, ok ? 3 : 2, false);
+  if(!fulfillAddressStep.classList.contains('hidden')) setCheckoutSteps(fulfillSteps, ok ? 3 : 2);
   if(!fulfillAddressHint.classList.contains('error')){
     fulfillAddressHint.textContent = ok ? 'Con esto armamos el envío por WhatsApp' : 'Completá tu localidad y dirección para continuar';
   }
@@ -7200,7 +7610,7 @@ document.getElementById('fulfillClose').addEventListener('click', ()=>{
   if(!fulfillAddressStep.classList.contains('hidden')){
     fulfillAddressStep.classList.add('hidden');
     fulfillChoiceStep.classList.remove('hidden');
-    setCheckoutSteps(fulfillSteps, 1, true);
+    setCheckoutSteps(fulfillSteps, 2);
     fulfillZoneSuggestions.classList.remove('open');
     document.getElementById('fulfillSheet').scrollTop = 0;
     return;
@@ -7436,8 +7846,6 @@ function syncCartBar(){
   document.getElementById('cartBarCount').textContent = n;
   document.getElementById('cartBarSub').textContent = n === 1 ? '1 producto' : n + ' productos';
   document.getElementById('cartBarTotal').textContent = cart.every(i => i.price) ? money(cartTotal()) : '';
-  const tc = document.getElementById('topbarCartCount');
-  if(tc) tc.textContent = n;
   if(n === 0){
     cartBar.classList.remove('show');
     document.body.classList.remove('has-cart');
@@ -7447,6 +7855,29 @@ function syncCartBar(){
   }
 }
 cartBar.addEventListener('click', ()=> openCart());
+// Al sumar: el botón se estira ("Ver carrito" + total) y a los 2 s vuelve a
+// ser solo el carrito.
+let cartBarTimer = null;
+let cartBarCollapseTimer = null;
+function expandCartBar(){
+  clearTimeout(cartBarTimer);
+  clearTimeout(cartBarCollapseTimer);
+  cartBar.classList.remove('collapsing');
+  cartBar.classList.add('expanded');
+  cartBarTimer = setTimeout(collapseCartBar, 4500);
+}
+// El texto y el total se "chupan" hacia el ícono, la píldora se cierra y el
+// carrito da un saltito, para que quede claro dónde quedó.
+function collapseCartBar(){
+  cartBar.classList.add('collapsing');
+  cartBar.classList.remove('expanded');
+  cartBarCollapseTimer = setTimeout(()=>{
+    cartBar.classList.remove('collapsing');
+    cartBarIcon.classList.remove('bump');
+    void cartBarIcon.offsetWidth;
+    cartBarIcon.classList.add('bump');
+  }, 340);
+}
 
 function showCartToast(html){
   document.getElementById('fabWpp').classList.remove('tip-show'); // que no se pisen
@@ -7462,8 +7893,7 @@ function flyToCart(fromRect, src, done){
   if(!src || !fromRect || reduce || !fromRect.width){ done && done(); return; }
   // Posición final del ícono SIN la transformación de entrada de la barra
   // (offsetLeft/Top ignoran transforms).
-  const barW = cartBar.offsetWidth;
-  const tx = window.innerWidth / 2 - barW / 2 + cartBarIcon.offsetLeft + cartBarIcon.offsetWidth / 2;
+  const tx = cartBar.offsetLeft + cartBarIcon.offsetLeft + cartBarIcon.offsetWidth / 2;
   const ty = cartBar.offsetTop + cartBarIcon.offsetTop + cartBarIcon.offsetHeight / 2;
   const size = Math.min(fromRect.width, fromRect.height, 220);
   const img = document.createElement('img');
@@ -7502,12 +7932,7 @@ function addedAndBack(p, flavorName){
 }
 function celebrateAdd(p, flavorName, rect, src){
     syncCartBar();
-    const missing = COMBO_SIZE - cartVapeCount(cart) % COMBO_SIZE;
-    const isVape = p.category !== 'apple';
-    const extra = isVape && missing === 1
-      ? `<small>🔥 Sumá 1 vape más y ahorrás ${money(COMBO_DISCOUNT)}</small>`
-      : (isVape && cartVapeCount(cart) >= COMBO_SIZE && missing === COMBO_SIZE ? `<small>🔥 ¡Combo activado! -${money(comboDiscount(cart))}</small>` : '');
-    showCartToast(`Sumaste <b>${p.name}</b> · ${flavorName}${extra}`);
+    expandCartBar();
     flyToCart(rect, src, ()=>{
       cartBarIcon.classList.remove('bump');
       void cartBarIcon.offsetWidth;
@@ -7637,14 +8062,8 @@ function renderCart(){
     cartItemsList.innerHTML += `
     <button class="cart-combo-nudge" type="button">
       <span class="cart-combo-nudge-icon" aria-hidden="true">🔥</span>
-      <span class="cart-combo-nudge-text">
-        <b>¡Te falta${missing > 1 ? 'n ' + missing + ' vapes' : ' 1 vape'} para el combo!</b>
-        <small>Tocá acá, sumá ${missing > 1 ? 'otros' : 'otro'} y ahorrás</small>
-        <span class="cart-combo-dots" aria-hidden="true">${Array.from({length:COMBO_SIZE}, (_, i)=> `<i class="${i < COMBO_SIZE - missing ? 'on' : ''}"></i>`).join('')}</span>
-      </span>
-      <span class="cart-combo-nudge-amount">$${COMBO_DISCOUNT.toLocaleString('es-AR')}
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </span>
+      <span class="cart-combo-nudge-text"><small class="cart-combo-tag">Promoción</small>Sumá ${missing > 1 ? missing + ' vapes' : '1 vape'} más y ahorrás <b>$${COMBO_DISCOUNT.toLocaleString('es-AR')}</b></span>
+      <svg class="cart-combo-nudge-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>`;
   }
   // Tapping it closes the cart (and the product behind it) and goes to the
@@ -7677,7 +8096,7 @@ function openCart(){
   renderCart();
   const steps = document.querySelector('#cartSheet .checkout-steps');
   resetCheckoutSteps(steps);
-  setCheckoutSteps(steps, 0, cart.length > 0);
+  setCheckoutSteps(steps, cart.length > 0 ? 1 : 0);
   const sheet = document.getElementById('cartSheet');
   sheet.classList.add('intro');
   clearTimeout(cartIntroTimer);
@@ -8559,9 +8978,7 @@ function applyWholesaleOrderingState(){
 
 /* ================= CATALOG HINT + WHATSAPP TIP ================= */
 document.getElementById('catalogHint').innerHTML =
-  `<span class="ph-fire" aria-hidden="true">🔥</span>
-   <span class="ph-text"><b>Combo x${COMBO_SIZE}</b>Llevando ${COMBO_SIZE} vapes ahorrás</span>
-   <span class="ph-amt">$${COMBO_DISCOUNT.toLocaleString('es-AR')}</span>`;
+  `Llevando ${COMBO_SIZE} vapes ahorrás <b>$${COMBO_DISCOUNT.toLocaleString('es-AR')}</b>`;
 
 /* Phones have no hover, so the "¿Dudas? Escribinos" label also pops out by
    itself once per visit, a few seconds after the intro, then tucks away. */
@@ -8595,44 +9012,6 @@ initIntro();
 applyWholesaleLockState();
 applyWholesaleOrderingState();
 
-/* ================= BARRA FLOTANTE (reemplaza el header que se achicaba) =================
-   El header ya no cambia de tamaño al scrollear (eso relayouteaba toda la
-   página en cada frame). Cuando sale de pantalla baja .topbar, que solo
-   cambia una clase (transform/opacity, sin relayout). */
-const siteHeader = document.querySelector('header.site');
-const topbar = document.getElementById('topbar');
-let topbarShown = false;
-let scrollTicking = false;
-let headerBottom = 0;
-function measureHeader(){ headerBottom = siteHeader.offsetTop + siteHeader.offsetHeight; }
-function handleHeaderScroll(){
-  const show = window.scrollY > headerBottom - 10;
-  if(show !== topbarShown){
-    topbarShown = show;
-    topbar.classList.toggle('show', show);
-  }
-}
-window.addEventListener('scroll', ()=>{
-  if(!scrollTicking){
-    scrollTicking = true;
-    requestAnimationFrame(()=>{
-      handleHeaderScroll();
-      scrollTicking = false;
-    });
-  }
-}, {passive:true});
-window.addEventListener('resize', ()=>{ measureHeader(); handleHeaderScroll(); }, {passive:true});
-measureHeader();
-handleHeaderScroll();
-window.addEventListener('load', ()=>{ measureHeader(); handleHeaderScroll(); });
-document.getElementById('topbarLogo').addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
-document.getElementById('topbarSearch').addEventListener('click', ()=>{
-  // focus dentro del mismo toque (si no, el celular no abre el teclado)
-  searchInput.focus({preventScroll:true});
-  window.scrollTo({top:0, behavior:'smooth'});
-});
-document.getElementById('topbarCart').addEventListener('click', ()=> openCart());
-
 /* ================= NUBES DE VAPOR AL TOCAR =================
    Cada toque en la página larga una bocanada: un anillo que se abre, una
    nubecita que sube y unos puffs de vapor que se esparcen y se desvanecen.
@@ -8656,7 +9035,7 @@ document.getElementById('topbarCart').addEventListener('click', ()=> openCart())
       transform:`translate(${ox + (f.dx || 0)}px,${oy + (f.dy || 0)}px) scale(${f.s}) rotate(${f.r || 0}deg)`,
       opacity:f.o,
       ...(f.offset != null ? {offset:f.offset} : {})
-    })), opts);
+    })), {fill:'backwards', ...opts});
     anim.onfinish = ()=> el.remove();
   }
   function puff(x, y){
