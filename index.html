@@ -25,7 +25,7 @@
 <meta name="twitter:image" content="https://vapesoon.vercel.app/og-image.png">
 <link rel="icon" type="image/png" href="img/favicon.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
-<link rel="preload" as="image" href="img/logo.webp" fetchpriority="high">
+<link rel="preload" as="image" href="img/logo.webp?v=5" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Fonts load without blocking the first paint (and the page script) -->
@@ -5193,13 +5193,11 @@ body{background:#070f2a;}
 .grid-more-btn{
   position:relative;
   overflow:hidden;
-  background:linear-gradient(120deg, rgba(122,163,255,.5) 0%, rgba(74,128,255,.5) 40%, rgba(42,95,240,.5) 75%, rgba(74,128,255,.5) 100%);
+  background:var(--grad-btn);
   background-size:200% 100%;
-  -webkit-backdrop-filter:blur(8px);
-  backdrop-filter:blur(8px);
-  border-color:rgba(176,203,255,.35);
+  border-color:transparent;
   color:#fff;
-  box-shadow:0 4px 0 rgba(20,50,150,.45), 0 12px 24px -10px rgba(91,140,255,.45);
+  box-shadow:0 4px 0 var(--btn-edge), 0 12px 24px -10px rgba(91,140,255,.65);
 }
 .grid-more-btn:hover{border-color:transparent;background-position:100% 0;box-shadow:0 5px 0 var(--btn-edge), 0 16px 30px -10px rgba(91,140,255,.8);}
 .grid-more-btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--btn-edge), 0 6px 14px -8px rgba(91,140,255,.6);}
@@ -5225,6 +5223,17 @@ body{background:#070f2a;}
 
 /* Pasos: el que está en curso se marca apenas, sin llenarse */
 .cs-seg.cur{background:rgba(255,255,255,.26);}
+
+/* "Ver carrito" + total: en celulares angostos el texto se achicaba y se
+   montaba sobre el precio. Nada se achica; letra un poco más chica y la
+   píldora llega justo hasta antes del botón de WhatsApp. */
+.cart-bar-more{gap:8px;}
+.cart-bar-text,.cart-bar-total{flex:none;white-space:nowrap;}
+.cart-bar-text b,.cart-bar-total{font-size:14.5px;}
+.cart-bar-arrow{width:26px;height:26px;}
+.cart-bar-arrow svg{width:15px;height:15px;}
+.cart-bar.expanded .cart-bar-more{max-width:calc(100vw - 16px - 58px - 90px);padding:0 2px 0 10px;}
+@media(min-width:900px){ .cart-bar.expanded .cart-bar-more{max-width:360px;} }
 </style>
 </head>
 <body>
@@ -5237,7 +5246,7 @@ body{background:#070f2a;}
   <div class="intro-curtain intro-curtain--top"><div class="nebula-bg"></div></div>
   <div class="intro-curtain intro-curtain--bottom"><div class="nebula-bg"></div></div>
   <div class="intro-mark">
-    <img class="intro-logo" fetchpriority="high" src="img/logo.webp" alt="Vapesoon">
+    <img class="intro-logo" fetchpriority="high" src="img/logo.webp?v=5" alt="Vapesoon">
     <div class="intro-bar" aria-hidden="true"><span></span></div>
   </div>
   <div class="intro-seam" aria-hidden="true"></div>
@@ -5264,7 +5273,7 @@ body{background:#070f2a;}
   <div class="header-inner">
     <div class="brand-row">
       <div class="brand-logo-wrap">
-        <img class="brand-logo" fetchpriority="high" src="img/logo.webp" alt="Vapesoon">
+        <img class="brand-logo" fetchpriority="high" src="img/logo.webp?v=5" alt="Vapesoon">
       </div>
       <div class="brand-location">📍 Zona Oeste · Hurlingham, Buenos Aires</div>
     </div>
@@ -5327,8 +5336,8 @@ body{background:#070f2a;}
           <button class="filter-chip" id="filterPopularBtn" aria-pressed="false">
             <span class="filter-chip-icon">🏆</span><span class="filter-chip-label">Más vendidos</span>
           </button>
-          <button class="filter-chip filter-chip--thc" id="filterThcBtn" disabled aria-disabled="true" title="Sin stock por ahora">
-            <span class="filter-chip-icon">🌿</span><span class="filter-chip-label">Vapes c/THC</span>
+          <button class="filter-chip" id="filterPriceBtn" aria-pressed="false">
+            <span class="filter-chip-icon">🏷️</span><span class="filter-chip-label">Menor precio</span>
           </button>
           <p class="peek-hint" id="catalogHint"></p>
         </div>
@@ -5427,7 +5436,7 @@ body{background:#070f2a;}
 
     <div class="footer-grid">
       <div class="footer-brand">
-        <img class="footer-logo" loading="lazy" decoding="async" src="img/logo.webp" alt="Vapesoon">
+        <img class="footer-logo" loading="lazy" decoding="async" src="img/logo.webp?v=5" alt="Vapesoon">
         <p>Vapes originales en Zona Oeste, con envíos low cost y la mejor atención que vas a encontrar.</p>
       </div>
       <div class="footer-col">
@@ -5977,7 +5986,7 @@ window.__PRODUCT_PHOTOS__ = {
   'elfbar_disp_te30k': 'img/productos/elfbar_disp_te30k.webp',
   'dinner_lady_luma': 'img/productos/dinner_lady_luma.webp',
 
-  'trio': 'img/productos/trio.webp',
+  'trio': 'img/productos/trio.webp?v=2',
   'v250': 'img/productos/v250.webp',
   'nikbar30': 'img/productos/nikbar30.webp',
   'nikbar10': 'img/productos/nikbar10.webp',
@@ -6049,7 +6058,7 @@ const CATALOG = [
      + $10.000 de margen = $30.750 → redondeado a $31.000. */
   {name:'BLACKSHEEP 55K', price:31000, puffs:55000, photo:'blacksheep_55k', outOfStock:true, flavors:[]},
   {name:'BLACKSHEEP 40K', price:29000, puffs:40000, photo:'blacksheep', outOfStock:true, flavors:[]},
-  {name:'BLACKSHEEP ICE 40K', price:29000, puffs:40000, photo:'blacksheep_ice', flavors:[
+  {name:'BLACKSHEEP ICE 40K', price:27000, originalPrice:29000, promo:true, promoOrder:4, puffs:40000, photo:'blacksheep_ice', flavors:[
     {name:'Kiwi Grape Starfruit + Acaí Straw Banana 🥝🍇⭐🍓🍌', stock:1}
   ]},
   {name:'NIKBAR 10K', price:19000, puffs:10000, photo:'nikbar10', photoScale:1.18, outOfStock:true, flavors:[]},
@@ -6057,7 +6066,7 @@ const CATALOG = [
   {name:'BLVK JUST JUICE', price:27500, puffs:45000, photo:'blvk', reel:'Dd9LzkfKrsd', flavors:[
     {name:'Menthol ❄️', stock:2}
   ]},
-  {name:'ELFBAR TRIO', price:27000, puffs:40000, photo:'trio', flavors:[
+  {name:'ELFBAR TRIO', price:27000, puffs:40000, photo:'trio', pinFirst:true, flavors:[
     {name:'Watermelon Ice 🍉', stock:1}
   ]},
   /* Precio según cotización Italia Shop (S12012): USD 7 × 1660 = $11.620
@@ -6196,7 +6205,7 @@ let selectedFlavor = null;
    rows are guarded, so a stray tap landing on the buy bar right as it
    appears (Apple single-variant flow) can't fire a purchase unnoticed. */
 let modalOpenedAt = 0;
-let sortMode = null; // null | 'puffs' | 'popular' (best sellers first, by POPULARITY_ORDER)
+let sortMode = null; // null | 'puffs' | 'popular' (best sellers first, by POPULARITY_ORDER) | 'price' (cheapest first)
 const WHATSAPP_NUMBER = '5491131635898';
 
 // Some WhatsApp clients garble 4-byte "astral" emoji (most fruit/object
@@ -6542,10 +6551,12 @@ function renderProducts(){
   // flagship (Elfbar Ice King) comes right after them, and the rest follow by
   // how many flavors they have available, most first. An explicit sort ("Más
   // pitadas"/"Más vendidos") is the customer's own choice, so it isn't overridden.
-  const defaultRank = p => p.promo ? (p.promoOrder || 0) - 10 : p.flagship ? 1 : 2;
+  // `pinFirst`: va primero después de las ofertas (ej. Elfbar Trio).
+  const defaultRank = p => p.promo ? (p.promoOrder || 0) - 10 : p.pinFirst ? 0 : p.flagship ? 1 : 2;
   const inStockVapeIndices = vapeIndices.filter(i => !isOutOfStock(CATALOG[i])).sort((a, b) => {
     const pa = CATALOG[a], pb = CATALOG[b];
     if(sortMode === 'puffs') return (pb.puffs||0) - (pa.puffs||0);
+    if(sortMode === 'price') return (pa.price||0) - (pb.price||0);
     if(sortMode === 'popular'){
       const ra = popularityRank(pa), rb = popularityRank(pb);
       return ra === rb ? 0 : ra - rb; // models not in the ranking (Infinity) keep their order, last
@@ -6686,6 +6697,7 @@ function updateCarouselArrows(carouselEl, prevBtn, nextBtn){
    nothing to align and that padding hack is gone.) */
 const filterPuffsBtn = document.getElementById('filterPuffsBtn');
 const filterPopularBtn = document.getElementById('filterPopularBtn');
+const filterPriceBtn = document.getElementById('filterPriceBtn');
 
 /* Scrolls the PAGE (vertically) so the Deslizar/Grilla toggle sits just under
    the sticky header, with a bit of breathing room (26px) rather than flush
@@ -6725,6 +6737,8 @@ function setSortMode(mode){
   filterPuffsBtn.setAttribute('aria-pressed', sortMode === 'puffs');
   filterPopularBtn.classList.toggle('active', sortMode === 'popular');
   filterPopularBtn.setAttribute('aria-pressed', sortMode === 'popular');
+  filterPriceBtn.classList.toggle('active', sortMode === 'price');
+  filterPriceBtn.setAttribute('aria-pressed', sortMode === 'price');
   renderProducts();
   scrollCatalogControlsIntoView();
   // In carousel mode, also jump to the new #1 card so the customer starts
@@ -6734,6 +6748,7 @@ function setSortMode(mode){
 }
 filterPuffsBtn.addEventListener('click', ()=> setSortMode('puffs'));
 filterPopularBtn.addEventListener('click', ()=> setSortMode('popular'));
+filterPriceBtn.addEventListener('click', ()=> setSortMode('price'));
 
 /* ================= RENDER: REVIEWS ================= */
 const reviewCarousel = document.getElementById('reviewCarousel');
@@ -7684,6 +7699,7 @@ const THC_PRODUCTS = [
     name:'Phenom',
     price:65000,
     photo:'phenom',
+    outOfStock:true,
     grams:'6g (6000mg)',
     description:'Viene precargado con 6 gramos de un blend premium de THC-A y THC-M, combinados para potenciarse entre sí: un efecto potente, parejo y duradero, con sabor intenso de la primera a la última pitada. Descartable y recargable por USB-C, así lo aprovechás hasta el final. Rinde muchísimo: calidad y duración en un solo equipo.',
     flavors:['Ice Cream Cake 🍰']
@@ -7845,7 +7861,7 @@ function closeThcModal(){
   thcOverlay.classList.remove('open');
   document.body.style.overflow = '';
 }
-document.getElementById('filterThcBtn').addEventListener('click', openThcModal);
+// El filtro "Vapes c/THC" se sacó mientras no haya stock; openThcModal queda para cuando vuelva.
 // "Volver": from a product opened via the THC list it returns to that list;
 // otherwise it closes back to the catalog.
 document.getElementById('thcClose').addEventListener('click', ()=>{
