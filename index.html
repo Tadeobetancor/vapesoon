@@ -25,7 +25,7 @@
 <meta name="twitter:image" content="https://vapesoon.vercel.app/og-image.png">
 <link rel="icon" type="image/png" href="img/favicon.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
-<link rel="preload" as="image" href="img/logo.webp?v=5" fetchpriority="high">
+<link rel="preload" as="image" href="img/logo.webp?v=6" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Fonts load without blocking the first paint (and the page script) -->
@@ -5178,9 +5178,10 @@ body{background:#070f2a;}
    RONDA 9 — logo más tranquilo con luz, "Ver más vapes" como los botones,
    carrito más calmo, pasos del checkout
    ===================================================================== */
-/* Logo: vuelve la luz azul de la palabra y flota suave */
+/* Logo: vuelve la luz azul de la palabra y flota suave. Una sombra azul
+   oscura pegada al borde suaviza el corte contra el fondo. */
 .brand-logo{
-  filter:drop-shadow(0 4px 18px rgba(91,140,255,.5));
+  filter:drop-shadow(0 2px 3px rgba(5,12,40,.55)) drop-shadow(0 4px 18px rgba(91,140,255,.45));
   animation:logoFloat3 4.2s ease-in-out infinite;
 }
 @keyframes logoFloat3{
@@ -5246,7 +5247,7 @@ body{background:#070f2a;}
   <div class="intro-curtain intro-curtain--top"><div class="nebula-bg"></div></div>
   <div class="intro-curtain intro-curtain--bottom"><div class="nebula-bg"></div></div>
   <div class="intro-mark">
-    <img class="intro-logo" fetchpriority="high" src="img/logo.webp?v=5" alt="Vapesoon">
+    <img class="intro-logo" fetchpriority="high" src="img/logo.webp?v=6" alt="Vapesoon">
     <div class="intro-bar" aria-hidden="true"><span></span></div>
   </div>
   <div class="intro-seam" aria-hidden="true"></div>
@@ -5273,7 +5274,7 @@ body{background:#070f2a;}
   <div class="header-inner">
     <div class="brand-row">
       <div class="brand-logo-wrap">
-        <img class="brand-logo" fetchpriority="high" src="img/logo.webp?v=5" alt="Vapesoon">
+        <img class="brand-logo" fetchpriority="high" src="img/logo.webp?v=6" alt="Vapesoon">
       </div>
       <div class="brand-location">📍 Zona Oeste · Hurlingham, Buenos Aires</div>
     </div>
@@ -5436,7 +5437,7 @@ body{background:#070f2a;}
 
     <div class="footer-grid">
       <div class="footer-brand">
-        <img class="footer-logo" loading="lazy" decoding="async" src="img/logo.webp?v=5" alt="Vapesoon">
+        <img class="footer-logo" loading="lazy" decoding="async" src="img/logo.webp?v=6" alt="Vapesoon">
         <p>Vapes originales en Zona Oeste, con envíos low cost y la mejor atención que vas a encontrar.</p>
       </div>
       <div class="footer-col">
@@ -5976,45 +5977,49 @@ body{background:#070f2a;}
 <script>
 window.__MASCOT__ = 'img/mascota.webp';
 window.__PRODUCT_PHOTOS__ = {
-  'ignite_boost_mix': 'img/productos/ignite_boost_mix.webp',
-  'wholesale_v300': 'img/productos/wholesale_v300.webp',
-  'wholesale_v300_ultra_slim': 'img/productos/wholesale_v300_ultra_slim.webp',
-  'blacksheep_55k': 'img/productos/blacksheep_55k.webp',
-  'lost_mary_dura_35000': 'img/productos/lost_mary_dura_35000.webp',
-  'lost_mary_mt20000': 'img/productos/lost_mary_mt20000.webp',
-  'elfbar_gh_23000': 'img/productos/elfbar_gh_23000.webp',
-  'elfbar_disp_te30k': 'img/productos/elfbar_disp_te30k.webp',
-  'dinner_lady_luma': 'img/productos/dinner_lady_luma.webp',
+  'ignite_boost_mix': 'img/productos/sm/ignite_boost_mix.webp?v=3',
+  'wholesale_v300': 'img/productos/sm/wholesale_v300.webp?v=3',
+  'wholesale_v300_ultra_slim': 'img/productos/sm/wholesale_v300_ultra_slim.webp?v=3',
+  'blacksheep_55k': 'img/productos/sm/blacksheep_55k.webp?v=3',
+  'lost_mary_dura_35000': 'img/productos/sm/lost_mary_dura_35000.webp?v=3',
+  'lost_mary_mt20000': 'img/productos/sm/lost_mary_mt20000.webp?v=3',
+  'elfbar_gh_23000': 'img/productos/sm/elfbar_gh_23000.webp?v=3',
+  'elfbar_disp_te30k': 'img/productos/sm/elfbar_disp_te30k.webp?v=3',
+  'dinner_lady_luma': 'img/productos/sm/dinner_lady_luma.webp?v=3',
 
-  'trio': 'img/productos/trio.webp?v=2',
-  'v250': 'img/productos/v250.webp',
-  'nikbar30': 'img/productos/nikbar30.webp',
-  'nikbar10': 'img/productos/nikbar10.webp',
-  'hookalit': 'img/productos/hookalit.webp',
-  'v150': 'img/productos/v150.webp',
-  'ebcreate': 'img/productos/ebcreate.webp',
-  'bc': 'img/productos/bc.webp',
-  'v300': 'img/productos/v300.webp',
-  'v400': 'img/productos/v400.webp',
-  'vmix': 'img/productos/vmix.webp',
-  'ice_king': 'img/productos/ice_king.webp',
-  'sweet_king': 'img/productos/sweet_king.webp',
-  'blvk': 'img/productos/blvk.webp',
-  'duke': 'img/productos/duke.webp',
-  'blacksheep': 'img/productos/blacksheep.webp',
-  'blacksheep_ice': 'img/productos/blacksheep_ice.webp',
-  'v500': 'img/productos/v500.webp',
-  'phenom': 'img/productos/phenom.webp',
-  'shroomz': 'img/productos/shroomz.webp',
-  'airpods': 'img/productos/airpods.webp',
-  'cargador_apple': 'img/productos/cargador_apple.webp',
+  'trio': 'img/productos/sm/trio.webp?v=3',
+  'v250': 'img/productos/sm/v250.webp?v=3',
+  'nikbar30': 'img/productos/sm/nikbar30.webp?v=3',
+  'nikbar10': 'img/productos/sm/nikbar10.webp?v=3',
+  'hookalit': 'img/productos/sm/hookalit.webp?v=3',
+  'v150': 'img/productos/sm/v150.webp?v=3',
+  'ebcreate': 'img/productos/sm/ebcreate.webp?v=3',
+  'bc': 'img/productos/sm/bc.webp?v=3',
+  'v300': 'img/productos/sm/v300.webp?v=3',
+  'v400': 'img/productos/sm/v400.webp?v=3',
+  'vmix': 'img/productos/sm/vmix.webp?v=3',
+  'ice_king': 'img/productos/sm/ice_king.webp?v=3',
+  'sweet_king': 'img/productos/sm/sweet_king.webp?v=3',
+  'blvk': 'img/productos/sm/blvk.webp?v=3',
+  'duke': 'img/productos/sm/duke.webp?v=3',
+  'blacksheep': 'img/productos/sm/blacksheep.webp?v=3',
+  'blacksheep_ice': 'img/productos/sm/blacksheep_ice.webp?v=3',
+  'v500': 'img/productos/sm/v500.webp?v=3',
+  'phenom': 'img/productos/sm/phenom.webp?v=3',
+  'shroomz': 'img/productos/sm/shroomz.webp?v=3',
+  'airpods': 'img/productos/sm/airpods.webp?v=3',
+  'cargador_apple': 'img/productos/sm/cargador_apple.webp?v=3',
 };
+// Cada foto de producto existe en dos tamaños: img/productos/sm/ (≈480px,
+// para tarjetas, carrito y ofertas) e img/productos/ (≈1000px, agrandada con
+// IA, para el detalle del producto). __PHOTO_BIG__ pasa de una a la otra.
+window.__PHOTO_BIG__ = url => url ? url.replace('img/productos/sm/', 'img/productos/') : url;
 window.__CUSTOMER_PHOTOS__ = {
-  'abrill': 'img/clientes/abrill.webp',
-  'tile': 'img/clientes/tile.webp',
-  'summer': 'img/clientes/summer.webp',
+  'abrill': 'img/clientes/abrill.webp?v=2',
+  'tile': 'img/clientes/tile.webp?v=2',
+  'summer': 'img/clientes/summer.webp?v=2',
   'bw': 'img/clientes/bw-color.webp', // original was black & white; tinted to the site's blues
-  'geekbar': 'img/clientes/geekbar.webp',
+  'geekbar': 'img/clientes/geekbar.webp?v=2',
 };
 /* ================= DATA ================= */
 // A single shared accent for every card. This used to cycle through three
@@ -7052,6 +7057,14 @@ function openModal(index, presetFlavor, sourceEvent){
     modalGlyph.innerHTML = hasPhoto
       ? `<img class="modal-photo-img" src="${window.__PRODUCT_PHOTOS__[key]}" alt="${p.name}">`
       : `<img src="${window.__MASCOT__}" alt="" style="width:60%;height:60%;object-fit:contain;">`;
+    if(hasPhoto){
+      const img = modalGlyph.querySelector('img');
+      const big = window.__PHOTO_BIG__(window.__PRODUCT_PHOTOS__[key]);
+      const hi = new Image();
+      hi.decoding = 'async';
+      hi.onload = ()=>{ if(img.isConnected) img.src = big; };
+      hi.src = big;
+    }
   }
   paintImage(null);
 
@@ -8647,7 +8660,7 @@ function openWholesaleFlavorStep(model){
   wholesaleFlavorModelPrice.textContent = formatWholesaleAmount(model.price) + ' / u.';
   const hasPhoto = model.photo && window.__PRODUCT_PHOTOS__ && window.__PRODUCT_PHOTOS__[model.photo];
   wholesaleFlavorGlyph.innerHTML = hasPhoto
-    ? `<img loading="lazy" decoding="async" src="${window.__PRODUCT_PHOTOS__[model.photo]}" alt="">`
+    ? `<img decoding="async" src="${window.__PHOTO_BIG__(window.__PRODUCT_PHOTOS__[model.photo])}" alt="">`
     : wholesaleVapeIconSVG();
   wholesaleFlavorGlyph.classList.toggle('has-photo', !!hasPhoto);
   renderWholesaleFlavorList();

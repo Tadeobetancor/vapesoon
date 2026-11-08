@@ -6,7 +6,7 @@ Sitio de una sola página, sin backend ni build: el HTML, CSS y JS están en `in
 
 ## Estructura
 - `index.html` — sitio completo (catálogo, carrito, reseñas, WhatsApp, etc.)
-- `img/` — logo, mascota, favicon, fotos de productos (`img/productos/`) y de clientes (`img/clientes/`). Para agregar un producto nuevo: guardar la foto como `.webp` en `img/productos/` y sumarla a `window.__PRODUCT_PHOTOS__` en `index.html`. **No volver a pegar imágenes en base64 dentro del HTML**: era lo que hacía que la página pesara 7 MB y anduviera lenta.
+- `img/` — logo, mascota, favicon, fotos de productos (`img/productos/`) y de clientes (`img/clientes/`). Cada foto de producto va en dos tamaños con el mismo nombre: `img/productos/<nombre>.webp` (≈1000px del lado largo, para el detalle del producto) e `img/productos/sm/<nombre>.webp` (≈480px, para tarjetas, carrito y ofertas). Para agregar un producto nuevo: guardar las dos versiones y sumar la ruta de la chica (`img/productos/sm/...`) a `window.__PRODUCT_PHOTOS__` en `index.html`. **No volver a pegar imágenes en base64 dentro del HTML**: era lo que hacía que la página pesara 7 MB y anduviera lenta.
 - `og-image.png` — imagen de vista previa para cuando se comparte el link (WhatsApp, redes, etc.). Tiene que subirse junto a `index.html`, en la misma carpeta.
 
 ## Deploy
