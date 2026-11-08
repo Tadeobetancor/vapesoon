@@ -5193,11 +5193,13 @@ body{background:#070f2a;}
 .grid-more-btn{
   position:relative;
   overflow:hidden;
-  background:var(--grad-btn);
+  background:linear-gradient(120deg, rgba(122,163,255,.5) 0%, rgba(74,128,255,.5) 40%, rgba(42,95,240,.5) 75%, rgba(74,128,255,.5) 100%);
   background-size:200% 100%;
-  border-color:transparent;
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+  border-color:rgba(176,203,255,.35);
   color:#fff;
-  box-shadow:0 4px 0 var(--btn-edge), 0 12px 24px -10px rgba(91,140,255,.65);
+  box-shadow:0 4px 0 rgba(20,50,150,.45), 0 12px 24px -10px rgba(91,140,255,.45);
 }
 .grid-more-btn:hover{border-color:transparent;background-position:100% 0;box-shadow:0 5px 0 var(--btn-edge), 0 16px 30px -10px rgba(91,140,255,.8);}
 .grid-more-btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--btn-edge), 0 6px 14px -8px rgba(91,140,255,.6);}
