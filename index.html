@@ -2789,42 +2789,59 @@ main{position:relative;z-index:1;}
 .cart-empty p{font-size:13px;line-height:1.6;margin:0;}
 .cart-empty.hidden{display:none;}
 
+/* Cada producto del carrito es una ficha del mismo alto para todos:
+   foto grande a la izquierda; a la derecha nombre (1 renglón), sabor
+   (hasta 2 renglones, sin emojis) y el precio abajo; la X arriba a la derecha. */
 .cart-item{
+  position:relative;
   display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  padding:10px 14px 10px 10px;
+  align-items:stretch;
+  gap:12px;
+  height:98px;
+  padding:10px 12px 10px 10px;
   background:linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
   border:1px solid rgba(255,255,255,.12);
-  border-radius:14px;
+  border-radius:16px;
   margin-bottom:10px;
 }
-/* Small product photo on the left of each row, on a soft light tile. */
 .cart-item-photo{
   flex:none;
   display:block; /* not grid: an auto grid row left the img's height:100% unresolved */
-  width:48px;height:48px;
-  padding:5px;
+  width:76px;height:76px;
+  padding:3px;
   overflow:hidden;
-  border-radius:12px;
-  background:radial-gradient(circle at 50% 40%, rgba(176,203,255,.3), rgba(255,255,255,.04) 70%);
+  border-radius:13px;
+  background:radial-gradient(circle at 50% 42%, rgba(176,203,255,.32), rgba(255,255,255,.04) 72%);
   border:1px solid rgba(255,255,255,.1);
 }
 .cart-item-photo img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(3,10,38,.5));}
-.cart-item-info{flex:1;min-width:0;}
-.cart-item-name{font-size:13.5px;font-weight:700;color:var(--white-glove);}
-.cart-item-flavor{font-size:11.5px;color:var(--ink-dim);margin-top:2px;}
+.cart-item-info{
+  flex:1;min-width:0;
+  display:flex;flex-direction:column;
+  padding-right:30px; /* lugar para la X */
+}
+.cart-item-name{
+  font-size:13.5px;font-weight:800;line-height:18px;
+  color:var(--white-glove);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.cart-item-flavor{
+  font-size:11.5px;line-height:15px;
+  color:var(--ink-dim);
+  margin-top:2px;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;
+  overflow:hidden;
+}
 .cart-item-right{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex:none;
+  position:absolute;
+  top:10px;right:10px;
 }
 .cart-item-price{
+  margin-top:auto;
   font-family:'Poppins',sans-serif;
   font-weight:800;
-  font-size:14px;
+  font-size:15px;
+  line-height:20px;
   color:#fff;
   white-space:nowrap;
 }
@@ -5231,9 +5248,13 @@ body{background:#070f2a;}
 .cart-bar-more{gap:8px;}
 .cart-bar-text,.cart-bar-total{flex:none;white-space:nowrap;}
 .cart-bar-text b,.cart-bar-total{font-size:14.5px;}
-.cart-bar-arrow{width:26px;height:26px;}
-.cart-bar-arrow svg{width:15px;height:15px;}
-.cart-bar.expanded .cart-bar-more{max-width:calc(100vw - 16px - 58px - 90px);padding:0 2px 0 10px;}
+/* La flechita: antes era un círculo de 26px pegado al borde curvo de la
+   píldora y se veía corrida. Ahora es solo el chevron, chico, con el mismo
+   aire a la derecha que tiene el carrito a la izquierda. */
+.cart-bar-arrow{width:14px;height:14px;background:none;border-radius:0;}
+.cart-bar-arrow svg{width:14px;height:14px;}
+.cart-bar-more{gap:7px;}
+.cart-bar.expanded .cart-bar-more{max-width:calc(100vw - 16px - 58px - 84px);padding:0 15px 0 10px;}
 @media(min-width:900px){ .cart-bar.expanded .cart-bar-more{max-width:360px;} }
 </style>
 </head>
@@ -6015,11 +6036,15 @@ window.__PRODUCT_PHOTOS__ = {
 // IA, para el detalle del producto). __PHOTO_BIG__ pasa de una a la otra.
 window.__PHOTO_BIG__ = url => url ? url.replace('img/productos/sm/', 'img/productos/') : url;
 window.__CUSTOMER_PHOTOS__ = {
-  'abrill': 'img/clientes/abrill.webp?v=2',
-  'tile': 'img/clientes/tile.webp?v=2',
   'summer': 'img/clientes/summer.webp?v=2',
   'bw': 'img/clientes/bw-color.webp', // original was black & white; tinted to the site's blues
   'geekbar': 'img/clientes/geekbar.webp?v=2',
+  'luma-watermelon': 'img/clientes/luma-watermelon.webp',
+  'v500-strawberry-kiwi': 'img/clientes/v500-strawberry-kiwi.webp',
+  'luma-strawberry-ice': 'img/clientes/luma-strawberry-ice.webp',
+  'boost-mix-sticker': 'img/clientes/boost-mix-sticker.webp',
+  'boost-mix-bolsa': 'img/clientes/boost-mix-bolsa.webp',
+  'duke-bolsa': 'img/clientes/duke-bolsa.webp',
 };
 /* ================= DATA ================= */
 // A single shared accent for every card. This used to cycle through three
@@ -6178,11 +6203,15 @@ function stockLabel(stock){
 }
 
 const REVIEWS = [
-  {name:'Abril P.', rating:5, flavor:'Sour Strawberry Dragonfruit · Ice King', text:'Llego al otro dia todo bien, buen sabor la verdad', photo:'abrill'},
-  {name:'Lucas R.', rating:5, flavor:'Watermelon Ice · Ice King', text:'Pedi a la tarde y a la noche ya lo tenia, todo joya', photo:'tile'},
   {name:'Vale G.', rating:5, flavor:'Edición Summer · Elfbar', text:'Buena atencion, el diseño del vape esta lindo no tuve drama', photo:'summer'},
   {name:'Naty A.', rating:5, flavor:'Menthol · V250', text:'Entrega rapida por la zona, cumplieron horario', photo:'bw'},
-  {name:'Flor M.', rating:5, flavor:'Miami Mint · Geek Bar Pulse X', text:'Pedi tipo 20 y llego re rapido, el diseño esta tremendo', photo:'geekbar'}
+  {name:'Flor M.', rating:5, flavor:'Miami Mint · Geek Bar Pulse X', text:'Pedi tipo 20 y llego re rapido, el diseño esta tremendo', photo:'geekbar'},
+  {name:'Tomi N.', rating:5, flavor:'Watermelon · Dinner Lady Luma 40K', text:'Llegó todo joya, gracias!', photo:'luma-watermelon'},
+  {name:'Mica F.', rating:5, flavor:'Strawberry Kiwi · Ignite V500', text:'Todo perfecto, muy buena atención.', photo:'v500-strawberry-kiwi'},
+  {name:'Bauti S.', rating:5, flavor:'Strawberry Ice · Dinner Lady Luma 40K', text:'Me llegó rapidísimo, un lujo.', photo:'luma-strawberry-ice'},
+  {name:'Cami V.', rating:5, flavor:'Ignite Boost Mix', text:'Re buena onda para atender, recomiendo.', photo:'boost-mix-sticker'},
+  {name:'Lauti M.', rating:5, flavor:'Watermelon Grape · Ignite Boost Mix', text:'Todo como esperaba, llegó impecable.', photo:'boost-mix-bolsa'},
+  {name:'Sofi G.', rating:5, flavor:'Watermelon Lemon Ice · Elfbar Duke', text:'Ya hice varios pedidos, siempre todo bien.', photo:'duke-bolsa'}
 ];
 // Shown in a different random order on every visit (shuffled once per page
 // load; the strip and the enlarged view both use this order).
@@ -6778,15 +6807,15 @@ function renderReviews(){
   const cardHTML = (r, i, copy) => {
     const photoUrl = reviewPhotoUrl(r);
     return `
-    <button class="review-card" type="button" data-review="${i}"${copy ? ' aria-hidden="true" tabindex="-1"' : ` aria-label="Ver reseña de ${r.name}"`}>
+    <button class="review-card" type="button" data-review="${i}"${copy ? ' aria-hidden="true" tabindex="-1"' : ` aria-label="${r.text ? 'Ver reseña de ' + r.name : 'Ver foto de cliente'}"`}>
       ${photoUrl ? `<img loading="lazy" decoding="async" src="${photoUrl}" alt="">` : ''}
       <span class="review-shade"></span>
       <span class="review-zoom" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </span>
       <span class="review-info">
-        <span class="review-stars">${starsSVG(r.rating)}</span>
-        <span class="review-text">"${r.text}"</span>
+        ${r.rating ? `<span class="review-stars">${starsSVG(r.rating)}</span>` : ''}
+        <span class="review-text">${r.text ? `"${r.text}"` : r.caption}</span>
         <span class="review-foot">
           ${reviewAvatarHTML(r, i)}
           <span>
@@ -6855,7 +6884,7 @@ function paintReview(i){
   rvImg.src = reviewPhotoUrl(r) || window.__MASCOT__;
   rvImg.alt = 'Foto de ' + r.name;
   rvTop.innerHTML =
-    `<div class="review-stars">${starsSVG(r.rating)}</div><p class="rv-quote">${r.text}</p><div class="rv-name">${r.name}</div>`;
+    (r.rating ? `<div class="review-stars">${starsSVG(r.rating)}</div>` : '') + `<p class="rv-quote">${r.text || r.caption}</p><div class="rv-name">${r.name}</div>`;
   rvTop.classList.remove('show');
   void rvTop.offsetWidth;
   rvTop.classList.add('show');
@@ -7287,7 +7316,10 @@ const DELIVERY_ZONES = [
   {region:'CABA', localities:['Agronomía','Almagro','Balvanera','Barracas','Belgrano','Boedo','Caballito','Chacarita','Coghlan','Colegiales','Constitución','Flores','Floresta','La Boca','La Paternal','Liniers','Mataderos','Monte Castro','Monserrat','Nueva Pompeya','Núñez','Palermo','Parque Avellaneda','Parque Chacabuco','Parque Chas','Parque Patricios','Puerto Madero','Recoleta','Retiro','Saavedra','San Cristóbal','San Nicolás','San Telmo','Vélez Sarsfield','Versalles','Villa Crespo','Villa del Parque','Villa Devoto','Villa General Mitre','Villa Lugano','Villa Luro','Villa Ortúzar','Villa Pueyrredón','Villa Real','Villa Riachuelo','Villa Santa Rita','Villa Soldati','Villa Urquiza']},
 ];
 const SAME_DAY_LOCALITIES = ['Hurlingham','Morón','Tres de Febrero','José C. Paz','San Miguel','Bella Vista','William Morris'];
-const LOCALITY_INDEX = DELIVERY_ZONES.flatMap(z => z.localities.map(name => ({name, region:z.region})));
+// Lista completa en orden alfabético (sin importar acentos: "Núñez" va con la N).
+const LOCALITY_INDEX = DELIVERY_ZONES
+  .flatMap(z => z.localities.map(name => ({name, region:z.region})))
+  .sort((a, b) => a.name.localeCompare(b.name, 'es', {sensitivity:'base'}));
 function isSameDayLocality(name){
   return SAME_DAY_LOCALITIES.some(l => normalize(l) === normalize(name));
 }
@@ -7308,7 +7340,7 @@ function renderZoneSuggestions(query){
         const an = normalize(a.name), bn = normalize(b.name);
         const aStarts = an.startsWith(q) ? 0 : 1;
         const bStarts = bn.startsWith(q) ? 0 : 1;
-        return aStarts !== bStarts ? aStarts - bStarts : an.localeCompare(bn);
+        return aStarts !== bStarts ? aStarts - bStarts : an.localeCompare(bn, 'es');
       })
     : LOCALITY_INDEX;
 
@@ -8088,6 +8120,10 @@ document.addEventListener('click', (e)=>{
   openCart();
 });
 
+// En el carrito el sabor va sin emojis: ocupaban un renglón entero de más.
+function cartFlavorText(flavor){
+  return String(flavor).replace(/[\p{Extended_Pictographic}️‍]/gu, '').replace(/\s{2,}/g, ' ').trim();
+}
 function renderCart(){
   const disclaimer = document.getElementById('cartDisclaimer');
   if(cart.length === 0){
@@ -8110,10 +8146,10 @@ function renderCart(){
       ${photoUrl ? `<span class="cart-item-photo"><img src="${photoUrl}" alt="" decoding="async"></span>` : ''}
       <div class="cart-item-info">
         <div class="cart-item-name">${item.product}</div>
-        <div class="cart-item-flavor">${item.flavor}</div>
+        <div class="cart-item-flavor">${cartFlavorText(item.flavor)}</div>
+        <span class="cart-item-price">${priceText}</span>
       </div>
       <div class="cart-item-right">
-        <span class="cart-item-price">${priceText}</span>
         <button class="cart-item-remove" data-idx="${idx}" aria-label="Quitar">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
         </button>
