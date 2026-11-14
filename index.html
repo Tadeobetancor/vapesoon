@@ -1163,7 +1163,7 @@ main{position:relative;z-index:1;}
 @media (prefers-reduced-motion: reduce){ .p-badge--promo{animation:none;} }
 .p-badge--flagship{background:linear-gradient(135deg, #ffd873, var(--gold));color:var(--void);box-shadow:0 2px 10px -2px rgba(255,200,87,.6);}
 .p-glyph .p-badge--promo, .p-glyph .p-badge--flagship{top:-6px;left:-4px;}
-.catalog.grid-mode .p-glyph .p-badge--promo, .catalog.grid-mode .p-glyph .p-badge--flagship{
+.catalog.grid-mode .p-glyph .p-badge--promo, .catalog.grid-mode .p-glyph .p-badge--flagship, .catalog.grid-mode .p-glyph .p-badge--preorder{
   display:flex;
   align-items:center;
   gap:3px;
@@ -1171,6 +1171,103 @@ main{position:relative;z-index:1;}
   font-size:9px;
   padding:4px 8px;
 }
+
+/* ---- LIQUIDACIÓN (flag `clearance`): misma tarjeta que una oferta pero en
+   brasa — fondo vino/naranja, borde que gira en dorado→naranja. ---- */
+/* Doble clase: el REFRESH de más abajo repinta .p-card--promo y le ganaría. */
+.p-card.p-card--clearance{
+  background:
+    radial-gradient(70% 45% at 50% 22%, rgba(255,190,130,.24), transparent 70%),
+    radial-gradient(80% 50% at 100% 100%, rgba(232,67,58,.34), transparent 70%),
+    linear-gradient(165deg, rgba(122,38,58,.92) 0%, rgba(78,26,64,.92) 50%, rgba(34,18,62,.92) 100%);
+  box-shadow:0 22px 46px -20px rgba(3,10,38,.9), 0 14px 38px -16px rgba(255,120,60,.6);
+}
+.p-card.p-card--clearance:hover{box-shadow:0 30px 56px -20px rgba(3,10,38,.95), 0 18px 46px -14px rgba(255,140,70,.8);}
+.p-card.p-card--clearance::after{
+  background:conic-gradient(from var(--spin), rgba(255,200,87,.12), var(--orange-pulp), rgba(255,240,210,.85), rgba(255,200,87,.12) 60%);
+}
+.p-card--clearance .p-meta{color:#ffd2b8;font-weight:700;}
+.p-card--clearance .p-price-orig{color:#e9b9a6;}
+.p-badge--clearance{letter-spacing:.6px;}
+
+/* ---- RESERVA (flag `preorder`): etiqueta celeste + leyenda "Llega ...". ---- */
+.p-badge--preorder{
+  color:var(--void);
+  z-index:2;
+  background:linear-gradient(135deg, #a6f0ff, #3fb7ff);
+  box-shadow:0 4px 14px -4px rgba(63,183,255,.7);
+}
+.p-glyph .p-badge--preorder{top:-6px;left:-4px;}
+.p-card--preorder .p-meta{color:#9fdcff;font-weight:600;}
+
+/* Toque desde el cartel de arriba: la tarjeta destella una vez. */
+.p-card.p-card--ping{animation:cardPing 1.1s ease-out 1;}
+@keyframes cardPing{
+  0%{box-shadow:0 0 0 0 var(--accent-shadow);}
+  40%{box-shadow:0 0 0 6px var(--accent-shadow), 0 0 28px 4px var(--accent-shadow);}
+  100%{box-shadow:0 0 0 0 transparent;}
+}
+
+/* ---- Cartel de liquidación / reservas, arriba del catálogo ---- */
+.sale-banner{display:grid;gap:8px;margin:4px 0 14px;}
+.sale-banner[hidden]{display:none;}
+@media(min-width:640px){.sale-banner{grid-template-columns:1fr 1fr;gap:12px;}}
+.sale-banner-row{
+  display:flex;align-items:center;gap:12px;
+  width:100%;min-width:0;
+  padding:12px 14px;
+  border-radius:16px;
+  border:1px solid transparent;
+  text-align:left;
+  color:var(--white-glove);
+  font:inherit;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+.sale-banner-row:active{transform:scale(.98);}
+.sale-banner-row--clearance{
+  background:linear-gradient(120deg, #7a2233 0%, #a83a2a 55%, #d46a22 100%);
+  border-color:rgba(255,200,87,.45);
+  box-shadow:0 12px 28px -14px rgba(232,67,58,.8);
+}
+.sale-banner-row--preorder{
+  background:linear-gradient(120deg, #123a7a 0%, #1a5aa8 60%, #2a8fd0 100%);
+  border-color:rgba(166,240,255,.4);
+  box-shadow:0 12px 28px -14px rgba(63,183,255,.7);
+}
+.sale-banner-icon{flex:none;font-size:24px;line-height:1;}
+.sale-banner-row--clearance .sale-banner-icon{animation:badgePulse 1.8s ease-in-out infinite;}
+.sale-banner-text{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1;}
+.sale-banner-text b{font-family:'Bungee',cursive;font-weight:400;font-size:15px;letter-spacing:.3px;line-height:1.2;}
+.sale-banner-text small{font-size:12px;font-weight:600;opacity:.9;line-height:1.35;}
+.sale-banner-go{flex:none;width:18px;height:18px;opacity:.85;}
+@media (prefers-reduced-motion: reduce){
+  .sale-banner-row--clearance .sale-banner-icon, .p-card--ping{animation:none;}
+}
+html.lite .sale-banner-row--clearance .sale-banner-icon{animation:none;}
+
+/* Leyenda arriba de los sabores en el modal */
+.flavor-note{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:11px 13px;margin-bottom:10px;
+  border-radius:12px;
+  font-size:12.5px;line-height:1.45;
+  color:var(--white-glove);
+}
+.flavor-note b{font-weight:800;}
+.flavor-note--clearance{background:rgba(255,145,48,.14);border:1px solid rgba(255,145,48,.42);}
+.flavor-note--preorder{background:rgba(63,183,255,.12);border:1px solid rgba(63,183,255,.4);}
+
+/* Etiquetita en el carrito */
+.cart-item-tag{
+  display:inline-block;vertical-align:1px;
+  margin-left:4px;padding:1px 7px;
+  border-radius:999px;
+  font-size:10px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;
+}
+.cart-item-tag--preorder{background:rgba(63,183,255,.18);color:#9fdcff;}
+.cart-item-tag--clearance{background:rgba(255,145,48,.18);color:#ffb36b;}
 .p-puffs{
   position:absolute;top:14px;right:14px;
   font-size:12.5px;
@@ -4401,7 +4498,7 @@ footer.site::before{
   .catalog.grid-mode .p-price-orig{font-size:13px;}
   .catalog.grid-mode .p-cta{font-size:14.5px;padding:13px 10px;}
   .catalog.grid-mode .p-puffs{font-size:12.5px;padding:6px 12px;}
-  .catalog.grid-mode .p-glyph .p-badge--promo, .catalog.grid-mode .p-glyph .p-badge--flagship{font-size:11px;padding:5px 10px;}
+  .catalog.grid-mode .p-glyph .p-badge--promo, .catalog.grid-mode .p-glyph .p-badge--flagship, .catalog.grid-mode .p-glyph .p-badge--preorder{font-size:11px;padding:5px 10px;}
 }
 /* =====================================================================
    REFRESH (nov 2026) — paleta azul royal más clara + animaciones nuevas
@@ -5277,19 +5374,22 @@ body{background:#070f2a;}
 <!-- HEADER -->
 <header class="site">
   <div class="ticker">
+    <!-- Mientras dure la liquidación / reservas. Para volver a las frases de
+         siempre: 🚚 Envíos low cost · 💬 La mejor atención que vas a encontrar ·
+         🔥 Más de 100 clientes y sumando -->
     <div class="ticker-track">
+      <span>🔥 Liquidación: últimas unidades a precio de remate</span>
+      <span>📦 Lo nuevo llega la semana que viene: ¡reservalo ya!</span>
       <span>🚚 Envíos low cost</span>
-      <span>💬 La mejor atención que vas a encontrar</span>
-      <span>🔥 Más de 100 clientes y sumando</span>
+      <span>🔥 Liquidación: últimas unidades a precio de remate</span>
+      <span>📦 Lo nuevo llega la semana que viene: ¡reservalo ya!</span>
       <span>🚚 Envíos low cost</span>
-      <span>💬 La mejor atención que vas a encontrar</span>
-      <span>🔥 Más de 100 clientes y sumando</span>
+      <span>🔥 Liquidación: últimas unidades a precio de remate</span>
+      <span>📦 Lo nuevo llega la semana que viene: ¡reservalo ya!</span>
       <span>🚚 Envíos low cost</span>
-      <span>💬 La mejor atención que vas a encontrar</span>
-      <span>🔥 Más de 100 clientes y sumando</span>
+      <span>🔥 Liquidación: últimas unidades a precio de remate</span>
+      <span>📦 Lo nuevo llega la semana que viene: ¡reservalo ya!</span>
       <span>🚚 Envíos low cost</span>
-      <span>💬 La mejor atención que vas a encontrar</span>
-      <span>🔥 Más de 100 clientes y sumando</span>
     </div>
   </div>
   <div class="header-inner">
@@ -5336,6 +5436,10 @@ body{background:#070f2a;}
       <!-- No visible section header anymore (it ate vertical space above the
            products) — the h1 stays for screen readers / SEO. -->
       <h1 class="sr-only">Elegí tu vape</h1>
+
+      <!-- Cartel de liquidación / reservas: lo arma renderSaleBanner() con los
+           flags `clearance` y `preorder` del CATALOG (se oculta solo si no hay). -->
+      <div class="sale-banner" id="saleBanner" hidden></div>
 
       <div class="catalog-controls">
         <div class="catalog-view-row">
@@ -6017,6 +6121,7 @@ window.__PRODUCT_PHOTOS__ = {
   'ebcreate': 'img/productos/sm/ebcreate.webp?v=3',
   'bc': 'img/productos/sm/bc.webp?v=3',
   'v300': 'img/productos/sm/v300.webp?v=3',
+  'v400_ultra_slim': 'img/productos/sm/v400_ultra_slim.webp?v=1',
   'v400': 'img/productos/sm/v400.webp?v=3',
   'vmix': 'img/productos/sm/vmix.webp?v=3',
   'ice_king': 'img/productos/sm/ice_king.webp?v=3',
@@ -6056,53 +6161,89 @@ const ACCENTS = [
 // Promo cards (see the `promo` flag in CATALOG) skip the cycling accents above
 // and always use this one, so their puffs pill / glow match their cobalt card.
 const PROMO_ACCENT = {main:'#7db2ff', fade:'rgba(125,178,255,.30)', shadow:'rgba(80,140,255,.45)'};
+// Liquidación (flag `clearance`): naranja, para que se distinga de las ofertas.
+const CLEARANCE_ACCENT = {main:'#ff9130', fade:'rgba(255,145,48,.30)', shadow:'rgba(232,67,58,.45)'};
 
 /* `reel`: id of an Instagram reel with an unboxing/review of that model
    (instagram.com/reel/<id>/). The product modal shows a "Miralo en video" pill
    on its photo that opens it. (Instagram doesn't allow embedding these
    reels in the page — the embed answers "publicación no disponible".) */
+/* LIQUIDACIÓN y RESERVA
+   - `clearance:true`: últimas unidades a precio de liquidación. `price` es el
+     precio rebajado y `originalPrice` el de lista (se muestra tachado). Van
+     primeros en el catálogo, con tarjeta naranja y la etiqueta "🔥 Liquidación
+     -X%". No suman para el combo "Llevá 2" (ya vienen rebajados).
+   - `preorder:true`: todavía no llegó — se puede pedir para reservar. `stock`
+     es lo que viene en camino. Cuando llegue la mercadería, sacale el
+     `preorder:true` al modelo y queda como stock normal.
+   El cartel de arriba del catálogo se arma solo con estos dos flags. */
+const PREORDER_ETA = 'la semana que viene';
+
 const CATALOG = [
-  {name:'ELFBAR ICE KING', price:26000, puffs:40000, photo:'ice_king', flagship:true, reel:'DcZkRJvKemD', outOfStock:true, flavors:[]},
+  {name:'ELFBAR ICE KING', price:26000, puffs:40000, photo:'ice_king', flagship:true, reel:'DcZkRJvKemD', preorder:true, flavors:[
+    {name:'Sour Apple Ice 🍏❄️', stock:2},{name:'Green Apple Ice 🍏❄️', stock:1},{name:'Miami Mint 🌴', stock:2},
+    {name:'Baja Splash 🌊', stock:1},{name:'Strawberry Watermelon 🍓🍉', stock:3},{name:'Tiger Blood 🐯', stock:1},
+    {name:'Watermelon Ice 🍉❄️', stock:3},{name:'Summer Splash ☀️', stock:2},{name:'Peach 🍑', stock:2},
+    {name:'Mango Magic 🥭', stock:2},{name:'Strawberry Ice 🍓❄️', stock:3},{name:'Blue Razz Ice 🫐❄️', stock:3}
+  ]},
   {name:'ELFBAR SWEET KING', price:26500, puffs:40000, photo:'sweet_king', outOfStock:true, flavors:[]},
   {name:'ELFBAR DUKE', price:25000, puffs:35000, photo:'duke', outOfStock:true, flavors:[]},
-  {name:'ELFBAR BC', price:20000, puffs:15000, photo:'bc', reel:'DUBBIz3AO4S', flavors:[
+  {name:'ELFBAR BC', price:16000, originalPrice:20000, clearance:true, puffs:15000, photo:'bc', reel:'DUBBIz3AO4S', flavors:[
     {name:'Miami Mint 🌴', stock:1}
   ]},
   /* Precio según cotización Italia Shop (S12211): USD 10,50 × 1660 = $17.430
      + ~$12.000 de margen → $29.500; en oferta a $25.500. */
   {name:'LUMA', price:25500, originalPrice:29500, promo:true, promoOrder:4, puffs:40000, photo:'dinner_lady_luma', photoScale:0.85, reel:'DeSItt6KCpc', outOfStock:true, flavors:[]},
-  {name:'EBCREATE BC PRO', price:25000, puffs:40000, photo:'ebcreate', flavors:[
+  {name:'EBCREATE BC PRO', price:20000, originalPrice:25000, clearance:true, puffs:40000, photo:'ebcreate', flavors:[
     {name:'Black Mint 🌿', stock:1}
   ]},
-  {name:'IGNITE V500', price:29000, originalPrice:32000, promo:true, promoOrder:1, puffs:50000, photo:'v500', flavors:[
-    {name:'Watermelon Mix 🍉', stock:2},{name:'Watermelon Kiwi 🍉🥝', stock:1}
+  {name:'EBCREATE BC PRO 40K', price:25000, puffs:40000, photo:'ebcreate', preorder:true, flavors:[
+    {name:'Aurora Berries 🫐', stock:2},{name:'Blue Razz Ice 🫐❄️', stock:2},{name:'Golden Berry ✨', stock:1},
+    {name:'Strawberry Blend 🍓', stock:2},{name:'Strawberry Kiwi 🍓🥝', stock:2},{name:'Triple Berry 🫐', stock:2},
+    {name:'Watermelon Peach Frost 🍉🍑', stock:2},{name:'Strawberry Raspberry Frost 🍓❄️', stock:2},{name:'Blackberry Grape 🍇', stock:2}
   ]},
-  {name:'IGNITE BOOST MIX', price:27500, originalPrice:29000, promo:true, promoOrder:2, puffs:40000, photo:'ignite_boost_mix', flavors:[
-    {name:'Strawberry Kiwi Ice + Grape Kiwi Ice 🍓🥝🍇', stock:1}
+  {name:'IGNITE V500', price:29000, originalPrice:32000, promo:true, promoOrder:1, puffs:50000, photo:'v500', outOfStock:true, flavors:[]},
+  {name:'IGNITE BOOST MIX', price:27500, originalPrice:29000, promo:true, promoOrder:2, puffs:40000, photo:'ignite_boost_mix', outOfStock:true, flavors:[]},
+  {name:'IGNITE V400 ICE ULTRA SLIM', price:28000, puffs:40000, photo:'v400_ultra_slim', preorder:true, flavors:[
+    {name:'Blueberry 🫐', stock:2},{name:'Grape 🍇', stock:2},{name:'Grape Mix 🍇', stock:2},
+    {name:'Mango 🥭', stock:2},{name:'Passion Fruit 🌺', stock:2},{name:'Pineapple Kiwi Dragon 🍍🥝🐉', stock:2},
+    {name:'Strawberry 🍓', stock:3},{name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:3},{name:'Strawberry Banana 🍓🍌', stock:3},
+    {name:'Strawberry Kiwi 🍓🥝', stock:3},{name:'Strawberry Watermelon 🍓🍉', stock:3},{name:'Tutti Frutti 🍬', stock:3}
   ]},
-  {name:'IGNITE V400 ICE', price:28000, puffs:40000, photo:'v400', outOfStock:true, flavors:[]},
+  {name:'IGNITE V400 ICY', price:28000, puffs:40000, photo:'v400', preorder:true, flavors:[
+    {name:'Strawberry Banana 🍓🍌', stock:1},{name:'Strawberry Kiwi 🍓🥝', stock:3}
+  ]},
   {name:'IGNITE V300 ULTRA SLIM', price:24000, puffs:30000, photo:'wholesale_v300_ultra_slim', outOfStock:true, flavors:[]},
   {name:'IGNITE V250', price:22000, puffs:25000, photo:'v250', photoScale:1.18, outOfStock:true, flavors:[]},
   /* Precio según cotización Italia Shop (S12019): USD 12,50 × 1660 = $20.750
      + $10.000 de margen = $30.750 → redondeado a $31.000. */
-  {name:'BLACKSHEEP 55K', price:31000, puffs:55000, photo:'blacksheep_55k', outOfStock:true, flavors:[]},
+  {name:'BLACKSHEEP 55K', price:31000, puffs:55000, photo:'blacksheep_55k', preorder:true, flavors:[
+    {name:'Aloe Grape 🍇', stock:2},{name:'Cool Mint ❄️', stock:1},{name:'Lemon Heads 🍋', stock:1},
+    {name:'Passion Fruit 🌺', stock:2},{name:'Sour Apple Ice 🍏❄️', stock:2},{name:'Strawberry Banana 🍓🍌', stock:3}
+  ]},
   {name:'BLACKSHEEP 40K', price:29000, puffs:40000, photo:'blacksheep', outOfStock:true, flavors:[]},
   {name:'BLACKSHEEP ICE 40K', price:29000, puffs:40000, photo:'blacksheep_ice', outOfStock:true, flavors:[]},
   {name:'NIKBAR 10K', price:19000, puffs:10000, photo:'nikbar10', photoScale:1.18, outOfStock:true, flavors:[]},
   {name:'IGNITE V150', price:20000, puffs:15000, photo:'v150', outOfStock:true, flavors:[]},
-  {name:'BLVK JUST JUICE', price:25500, originalPrice:27500, promo:true, promoOrder:3, puffs:45000, photo:'blvk', reel:'Dd9LzkfKrsd', flavors:[
-    {name:'Menthol ❄️', stock:2}
+  {name:'BLVK JUST JUICE', price:22000, originalPrice:27500, clearance:true, puffs:45000, photo:'blvk', reel:'Dd9LzkfKrsd', flavors:[
+    {name:'Menthol ❄️', stock:1}
   ]},
-  {name:'ELFBAR TRIO', price:27000, puffs:40000, photo:'trio', pinFirst:true, flavors:[
-    {name:'Watermelon Ice 🍉', stock:1}
+  {name:'ELFBAR TRIO', price:27000, puffs:40000, photo:'trio', pinFirst:true, preorder:true, flavors:[
+    {name:'Blueberry Pom Slushy 🫐', stock:2},{name:'Cool Menthol ❄️', stock:1},{name:'Pineapple Lime 🍍🍋', stock:1},
+    {name:'Sour Apple Ice 🍏❄️', stock:1},{name:'Strawberry Orange Lime 🍓🍊', stock:1}
   ]},
   /* Precio según cotización Italia Shop (S12012): USD 7 × 1660 = $11.620
      + $10.000 de margen = $21.620 → redondeado a $22.000. */
-  {name:'LOST MARY MT20000', price:22000, puffs:20000, photo:'lost_mary_mt20000', flavors:[
+  {name:'LOST MARY MT20000', price:17500, originalPrice:22000, clearance:true, puffs:20000, photo:'lost_mary_mt20000', flavors:[
     {name:'Hawaii Juice ❄️', stock:1}
   ]},
   {name:'NIKBAR 30K', price:22500, puffs:30000, photo:'nikbar30', outOfStock:true, flavors:[]},
-  {name:'IGNITE VMIX', price:29000, puffs:40000, photo:'vmix', reel:'DYNEbu7Kt5Y', outOfStock:true, flavors:[]},
+  {name:'IGNITE VMIX', price:29000, puffs:40000, photo:'vmix', reel:'DYNEbu7Kt5Y', preorder:true, flavors:[
+    {name:'Banana Cherry + Grape Ice 🍌🍒🍇', stock:2},{name:'Blueberry + Strawberry 🫐🍓', stock:1},{name:'Cherry + Grape Ice 🍒🍇', stock:1},
+    {name:'Kiwi Passion Guava Ice + Strawberry Ice 🥝🍓', stock:2},{name:'Raspberry Ice + Watermelon Ice 🍉❄️', stock:3},
+    {name:'Strawberry Grape Ice + Kiwi Watermelon Ice 🍓🍇🥝🍉', stock:3},{name:'Strawberry Kiwi Ice + Grape Kiwi Ice 🍓🥝🍇', stock:2},
+    {name:'Triple Berry Ice + Grape Ice 🫐🍇', stock:1},{name:'Watermelon Ice + Grape Ice 🍉🍇', stock:3}
+  ]},
   {name:'HOOKALIT', price:24000, puffs:40000, photo:'hookalit', outOfStock:true, flavors:[]},
   {name:'AirPods', price:22000, photo:'airpods', category:'apple', variantWord:'modelo', variantWordPlural:'modelos',
     description:'Auriculares inalámbricos con estuche de carga, Bluetooth estable y compatibilidad con Find My.',
@@ -6121,8 +6262,8 @@ const CATALOG = [
    quedan relegados al final de ese orden. */
 const POPULARITY_ORDER = [
   'ELFBAR ICE KING', 'IGNITE V500', 'IGNITE BOOST MIX', 'BLACKSHEEP 55K', 'BLVK JUST JUICE',
-  'ELFBAR DUKE', 'LUMA', 'BLACKSHEEP 40K', 'EBCREATE BC PRO', 'IGNITE V400 ICE',
-  'BLACKSHEEP ICE 40K', 'ELFBAR BC', 'IGNITE V150',
+  'ELFBAR DUKE', 'LUMA', 'BLACKSHEEP 40K', 'EBCREATE BC PRO 40K', 'EBCREATE BC PRO', 'IGNITE V400 ICE ULTRA SLIM',
+  'IGNITE VMIX', 'IGNITE V400 ICY', 'BLACKSHEEP ICE 40K', 'ELFBAR BC', 'IGNITE V150',
   'ELFBAR TRIO', 'IGNITE V300 ULTRA SLIM', 'NIKBAR 10K'
 ];
 function popularityRank(p){
@@ -6151,7 +6292,8 @@ const COMBO_SIZE = 2;
 const COMBO_DISCOUNT = 3000;
 // Vapes sumados desde las ofertas del checkout ya vienen con precio especial:
 // no cuentan para el combo (así el total del mensaje de WhatsApp no cambia).
-function cartVapeCount(items){ return items.filter(i => i.category !== 'apple' && i.price && !i.offer).length; }
+// Lo de liquidación tampoco cuenta: ya está rebajado.
+function cartVapeCount(items){ return items.filter(i => i.category !== 'apple' && i.price && !i.offer && !i.clearance).length; }
 function comboDiscount(items){ return Math.floor(cartVapeCount(items) / COMBO_SIZE) * COMBO_DISCOUNT; }
 
 function formatPrice(price, originalPrice){
@@ -6403,14 +6545,22 @@ function cartConfirmHTML(){
    catalog reads consistently even when a vape happens to be down to one. */
 function productCardHTML(p, i, badgeText, showPuffs){
   const oos = isOutOfStock(p);
-  const promo = !oos && !!p.promo;
+  const clearance = !oos && !!p.clearance;
+  const preorder = !oos && !!p.preorder;
+  // Liquidación reusa el look de oferta (borde que gira, brillo) en naranja.
+  const promo = !oos && (!!p.promo || clearance);
   // Elfbar Ice King's permanent "⭐ Favorito" tag — a fixed flagship marker,
   // independent of sort order or which card the dynamic "Más pedido" badge
   // happens to land on (see the `flagship` flag in CATALOG and the skip for
   // it in renderProducts' badge assignment).
   const flagship = !oos && !!p.flagship;
-  const acc = promo ? PROMO_ACCENT : ACCENTS[i % ACCENTS.length];
+  const acc = clearance ? CLEARANCE_ACCENT : promo ? PROMO_ACCENT : ACCENTS[i % ACCENTS.length];
   const variantWordPlural = p.variantWordPlural || 'sabores';
+  const units = totalStock(p);
+  const glyphBadge = clearance ? `<div class="p-badge p-badge--promo p-badge--clearance">🔥 Liquidación${p.originalPrice ? ' -' + discountPct(p) + '%' : ''}</div>`
+    : promo ? `<div class="p-badge p-badge--promo">🔥 ${p.originalPrice ? '-' + discountPct(p) + '% OFF' : 'Oferta'}</div>`
+    : preorder ? '<div class="p-badge p-badge--preorder">📦 Reservá</div>'
+    : flagship ? '<div class="p-badge p-badge--flagship">⭐ Favorito</div>' : '';
   const variantCountWord = p.flavors.length === 1 ? (p.variantWord || 'sabor') : variantWordPlural;
   const singleVariant = !oos && p.flavors.length === 1 && p.category === 'apple';
 
@@ -6431,22 +6581,25 @@ function productCardHTML(p, i, badgeText, showPuffs){
         ${cartConfirmHTML()}
       </div>` : `
       <div class="p-cta p-cta--solid">
-        <span>Ver ${variantWordPlural}</span>
+        <span>${preorder ? 'Reservar' : 'Ver ' + variantWordPlural}</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>`;
 
   return `
-    <div class="p-card${oos ? ' p-card--oos' : ''}${promo ? ' p-card--promo' : ''}${flagship ? ' p-card--flagship' : ''}" data-index="${i}" style="--accent:${acc.main};--accent-fade:${acc.fade};--accent-shadow:${acc.shadow}">
-      ${oos ? '<div class="p-badge p-badge--oos">Sin stock</div>' : (promo || flagship) ? '' : (badgeText ? `<div class="p-badge${badgeText === 'Más pedido' ? ' p-badge--popular' : ''}">${badgeText}</div>` : '')}
+    <div class="p-card${oos ? ' p-card--oos' : ''}${promo ? ' p-card--promo' : ''}${clearance ? ' p-card--clearance' : ''}${preorder ? ' p-card--preorder' : ''}${flagship ? ' p-card--flagship' : ''}" data-index="${i}" style="--accent:${acc.main};--accent-fade:${acc.fade};--accent-shadow:${acc.shadow}">
+      ${oos ? '<div class="p-badge p-badge--oos">Sin stock</div>' : (promo || flagship || preorder) ? '' : (badgeText ? `<div class="p-badge${badgeText === 'Más pedido' ? ' p-badge--popular' : ''}">${badgeText}</div>` : '')}
       ${promo ? '<span class="p-shine" aria-hidden="true"></span>' : ''}
       ${showPuffs && p.puffs != null ? `<div class="p-puffs">${formatPuffs(p.puffs)}</div>` : ''}
-      <div class="p-glyph">${promo ? `<div class="p-badge p-badge--promo">🔥 ${p.originalPrice ? '-' + discountPct(p) + '% OFF' : 'Oferta'}</div>` : flagship ? '<div class="p-badge p-badge--flagship">⭐ Favorito</div>' : ''}${productGlyphHTML(p)}</div>
+      <div class="p-glyph">${glyphBadge}${productGlyphHTML(p)}</div>
       <div class="p-name-row">
         <div class="p-name">${p.name}</div>
         ${formatPrice(p.price, p.originalPrice)}
       </div>
       <div class="p-meta">
-        <span>${oos ? 'Sin stock por el momento' : p.flavors.length + ' ' + variantCountWord}</span>
+        <span>${oos ? 'Sin stock por el momento'
+          : clearance ? (units === 1 ? '⚡ Última unidad' : '⚡ Últimas ' + units + ' unidades')
+          : preorder ? '📦 Llega ' + PREORDER_ETA
+          : p.flavors.length + ' ' + variantCountWord}</span>
       </div>
       ${actionsHTML}
       ${oos || singleVariant ? '' : flavorPeekHTML(p.name, variantWordPlural.charAt(0).toUpperCase() + variantWordPlural.slice(1), p.flavors.map(f => f.name))}
@@ -6583,7 +6736,8 @@ function renderProducts(){
   // how many flavors they have available, most first. An explicit sort ("Más
   // pitadas"/"Más vendidos") is the customer's own choice, so it isn't overridden.
   // `pinFirst`: va primero después de las ofertas (ej. Elfbar Trio).
-  const defaultRank = p => p.promo ? (p.promoOrder || 0) - 10 : p.pinFirst ? 0 : p.flagship ? 1 : 2;
+  // Liquidación va antes que todo (es lo que hay que sacar).
+  const defaultRank = p => p.clearance ? -20 : p.promo ? (p.promoOrder || 0) - 10 : p.pinFirst ? 0 : p.flagship ? 1 : 2;
   const inStockVapeIndices = vapeIndices.filter(i => !isOutOfStock(CATALOG[i])).sort((a, b) => {
     const pa = CATALOG[a], pb = CATALOG[b];
     if(sortMode === 'puffs') return (pb.puffs||0) - (pa.puffs||0);
@@ -6607,7 +6761,7 @@ function renderProducts(){
   let popularBadgeGiven = false;
   const entries = inStockVapeIndices.map((i) => {
     const p = CATALOG[i];
-    const giveBadge = sortMode === null && !p.promo && !p.flagship && !popularBadgeGiven;
+    const giveBadge = sortMode === null && !p.promo && !p.clearance && !p.preorder && !p.flagship && !popularBadgeGiven;
     if(giveBadge) popularBadgeGiven = true;
     return { html: productCardHTML(p, i, giveBadge ? 'Más pedido' : null, true) };
   }).concat(thcOrdered.map(p => ({ html: thcCardHTML(p) }))); // THC vapes always last
@@ -7097,7 +7251,11 @@ function openModal(index, presetFlavor, sourceEvent){
   const oos = isOutOfStock(p);
   const variantCountWord = p.flavors.length === 1 ? variantWord : variantWordPlural;
   const availableWord = p.flavors.length === 1 ? 'disponible' : 'disponibles';
-  modalEyebrow.textContent = oos ? 'Sin stock por el momento' : p.flavors.length + ' ' + variantCountWord + ' ' + availableWord;
+  const units = totalStock(p);
+  modalEyebrow.textContent = oos ? 'Sin stock por el momento'
+    : p.clearance ? '🔥 Liquidación · ' + (units === 1 ? 'última unidad' : 'últimas unidades')
+    : p.preorder ? '📦 Reserva · llega ' + PREORDER_ETA
+    : p.flavors.length + ' ' + variantCountWord + ' ' + availableWord;
   modalEyebrow.classList.toggle('is-oos', oos);
   modalReelBtn.classList.toggle('hidden', !p.reel);
   if(p.reel) modalReelBtn.href = `https://www.instagram.com/reel/${p.reel}/`;
@@ -7134,24 +7292,30 @@ function openModal(index, presetFlavor, sourceEvent){
   } else {
     document.getElementById('modalVariantLabel').textContent = 'Elegí tu ' + variantWord;
 
+    const stateNote = oos ? ''
+      : p.clearance ? `<div class="flavor-note flavor-note--clearance">🔥 <span><b>Precio de liquidación.</b> Son las últimas unidades que nos quedan: cuando se terminan, no vuelven a este precio.</span></div>`
+      : p.preorder ? `<div class="flavor-note flavor-note--preorder">📦 <span><b>Llega ${PREORDER_ETA}.</b> Reservalo ahora y te lo guardamos: te avisamos por WhatsApp apenas llegue para coordinar la entrega.</span></div>`
+      : '';
     flavorGrid.innerHTML = oos
       ? `<div class="flavor-empty">😔 Sin stock por el momento. Escribinos por WhatsApp para avisarte cuando vuelva a estar disponible.</div>`
-      : p.flavors.map(f=>{
+      : stateNote + p.flavors.map(f=>{
         const c = flavorAccent(f.name);
+        const stockText = p.preorder ? f.stock + ' para reservar' : stockLabel(f.stock);
+        const dot = p.preorder ? '#3fb7ff' : stockDotColor(f.stock);
         return `
         <div class="flavor-row" data-flavor="${f.name}">
           <div class="flavor-row-main">
             <span class="flavor-dot" style="background:${c}"></span>
             <span class="flavor-text">
               <span class="flavor-name">${f.name}</span>
-              <span class="flavor-stock"><span class="stock-dot" style="background:${stockDotColor(f.stock)}"></span>${stockLabel(f.stock)}</span>
+              <span class="flavor-stock"><span class="stock-dot" style="background:${dot}"></span>${stockText}</span>
             </span>
           </div>
           <span class="flavor-pick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           <div class="flavor-row-actions">
             <button class="flavor-row-add" type="button">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1.4"/><circle cx="18" cy="21" r="1.4"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 8H6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <span>Sumar al carrito</span>
+              <span>${p.preorder ? 'Reservar (sumar al carrito)' : 'Sumar al carrito'}</span>
             </button>
           </div>
         </div>`;
@@ -7288,8 +7452,10 @@ modalCta.addEventListener('click', ()=>{
    that skip the modal entirely. */
 function buyProductDirect(p, flavorName){
   const priceLine = p.price != null ? ` — $${p.price.toLocaleString('es-AR')}` : '';
-  const msg = `¡Hola Vapesoon! Quiero comprar un *${p.name}* ${p.variantWord || 'sabor'} *${stripEmoji(flavorName)}*${priceLine} ¿Me confirmás disponibilidad?`;
-  openFulfillmentChoice(msg, [{product: p.name, category: p.category}]);
+  const msg = p.preorder
+    ? `¡Hola Vapesoon! Quiero *reservar* un *${p.name}* ${p.variantWord || 'sabor'} *${stripEmoji(flavorName)}*${priceLine} (llega ${PREORDER_ETA}). ¿Me confirmás la reserva?`
+    : `¡Hola Vapesoon! Quiero comprar un *${p.name}* ${p.variantWord || 'sabor'} *${stripEmoji(flavorName)}*${priceLine} ¿Me confirmás disponibilidad?`;
+  openFulfillmentChoice(msg, [{product: p.name, category: p.category, preorder: !!p.preorder}]);
 }
 
 /* ================= FULFILLMENT (retiro / envío) ================= */
@@ -7369,7 +7535,11 @@ function selectLocality(name){
   fulfillAddressHint.classList.remove('error');
   fulfillAddressHint.textContent = 'Con esto armamos el envío por WhatsApp';
   fulfillZoneNote.classList.remove('hidden', 'same-day', 'next-day');
-  if(sameDay){
+  if(pendingAllPreorder){
+    // Todo el pedido es reserva: no tiene sentido prometer "en el día".
+    fulfillZoneNote.classList.add('next-day');
+    fulfillZoneNote.textContent = `📦 Es una reserva: te lo enviamos apenas llegue (${PREORDER_ETA}).`;
+  } else if(sameDay){
     fulfillZoneNote.classList.add('same-day');
     fulfillZoneNote.textContent = `✅ En ${name} entregamos en el día.`;
   } else {
@@ -7431,7 +7601,9 @@ const fulfillSteps = document.getElementById('fulfillSteps');
 
 /* items: what's being bought ({product, category}), used to pick which
    checkout offers make sense. */
+let pendingAllPreorder = false;
 function openFulfillmentChoice(baseMessage, items){
+  pendingAllPreorder = !!(items && items.length && items.every(i => i.preorder));
   resetCheckoutSteps(fulfillSteps);
   setCheckoutSteps(fulfillSteps, 1, 2);
   pendingCheckoutMessage = baseMessage;
@@ -7933,7 +8105,7 @@ const cartCheckoutBtn = document.getElementById('cartCheckoutBtn');
    "added" markup instead of the default "+1". */
 const FLAVOR_ADDED_HTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>¡Sumado al carrito!</span>';
 function addProductFlavorToCart(p, flavorName, btnEl, flashHtml){
-  cart.push({product:p.name, flavor:flavorName, price:p.price, category:p.category});
+  cart.push({product:p.name, flavor:flavorName, price:p.price, category:p.category, preorder:!!p.preorder, clearance:!!p.clearance});
   updateCartBadge();
   flashAddedState(btnEl, flashHtml);
 }
@@ -8143,7 +8315,7 @@ function renderCart(){
       ${photoUrl ? `<span class="cart-item-photo"><img src="${photoUrl}" alt="" decoding="async"></span>` : ''}
       <div class="cart-item-info">
         <div class="cart-item-name">${item.product}</div>
-        <div class="cart-item-flavor">${cartFlavorText(item.flavor)}</div>
+        <div class="cart-item-flavor">${cartFlavorText(item.flavor)}${item.preorder ? ' <span class="cart-item-tag cart-item-tag--preorder">Reserva</span>' : item.clearance ? ' <span class="cart-item-tag cart-item-tag--clearance">Liquidación</span>' : ''}</div>
         <span class="cart-item-price">${priceText}</span>
       </div>
       <div class="cart-item-right">
@@ -8246,7 +8418,7 @@ cartCheckoutBtn.addEventListener('click', ()=>{
     byProduct.get(item.product).push(item);
   });
   byProduct.forEach((items, product)=>{
-    msg += `*${product}*\n`;
+    msg += `*${product}*${items[0].preorder ? ` _(reserva — llega ${PREORDER_ETA})_` : ''}\n`;
     const byFlavor = new Map();
     items.forEach(item=>{
       const flavor = stripEmoji(item.flavor);
@@ -8270,7 +8442,9 @@ cartCheckoutBtn.addEventListener('click', ()=>{
     }
     msg += `Total aprox: $${(subtotal - discount).toLocaleString('es-AR')}\n\n`;
   }
-  msg += '¿Me confirmás disponibilidad?';
+  const hasPreorder = cart.some(i => i.preorder);
+  if(hasPreorder) msg += `📦 Lo marcado como reserva llega ${PREORDER_ETA}.\n\n`;
+  msg += hasPreorder ? '¿Me confirmás disponibilidad y la reserva?' : '¿Me confirmás disponibilidad?';
   openFulfillmentChoice(msg, cart);
 });
 
@@ -9117,7 +9291,45 @@ const modalReelBtn = document.getElementById('modalReelBtn');
 // It's a link to the reel: don't let the tap also reach the product photo.
 modalReelBtn.addEventListener('click', (e)=> e.stopPropagation());
 
+/* ================= CARTEL LIQUIDACIÓN / RESERVAS =================
+   Arriba del catálogo, lo primero que se ve al entrar. Cada fila lleva a la
+   primera tarjeta de ese tipo (vuelve al orden por defecto si había otro). */
+function renderSaleBanner(){
+  const el = document.getElementById('saleBanner');
+  const clear = CATALOG.filter(p => p.clearance && !isOutOfStock(p));
+  const pre = CATALOG.filter(p => p.preorder && !isOutOfStock(p));
+  if(!clear.length && !pre.length){ el.hidden = true; el.innerHTML = ''; return; }
+  const maxPct = Math.max(0, ...clear.map(discountPct));
+  const chevron = '<svg class="sale-banner-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  el.innerHTML =
+    (clear.length ? `
+    <button class="sale-banner-row sale-banner-row--clearance" type="button" data-go="clearance">
+      <span class="sale-banner-icon" aria-hidden="true">🔥</span>
+      <span class="sale-banner-text"><b>Liquidación${maxPct ? ' hasta -' + maxPct + '%' : ''}</b><small>Últimas unidades de ${clear.length} ${clear.length === 1 ? 'modelo' : 'modelos'} a precio de remate</small></span>
+      ${chevron}
+    </button>` : '') +
+    (pre.length ? `
+    <button class="sale-banner-row sale-banner-row--preorder" type="button" data-go="preorder">
+      <span class="sale-banner-icon" aria-hidden="true">📦</span>
+      <span class="sale-banner-text"><b>Llega ${PREORDER_ETA}</b><small>Reservá ${pre.length} ${pre.length === 1 ? 'modelo' : 'modelos'} antes de que se agoten</small></span>
+      ${chevron}
+    </button>` : '');
+  el.hidden = false;
+  el.querySelectorAll('[data-go]').forEach(btn => btn.addEventListener('click', ()=>{
+    if(sortMode !== null) setSortMode(null);
+    const card = productCarousel.querySelector('.p-card--' + btn.dataset.go);
+    if(!card) return;
+    card.scrollIntoView({behavior:'smooth', block:'center', inline:'center'});
+    card.classList.remove('p-card--ping');
+    void card.offsetWidth;
+    card.classList.add('p-card--ping');
+    clearTimeout(card._pingTimer);
+    card._pingTimer = setTimeout(()=> card.classList.remove('p-card--ping'), 1200);
+  }));
+}
+
 /* ================= INIT ================= */
+renderSaleBanner();
 renderProducts();
 renderAppleProducts();
 renderReviews();
