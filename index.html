@@ -1200,53 +1200,6 @@ main{position:relative;z-index:1;}
 .p-glyph .p-badge--preorder{top:-6px;left:-4px;}
 .p-card--preorder .p-meta{color:#9fdcff;font-weight:600;}
 
-/* Toque desde el cartel de arriba: la tarjeta destella una vez. */
-.p-card.p-card--ping{animation:cardPing 1.1s ease-out 1;}
-@keyframes cardPing{
-  0%{box-shadow:0 0 0 0 var(--accent-shadow);}
-  40%{box-shadow:0 0 0 6px var(--accent-shadow), 0 0 28px 4px var(--accent-shadow);}
-  100%{box-shadow:0 0 0 0 transparent;}
-}
-
-/* ---- Cartel de liquidación / reservas, arriba del catálogo ---- */
-.sale-banner{display:grid;gap:8px;margin:4px 0 14px;}
-.sale-banner[hidden]{display:none;}
-@media(min-width:640px){.sale-banner{grid-template-columns:1fr 1fr;gap:12px;}}
-.sale-banner-row{
-  display:flex;align-items:center;gap:12px;
-  width:100%;min-width:0;
-  padding:12px 14px;
-  border-radius:16px;
-  border:1px solid transparent;
-  text-align:left;
-  color:var(--white-glove);
-  font:inherit;
-  cursor:pointer;
-  -webkit-tap-highlight-color:transparent;
-  transition:transform .2s var(--ease), box-shadow .2s var(--ease);
-}
-.sale-banner-row:active{transform:scale(.98);}
-.sale-banner-row--clearance{
-  background:linear-gradient(120deg, #7a2233 0%, #a83a2a 55%, #d46a22 100%);
-  border-color:rgba(255,200,87,.45);
-  box-shadow:0 12px 28px -14px rgba(232,67,58,.8);
-}
-.sale-banner-row--preorder{
-  background:linear-gradient(120deg, #123a7a 0%, #1a5aa8 60%, #2a8fd0 100%);
-  border-color:rgba(166,240,255,.4);
-  box-shadow:0 12px 28px -14px rgba(63,183,255,.7);
-}
-.sale-banner-icon{flex:none;font-size:24px;line-height:1;}
-.sale-banner-row--clearance .sale-banner-icon{animation:badgePulse 1.8s ease-in-out infinite;}
-.sale-banner-text{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1;}
-.sale-banner-text b{font-family:'Bungee',cursive;font-weight:400;font-size:15px;letter-spacing:.3px;line-height:1.2;}
-.sale-banner-text small{font-size:12px;font-weight:600;opacity:.9;line-height:1.35;}
-.sale-banner-go{flex:none;width:18px;height:18px;opacity:.85;}
-@media (prefers-reduced-motion: reduce){
-  .sale-banner-row--clearance .sale-banner-icon, .p-card--ping{animation:none;}
-}
-html.lite .sale-banner-row--clearance .sale-banner-icon{animation:none;}
-
 /* Leyenda arriba de los sabores en el modal */
 .flavor-note{
   display:flex;gap:10px;align-items:flex-start;
@@ -5437,10 +5390,6 @@ body{background:#070f2a;}
            products) — the h1 stays for screen readers / SEO. -->
       <h1 class="sr-only">Elegí tu vape</h1>
 
-      <!-- Cartel de liquidación / reservas: lo arma renderSaleBanner() con los
-           flags `clearance` y `preorder` del CATALOG (se oculta solo si no hay). -->
-      <div class="sale-banner" id="saleBanner" hidden></div>
-
       <div class="catalog-controls">
         <div class="catalog-view-row">
           <div class="view-toggle" role="group" aria-label="Cambiar cómo se ven los vapes">
@@ -6176,11 +6125,13 @@ const CLEARANCE_ACCENT = {main:'#ff9130', fade:'rgba(255,145,48,.30)', shadow:'r
    - `preorder:true`: todavía no llegó — se puede pedir para reservar. `stock`
      es lo que viene en camino. Cuando llegue la mercadería, sacale el
      `preorder:true` al modelo y queda como stock normal.
-   El cartel de arriba del catálogo se arma solo con estos dos flags. */
+*/
 const PREORDER_ETA = 'la semana que viene';
 
 const CATALOG = [
-  {name:'ELFBAR ICE KING', price:26000, puffs:40000, photo:'ice_king', flagship:true, reel:'DcZkRJvKemD', preorder:true, flavors:[
+  // ESCONDIDO hasta nuevo aviso (el proveedor no responde). Para volver a
+  // mostrarlo con estos sabores para reservar, borrá `outOfStock:true`.
+  {name:'ELFBAR ICE KING', price:25000, puffs:40000, photo:'ice_king', flagship:true, reel:'DcZkRJvKemD', outOfStock:true, preorder:true, flavors:[
     {name:'Sour Apple Ice 🍏❄️', stock:2},{name:'Green Apple Ice 🍏❄️', stock:1},{name:'Miami Mint 🌴', stock:2},
     {name:'Baja Splash 🌊', stock:1},{name:'Strawberry Watermelon 🍓🍉', stock:3},{name:'Tiger Blood 🐯', stock:1},
     {name:'Watermelon Ice 🍉❄️', stock:3},{name:'Summer Splash ☀️', stock:2},{name:'Peach 🍑', stock:2},
@@ -6197,27 +6148,27 @@ const CATALOG = [
   {name:'EBCREATE BC PRO', price:20000, originalPrice:25000, clearance:true, puffs:40000, photo:'ebcreate', flavors:[
     {name:'Black Mint 🌿', stock:1}
   ]},
-  {name:'EBCREATE BC PRO 40K', price:25000, puffs:40000, photo:'ebcreate', preorder:true, flavors:[
+  {name:'EBCREATE BC PRO 40K', price:24000, puffs:40000, photo:'ebcreate', preorder:true, flavors:[
     {name:'Aurora Berries 🫐', stock:2},{name:'Blue Razz Ice 🫐❄️', stock:2},{name:'Golden Berry ✨', stock:1},
     {name:'Strawberry Blend 🍓', stock:2},{name:'Strawberry Kiwi 🍓🥝', stock:2},{name:'Triple Berry 🫐', stock:2},
     {name:'Watermelon Peach Frost 🍉🍑', stock:2},{name:'Strawberry Raspberry Frost 🍓❄️', stock:2},{name:'Blackberry Grape 🍇', stock:2}
   ]},
   {name:'IGNITE V500', price:29000, originalPrice:32000, promo:true, promoOrder:1, puffs:50000, photo:'v500', outOfStock:true, flavors:[]},
   {name:'IGNITE BOOST MIX', price:27500, originalPrice:29000, promo:true, promoOrder:2, puffs:40000, photo:'ignite_boost_mix', outOfStock:true, flavors:[]},
-  {name:'IGNITE V400 ICE ULTRA SLIM', price:28000, puffs:40000, photo:'v400_ultra_slim', preorder:true, flavors:[
+  {name:'IGNITE V400 ICE ULTRA SLIM', price:27000, puffs:40000, photo:'v400_ultra_slim', preorder:true, flavors:[
     {name:'Blueberry 🫐', stock:2},{name:'Grape 🍇', stock:2},{name:'Grape Mix 🍇', stock:2},
     {name:'Mango 🥭', stock:2},{name:'Passion Fruit 🌺', stock:2},{name:'Pineapple Kiwi Dragon 🍍🥝🐉', stock:2},
     {name:'Strawberry 🍓', stock:3},{name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:3},{name:'Strawberry Banana 🍓🍌', stock:3},
     {name:'Strawberry Kiwi 🍓🥝', stock:3},{name:'Strawberry Watermelon 🍓🍉', stock:3},{name:'Tutti Frutti 🍬', stock:3}
   ]},
-  {name:'IGNITE V400 ICY', price:28000, puffs:40000, photo:'v400', preorder:true, flavors:[
+  {name:'IGNITE V400 ICY', price:27000, puffs:40000, photo:'v400', preorder:true, flavors:[
     {name:'Strawberry Banana 🍓🍌', stock:1},{name:'Strawberry Kiwi 🍓🥝', stock:3}
   ]},
   {name:'IGNITE V300 ULTRA SLIM', price:24000, puffs:30000, photo:'wholesale_v300_ultra_slim', outOfStock:true, flavors:[]},
   {name:'IGNITE V250', price:22000, puffs:25000, photo:'v250', photoScale:1.18, outOfStock:true, flavors:[]},
   /* Precio según cotización Italia Shop (S12019): USD 12,50 × 1660 = $20.750
-     + $10.000 de margen = $30.750 → redondeado a $31.000. */
-  {name:'BLACKSHEEP 55K', price:31000, puffs:55000, photo:'blacksheep_55k', preorder:true, flavors:[
+     + ~$9.250 de margen → $30.000. */
+  {name:'BLACKSHEEP 55K', price:30000, puffs:55000, photo:'blacksheep_55k', preorder:true, flavors:[
     {name:'Aloe Grape 🍇', stock:2},{name:'Cool Mint ❄️', stock:1},{name:'Lemon Heads 🍋', stock:1},
     {name:'Passion Fruit 🌺', stock:2},{name:'Sour Apple Ice 🍏❄️', stock:2},{name:'Strawberry Banana 🍓🍌', stock:3}
   ]},
@@ -6228,7 +6179,7 @@ const CATALOG = [
   {name:'BLVK JUST JUICE', price:22000, originalPrice:27500, clearance:true, puffs:45000, photo:'blvk', reel:'Dd9LzkfKrsd', flavors:[
     {name:'Menthol ❄️', stock:1}
   ]},
-  {name:'ELFBAR TRIO', price:27000, puffs:40000, photo:'trio', pinFirst:true, preorder:true, flavors:[
+  {name:'ELFBAR TRIO', price:26000, puffs:40000, photo:'trio', pinFirst:true, preorder:true, flavors:[
     {name:'Blueberry Pom Slushy 🫐', stock:2},{name:'Cool Menthol ❄️', stock:1},{name:'Pineapple Lime 🍍🍋', stock:1},
     {name:'Sour Apple Ice 🍏❄️', stock:1},{name:'Strawberry Orange Lime 🍓🍊', stock:1}
   ]},
@@ -6238,7 +6189,7 @@ const CATALOG = [
     {name:'Hawaii Juice ❄️', stock:1}
   ]},
   {name:'NIKBAR 30K', price:22500, puffs:30000, photo:'nikbar30', outOfStock:true, flavors:[]},
-  {name:'IGNITE VMIX', price:29000, puffs:40000, photo:'vmix', reel:'DYNEbu7Kt5Y', preorder:true, flavors:[
+  {name:'IGNITE VMIX', price:28000, puffs:40000, photo:'vmix', reel:'DYNEbu7Kt5Y', preorder:true, flavors:[
     {name:'Banana Cherry + Grape Ice 🍌🍒🍇', stock:2},{name:'Blueberry + Strawberry 🫐🍓', stock:1},{name:'Cherry + Grape Ice 🍒🍇', stock:1},
     {name:'Kiwi Passion Guava Ice + Strawberry Ice 🥝🍓', stock:2},{name:'Raspberry Ice + Watermelon Ice 🍉❄️', stock:3},
     {name:'Strawberry Grape Ice + Kiwi Watermelon Ice 🍓🍇🥝🍉', stock:3},{name:'Strawberry Kiwi Ice + Grape Kiwi Ice 🍓🥝🍇', stock:2},
@@ -9291,45 +9242,7 @@ const modalReelBtn = document.getElementById('modalReelBtn');
 // It's a link to the reel: don't let the tap also reach the product photo.
 modalReelBtn.addEventListener('click', (e)=> e.stopPropagation());
 
-/* ================= CARTEL LIQUIDACIÓN / RESERVAS =================
-   Arriba del catálogo, lo primero que se ve al entrar. Cada fila lleva a la
-   primera tarjeta de ese tipo (vuelve al orden por defecto si había otro). */
-function renderSaleBanner(){
-  const el = document.getElementById('saleBanner');
-  const clear = CATALOG.filter(p => p.clearance && !isOutOfStock(p));
-  const pre = CATALOG.filter(p => p.preorder && !isOutOfStock(p));
-  if(!clear.length && !pre.length){ el.hidden = true; el.innerHTML = ''; return; }
-  const maxPct = Math.max(0, ...clear.map(discountPct));
-  const chevron = '<svg class="sale-banner-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  el.innerHTML =
-    (clear.length ? `
-    <button class="sale-banner-row sale-banner-row--clearance" type="button" data-go="clearance">
-      <span class="sale-banner-icon" aria-hidden="true">🔥</span>
-      <span class="sale-banner-text"><b>Liquidación${maxPct ? ' hasta -' + maxPct + '%' : ''}</b><small>Últimas unidades de ${clear.length} ${clear.length === 1 ? 'modelo' : 'modelos'} a precio de remate</small></span>
-      ${chevron}
-    </button>` : '') +
-    (pre.length ? `
-    <button class="sale-banner-row sale-banner-row--preorder" type="button" data-go="preorder">
-      <span class="sale-banner-icon" aria-hidden="true">📦</span>
-      <span class="sale-banner-text"><b>Llega ${PREORDER_ETA}</b><small>Reservá ${pre.length} ${pre.length === 1 ? 'modelo' : 'modelos'} antes de que se agoten</small></span>
-      ${chevron}
-    </button>` : '');
-  el.hidden = false;
-  el.querySelectorAll('[data-go]').forEach(btn => btn.addEventListener('click', ()=>{
-    if(sortMode !== null) setSortMode(null);
-    const card = productCarousel.querySelector('.p-card--' + btn.dataset.go);
-    if(!card) return;
-    card.scrollIntoView({behavior:'smooth', block:'center', inline:'center'});
-    card.classList.remove('p-card--ping');
-    void card.offsetWidth;
-    card.classList.add('p-card--ping');
-    clearTimeout(card._pingTimer);
-    card._pingTimer = setTimeout(()=> card.classList.remove('p-card--ping'), 1200);
-  }));
-}
-
 /* ================= INIT ================= */
-renderSaleBanner();
 renderProducts();
 renderAppleProducts();
 renderReviews();
