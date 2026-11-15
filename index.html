@@ -1173,22 +1173,27 @@ main{position:relative;z-index:1;}
 }
 
 /* ---- LIQUIDACIÓN (flag `clearance`): misma tarjeta que una oferta pero en
-   brasa — fondo vino/naranja, borde que gira en dorado→naranja. ---- */
+   azul índigo/ultramar — distinto del cobalto de las ofertas y del celeste
+   de las reservas. Borde que gira en lavanda→blanco. ---- */
 /* Doble clase: el REFRESH de más abajo repinta .p-card--promo y le ganaría. */
 .p-card.p-card--clearance{
   background:
-    radial-gradient(70% 45% at 50% 22%, rgba(255,190,130,.24), transparent 70%),
-    radial-gradient(80% 50% at 100% 100%, rgba(232,67,58,.34), transparent 70%),
-    linear-gradient(165deg, rgba(122,38,58,.92) 0%, rgba(78,26,64,.92) 50%, rgba(34,18,62,.92) 100%);
-  box-shadow:0 22px 46px -20px rgba(3,10,38,.9), 0 14px 38px -16px rgba(255,120,60,.6);
+    radial-gradient(70% 45% at 50% 22%, rgba(196,190,255,.32), transparent 70%),
+    radial-gradient(80% 50% at 100% 100%, rgba(104,88,255,.42), transparent 70%),
+    linear-gradient(165deg, rgba(64,56,200,.94) 0%, rgba(42,34,150,.94) 50%, rgba(22,18,88,.94) 100%);
+  box-shadow:0 22px 46px -20px rgba(3,10,38,.9), 0 14px 38px -16px rgba(112,96,255,.7);
 }
-.p-card.p-card--clearance:hover{box-shadow:0 30px 56px -20px rgba(3,10,38,.95), 0 18px 46px -14px rgba(255,140,70,.8);}
+.p-card.p-card--clearance:hover{box-shadow:0 30px 56px -20px rgba(3,10,38,.95), 0 18px 46px -14px rgba(140,126,255,.85);}
 .p-card.p-card--clearance::after{
-  background:conic-gradient(from var(--spin), rgba(255,200,87,.12), var(--orange-pulp), rgba(255,240,210,.85), rgba(255,200,87,.12) 60%);
+  background:conic-gradient(from var(--spin), rgba(190,184,255,.12), #9d93ff, rgba(255,255,255,.85), rgba(190,184,255,.12) 60%);
 }
-.p-card--clearance .p-meta{color:#ffd2b8;font-weight:700;}
-.p-card--clearance .p-price-orig{color:#e9b9a6;}
-.p-badge--clearance{letter-spacing:.6px;}
+.p-card--clearance .p-meta{color:#d6d2ff;font-weight:700;}
+.p-card--clearance .p-price-orig{color:#b9b4ec;}
+.p-badge.p-badge--clearance{
+  letter-spacing:.6px;
+  background:linear-gradient(135deg, #8a7dff, #4a38e6);
+  box-shadow:0 4px 14px -4px rgba(98,78,255,.8);
+}
 
 /* ---- RESERVA (flag `preorder`): etiqueta celeste + leyenda "Llega ...". ---- */
 .p-badge--preorder{
@@ -1209,7 +1214,7 @@ main{position:relative;z-index:1;}
   color:var(--white-glove);
 }
 .flavor-note b{font-weight:800;}
-.flavor-note--clearance{background:rgba(255,145,48,.14);border:1px solid rgba(255,145,48,.42);}
+.flavor-note--clearance{background:rgba(120,104,255,.16);border:1px solid rgba(140,126,255,.48);}
 .flavor-note--preorder{background:rgba(63,183,255,.12);border:1px solid rgba(63,183,255,.4);}
 
 /* Etiquetita en el carrito */
@@ -1220,7 +1225,7 @@ main{position:relative;z-index:1;}
   font-size:10px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;
 }
 .cart-item-tag--preorder{background:rgba(63,183,255,.18);color:#9fdcff;}
-.cart-item-tag--clearance{background:rgba(255,145,48,.18);color:#ffb36b;}
+.cart-item-tag--clearance{background:rgba(120,104,255,.22);color:#c4bdff;}
 .p-puffs{
   position:absolute;top:14px;right:14px;
   font-size:12.5px;
@@ -6110,8 +6115,8 @@ const ACCENTS = [
 // Promo cards (see the `promo` flag in CATALOG) skip the cycling accents above
 // and always use this one, so their puffs pill / glow match their cobalt card.
 const PROMO_ACCENT = {main:'#7db2ff', fade:'rgba(125,178,255,.30)', shadow:'rgba(80,140,255,.45)'};
-// Liquidación (flag `clearance`): naranja, para que se distinga de las ofertas.
-const CLEARANCE_ACCENT = {main:'#ff9130', fade:'rgba(255,145,48,.30)', shadow:'rgba(232,67,58,.45)'};
+// Liquidación (flag `clearance`): índigo, para que se distinga de las ofertas.
+const CLEARANCE_ACCENT = {main:'#a49bff', fade:'rgba(130,116,255,.30)', shadow:'rgba(98,78,255,.45)'};
 
 /* `reel`: id of an Instagram reel with an unboxing/review of that model
    (instagram.com/reel/<id>/). The product modal shows a "Miralo en video" pill
@@ -6120,7 +6125,7 @@ const CLEARANCE_ACCENT = {main:'#ff9130', fade:'rgba(255,145,48,.30)', shadow:'r
 /* LIQUIDACIÓN y RESERVA
    - `clearance:true`: últimas unidades a precio de liquidación. `price` es el
      precio rebajado y `originalPrice` el de lista (se muestra tachado). Van
-     primeros en el catálogo, con tarjeta naranja y la etiqueta "🔥 Liquidación
+     primeros en el catálogo, con tarjeta índigo y la etiqueta "🔥 Liquidación
      -X%". No suman para el combo "Llevá 2" (ya vienen rebajados).
    - `preorder:true`: todavía no llegó — se puede pedir para reservar. `stock`
      es lo que viene en camino. Cuando llegue la mercadería, sacale el
@@ -6145,9 +6150,6 @@ const CATALOG = [
   /* Precio según cotización Italia Shop (S12211): USD 10,50 × 1660 = $17.430
      + ~$12.000 de margen → $29.500; en oferta a $25.500. */
   {name:'LUMA', price:25500, originalPrice:29500, promo:true, promoOrder:4, puffs:40000, photo:'dinner_lady_luma', photoScale:0.85, reel:'DeSItt6KCpc', outOfStock:true, flavors:[]},
-  {name:'EBCREATE BC PRO', price:20000, originalPrice:25000, clearance:true, puffs:40000, photo:'ebcreate', flavors:[
-    {name:'Black Mint 🌿', stock:1}
-  ]},
   {name:'EBCREATE BC PRO 40K', price:24000, puffs:40000, photo:'ebcreate', preorder:true, flavors:[
     {name:'Aurora Berries 🫐', stock:2},{name:'Blue Razz Ice 🫐❄️', stock:2},{name:'Golden Berry ✨', stock:1},
     {name:'Strawberry Blend 🍓', stock:2},{name:'Strawberry Kiwi 🍓🥝', stock:2},{name:'Triple Berry 🫐', stock:2},
@@ -6213,7 +6215,7 @@ const CATALOG = [
    quedan relegados al final de ese orden. */
 const POPULARITY_ORDER = [
   'ELFBAR ICE KING', 'IGNITE V500', 'IGNITE BOOST MIX', 'BLACKSHEEP 55K', 'BLVK JUST JUICE',
-  'ELFBAR DUKE', 'LUMA', 'BLACKSHEEP 40K', 'EBCREATE BC PRO 40K', 'EBCREATE BC PRO', 'IGNITE V400 ICE ULTRA SLIM',
+  'ELFBAR DUKE', 'LUMA', 'BLACKSHEEP 40K', 'EBCREATE BC PRO 40K', 'IGNITE V400 ICE ULTRA SLIM',
   'IGNITE VMIX', 'IGNITE V400 ICY', 'BLACKSHEEP ICE 40K', 'ELFBAR BC', 'IGNITE V150',
   'ELFBAR TRIO', 'IGNITE V300 ULTRA SLIM', 'NIKBAR 10K'
 ];
@@ -6498,7 +6500,7 @@ function productCardHTML(p, i, badgeText, showPuffs){
   const oos = isOutOfStock(p);
   const clearance = !oos && !!p.clearance;
   const preorder = !oos && !!p.preorder;
-  // Liquidación reusa el look de oferta (borde que gira, brillo) en naranja.
+  // Liquidación reusa el look de oferta (borde que gira, brillo) en índigo.
   const promo = !oos && (!!p.promo || clearance);
   // Elfbar Ice King's permanent "⭐ Favorito" tag — a fixed flagship marker,
   // independent of sort order or which card the dynamic "Más pedido" badge
