@@ -5332,22 +5332,19 @@ body{background:#070f2a;}
 <!-- HEADER -->
 <header class="site">
   <div class="ticker">
-    <!-- Mientras dure la liquidación / reservas. Para volver a las frases de
-         siempre: 🚚 Envíos low cost · 💬 La mejor atención que vas a encontrar ·
-         🔥 Más de 100 clientes y sumando -->
     <div class="ticker-track">
-      <span>🔥 Liquidación: últimas unidades a precio de remate</span>
-      <span>📦 Lo nuevo llega la semana que viene: ¡reservalo ya!</span>
       <span>🚚 Envíos low cost</span>
-      <span>🔥 Liquidación: últimas unidades a precio de remate</span>
-      <span>📦 Lo nuevo llega la semana que viene: ¡reservalo ya!</span>
+      <span>💬 La mejor atención que vas a encontrar</span>
+      <span>🔥 Más de 100 clientes y sumando</span>
       <span>🚚 Envíos low cost</span>
-      <span>🔥 Liquidación: últimas unidades a precio de remate</span>
-      <span>📦 Lo nuevo llega la semana que viene: ¡reservalo ya!</span>
+      <span>💬 La mejor atención que vas a encontrar</span>
+      <span>🔥 Más de 100 clientes y sumando</span>
       <span>🚚 Envíos low cost</span>
-      <span>🔥 Liquidación: últimas unidades a precio de remate</span>
-      <span>📦 Lo nuevo llega la semana que viene: ¡reservalo ya!</span>
+      <span>💬 La mejor atención que vas a encontrar</span>
+      <span>🔥 Más de 100 clientes y sumando</span>
       <span>🚚 Envíos low cost</span>
+      <span>💬 La mejor atención que vas a encontrar</span>
+      <span>🔥 Más de 100 clientes y sumando</span>
     </div>
   </div>
   <div class="header-inner">
@@ -6150,27 +6147,28 @@ const CATALOG = [
   /* Precio según cotización Italia Shop (S12211): USD 10,50 × 1660 = $17.430
      + ~$12.000 de margen → $29.500; en oferta a $25.500. */
   {name:'LUMA', price:25500, originalPrice:29500, promo:true, promoOrder:4, puffs:40000, photo:'dinner_lady_luma', photoScale:0.85, reel:'DeSItt6KCpc', outOfStock:true, flavors:[]},
-  {name:'EBCREATE BC PRO 40K', price:24000, puffs:40000, photo:'ebcreate', preorder:true, flavors:[
+  {name:'EBCREATE BC PRO 40K', price:24000, puffs:40000, photo:'ebcreate', flavors:[
     {name:'Aurora Berries 🫐', stock:2},{name:'Blue Razz Ice 🫐❄️', stock:2},{name:'Golden Berry ✨', stock:1},
     {name:'Strawberry Blend 🍓', stock:2},{name:'Strawberry Kiwi 🍓🥝', stock:2},{name:'Triple Berry 🫐', stock:2},
-    {name:'Watermelon Peach Frost 🍉🍑', stock:2},{name:'Strawberry Raspberry Frost 🍓❄️', stock:2},{name:'Blackberry Grape 🍇', stock:2}
+    {name:'Watermelon Peach Frost 🍉🍑', stock:2},{name:'Strawberry Raspberry Frost 🍓❄️', stock:2},{name:'Blackberry Grape 🍇', stock:2},
+    {name:'Black Mint 🌿', stock:1}
   ]},
   {name:'IGNITE V500', price:29000, originalPrice:32000, promo:true, promoOrder:1, puffs:50000, photo:'v500', outOfStock:true, flavors:[]},
   {name:'IGNITE BOOST MIX', price:27500, originalPrice:29000, promo:true, promoOrder:2, puffs:40000, photo:'ignite_boost_mix', outOfStock:true, flavors:[]},
-  {name:'IGNITE V400 ICE ULTRA SLIM', price:27000, puffs:40000, photo:'v400_ultra_slim', preorder:true, flavors:[
+  {name:'IGNITE V400 ICE ULTRA SLIM', price:27000, puffs:40000, photo:'v400_ultra_slim', flavors:[
     {name:'Blueberry 🫐', stock:2},{name:'Grape 🍇', stock:2},{name:'Grape Mix 🍇', stock:2},
     {name:'Mango 🥭', stock:2},{name:'Passion Fruit 🌺', stock:2},{name:'Pineapple Kiwi Dragon 🍍🥝🐉', stock:2},
     {name:'Strawberry 🍓', stock:3},{name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:3},{name:'Strawberry Banana 🍓🍌', stock:3},
     {name:'Strawberry Kiwi 🍓🥝', stock:3},{name:'Strawberry Watermelon 🍓🍉', stock:3},{name:'Tutti Frutti 🍬', stock:3}
   ]},
-  {name:'IGNITE V400 ICY', price:27000, puffs:40000, photo:'v400', preorder:true, flavors:[
+  {name:'IGNITE V400 ICY', price:27000, puffs:40000, photo:'v400', flavors:[
     {name:'Strawberry Banana 🍓🍌', stock:1},{name:'Strawberry Kiwi 🍓🥝', stock:3}
   ]},
   {name:'IGNITE V300 ULTRA SLIM', price:24000, puffs:30000, photo:'wholesale_v300_ultra_slim', outOfStock:true, flavors:[]},
   {name:'IGNITE V250', price:22000, puffs:25000, photo:'v250', photoScale:1.18, outOfStock:true, flavors:[]},
   /* Precio según cotización Italia Shop (S12019): USD 12,50 × 1660 = $20.750
      + ~$9.250 de margen → $30.000. */
-  {name:'BLACKSHEEP 55K', price:30000, puffs:55000, photo:'blacksheep_55k', preorder:true, flavors:[
+  {name:'BLACKSHEEP 55K', price:30000, puffs:55000, photo:'blacksheep_55k', flavors:[
     {name:'Aloe Grape 🍇', stock:2},{name:'Cool Mint ❄️', stock:1},{name:'Lemon Heads 🍋', stock:1},
     {name:'Passion Fruit 🌺', stock:2},{name:'Sour Apple Ice 🍏❄️', stock:2},{name:'Strawberry Banana 🍓🍌', stock:3}
   ]},
@@ -6178,20 +6176,16 @@ const CATALOG = [
   {name:'BLACKSHEEP ICE 40K', price:29000, puffs:40000, photo:'blacksheep_ice', outOfStock:true, flavors:[]},
   {name:'NIKBAR 10K', price:19000, puffs:10000, photo:'nikbar10', photoScale:1.18, outOfStock:true, flavors:[]},
   {name:'IGNITE V150', price:20000, puffs:15000, photo:'v150', outOfStock:true, flavors:[]},
-  {name:'BLVK JUST JUICE', price:22000, originalPrice:27500, clearance:true, puffs:45000, photo:'blvk', reel:'Dd9LzkfKrsd', flavors:[
-    {name:'Menthol ❄️', stock:1}
-  ]},
-  {name:'ELFBAR TRIO', price:26000, puffs:40000, photo:'trio', pinFirst:true, preorder:true, flavors:[
+  {name:'BLVK JUST JUICE', price:22000, originalPrice:27500, clearance:true, puffs:45000, photo:'blvk', reel:'Dd9LzkfKrsd', outOfStock:true, flavors:[]},
+  {name:'ELFBAR TRIO', price:26000, puffs:40000, photo:'trio', pinFirst:true, flavors:[
     {name:'Blueberry Pom Slushy 🫐', stock:2},{name:'Cool Menthol ❄️', stock:1},{name:'Pineapple Lime 🍍🍋', stock:1},
     {name:'Sour Apple Ice 🍏❄️', stock:1},{name:'Strawberry Orange Lime 🍓🍊', stock:1}
   ]},
   /* Precio según cotización Italia Shop (S12012): USD 7 × 1660 = $11.620
      + $10.000 de margen = $21.620 → redondeado a $22.000. */
-  {name:'LOST MARY MT20000', price:17500, originalPrice:22000, clearance:true, puffs:20000, photo:'lost_mary_mt20000', flavors:[
-    {name:'Hawaii Juice ❄️', stock:1}
-  ]},
+  {name:'LOST MARY MT20000', price:17500, originalPrice:22000, clearance:true, puffs:20000, photo:'lost_mary_mt20000', outOfStock:true, flavors:[]},
   {name:'NIKBAR 30K', price:22500, puffs:30000, photo:'nikbar30', outOfStock:true, flavors:[]},
-  {name:'IGNITE VMIX', price:28000, puffs:40000, photo:'vmix', reel:'DYNEbu7Kt5Y', preorder:true, flavors:[
+  {name:'IGNITE VMIX', price:28000, puffs:40000, photo:'vmix', reel:'DYNEbu7Kt5Y', flavors:[
     {name:'Banana Cherry + Grape Ice 🍌🍒🍇', stock:2},{name:'Blueberry + Strawberry 🫐🍓', stock:1},{name:'Cherry + Grape Ice 🍒🍇', stock:1},
     {name:'Kiwi Passion Guava Ice + Strawberry Ice 🥝🍓', stock:2},{name:'Raspberry Ice + Watermelon Ice 🍉❄️', stock:3},
     {name:'Strawberry Grape Ice + Kiwi Watermelon Ice 🍓🍇🥝🍉', stock:3},{name:'Strawberry Kiwi Ice + Grape Kiwi Ice 🍓🥝🍇', stock:2},
