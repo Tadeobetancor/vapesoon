@@ -1510,7 +1510,7 @@ main{position:relative;z-index:1;}
   }
 }
 /* FOTO REAL en la tarjeta (modelos con `realPhoto`): al pasar el mouse por
-   arriba del vape (o mantenerlo apretado en el celu, ver wirePeek) la imagen
+   arriba del vape (o mantener apretada la tarjeta en el celu, ver wirePeek) la imagen
    del producto se da vuelta a la foto real de la caja en la mano. Mientras el
    mouse está sobre el vape no se muestra la lista de sabores; en el resto de
    la tarjeta sí, como siempre. */
@@ -1549,38 +1549,28 @@ main{position:relative;z-index:1;}
   text-transform:uppercase;
   color:#fff;
 }
-/* Pill that tells people the photo is there. */
-.p-real-chip{
+/* Camera circle beside the puff-count pill: the only hint on the card that
+   the model has a real photo (a "Foto real" label made the card too busy on a
+   phone). It lives inside .p-puffs so it follows the pill wherever each view
+   puts it, but sits outside it as its own circle: to the right of the pill in
+   grid mode (pill top-left), to the left in carousel mode (pill top-right). */
+.p-puffs-real{
   position:absolute;
-  right:6px;bottom:2px;
-  z-index:2;
-  display:inline-flex;
-  align-items:center;
-  gap:5px;
-  padding:4px 10px 4px 5px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.2);
-  background:rgba(14,36,98,.6);
-  -webkit-backdrop-filter:blur(6px);
-  backdrop-filter:blur(6px);
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:.3px;
-  color:#fff;
-  pointer-events:none;
-  box-shadow:0 6px 16px -8px rgba(3,10,38,.8);
-  transition:opacity .2s var(--ease);
-}
-.p-real-chip-icon{
+  top:50%;
+  right:calc(100% + 6px);
   display:grid;
   place-items:center;
-  width:18px;height:18px;
+  width:30px;height:30px;
   border-radius:50%;
   background:linear-gradient(135deg, #7db2ff, #2f6bff);
+  border:1.5px solid rgba(255,255,255,.55);
+  box-shadow:0 4px 12px -4px rgba(47,107,255,.9);
+  color:#fff;
+  transform:translateY(-50%);
 }
-/* Beats `.catalog.grid-mode .p-glyph svg` (the big glyph icon size). */
-.p-card .p-glyph .p-real-chip .p-real-chip-icon svg{width:11px;height:11px;filter:none;}
-.catalog.grid-mode .p-real-chip{font-size:9px;padding-right:8px;}
+.p-card .p-puffs-real svg{width:14px;height:14px;}
+.catalog.grid-mode .p-puffs-real{right:auto;left:calc(100% + 5px);width:25px;height:25px;}
+.catalog.grid-mode .p-card .p-puffs-real svg{width:12px;height:12px;}
 .p-card--real .p-glyph .p-badge, .p-card--real .p-puffs{transition:opacity .2s var(--ease);}
 .p-card.real-peek .p-glyph .p-badge, .p-card.real-peek .p-puffs{opacity:0;}
 .p-card.real-peek .p-real{
@@ -1590,7 +1580,6 @@ main{position:relative;z-index:1;}
   transition:opacity .25s var(--ease), transform .45s var(--ease-spring), visibility 0s;
 }
 .p-card.real-peek .p-real img{transform:scale(1.04);}
-.p-card.real-peek .p-real-chip{opacity:0;}
 @media (hover:hover) and (pointer:fine){
   .p-glyph:hover .p-real{
     opacity:1;
@@ -1599,7 +1588,6 @@ main{position:relative;z-index:1;}
     transition:opacity .25s var(--ease), transform .45s var(--ease-spring), visibility 0s;
   }
   .p-glyph:hover .p-real img{transform:scale(1.04);}
-  .p-glyph:hover .p-real-chip{opacity:0;}
   .p-card--real .p-glyph:hover .p-badge,
   .p-card--real:has(.p-glyph:hover) .p-puffs{opacity:0;}
   .p-card--real:has(.p-glyph:hover) .p-peek{
@@ -2366,7 +2354,7 @@ main{position:relative;z-index:1;}
   box-shadow:0 4px 12px -4px rgba(238,42,123,.8);
 }
 .modal-reel-btn-icon svg{width:12px;height:12px;margin-left:2px;}
-/* The photo's pills ("Miralo en video", "Ver foto real") line up together in
+/* The photo's pills ("Miralo en video") line up together in
    the bottom-left corner, clear of the logo watermark on the right. */
 .modal-media-pills{
   position:absolute;
@@ -2379,8 +2367,142 @@ main{position:relative;z-index:1;}
 }
 .modal-media-pills > *{pointer-events:auto;}
 .modal-media-pills .modal-reel-btn{position:relative;left:auto;bottom:auto;cursor:pointer;}
-.modal-photos-btn-icon{background:linear-gradient(135deg, #7db2ff, #2f6bff);box-shadow:0 4px 12px -4px rgba(47,107,255,.85);}
-.modal-photos-btn-icon svg{width:14px;height:14px;margin-left:0;}
+
+/* FOTO REAL en el recuadro del producto: una flechita al costado pasa de la
+   foto del producto a la foto real (y vuelve). También se puede deslizar con
+   el dedo; tocar la foto real la abre grande (#rpOverlay). Solo aparece en
+   modelos con `realPhoto` (.modal-media.has-real). */
+.modal-real{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  padding:0;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:22px;
+  overflow:hidden;
+  background:var(--bg-card);
+  cursor:zoom-in;
+  opacity:0;
+  visibility:hidden;
+  transform:translateX(18%) scale(.96);
+  transition:opacity .3s var(--ease), transform .45s var(--ease), visibility 0s linear .3s;
+}
+.modal-real img{
+  display:block;
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:50% 50%;
+}
+.modal-real-label{
+  position:absolute;
+  top:12px;left:12px;
+  padding:5px 11px;
+  border-radius:999px;
+  background:rgba(14,36,98,.6);
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.22);
+  font-size:10.5px;
+  font-weight:700;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+  color:#fff;
+}
+.modal-real-zoom{
+  position:absolute;
+  right:12px;bottom:12px; /* top-right sits under the sheet's "Volver" */
+  display:grid;place-items:center;
+  width:30px;height:30px;
+  border-radius:50%;
+  background:rgba(14,36,98,.6);
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.22);
+  color:#fff;
+}
+.modal-real-zoom svg{width:14px;height:14px;}
+.modal-media-frame > img{transition:opacity .3s var(--ease);}
+.modal-media.show-real .modal-media-frame > img{opacity:0;}
+.modal-media.show-real .modal-real{
+  opacity:1;
+  visibility:visible;
+  transform:none;
+  transition:opacity .3s var(--ease), transform .5s var(--ease-spring), visibility 0s;
+}
+.modal-media-pills,.modal-media-watermark{transition:opacity .25s var(--ease);}
+.modal-media.show-real .modal-media-pills,
+.modal-media.show-real .modal-media-watermark{opacity:0;pointer-events:none;}
+
+/* The arrow: a glass pill on the right edge, "Foto real ›". On the real
+   photo it turns into a round "‹" on the left edge to go back. */
+.modal-media-arrow{
+  display:none;
+  position:absolute;
+  top:50%;right:10px;
+  z-index:3;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  height:40px;
+  padding:0 8px 0 13px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.3);
+  background:linear-gradient(135deg, rgba(125,178,255,.92), rgba(47,107,255,.92));
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+  color:#fff;
+  font-family:'Poppins',sans-serif;
+  font-size:11.5px;
+  font-weight:700;
+  letter-spacing:.2px;
+  white-space:nowrap;
+  cursor:pointer;
+  transform:translateY(-50%);
+  box-shadow:0 10px 24px -10px rgba(3,10,38,.9), 0 6px 18px -8px rgba(47,107,255,.9);
+  transition:transform .25s var(--ease-spring), background .25s;
+}
+.modal-media-arrow svg{width:18px;height:18px;flex:none;}
+.modal-media.has-real .modal-media-arrow{display:inline-flex;animation:arrowNudge 1.6s var(--ease) .9s 2;}
+.modal-media-arrow:hover{transform:translateY(-50%) scale(1.06);}
+.modal-media-arrow:active{transform:translateY(-50%) scale(.94);}
+@keyframes arrowNudge{
+  0%,100%{transform:translateY(-50%);}
+  30%{transform:translateY(-50%) translateX(5px);}
+  55%{transform:translateY(-50%) translateX(-2px);}
+}
+.modal-media.show-real .modal-media-arrow{
+  right:auto;left:10px;
+  width:40px;
+  padding:0;
+  background:rgba(14,36,98,.62);
+  animation:none;
+}
+.modal-media.show-real .modal-media-arrow-label{display:none;}
+.modal-media.show-real .modal-media-arrow svg{transform:rotate(180deg);}
+
+/* Two dots under the photo: which "slide" is showing. */
+.modal-media-dots{
+  display:none;
+  position:absolute;
+  left:50%;bottom:12px;
+  z-index:3;
+  gap:6px;
+  transform:translateX(-50%);
+  pointer-events:none;
+}
+.modal-media.has-real .modal-media-dots{display:flex;}
+.modal-media-dots i{
+  width:7px;height:7px;
+  border-radius:999px;
+  background:rgba(255,255,255,.45);
+  box-shadow:0 1px 4px rgba(3,10,38,.5);
+  transition:width .3s var(--ease), background .3s;
+}
+.modal-media:not(.show-real) .modal-media-dots i:first-child,
+.modal-media.show-real .modal-media-dots i:last-child{width:20px;background:#fff;}
+@media (prefers-reduced-motion: reduce){
+  .modal-media.has-real .modal-media-arrow{animation:none;}
+}
 
 /* Small brand watermark pinned to a corner of the flavor-picker product
    image — the area felt anonymous without it. Reuses the header's own logo
@@ -3316,7 +3438,7 @@ main{position:relative;z-index:1;}
 /* Moving to the next review: the card slides in again. */
 .rv-overlay.swap .rv-card{animation:riseIn .35s var(--ease) backwards;}
 
-/* FOTO REAL ampliada (botón "Ver foto real" del producto): mismo visor que
+/* FOTO REAL ampliada (tocando la foto real en el recuadro del producto): mismo visor que
    las reseñas, por encima del detalle del producto. */
 .rp-overlay{z-index:235;}
 .rp-overlay.open .rp-card{animation:rpPop .5s var(--ease-spring) backwards;}
@@ -5686,7 +5808,7 @@ body{background:#070f2a;}
   <button class="rv-arrow rv-arrow--next" id="rvNext" type="button" aria-label="Reseña siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 </div>
 
-<!-- FOTO REAL AMPLIADA: botón "Ver foto real" del detalle del producto (openRealPhoto) -->
+<!-- FOTO REAL AMPLIADA: al tocar la foto real en el recuadro del producto (openRealPhoto) -->
 <div class="modal-overlay rv-overlay rp-overlay" id="rpOverlay" role="dialog" aria-modal="true" aria-label="Foto real del producto">
   <div class="rv-stage" id="rpStage">
     <figure class="rv-card rp-card">
@@ -5717,16 +5839,23 @@ body{background:#070f2a;}
       <!-- LEFT: product image (prepared for future per-flavor swapping via data-flavor-img) -->
       <div class="modal-media">
         <div class="modal-media-frame" id="modalGlyph"><img src="img/mascota.webp" alt=""></div>
+        <!-- FOTO REAL: segunda "diapositiva" del recuadro (modelos con realPhoto) -->
+        <button class="modal-real" id="modalReal" type="button" tabindex="-1" aria-label="Ampliar foto real">
+          <img id="modalRealImg" alt="" decoding="async">
+          <span class="modal-real-label">📸 Foto real</span>
+          <span class="modal-real-zoom" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </button>
+        <button class="modal-media-arrow" id="modalMediaArrow" type="button" aria-label="Ver foto real">
+          <span class="modal-media-arrow-label">Foto real</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="modal-media-dots" aria-hidden="true"><i></i><i></i></div>
         <img class="modal-media-watermark" id="modalMediaWatermark" src="" alt="" aria-hidden="true">
         <div class="modal-media-pills">
           <a class="modal-reel-btn hidden" id="modalReelBtn" href="https://instagram.com/vapesoon.arg" target="_blank" rel="noopener">
             <span class="modal-reel-btn-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
             Miralo en video
           </a>
-          <button class="modal-reel-btn modal-photos-btn hidden" id="modalPhotosBtn" type="button">
-            <span class="modal-reel-btn-icon modal-photos-btn-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 8h3l1.6-2.4A1.5 1.5 0 0 1 9.9 5h4.2a1.5 1.5 0 0 1 1.3.6L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.4"/></svg></span>
-            Ver foto real
-          </button>
         </div>
       </div>
       <!-- RIGHT: info, ordered Name -> Price -> Puffs -> Flavors -> Purchase -->
@@ -6243,7 +6372,7 @@ window.__PRODUCT_PHOTOS__ = {
 window.__PHOTO_BIG__ = url => url ? url.replace('img/productos/sm/', 'img/productos/') : url;
 // FOTOS REALES (la caja en la mano, en nuestro stock). Un modelo la muestra si
 // tiene `realPhoto:'<clave>'` en CATALOG: aparece al pasar el mouse por arriba
-// del vape en la tarjeta y en el botón "Ver foto real" del detalle. También en
+// del vape en la tarjeta (o mantener apretada la tarjeta) y en el recuadro del detalle, con la flechita. También en
 // dos tamaños: img/reales/sm/ (400px, tarjeta) e img/reales/ (720px, visor).
 window.__REAL_PHOTOS__ = {
   'ebcreate': 'img/reales/ebcreate.webp',
@@ -6682,8 +6811,10 @@ function productCardHTML(p, i, badgeText, showPuffs){
   const singleVariant = !oos && p.flavors.length === 1 && p.category === 'apple';
   const realSrc = oos ? null : realPhotoUrl(p);
   const realHTML = realSrc ? `
-        <div class="p-real" aria-hidden="true"><img loading="lazy" decoding="async" src="${realSrc.replace('img/reales/', 'img/reales/sm/')}" alt=""><span class="p-real-label">📸 Foto real</span></div>
-        <span class="p-real-chip" aria-hidden="true"><span class="p-real-chip-icon">${CAMERA_SVG}</span>Foto real</span>` : '';
+        <div class="p-real" aria-hidden="true"><img loading="lazy" decoding="async" src="${realSrc.replace('img/reales/', 'img/reales/sm/')}" alt=""><span class="p-real-label">📸 Foto real</span></div>` : '';
+  // A tiny camera next to the puff count says "this one has a real photo"
+  // without adding another label to the card.
+  const realChip = realSrc ? `<span class="p-puffs-real" title="Tiene foto real">${CAMERA_SVG}</span>` : '';
 
   const actionsHTML = oos ? `
       <div class="p-cta">
@@ -6710,7 +6841,7 @@ function productCardHTML(p, i, badgeText, showPuffs){
     <div class="p-card${oos ? ' p-card--oos' : ''}${promo ? ' p-card--promo' : ''}${clearance ? ' p-card--clearance' : ''}${preorder ? ' p-card--preorder' : ''}${flagship ? ' p-card--flagship' : ''}${realSrc ? ' p-card--real' : ''}" data-index="${i}" style="--accent:${acc.main};--accent-fade:${acc.fade};--accent-shadow:${acc.shadow}">
       ${oos ? '<div class="p-badge p-badge--oos">Sin stock</div>' : (promo || flagship || preorder) ? '' : (badgeText ? `<div class="p-badge${badgeText === 'Más pedido' ? ' p-badge--popular' : ''}">${badgeText}</div>` : '')}
       ${promo ? '<span class="p-shine" aria-hidden="true"></span>' : ''}
-      ${showPuffs && p.puffs != null ? `<div class="p-puffs">${formatPuffs(p.puffs)}</div>` : ''}
+      ${showPuffs && p.puffs != null ? `<div class="p-puffs">${formatPuffs(p.puffs)}${realChip}</div>` : ''}
       <div class="p-glyph">${glyphBadge}${productGlyphHTML(p)}${realHTML}</div>
       <div class="p-name-row">
         <div class="p-name">${p.name}</div>
@@ -6764,8 +6895,8 @@ function thcCardHTML(p){
    pure CSS (.p-card:hover .p-peek). */
 const PEEK_HOLD_MS = 350;
 const PEEK_MOVE_TOLERANCE = 10; // px of finger drift before we treat it as a scroll
-// Holding the vape itself (the photo area) on a card with a real photo shows
-// that photo instead of the flavor list ('real-peek' instead of 'peek').
+// On a card with a real photo, holding it anywhere shows that photo instead of
+// the flavor list ('real-peek' instead of 'peek'); the flavors are one tap away.
 function wirePeek(card){
   const hasPeek = !!card.querySelector('.p-peek');
   const hasReal = !!card.querySelector('.p-real');
@@ -6777,7 +6908,7 @@ function wirePeek(card){
   card.addEventListener('touchstart', (e)=>{
     cancelTimer();
     if(e.touches.length !== 1) return;
-    const cls = hasReal && e.target.closest('.p-glyph') ? 'real-peek' : hasPeek ? 'peek' : null;
+    const cls = hasReal ? 'real-peek' : hasPeek ? 'peek' : null;
     if(!cls) return;
     touching = true;
     sx = e.touches[0].clientX;
@@ -7366,6 +7497,7 @@ function openModal(index, presetFlavor, sourceEvent){
   const variantWordPlural = p.variantWordPlural || 'sabores';
 
   function paintImage(flavorName){
+    showModalReal(false);
     const key = getDisplayPhotoKey(p, flavorName);
     const hasPhoto = key && window.__PRODUCT_PHOTOS__ && window.__PRODUCT_PHOTOS__[key];
     modalGlyph.innerHTML = hasPhoto
@@ -7393,9 +7525,7 @@ function openModal(index, presetFlavor, sourceEvent){
   modalEyebrow.classList.toggle('is-oos', oos);
   modalReelBtn.classList.toggle('hidden', !p.reel);
   if(p.reel) modalReelBtn.href = `https://www.instagram.com/reel/${p.reel}/`;
-  const realSrc = realPhotoUrl(p);
-  modalPhotosBtn.classList.toggle('hidden', !realSrc);
-  if(realSrc){ const pre = new Image(); pre.decoding = 'async'; pre.src = realSrc; }
+  setupModalReal(p);
   modalName.textContent = p.name;
   document.getElementById('modalPrice').innerHTML = renderModalPrice(p.price, p.originalPrice);
   const modalPuffsEl = document.getElementById('modalPuffs');
@@ -7735,6 +7865,7 @@ function resetCheckoutSteps(el){
   el.querySelectorAll('.cs-labels li').forEach(li => li.classList.remove('on','pop'));
 }
 const fulfillSteps = document.getElementById('fulfillSteps');
+const cartSteps = document.querySelector('#cartSheet .checkout-steps');
 
 /* items: what's being bought ({product, category}), used to pick which
    checkout offers make sense. */
@@ -7760,6 +7891,8 @@ function openFulfillmentChoice(baseMessage, items){
 function closeFulfillmentModal(){
   fulfillOverlay.classList.remove('open');
   stopOfferCountdown();
+  // Back on the cart: its bar empties again until "Continuar compra".
+  if(cartOverlay.classList.contains('open')) setCheckoutSteps(cartSteps, 0, cart.length > 0 ? 1 : 0);
 }
 function sendWhatsAppOrder(extra){
   const msg = pendingCheckoutMessage + extra;
@@ -8523,9 +8656,9 @@ function renderCart(){
 let cartIntroTimer = null;
 function openCart(){
   renderCart();
-  const steps = document.querySelector('#cartSheet .checkout-steps');
-  resetCheckoutSteps(steps);
-  setCheckoutSteps(steps, cart.length > 0 ? 1 : 0);
+  resetCheckoutSteps(cartSteps);
+  // Paso 1 encendido pero la barra vacía: se llena recién con "Continuar compra".
+  setCheckoutSteps(cartSteps, 0, cart.length > 0 ? 1 : 0);
   const sheet = document.getElementById('cartSheet');
   sheet.classList.add('intro');
   clearTimeout(cartIntroTimer);
@@ -8582,6 +8715,7 @@ cartCheckoutBtn.addEventListener('click', ()=>{
   const hasPreorder = cart.some(i => i.preorder);
   if(hasPreorder) msg += `📦 Lo marcado como reserva llega ${PREORDER_ETA}.\n\n`;
   msg += hasPreorder ? '¿Me confirmás disponibilidad y la reserva?' : '¿Me confirmás disponibilidad?';
+  setCheckoutSteps(cartSteps, 1);
   openFulfillmentChoice(msg, cart);
 });
 
@@ -9429,7 +9563,49 @@ const modalReelBtn = document.getElementById('modalReelBtn');
 modalReelBtn.addEventListener('click', (e)=> e.stopPropagation());
 
 /* ================= FOTO REAL (visor) ================= */
-const modalPhotosBtn = document.getElementById('modalPhotosBtn');
+const modalMedia = document.querySelector('.modal-media');
+const modalReal = document.getElementById('modalReal');
+const modalRealImg = document.getElementById('modalRealImg');
+const modalMediaArrow = document.getElementById('modalMediaArrow');
+function showModalReal(on){
+  on = !!on && modalMedia.classList.contains('has-real');
+  modalMedia.classList.toggle('show-real', on);
+  modalMediaArrow.setAttribute('aria-label', on ? 'Volver a la foto del producto' : 'Ver foto real');
+  modalReal.tabIndex = on ? 0 : -1;
+}
+function setupModalReal(p){
+  const src = realPhotoUrl(p);
+  modalMedia.classList.toggle('has-real', !!src);
+  showModalReal(false);
+  if(src){
+    modalRealImg.src = src;
+    modalRealImg.alt = 'Foto real: ' + p.name;
+  } else {
+    modalRealImg.removeAttribute('src');
+  }
+}
+modalMediaArrow.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  showModalReal(!modalMedia.classList.contains('show-real'));
+});
+modalReal.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  if(activeProductIndex !== null) openRealPhoto(CATALOG[activeProductIndex]);
+});
+// Swipe the photo sideways to switch between the product and the real photo.
+let mediaSwipe = null;
+modalMedia.addEventListener('touchstart', (e)=>{
+  if(!modalMedia.classList.contains('has-real') || e.touches.length !== 1) return;
+  mediaSwipe = {x:e.touches[0].clientX, y:e.touches[0].clientY};
+}, {passive:true});
+modalMedia.addEventListener('touchend', (e)=>{
+  if(!mediaSwipe) return;
+  const t = e.changedTouches[0];
+  const dx = t.clientX - mediaSwipe.x, dy = t.clientY - mediaSwipe.y;
+  mediaSwipe = null;
+  if(Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.3) return;
+  showModalReal(dx < 0);
+}, {passive:true});
 const rpOverlay = document.getElementById('rpOverlay');
 const rpImg = document.getElementById('rpImg');
 function openRealPhoto(p){
@@ -9443,10 +9619,6 @@ function openRealPhoto(p){
 }
 // The product modal stays open underneath, so the page stays locked.
 function closeRealPhoto(){ rpOverlay.classList.remove('open'); }
-modalPhotosBtn.addEventListener('click', (e)=>{
-  e.stopPropagation();
-  if(activeProductIndex !== null) openRealPhoto(CATALOG[activeProductIndex]);
-});
 document.getElementById('rpClose').addEventListener('click', closeRealPhoto);
 document.getElementById('rpStage').addEventListener('click', (e)=>{ if(e.target.id === 'rpStage') closeRealPhoto(); });
 document.addEventListener('keydown', (e)=>{
