@@ -2393,21 +2393,6 @@ main{position:relative;z-index:1;}
   object-fit:cover;
   object-position:50% 50%;
 }
-.modal-real-label{
-  position:absolute;
-  top:12px;left:12px;
-  padding:5px 11px;
-  border-radius:999px;
-  background:rgba(14,36,98,.6);
-  -webkit-backdrop-filter:blur(8px);
-  backdrop-filter:blur(8px);
-  border:1px solid rgba(255,255,255,.22);
-  font-size:10.5px;
-  font-weight:700;
-  letter-spacing:1.2px;
-  text-transform:uppercase;
-  color:#fff;
-}
 .modal-real-zoom{
   position:absolute;
   right:12px;bottom:12px; /* top-right sits under the sheet's "Volver" */
@@ -2433,8 +2418,8 @@ main{position:relative;z-index:1;}
 .modal-media.show-real .modal-media-pills,
 .modal-media.show-real .modal-media-watermark{opacity:0;pointer-events:none;}
 
-/* The arrow: a glass pill on the right edge, "Foto real ›". On the real
-   photo it turns into a round "‹" on the left edge to go back. */
+/* The arrow: a round "›" on the right edge, beside the vape. On the real
+   photo it moves to the left edge as "‹" to go back. */
 .modal-media-arrow{
   display:none;
   position:absolute;
@@ -2442,26 +2427,20 @@ main{position:relative;z-index:1;}
   z-index:3;
   align-items:center;
   justify-content:center;
-  gap:4px;
-  height:40px;
-  padding:0 8px 0 13px;
-  border-radius:999px;
+  width:42px;height:42px;
+  padding:0;
+  border-radius:50%;
   border:1px solid rgba(255,255,255,.3);
   background:linear-gradient(135deg, rgba(125,178,255,.92), rgba(47,107,255,.92));
   -webkit-backdrop-filter:blur(8px);
   backdrop-filter:blur(8px);
   color:#fff;
-  font-family:'Poppins',sans-serif;
-  font-size:11.5px;
-  font-weight:700;
-  letter-spacing:.2px;
-  white-space:nowrap;
   cursor:pointer;
   transform:translateY(-50%);
   box-shadow:0 10px 24px -10px rgba(3,10,38,.9), 0 6px 18px -8px rgba(47,107,255,.9);
   transition:transform .25s var(--ease-spring), background .25s;
 }
-.modal-media-arrow svg{width:18px;height:18px;flex:none;}
+.modal-media-arrow svg{width:20px;height:20px;flex:none;margin-left:2px;}
 .modal-media.has-real .modal-media-arrow{display:inline-flex;animation:arrowNudge 1.6s var(--ease) .9s 2;}
 .modal-media-arrow:hover{transform:translateY(-50%) scale(1.06);}
 .modal-media-arrow:active{transform:translateY(-50%) scale(.94);}
@@ -2472,13 +2451,10 @@ main{position:relative;z-index:1;}
 }
 .modal-media.show-real .modal-media-arrow{
   right:auto;left:10px;
-  width:40px;
-  padding:0;
   background:rgba(14,36,98,.62);
   animation:none;
 }
-.modal-media.show-real .modal-media-arrow-label{display:none;}
-.modal-media.show-real .modal-media-arrow svg{transform:rotate(180deg);}
+.modal-media.show-real .modal-media-arrow svg{transform:rotate(180deg);margin:0 2px 0 0;}
 
 /* Two dots under the photo: which "slide" is showing. */
 .modal-media-dots{
@@ -3361,7 +3337,9 @@ main{position:relative;z-index:1;}
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:72px 16px 28px;
+  /* More room below than above, so the photo sits a bit above the middle
+     of the screen instead of low (it read as "too far down" on a phone). */
+  padding:64px 16px max(120px, 16svh);
   touch-action:pan-y;
 }
 .rv-card{
@@ -3377,7 +3355,7 @@ main{position:relative;z-index:1;}
   display:block;
   width:auto;height:auto;
   max-width:min(440px, calc(100vw - 32px));
-  max-height:calc(100svh - 110px);
+  max-height:calc(100svh - 200px);
   -webkit-user-drag:none;
   user-select:none;
 }
@@ -5842,11 +5820,9 @@ body{background:#070f2a;}
         <!-- FOTO REAL: segunda "diapositiva" del recuadro (modelos con realPhoto) -->
         <button class="modal-real" id="modalReal" type="button" tabindex="-1" aria-label="Ampliar foto real">
           <img id="modalRealImg" alt="" decoding="async">
-          <span class="modal-real-label">📸 Foto real</span>
           <span class="modal-real-zoom" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </button>
         <button class="modal-media-arrow" id="modalMediaArrow" type="button" aria-label="Ver foto real">
-          <span class="modal-media-arrow-label">Foto real</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <div class="modal-media-dots" aria-hidden="true"><i></i><i></i></div>
@@ -6591,11 +6567,11 @@ const REVIEWS = [
   {name:'Vale G.', rating:5, flavor:'Edición Summer · Elfbar', text:'Buena atencion, el diseño del vape esta lindo no tuve drama', photo:'summer'},
   {name:'Naty A.', rating:5, flavor:'Menthol · V250', text:'Entrega rapida por la zona, cumplieron horario', photo:'bw'},
   {name:'Flor M.', rating:5, flavor:'Miami Mint · Geek Bar Pulse X', text:'Pedi tipo 20 y llego re rapido, el diseño esta tremendo', photo:'geekbar'},
-  {name:'Tomi N.', rating:5, flavor:'Watermelon · Dinner Lady Luma 40K', text:'Llegó todo joya, gracias!', photo:'luma-watermelon'},
-  {name:'Mica F.', rating:5, flavor:'Strawberry Kiwi · Ignite V500', text:'Todo perfecto, muy buena atención.', photo:'v500-strawberry-kiwi'},
-  {name:'Bauti S.', rating:5, flavor:'Strawberry Ice · Dinner Lady Luma 40K', text:'Me llegó rapidísimo, un lujo.', photo:'luma-strawberry-ice'},
-  {name:'Cami V.', rating:5, flavor:'Ignite Boost Mix', text:'Re buena onda para atender, recomiendo.', photo:'boost-mix-sticker'},
-  {name:'Lauti M.', rating:5, flavor:'Watermelon Grape · Ignite Boost Mix', text:'Todo como esperaba, llegó impecable.', photo:'boost-mix-bolsa'},
+  {name:'Aldi', rating:5, flavor:'Watermelon · Dinner Lady Luma 40K', text:'Llegó todo joya, gracias!', photo:'luma-watermelon'},
+  {name:'Julián', rating:5, flavor:'Strawberry Kiwi · Ignite V500', text:'Todo perfecto, muy buena atención.', photo:'v500-strawberry-kiwi'},
+  {name:'Sofía', rating:5, flavor:'Strawberry Ice · Dinner Lady Luma 40K', text:'Me llegó rapidísimo, un lujo.', photo:'luma-strawberry-ice'},
+  {name:'Rodrigo', rating:5, flavor:'Ignite Boost Mix', text:'Re buena onda para atender, recomiendo.', photo:'boost-mix-sticker'},
+  {name:'Mel', rating:5, flavor:'Watermelon Grape · Ignite Boost Mix', text:'Todo como esperaba, llegó impecable.', photo:'boost-mix-bolsa'},
   {name:'Sofi G.', rating:5, flavor:'Watermelon Lemon Ice · Elfbar Duke', text:'Ya hice varios pedidos, siempre todo bien.', photo:'duke-bolsa'}
 ];
 // Shown in a different random order on every visit (shuffled once per page
