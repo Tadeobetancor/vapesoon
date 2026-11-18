@@ -1509,6 +1509,107 @@ main{position:relative;z-index:1;}
     transition:opacity .22s var(--ease), transform .22s var(--ease), visibility 0s;
   }
 }
+/* FOTO REAL en la tarjeta (modelos con `realPhoto`): al pasar el mouse por
+   arriba del vape (o mantenerlo apretado en el celu, ver wirePeek) la imagen
+   del producto se da vuelta a la foto real de la caja en la mano. Mientras el
+   mouse está sobre el vape no se muestra la lista de sabores; en el resto de
+   la tarjeta sí, como siempre. */
+.p-real{
+  position:absolute;
+  inset:0 4px;
+  z-index:2;
+  border-radius:18px;
+  overflow:hidden;
+  background:var(--bg-card);
+  border:1px solid rgba(255,255,255,.2);
+  box-shadow:0 22px 40px -18px rgba(3,10,38,.95), 0 0 0 4px var(--accent-fade);
+  opacity:0;
+  visibility:hidden;
+  transform:scale(.9) translateY(10px);
+  pointer-events:none;
+  transition:opacity .25s var(--ease), transform .4s var(--ease), visibility 0s linear .25s;
+}
+.p-real img{
+  display:block;
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:50% 52%;
+  transform:scale(1.14);
+  transition:transform 1.2s var(--ease);
+}
+.p-real-label{
+  position:absolute;
+  left:0;right:0;bottom:0;
+  padding:28px 10px 10px;
+  background:linear-gradient(0deg, rgba(7,19,56,.92) 0%, rgba(7,19,56,.55) 55%, transparent 100%);
+  text-align:center;
+  font-size:10.5px;
+  font-weight:700;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+  color:#fff;
+}
+/* Pill that tells people the photo is there. */
+.p-real-chip{
+  position:absolute;
+  right:6px;bottom:2px;
+  z-index:2;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:4px 10px 4px 5px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.2);
+  background:rgba(14,36,98,.6);
+  -webkit-backdrop-filter:blur(6px);
+  backdrop-filter:blur(6px);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.3px;
+  color:#fff;
+  pointer-events:none;
+  box-shadow:0 6px 16px -8px rgba(3,10,38,.8);
+  transition:opacity .2s var(--ease);
+}
+.p-real-chip-icon{
+  display:grid;
+  place-items:center;
+  width:18px;height:18px;
+  border-radius:50%;
+  background:linear-gradient(135deg, #7db2ff, #2f6bff);
+}
+/* Beats `.catalog.grid-mode .p-glyph svg` (the big glyph icon size). */
+.p-card .p-glyph .p-real-chip .p-real-chip-icon svg{width:11px;height:11px;filter:none;}
+.catalog.grid-mode .p-real-chip{font-size:9px;padding-right:8px;}
+.p-card--real .p-glyph .p-badge, .p-card--real .p-puffs{transition:opacity .2s var(--ease);}
+.p-card.real-peek .p-glyph .p-badge, .p-card.real-peek .p-puffs{opacity:0;}
+.p-card.real-peek .p-real{
+  opacity:1;
+  visibility:visible;
+  transform:none;
+  transition:opacity .25s var(--ease), transform .45s var(--ease-spring), visibility 0s;
+}
+.p-card.real-peek .p-real img{transform:scale(1.04);}
+.p-card.real-peek .p-real-chip{opacity:0;}
+@media (hover:hover) and (pointer:fine){
+  .p-glyph:hover .p-real{
+    opacity:1;
+    visibility:visible;
+    transform:none;
+    transition:opacity .25s var(--ease), transform .45s var(--ease-spring), visibility 0s;
+  }
+  .p-glyph:hover .p-real img{transform:scale(1.04);}
+  .p-glyph:hover .p-real-chip{opacity:0;}
+  .p-card--real .p-glyph:hover .p-badge,
+  .p-card--real:has(.p-glyph:hover) .p-puffs{opacity:0;}
+  .p-card--real:has(.p-glyph:hover) .p-peek{
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(10px);
+    transition:opacity .15s var(--ease), transform .15s var(--ease), visibility 0s linear .15s;
+  }
+}
+
 /* Long-press on a phone would otherwise select text / open the image save
    callout instead of just holding the card. */
 @media (hover:none){
@@ -2265,6 +2366,21 @@ main{position:relative;z-index:1;}
   box-shadow:0 4px 12px -4px rgba(238,42,123,.8);
 }
 .modal-reel-btn-icon svg{width:12px;height:12px;margin-left:2px;}
+/* The photo's pills ("Miralo en video", "Ver foto real") line up together in
+   the bottom-left corner, clear of the logo watermark on the right. */
+.modal-media-pills{
+  position:absolute;
+  left:12px;bottom:12px;right:52px;
+  z-index:2;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  pointer-events:none;
+}
+.modal-media-pills > *{pointer-events:auto;}
+.modal-media-pills .modal-reel-btn{position:relative;left:auto;bottom:auto;cursor:pointer;}
+.modal-photos-btn-icon{background:linear-gradient(135deg, #7db2ff, #2f6bff);box-shadow:0 4px 12px -4px rgba(47,107,255,.85);}
+.modal-photos-btn-icon svg{width:14px;height:14px;margin-left:0;}
 
 /* Small brand watermark pinned to a corner of the flavor-picker product
    image — the area felt anonymous without it. Reuses the header's own logo
@@ -3199,6 +3315,17 @@ main{position:relative;z-index:1;}
 @media (hover:hover) and (pointer:fine){ .rv-arrow{display:grid;} }
 /* Moving to the next review: the card slides in again. */
 .rv-overlay.swap .rv-card{animation:riseIn .35s var(--ease) backwards;}
+
+/* FOTO REAL ampliada (botón "Ver foto real" del producto): mismo visor que
+   las reseñas, por encima del detalle del producto. */
+.rp-overlay{z-index:235;}
+.rp-overlay.open .rp-card{animation:rpPop .5s var(--ease-spring) backwards;}
+.rp-card{transform-origin:center;}
+@keyframes rpPop{from{opacity:0;transform:translateY(22px) scale(.9);}}
+.rp-top{display:flex;flex-direction:column;gap:3px;}
+.rp-eyebrow{font-size:10.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#7db2ff;}
+.rp-name{font-family:'Bungee',cursive;font-size:16px;line-height:1.25;color:#fff;}
+.rp-sub{font-size:12px;font-weight:600;color:rgba(255,255,255,.7);}
 
 
 /* ---------- FOOTER ---------- */
@@ -5333,18 +5460,18 @@ body{background:#070f2a;}
 <header class="site">
   <div class="ticker">
     <div class="ticker-track">
-      <span>🚚 Envíos low cost</span>
+      <span>⚡ Entrega inmediata</span>
       <span>💬 La mejor atención que vas a encontrar</span>
-      <span>🔥 Más de 100 clientes y sumando</span>
-      <span>🚚 Envíos low cost</span>
+      <span>🔥 Más de 300 clientes y sumando</span>
+      <span>⚡ Entrega inmediata</span>
       <span>💬 La mejor atención que vas a encontrar</span>
-      <span>🔥 Más de 100 clientes y sumando</span>
-      <span>🚚 Envíos low cost</span>
+      <span>🔥 Más de 300 clientes y sumando</span>
+      <span>⚡ Entrega inmediata</span>
       <span>💬 La mejor atención que vas a encontrar</span>
-      <span>🔥 Más de 100 clientes y sumando</span>
-      <span>🚚 Envíos low cost</span>
+      <span>🔥 Más de 300 clientes y sumando</span>
+      <span>⚡ Entrega inmediata</span>
       <span>💬 La mejor atención que vas a encontrar</span>
-      <span>🔥 Más de 100 clientes y sumando</span>
+      <span>🔥 Más de 300 clientes y sumando</span>
     </div>
   </div>
   <div class="header-inner">
@@ -5514,7 +5641,7 @@ body{background:#070f2a;}
     <div class="footer-grid">
       <div class="footer-brand">
         <img class="footer-logo" loading="lazy" decoding="async" src="img/logo.webp?v=6" alt="Vapesoon">
-        <p>Vapes originales en Zona Oeste, con envíos low cost y la mejor atención que vas a encontrar.</p>
+        <p>Vapes originales en Zona Oeste, con entrega inmediata y la mejor atención que vas a encontrar.</p>
       </div>
       <div class="footer-col">
         <h3 class="footer-col-title">Hablemos</h3>
@@ -5559,6 +5686,23 @@ body{background:#070f2a;}
   <button class="rv-arrow rv-arrow--next" id="rvNext" type="button" aria-label="Reseña siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 </div>
 
+<!-- FOTO REAL AMPLIADA: botón "Ver foto real" del detalle del producto (openRealPhoto) -->
+<div class="modal-overlay rv-overlay rp-overlay" id="rpOverlay" role="dialog" aria-modal="true" aria-label="Foto real del producto">
+  <div class="rv-stage" id="rpStage">
+    <figure class="rv-card rp-card">
+      <img id="rpImg" alt="">
+      <figcaption class="rv-top rp-top">
+        <span class="rp-eyebrow">📸 Foto real</span>
+        <span class="rp-name" id="rpName"></span>
+        <span class="rp-sub">Así es la caja que te llevás</span>
+      </figcaption>
+    </figure>
+  </div>
+  <button class="rv-close" id="rpClose" type="button" aria-label="Cerrar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+  </button>
+</div>
+
 <!-- SMOKE TRANSITION OVERLAY -->
 <div class="modal-smoke-transition" id="modalSmokeTransition"></div>
 
@@ -5574,10 +5718,16 @@ body{background:#070f2a;}
       <div class="modal-media">
         <div class="modal-media-frame" id="modalGlyph"><img src="img/mascota.webp" alt=""></div>
         <img class="modal-media-watermark" id="modalMediaWatermark" src="" alt="" aria-hidden="true">
-        <a class="modal-reel-btn hidden" id="modalReelBtn" href="https://instagram.com/vapesoon.arg" target="_blank" rel="noopener">
-          <span class="modal-reel-btn-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
-          Miralo en video
-        </a>
+        <div class="modal-media-pills">
+          <a class="modal-reel-btn hidden" id="modalReelBtn" href="https://instagram.com/vapesoon.arg" target="_blank" rel="noopener">
+            <span class="modal-reel-btn-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span>
+            Miralo en video
+          </a>
+          <button class="modal-reel-btn modal-photos-btn hidden" id="modalPhotosBtn" type="button">
+            <span class="modal-reel-btn-icon modal-photos-btn-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 8h3l1.6-2.4A1.5 1.5 0 0 1 9.9 5h4.2a1.5 1.5 0 0 1 1.3.6L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.4"/></svg></span>
+            Ver foto real
+          </button>
+        </div>
       </div>
       <!-- RIGHT: info, ordered Name -> Price -> Puffs -> Flavors -> Purchase -->
       <div class="modal-info">
@@ -6091,6 +6241,20 @@ window.__PRODUCT_PHOTOS__ = {
 // para tarjetas, carrito y ofertas) e img/productos/ (≈1000px, agrandada con
 // IA, para el detalle del producto). __PHOTO_BIG__ pasa de una a la otra.
 window.__PHOTO_BIG__ = url => url ? url.replace('img/productos/sm/', 'img/productos/') : url;
+// FOTOS REALES (la caja en la mano, en nuestro stock). Un modelo la muestra si
+// tiene `realPhoto:'<clave>'` en CATALOG: aparece al pasar el mouse por arriba
+// del vape en la tarjeta y en el botón "Ver foto real" del detalle. También en
+// dos tamaños: img/reales/sm/ (400px, tarjeta) e img/reales/ (720px, visor).
+window.__REAL_PHOTOS__ = {
+  'ebcreate': 'img/reales/ebcreate.webp',
+  'ignite_boost_mix': 'img/reales/ignite_boost_mix.webp',
+  'v400_ultra_slim': 'img/reales/v400_ultra_slim.webp',
+  'blacksheep_55k': 'img/reales/blacksheep_55k.webp',
+  'trio': 'img/reales/trio.webp',
+  'v400': 'img/reales/v400.webp',
+};
+const realPhotoUrl = p => p && p.realPhoto && window.__REAL_PHOTOS__[p.realPhoto] || null;
+const CAMERA_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 8h3l1.6-2.4A1.5 1.5 0 0 1 9.9 5h4.2a1.5 1.5 0 0 1 1.3.6L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.4"/></svg>';
 window.__CUSTOMER_PHOTOS__ = {
   'summer': 'img/clientes/summer.webp?v=2',
   'bw': 'img/clientes/bw-color.webp', // original was black & white; tinted to the site's blues
@@ -6147,32 +6311,32 @@ const CATALOG = [
   /* Precio según cotización Italia Shop (S12211): USD 10,50 × 1660 = $17.430
      + ~$12.000 de margen → $29.500; en oferta a $25.500. */
   {name:'LUMA', price:25500, originalPrice:29500, promo:true, promoOrder:4, puffs:40000, photo:'dinner_lady_luma', photoScale:0.85, reel:'DeSItt6KCpc', outOfStock:true, flavors:[]},
-  {name:'EBCREATE BC PRO 40K', price:23000, originalPrice:25000, promo:true, promoOrder:1, puffs:40000, photo:'ebcreate', flavors:[
+  {name:'EBCREATE BC PRO', price:23000, originalPrice:25000, promo:true, promoOrder:1, puffs:40000, photo:'ebcreate', realPhoto:'ebcreate', flavors:[
     {name:'Aurora Berries 🫐', stock:2},{name:'Blue Razz Ice 🫐❄️', stock:1},{name:'Golden Berry ✨', stock:1},
     {name:'Strawberry Blend 🍓', stock:2},{name:'Strawberry Kiwi 🍓🥝', stock:1},{name:'Triple Berry 🫐', stock:2},
     {name:'Watermelon Peach Frost 🍉🍑', stock:1},{name:'Strawberry Raspberry Frost 🍓❄️', stock:2},{name:'Blackberry Grape 🍇', stock:2}
   ]},
   {name:'IGNITE V500', price:29000, originalPrice:32000, promo:true, promoOrder:1, puffs:50000, photo:'v500', outOfStock:true, flavors:[]},
-  {name:'IGNITE BOOST MIX', price:28000, puffs:40000, photo:'ignite_boost_mix', flavors:[
+  {name:'IGNITE BOOST MIX', price:28000, puffs:40000, photo:'ignite_boost_mix', realPhoto:'ignite_boost_mix', flavors:[
     {name:'Banana Cherry + Grape Ice 🍌🍒🍇', stock:2},{name:'Blueberry + Strawberry 🫐🍓', stock:1},{name:'Cherry + Grape Ice 🍒🍇', stock:1},
     {name:'Kiwi Passion Guava Ice + Strawberry Ice 🥝🍓', stock:2},{name:'Raspberry Ice + Watermelon Ice 🍉❄️', stock:1},
     {name:'Strawberry Grape Ice + Kiwi Watermelon Ice 🍓🍇🥝🍉', stock:3},{name:'Strawberry Kiwi Ice + Grape Kiwi Ice 🍓🥝🍇', stock:2},
     {name:'Triple Berry Ice + Grape Ice 🫐🍇', stock:1},{name:'Watermelon Ice + Grape Ice 🍉🍇', stock:3}
   ]},
-  {name:'IGNITE V400 ICE ULTRA SLIM', price:26000, originalPrice:28000, promo:true, promoOrder:2, puffs:40000, photo:'v400_ultra_slim', flavors:[
+  {name:'IGNITE ICE ULTRA SLIM', price:26000, originalPrice:28000, promo:true, promoOrder:2, puffs:40000, photo:'v400_ultra_slim', realPhoto:'v400_ultra_slim', flavors:[
     {name:'Blueberry 🫐', stock:1},{name:'Grape 🍇', stock:2},{name:'Grape Mix 🍇', stock:2},
     {name:'Mango 🥭', stock:1},{name:'Pineapple Kiwi Dragon 🍍🥝🐉', stock:1},
     {name:'Strawberry 🍓', stock:1},{name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:3},{name:'Strawberry Banana 🍓🍌', stock:3},
     {name:'Strawberry Kiwi 🍓🥝', stock:3},{name:'Strawberry Watermelon 🍓🍉', stock:1},{name:'Tutti Frutti 🍬', stock:3}
   ]},
-  {name:'IGNITE V400 ICY', price:27000, puffs:40000, photo:'v400', flavors:[
+  {name:'IGNITE V400 ICE', price:27000, puffs:40000, photo:'v400', realPhoto:'v400', flavors:[
     {name:'Strawberry Banana 🍓🍌', stock:1},{name:'Strawberry Kiwi 🍓🥝', stock:3}
   ]},
   {name:'IGNITE V300 ULTRA SLIM', price:24000, puffs:30000, photo:'wholesale_v300_ultra_slim', outOfStock:true, flavors:[]},
   {name:'IGNITE V250', price:22000, puffs:25000, photo:'v250', photoScale:1.18, outOfStock:true, flavors:[]},
   /* Precio según cotización Italia Shop (S12019): USD 12,50 × 1660 = $20.750
      + ~$9.250 de margen → $30.000. */
-  {name:'BLACKSHEEP 55K', price:30000, puffs:55000, photo:'blacksheep_55k', flavors:[
+  {name:'BLACKSHEEP 55K', price:30000, puffs:55000, photo:'blacksheep_55k', realPhoto:'blacksheep_55k', flavors:[
     {name:'Aloe Grape 🍇', stock:2},{name:'Cool Mint ❄️', stock:1},{name:'Lemon Heads 🍋', stock:1},
     {name:'Passion Fruit 🌺', stock:1},{name:'Sour Apple Ice 🍏❄️', stock:2},{name:'Strawberry Banana 🍓🍌', stock:3}
   ]},
@@ -6181,7 +6345,7 @@ const CATALOG = [
   {name:'NIKBAR 10K', price:19000, puffs:10000, photo:'nikbar10', photoScale:1.18, outOfStock:true, flavors:[]},
   {name:'IGNITE V150', price:20000, puffs:15000, photo:'v150', outOfStock:true, flavors:[]},
   {name:'BLVK JUST JUICE', price:22000, originalPrice:27500, clearance:true, puffs:45000, photo:'blvk', reel:'Dd9LzkfKrsd', outOfStock:true, flavors:[]},
-  {name:'ELFBAR TRIO', price:26000, puffs:40000, photo:'trio', pinFirst:true, flavors:[
+  {name:'ELFBAR TRIO', price:26000, puffs:40000, photo:'trio', realPhoto:'trio', pinFirst:true, flavors:[
     {name:'Blueberry Pom Slushy 🫐', stock:2},{name:'Cool Menthol ❄️', stock:1},{name:'Pineapple Lime 🍍🍋', stock:1},
     {name:'Sour Apple Ice 🍏❄️', stock:1},{name:'Strawberry Orange Lime 🍓🍊', stock:1}
   ]},
@@ -6206,8 +6370,8 @@ const CATALOG = [
 /* Orden por defecto del catálogo (de arriba hacia abajo). Lo que no esté en
    esta lista va después; lo de liquidación siempre al final. */
 const HOME_ORDER = [
-  'IGNITE V400 ICE ULTRA SLIM', 'EBCREATE BC PRO 40K', 'ELFBAR TRIO',
-  'BLACKSHEEP 55K', 'IGNITE BOOST MIX', 'IGNITE V400 ICY'
+  'EBCREATE BC PRO', 'IGNITE ICE ULTRA SLIM', 'IGNITE BOOST MIX',
+  'BLACKSHEEP 55K', 'ELFBAR TRIO', 'IGNITE V400 ICE', 'ELFBAR BC'
 ];
 
 /* Ranking manual de "más pedidos" (de mayor a menor demanda). Los modelos
@@ -6215,8 +6379,8 @@ const HOME_ORDER = [
    quedan relegados al final de ese orden. */
 const POPULARITY_ORDER = [
   'ELFBAR ICE KING', 'IGNITE V500', 'IGNITE BOOST MIX', 'BLACKSHEEP 55K', 'BLVK JUST JUICE',
-  'ELFBAR DUKE', 'LUMA', 'BLACKSHEEP 40K', 'EBCREATE BC PRO 40K', 'IGNITE V400 ICE ULTRA SLIM',
-  'IGNITE VMIX', 'IGNITE V400 ICY', 'BLACKSHEEP ICE 40K', 'ELFBAR BC', 'IGNITE V150',
+  'ELFBAR DUKE', 'LUMA', 'BLACKSHEEP 40K', 'EBCREATE BC PRO', 'IGNITE ICE ULTRA SLIM',
+  'IGNITE VMIX', 'IGNITE V400 ICE', 'BLACKSHEEP ICE 40K', 'ELFBAR BC', 'IGNITE V150',
   'ELFBAR TRIO', 'IGNITE V300 ULTRA SLIM', 'NIKBAR 10K'
 ];
 function popularityRank(p){
@@ -6516,6 +6680,10 @@ function productCardHTML(p, i, badgeText, showPuffs){
     : flagship ? '<div class="p-badge p-badge--flagship">⭐ Favorito</div>' : '';
   const variantCountWord = p.flavors.length === 1 ? (p.variantWord || 'sabor') : variantWordPlural;
   const singleVariant = !oos && p.flavors.length === 1 && p.category === 'apple';
+  const realSrc = oos ? null : realPhotoUrl(p);
+  const realHTML = realSrc ? `
+        <div class="p-real" aria-hidden="true"><img loading="lazy" decoding="async" src="${realSrc.replace('img/reales/', 'img/reales/sm/')}" alt=""><span class="p-real-label">📸 Foto real</span></div>
+        <span class="p-real-chip" aria-hidden="true"><span class="p-real-chip-icon">${CAMERA_SVG}</span>Foto real</span>` : '';
 
   const actionsHTML = oos ? `
       <div class="p-cta">
@@ -6539,11 +6707,11 @@ function productCardHTML(p, i, badgeText, showPuffs){
       </div>`;
 
   return `
-    <div class="p-card${oos ? ' p-card--oos' : ''}${promo ? ' p-card--promo' : ''}${clearance ? ' p-card--clearance' : ''}${preorder ? ' p-card--preorder' : ''}${flagship ? ' p-card--flagship' : ''}" data-index="${i}" style="--accent:${acc.main};--accent-fade:${acc.fade};--accent-shadow:${acc.shadow}">
+    <div class="p-card${oos ? ' p-card--oos' : ''}${promo ? ' p-card--promo' : ''}${clearance ? ' p-card--clearance' : ''}${preorder ? ' p-card--preorder' : ''}${flagship ? ' p-card--flagship' : ''}${realSrc ? ' p-card--real' : ''}" data-index="${i}" style="--accent:${acc.main};--accent-fade:${acc.fade};--accent-shadow:${acc.shadow}">
       ${oos ? '<div class="p-badge p-badge--oos">Sin stock</div>' : (promo || flagship || preorder) ? '' : (badgeText ? `<div class="p-badge${badgeText === 'Más pedido' ? ' p-badge--popular' : ''}">${badgeText}</div>` : '')}
       ${promo ? '<span class="p-shine" aria-hidden="true"></span>' : ''}
       ${showPuffs && p.puffs != null ? `<div class="p-puffs">${formatPuffs(p.puffs)}</div>` : ''}
-      <div class="p-glyph">${glyphBadge}${productGlyphHTML(p)}</div>
+      <div class="p-glyph">${glyphBadge}${productGlyphHTML(p)}${realHTML}</div>
       <div class="p-name-row">
         <div class="p-name">${p.name}</div>
         ${formatPrice(p.price, p.originalPrice)}
@@ -6596,33 +6764,40 @@ function thcCardHTML(p){
    pure CSS (.p-card:hover .p-peek). */
 const PEEK_HOLD_MS = 350;
 const PEEK_MOVE_TOLERANCE = 10; // px of finger drift before we treat it as a scroll
+// Holding the vape itself (the photo area) on a card with a real photo shows
+// that photo instead of the flavor list ('real-peek' instead of 'peek').
 function wirePeek(card){
-  if(!card.querySelector('.p-peek')) return;
+  const hasPeek = !!card.querySelector('.p-peek');
+  const hasReal = !!card.querySelector('.p-real');
+  if(!hasPeek && !hasReal) return;
   let timer = null, sx = 0, sy = 0, touching = false, suppressClickUntil = 0;
   const cancelTimer = () => { clearTimeout(timer); timer = null; };
+  const isPeeking = () => card.classList.contains('peek') || card.classList.contains('real-peek');
 
   card.addEventListener('touchstart', (e)=>{
     cancelTimer();
     if(e.touches.length !== 1) return;
+    const cls = hasReal && e.target.closest('.p-glyph') ? 'real-peek' : hasPeek ? 'peek' : null;
+    if(!cls) return;
     touching = true;
     sx = e.touches[0].clientX;
     sy = e.touches[0].clientY;
-    timer = setTimeout(()=> card.classList.add('peek'), PEEK_HOLD_MS);
+    timer = setTimeout(()=> card.classList.add(cls), PEEK_HOLD_MS);
   }, {passive:true});
 
   card.addEventListener('touchmove', (e)=>{
     const t = e.touches[0];
     if(Math.hypot(t.clientX - sx, t.clientY - sy) > PEEK_MOVE_TOLERANCE){
       cancelTimer();
-      card.classList.remove('peek');
+      card.classList.remove('peek', 'real-peek');
     }
   }, {passive:true});
 
   const release = ()=>{
     cancelTimer();
     touching = false;
-    if(card.classList.contains('peek')){
-      card.classList.remove('peek');
+    if(isPeeking()){
+      card.classList.remove('peek', 'real-peek');
       suppressClickUntil = Date.now() + 700;
     }
   };
@@ -6639,7 +6814,7 @@ function wirePeek(card){
   }, true);
 
   // Android fires a context menu on a long-press; keep it from stealing the hold.
-  card.addEventListener('contextmenu', (e)=>{ if(touching || card.classList.contains('peek')) e.preventDefault(); });
+  card.addEventListener('contextmenu', (e)=>{ if(touching || isPeeking()) e.preventDefault(); });
 }
 
 function wireProductCards(containerEl){
@@ -6670,7 +6845,7 @@ function wireProductCards(containerEl){
         updateCartBadge();
         showCartConfirm(card.querySelector('.cart-confirm'));
         flashAddedState(addCartBtn);
-        const ph = card.querySelector('.p-glyph img');
+        const ph = card.querySelector('.p-glyph .mascot-hero');
         celebrateAdd(p, p.flavors[0].name, ph ? ph.getBoundingClientRect() : null, ph ? ph.src : null);
       });
     }
@@ -7218,6 +7393,9 @@ function openModal(index, presetFlavor, sourceEvent){
   modalEyebrow.classList.toggle('is-oos', oos);
   modalReelBtn.classList.toggle('hidden', !p.reel);
   if(p.reel) modalReelBtn.href = `https://www.instagram.com/reel/${p.reel}/`;
+  const realSrc = realPhotoUrl(p);
+  modalPhotosBtn.classList.toggle('hidden', !realSrc);
+  if(realSrc){ const pre = new Image(); pre.decoding = 'async'; pre.src = realSrc; }
   modalName.textContent = p.name;
   document.getElementById('modalPrice').innerHTML = renderModalPrice(p.price, p.originalPrice);
   const modalPuffsEl = document.getElementById('modalPuffs');
@@ -9249,6 +9427,31 @@ function showWppTip(){
 const modalReelBtn = document.getElementById('modalReelBtn');
 // It's a link to the reel: don't let the tap also reach the product photo.
 modalReelBtn.addEventListener('click', (e)=> e.stopPropagation());
+
+/* ================= FOTO REAL (visor) ================= */
+const modalPhotosBtn = document.getElementById('modalPhotosBtn');
+const rpOverlay = document.getElementById('rpOverlay');
+const rpImg = document.getElementById('rpImg');
+function openRealPhoto(p){
+  const src = realPhotoUrl(p);
+  if(!src) return;
+  rpImg.src = src;
+  rpImg.alt = 'Foto real: ' + p.name;
+  document.getElementById('rpName').textContent = p.name;
+  rpOverlay.classList.add('open');
+  document.getElementById('rpClose').focus({preventScroll:true});
+}
+// The product modal stays open underneath, so the page stays locked.
+function closeRealPhoto(){ rpOverlay.classList.remove('open'); }
+modalPhotosBtn.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  if(activeProductIndex !== null) openRealPhoto(CATALOG[activeProductIndex]);
+});
+document.getElementById('rpClose').addEventListener('click', closeRealPhoto);
+document.getElementById('rpStage').addEventListener('click', (e)=>{ if(e.target.id === 'rpStage') closeRealPhoto(); });
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape' && rpOverlay.classList.contains('open')) closeRealPhoto();
+});
 
 /* ================= INIT ================= */
 renderProducts();
