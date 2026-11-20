@@ -1216,6 +1216,12 @@ main{position:relative;z-index:1;}
 .flavor-note b{font-weight:800;}
 .flavor-note--clearance{background:rgba(120,104,255,.16);border:1px solid rgba(140,126,255,.48);}
 .flavor-note--preorder{background:rgba(63,183,255,.12);border:1px solid rgba(63,183,255,.4);}
+.flavor-text:has(.flavor-name--dual){flex:1 1 0;}
+.flavor-row .flavor-name--dual{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;}
+.flavor-name--dual .flavor-half{min-width:0;}
+.flavor-name--dual .flavor-half:last-child{text-align:right;}
+.flavor-name--dual .flavor-plus{opacity:.55;font-weight:800;}
+.flavor-note--info{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);}
 
 /* Etiquetita en el carrito */
 .cart-item-tag{
@@ -6417,22 +6423,26 @@ const CATALOG = [
      + ~$12.000 de margen → $29.500; en oferta a $25.500. */
   {name:'LUMA', price:25500, originalPrice:29500, promo:true, promoOrder:4, puffs:40000, photo:'dinner_lady_luma', photoScale:0.85, reel:'DeSItt6KCpc', outOfStock:true, flavors:[]},
   {name:'EBCREATE BC PRO', price:23000, originalPrice:25000, promo:true, promoOrder:1, puffs:40000, photo:'ebcreate', realPhoto:'ebcreate', flavors:[
-    {name:'Aurora Berries 🫐', stock:2},{name:'Blue Razz Ice 🫐❄️', stock:1},{name:'Golden Berry ✨', stock:1},
-    {name:'Strawberry Blend 🍓', stock:2},{name:'Strawberry Kiwi 🍓🥝', stock:1},{name:'Triple Berry 🫐', stock:2},
+    {name:'Aurora Berries 🫐', stock:2},{name:'Golden Berry ✨', stock:1},
+    {name:'Strawberry Blend 🍓', stock:2},{name:'Triple Berry 🫐', stock:2},
     {name:'Watermelon Peach Frost 🍉🍑', stock:1},{name:'Strawberry Raspberry Frost 🍓❄️', stock:2},{name:'Blackberry Grape 🍇', stock:2}
   ]},
   {name:'IGNITE V500', price:29000, originalPrice:32000, promo:true, promoOrder:1, puffs:50000, photo:'v500', outOfStock:true, flavors:[]},
-  {name:'IGNITE BOOST MIX', price:28000, puffs:40000, photo:'ignite_boost_mix', realPhoto:'ignite_boost_mix', flavors:[
-    {name:'Banana Cherry + Grape Ice 🍌🍒🍇', stock:2},{name:'Blueberry + Strawberry 🫐🍓', stock:1},{name:'Cherry + Grape Ice 🍒🍇', stock:1},
-    {name:'Kiwi Passion Guava Ice + Strawberry Ice 🥝🍓', stock:2},{name:'Raspberry Ice + Watermelon Ice 🍉❄️', stock:1},
-    {name:'Strawberry Grape Ice + Kiwi Watermelon Ice 🍓🍇🥝🍉', stock:3},{name:'Strawberry Kiwi Ice + Grape Kiwi Ice 🍓🥝🍇', stock:2},
-    {name:'Triple Berry Ice + Grape Ice 🫐🍇', stock:1},{name:'Watermelon Ice + Grape Ice 🍉🍇', stock:3}
+  // `note`: aclaración que se muestra arriba de los sabores en el detalle.
+  // `dualFlavor`: cada sabor es "A + B" y en el detalle se muestra A a un lado y B al otro.
+  {name:'IGNITE BOOST MIX', price:28000, puffs:40000, photo:'ignite_boost_mix', realPhoto:'ignite_boost_mix', dualFlavor:true,
+    note:'🔀 <span><b>Dos sabores en un mismo vape.</b> Cada opción trae los dos sabores que figuran en el nombre, en el mismo equipo.</span>',
+    flavors:[
+    {name:'🍌🍒 Banana Cherry + 🍇 Grape Ice', stock:1},{name:'🫐 Blueberry + 🍓 Strawberry', stock:1},{name:'🍒 Cherry + 🍇 Grape Ice', stock:1},
+    {name:'🥝 Kiwi Passion Guava Ice + 🍓 Strawberry Ice', stock:2},{name:'🍓 Raspberry Ice + 🍉 Watermelon Ice', stock:1},
+    {name:'🍓🍇 Strawberry Grape Ice + 🥝🍉 Kiwi Watermelon Ice', stock:3},{name:'🍓🥝 Strawberry Kiwi Ice + 🍇🥝 Grape Kiwi Ice', stock:2},
+    {name:'🫐 Triple Berry Ice + 🍇 Grape Ice', stock:1},{name:'🍉 Watermelon Ice + 🍇 Grape Ice', stock:3}
   ]},
   {name:'IGNITE ICE ULTRA SLIM', price:26000, originalPrice:28000, promo:true, promoOrder:2, puffs:40000, photo:'v400_ultra_slim', realPhoto:'v400_ultra_slim', flavors:[
     {name:'Blueberry 🫐', stock:1},{name:'Grape 🍇', stock:2},{name:'Grape Mix 🍇', stock:2},
-    {name:'Mango 🥭', stock:1},{name:'Pineapple Kiwi Dragon 🍍🥝🐉', stock:1},
-    {name:'Strawberry 🍓', stock:1},{name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:3},{name:'Strawberry Banana 🍓🍌', stock:3},
-    {name:'Strawberry Kiwi 🍓🥝', stock:3},{name:'Strawberry Watermelon 🍓🍉', stock:1},{name:'Tutti Frutti 🍬', stock:3}
+    {name:'Passion Fruit Sour Kiwi 🌺🥝', stock:1},{name:'Pineapple Kiwi Dragon 🍍🥝🐉', stock:1},
+    {name:'Strawberry 🍓', stock:1},{name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:3},{name:'Strawberry Banana 🍓🍌', stock:2},
+    {name:'Strawberry Kiwi 🍓🥝', stock:1},{name:'Tutti Frutti 🍬', stock:2}
   ]},
   {name:'IGNITE V400 ICE', price:27000, puffs:40000, photo:'v400', realPhoto:'v400', flavors:[
     {name:'Strawberry Banana 🍓🍌', stock:1},{name:'Strawberry Kiwi 🍓🥝', stock:3}
@@ -6442,8 +6452,8 @@ const CATALOG = [
   /* Precio según cotización Italia Shop (S12019): USD 12,50 × 1660 = $20.750
      + ~$9.250 de margen → $30.000. */
   {name:'BLACKSHEEP 55K', price:30000, puffs:55000, photo:'blacksheep_55k', realPhoto:'blacksheep_55k', flavors:[
-    {name:'Aloe Grape 🍇', stock:2},{name:'Cool Mint ❄️', stock:1},{name:'Lemon Heads 🍋', stock:1},
-    {name:'Passion Fruit 🌺', stock:1},{name:'Sour Apple Ice 🍏❄️', stock:2},{name:'Strawberry Banana 🍓🍌', stock:3}
+    {name:'Aloe Grape 🍇', stock:2},{name:'Lemon Heads 🍋', stock:1},
+    {name:'Sour Apple Ice 🍏❄️', stock:2},{name:'Strawberry Banana 🍓🍌', stock:2}
   ]},
   {name:'BLACKSHEEP 40K', price:29000, puffs:40000, photo:'blacksheep', outOfStock:true, flavors:[]},
   {name:'BLACKSHEEP ICE 40K', price:29000, puffs:40000, photo:'blacksheep_ice', outOfStock:true, flavors:[]},
@@ -6451,7 +6461,7 @@ const CATALOG = [
   {name:'IGNITE V150', price:20000, puffs:15000, photo:'v150', outOfStock:true, flavors:[]},
   {name:'BLVK JUST JUICE', price:22000, originalPrice:27500, clearance:true, puffs:45000, photo:'blvk', reel:'Dd9LzkfKrsd', outOfStock:true, flavors:[]},
   {name:'ELFBAR TRIO', price:26000, puffs:40000, photo:'trio', realPhoto:'trio', pinFirst:true, flavors:[
-    {name:'Blueberry Pom Slushy 🫐', stock:2},{name:'Cool Menthol ❄️', stock:1},{name:'Pineapple Lime 🍍🍋', stock:1},
+    {name:'Blueberry Pom Slushy 🫐', stock:1},{name:'Pineapple Lime 🍍🍋', stock:1},
     {name:'Sour Apple Ice 🍏❄️', stock:1},{name:'Strawberry Orange Lime 🍓🍊', stock:1}
   ]},
   /* Precio según cotización Italia Shop (S12012): USD 7 × 1660 = $11.620
@@ -7539,18 +7549,23 @@ function openModal(index, presetFlavor, sourceEvent){
       : p.clearance ? `<div class="flavor-note flavor-note--clearance">🔥 <span><b>Precio de liquidación.</b> Son las últimas unidades que nos quedan: cuando se terminan, no vuelven a este precio.</span></div>`
       : p.preorder ? `<div class="flavor-note flavor-note--preorder">📦 <span><b>Llega ${PREORDER_ETA}.</b> Reservalo ahora y te lo guardamos: te avisamos por WhatsApp apenas llegue para coordinar la entrega.</span></div>`
       : '';
+    const infoNote = !oos && p.note ? `<div class="flavor-note flavor-note--info">${p.note}</div>` : '';
     flavorGrid.innerHTML = oos
       ? `<div class="flavor-empty">😔 Sin stock por el momento. Escribinos por WhatsApp para avisarte cuando vuelva a estar disponible.</div>`
-      : stateNote + p.flavors.map(f=>{
+      : infoNote + stateNote + p.flavors.map(f=>{
         const c = flavorAccent(f.name);
         const stockText = p.preorder ? f.stock + ' para reservar' : stockLabel(f.stock);
         const dot = p.preorder ? '#3fb7ff' : stockDotColor(f.stock);
+        const halves = p.dualFlavor ? f.name.split(' + ') : null;
+        const nameHtml = halves && halves.length === 2
+          ? `<span class="flavor-name flavor-name--dual"><span class="flavor-half">${halves[0]}</span><span class="flavor-plus">+</span><span class="flavor-half">${halves[1]}</span></span>`
+          : `<span class="flavor-name">${f.name}</span>`;
         return `
         <div class="flavor-row" data-flavor="${f.name}">
           <div class="flavor-row-main">
             <span class="flavor-dot" style="background:${c}"></span>
             <span class="flavor-text">
-              <span class="flavor-name">${f.name}</span>
+              ${nameHtml}
               <span class="flavor-stock"><span class="stock-dot" style="background:${dot}"></span>${stockText}</span>
             </span>
           </div>
