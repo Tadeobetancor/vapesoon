@@ -6328,7 +6328,7 @@ window.__PRODUCT_PHOTOS__ = {
   'ebcreate': 'img/productos/sm/ebcreate.webp?v=3',
   'bc': 'img/productos/sm/bc.webp?v=3',
   'v300': 'img/productos/sm/v300.webp?v=3',
-  'v400_ultra_slim': 'img/productos/sm/v400_ultra_slim.webp?v=1',
+  'v400_ultra_slim': 'img/productos/sm/v400_ultra_slim.webp?v=2',
   'v400': 'img/productos/sm/v400.webp?v=3',
   'vmix': 'img/productos/sm/vmix.webp?v=3',
   'ice_king': 'img/productos/sm/ice_king.webp?v=3',
@@ -6417,14 +6417,14 @@ const CATALOG = [
   /* Precio según cotización Italia Shop (S12211): USD 10,50 × 1660 = $17.430
      + ~$12.000 de margen → $29.500; en oferta a $25.500. */
   {name:'LUMA', price:25500, originalPrice:29500, promo:true, promoOrder:4, puffs:40000, photo:'dinner_lady_luma', photoScale:0.85, reel:'DeSItt6KCpc', outOfStock:true, flavors:[]},
-  {name:'EBCREATE BC PRO', price:23000, originalPrice:25000, promo:true, promoOrder:1, puffs:40000, photo:'ebcreate', realPhoto:'ebcreate', flavors:[
+  {name:'EBCREATE BC PRO', price:23000, originalPrice:25000, promo:true, promoOrder:3, puffs:40000, photo:'ebcreate', realPhoto:'ebcreate', flavors:[
     {name:'Aurora Berries 🫐', stock:2},{name:'Golden Berry ✨', stock:1},
     {name:'Strawberry Blend 🍓', stock:2},{name:'Triple Berry 🫐', stock:2},
     {name:'Watermelon Peach Frost 🍉🍑', stock:1},{name:'Strawberry Raspberry Frost 🍓❄️', stock:2},{name:'Blackberry Grape 🍇', stock:2}
   ]},
   {name:'IGNITE V500', price:29000, originalPrice:32000, promo:true, promoOrder:1, puffs:50000, photo:'v500', outOfStock:true, flavors:[]},
   // `note`: aclaración que se muestra arriba de los sabores en el detalle.
-  {name:'IGNITE BOOST MIX', price:28000, puffs:40000, photo:'ignite_boost_mix', realPhoto:'ignite_boost_mix',
+  {name:'IGNITE BOOST MIX', price:26000, originalPrice:28000, promo:true, promoOrder:1, puffs:40000, photo:'ignite_boost_mix', realPhoto:'ignite_boost_mix',
     note:'🔥 <span><b>2 sabores en 1 vape</b></span>',
     flavors:[
     {name:'Banana Cherry 🍌⁠🍒 + Grape Ice 🍇', stock:1},{name:'Blueberry 🫐 + Strawberry 🍓', stock:1},{name:'Cherry 🍒 + Grape Ice 🍇', stock:1},
@@ -6478,7 +6478,7 @@ const CATALOG = [
 /* Orden por defecto del catálogo (de arriba hacia abajo). Lo que no esté en
    esta lista va después; lo de liquidación siempre al final. */
 const HOME_ORDER = [
-  'EBCREATE BC PRO', 'IGNITE ICE ULTRA SLIM', 'IGNITE BOOST MIX',
+  'IGNITE BOOST MIX', 'IGNITE ICE ULTRA SLIM', 'EBCREATE BC PRO',
   'BLACKSHEEP 55K', 'ELFBAR TRIO', 'IGNITE V400 ICE', 'ELFBAR BC'
 ];
 
