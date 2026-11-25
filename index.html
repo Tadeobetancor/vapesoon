@@ -1163,6 +1163,13 @@ main{position:relative;z-index:1;}
 @media (prefers-reduced-motion: reduce){ .p-badge--promo{animation:none;} }
 .p-badge--flagship{background:linear-gradient(135deg, #ffd873, var(--gold));color:var(--void);box-shadow:0 2px 10px -2px rgba(255,200,87,.6);}
 .p-glyph .p-badge--promo, .p-glyph .p-badge--flagship{top:-6px;left:-4px;}
+/* `popular:true`: la oferta y "Más pedido" van juntas en una fila (.p-tags)
+   que ocupa el lugar de la etiqueta de oferta en cada vista. */
+.p-glyph .p-tags{position:absolute;top:-6px;left:-4px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;z-index:2;}
+.p-glyph .p-tags .p-badge{position:static;}
+.p-glyph .p-tags .p-badge--popular{box-shadow:0 4px 14px -4px rgba(91,170,255,.75);}
+.catalog.grid-mode .p-glyph .p-tags{top:auto;bottom:0;left:0;right:0;gap:4px;}
+.catalog.grid-mode .p-glyph .p-tags .p-badge{display:flex;align-items:center;gap:3px;font-size:9px;padding:4px 8px;letter-spacing:.6px;}
 .catalog.grid-mode .p-glyph .p-badge--promo, .catalog.grid-mode .p-glyph .p-badge--flagship, .catalog.grid-mode .p-glyph .p-badge--preorder{
   display:flex;
   align-items:center;
@@ -4685,6 +4692,7 @@ footer.site::before{
   .catalog.grid-mode .p-cta{font-size:14.5px;padding:13px 10px;}
   .catalog.grid-mode .p-puffs{font-size:12.5px;padding:6px 12px;}
   .catalog.grid-mode .p-glyph .p-badge--promo, .catalog.grid-mode .p-glyph .p-badge--flagship, .catalog.grid-mode .p-glyph .p-badge--preorder{font-size:11px;padding:5px 10px;}
+  .catalog.grid-mode .p-glyph .p-tags .p-badge{font-size:11px;padding:5px 10px;}
 }
 /* =====================================================================
    REFRESH (nov 2026) — paleta azul royal más clara + animaciones nuevas
@@ -6432,7 +6440,7 @@ const CATALOG = [
     {name:'Strawberry Kiwi Ice 🍓⁠🥝 + Grape Kiwi Ice 🍇⁠🥝', stock:2},
     {name:'Watermelon Ice 🍉 + Grape Ice 🍇', stock:2}
   ]},
-  {name:'IGNITE ICE ULTRA SLIM', price:27500, puffs:40000, photo:'v400_ultra_slim', realPhoto:'v400_ultra_slim', flavors:[
+  {name:'IGNITE ICE ULTRA SLIM', price:26000, originalPrice:32500, promo:true, promoOrder:3, popular:true, puffs:40000, photo:'v400_ultra_slim', realPhoto:'v400_ultra_slim', flavors:[
     {name:'Strawberry 🍓', stock:1},{name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:3},{name:'Strawberry Banana 🍓🍌', stock:1}
   ]},
   {name:'IGNITE V400 ICE', price:27000, puffs:40000, photo:'v400', realPhoto:'v400', flavors:[
@@ -6441,8 +6449,8 @@ const CATALOG = [
   {name:'IGNITE V300 ULTRA SLIM', price:24000, puffs:30000, photo:'wholesale_v300_ultra_slim', outOfStock:true, flavors:[]},
   {name:'IGNITE V250', price:22000, puffs:25000, photo:'v250', photoScale:1.18, outOfStock:true, flavors:[]},
   /* Precio según cotización Italia Shop (S12019): USD 12,50 × 1660 = $20.750
-     + ~$9.250 de margen → $30.000; en oferta a $28.000. */
-  {name:'BLACKSHEEP 55K', price:28000, originalPrice:30000, promo:true, promoOrder:2, puffs:55000, photo:'blacksheep_55k', realPhoto:'blacksheep_55k', flavors:[
+     + ~$9.250 de margen → $30.000; en oferta a $28.000 (tachado $35.000, -20%). */
+  {name:'BLACKSHEEP 55K', price:28000, originalPrice:35000, promo:true, promoOrder:2, puffs:55000, photo:'blacksheep_55k', realPhoto:'blacksheep_55k', flavors:[
     {name:'Aloe Grape 🍇', stock:1},{name:'Lemon Heads 🍋', stock:1},
     {name:'Sour Apple Ice 🍏❄️', stock:2},{name:'Strawberry Banana 🍓🍌', stock:2}
   ]},
@@ -6476,8 +6484,8 @@ const CATALOG = [
 /* Orden por defecto del catálogo (de arriba hacia abajo). Lo que no esté en
    esta lista va después; lo de liquidación siempre al final. */
 const HOME_ORDER = [
-  'EBCREATE BC PRO', 'BLACKSHEEP 55K', 'IGNITE BOOST MIX',
-  'IGNITE ICE ULTRA SLIM', 'ELFBAR TRIO', 'IGNITE V400 ICE', 'ELFBAR BC'
+  'EBCREATE BC PRO', 'BLACKSHEEP 55K', 'IGNITE ICE ULTRA SLIM',
+  'IGNITE BOOST MIX', 'ELFBAR TRIO', 'IGNITE V400 ICE', 'ELFBAR BC'
 ];
 
 /* Ranking manual de "más pedidos" (de mayor a menor demanda). Los modelos
@@ -6784,6 +6792,11 @@ function productCardHTML(p, i, badgeText, showPuffs){
     : promo ? `<div class="p-badge p-badge--promo">🔥 ${p.originalPrice ? '-' + discountPct(p) + '% OFF' : 'Oferta'}</div>`
     : preorder ? '<div class="p-badge p-badge--preorder">📦 Reservá</div>'
     : flagship ? '<div class="p-badge p-badge--flagship">⭐ Favorito</div>' : '';
+  // `popular:true` en CATALOG: etiqueta fija "Más pedido" al lado de la de
+  // oferta (se ve en las dos vistas; ver .p-tags).
+  const glyphTags = (!oos && p.popular && glyphBadge)
+    ? `<div class="p-tags">${glyphBadge}<div class="p-badge p-badge--popular">⭐ Más pedido</div></div>`
+    : glyphBadge;
   const variantCountWord = p.flavors.length === 1 ? (p.variantWord || 'sabor') : variantWordPlural;
   const singleVariant = !oos && p.flavors.length === 1 && p.category === 'apple';
   const realSrc = oos ? null : realPhotoUrl(p);
@@ -6819,7 +6832,7 @@ function productCardHTML(p, i, badgeText, showPuffs){
       ${oos ? '<div class="p-badge p-badge--oos">Sin stock</div>' : (promo || flagship || preorder) ? '' : (badgeText ? `<div class="p-badge${badgeText === 'Más pedido' ? ' p-badge--popular' : ''}">${badgeText}</div>` : '')}
       ${promo ? '<span class="p-shine" aria-hidden="true"></span>' : ''}
       ${showPuffs && p.puffs != null ? `<div class="p-puffs">${formatPuffs(p.puffs)}${realChip}</div>` : ''}
-      <div class="p-glyph">${glyphBadge}${productGlyphHTML(p)}${realHTML}</div>
+      <div class="p-glyph">${glyphTags}${productGlyphHTML(p)}${realHTML}</div>
       <div class="p-name-row">
         <div class="p-name">${p.name}</div>
         ${formatPrice(p.price, p.originalPrice)}
@@ -7000,7 +7013,8 @@ function renderProducts(){
   // skips the promo cards (their own "Oferta" ribbon already stands out) and
   // the flagship card (its own "⭐ Favorito" tag is permanent, not tied to
   // sort position), landing on the first regular card instead.
-  let popularBadgeGiven = false;
+  // Si algún modelo tiene `popular:true`, la etiqueta es suya y no se reparte.
+  let popularBadgeGiven = CATALOG.some(p => p.popular && !isOutOfStock(p));
   const entries = inStockVapeIndices.map((i) => {
     const p = CATALOG[i];
     const giveBadge = sortMode === null && !p.promo && !p.clearance && !p.preorder && !p.flagship && !popularBadgeGiven;
