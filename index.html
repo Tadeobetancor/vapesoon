@@ -29,8 +29,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Fonts load without blocking the first paint (and the page script) -->
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bungee&family=Poppins:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Poppins:wght@400;500;600;700;800&display=swap"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bungee&family=Poppins:wght@300;400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Poppins:wght@300;400;500;600;700;800&display=swap"></noscript>
 <style>
 :root{
   --void:#082244;
@@ -4961,15 +4961,15 @@ body.has-cart .fab-stack{transform:translateY(-80px);}
 }
 .offer-flavor.selected{background:#fff;color:var(--royal);border-color:#fff;}
 
-/* ---------- WHATSAPP: esfera azul brillante, como los íconos de la marca ---------- */
+/* ---------- WHATSAPP: esfera verde WhatsApp, con el mismo brillo que el resto ---------- */
 .fab-wpp{
   width:58px;height:58px;
-  background:radial-gradient(circle at 34% 26%, #b9ddff 0%, #6fb5ff 26%, #3a96ff 55%, #2175e0 80%, #1a5cb8 100%);
+  background:radial-gradient(circle at 34% 26%, #8ff0b4 0%, #4fe08a 24%, #25d366 52%, #1ebe5a 78%, #128c4a 100%);
   border:1px solid rgba(255,255,255,.4);
   color:#fff;
   -webkit-backdrop-filter:none;
   backdrop-filter:none;
-  box-shadow:inset 0 -7px 14px rgba(7,45,110,.45), inset 0 3px 6px rgba(255,255,255,.35), 0 14px 28px -10px rgba(25,106,220,.85);
+  box-shadow:inset 0 -7px 14px rgba(8,84,42,.45), inset 0 3px 6px rgba(255,255,255,.35), 0 14px 28px -10px rgba(37,211,102,.75);
 }
 .fab-wpp::before{
   content:"";
@@ -4980,24 +4980,16 @@ body.has-cart .fab-stack{transform:translateY(-80px);}
   background:linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,0));
   pointer-events:none;
 }
-.fab-wpp svg{position:relative;width:28px;height:28px;filter:drop-shadow(0 2px 3px rgba(7,45,110,.45));}
-/* puntito verde "en línea" */
-.fab-wpp::after{
-  content:"";
-  position:absolute;
-  top:3px;right:3px;
-  width:12px;height:12px;
-  border-radius:50%;
-  background:#2ee06f;
-  box-shadow:0 0 0 2px #fff;
-  animation:onlineDot 2s ease-in-out infinite;
-}
+.fab-wpp svg{position:relative;width:28px;height:28px;filter:drop-shadow(0 2px 3px rgba(8,84,42,.45));}
+/* sin puntito "en línea" (pedido): el logo solo, centrado en la esfera */
+.fab-wpp::after{content:none;display:none;}
+.fab-wpp > svg{position:absolute;left:50%;top:50%;margin:-14px 0 0 -14px;}
 @keyframes onlineDot{0%,100%{box-shadow:0 0 0 2px #fff, 0 0 0 0 rgba(46,224,111,.6);}50%{box-shadow:0 0 0 2px #fff, 0 0 0 6px rgba(46,224,111,0);}}
-.fab-wpp:hover{box-shadow:inset 0 -7px 14px rgba(7,45,110,.45), inset 0 3px 6px rgba(255,255,255,.35), 0 18px 32px -10px rgba(25,106,220,1);transform:translateY(-2px);}
+.fab-wpp:hover{box-shadow:inset 0 -7px 14px rgba(8,84,42,.45), inset 0 3px 6px rgba(255,255,255,.35), 0 18px 32px -10px rgba(37,211,102,1);transform:translateY(-2px);}
 .fab-tip{background:#fff;color:#0c315d;border:none;box-shadow:0 14px 30px -12px rgba(2,15,35,.9);}
 .fab-tip b{color:var(--royal);}
 .fab-tip::after{background:#fff;border:none;}
-html.lite .fab-wpp{background:radial-gradient(circle at 34% 26%, #b9ddff 0%, #6fb5ff 26%, #3a96ff 55%, #2175e0 80%, #1a5cb8 100%);}
+html.lite .fab-wpp{background:radial-gradient(circle at 34% 26%, #8ff0b4 0%, #4fe08a 24%, #25d366 52%, #1ebe5a 78%, #128c4a 100%);}
 
 @media (prefers-reduced-motion: reduce){
   .topbar,.cart-bar,.cart-toast{transition:opacity .2s ease;}
@@ -5547,6 +5539,492 @@ body{background:#061326;}
 .cart-bar-more{gap:7px;}
 .cart-bar.expanded .cart-bar-more{max-width:calc(100vw - 16px - 58px - 84px);padding:0 15px 0 10px;}
 @media(min-width:900px){ .cart-bar.expanded .cart-bar-more{max-width:360px;} }
+
+/* =====================================================================
+   CLIENTES REGISTRADOS — franja "Ingresar a mi cuenta" (arriba de
+   Grilla/Deslizar, mismo vidrio que ese selector), pop-up de invitación
+   con cuenta regresiva y tarjeta de cuenta (ingresar / crear / mi cuenta).
+   Los datos quedan en el celular del cliente (localStorage) y, si está
+   configurada, en la planilla de Google (CLIENTES_SHEET_URL en el JS).
+   ===================================================================== */
+.acct-strip{
+  position:relative;
+  display:flex;align-items:center;gap:12px;
+  width:100%;
+  margin:0 0 10px;
+  padding:10px 10px 10px 10px;
+  border-radius:16px;
+  background:linear-gradient(160deg, rgba(28,84,150,.75), rgba(11,46,90,.75));
+  border:1px solid rgba(176,217,255,.16);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05), var(--shadow-soft);
+  color:#fff;text-align:left;
+  font-family:'Poppins',sans-serif;
+  cursor:pointer;
+  transition:transform .15s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+/* borde de luz que gira (como las tarjetas en oferta), en azul y dorado */
+.acct-strip::after{
+  content:"";
+  position:absolute;inset:0;
+  border-radius:inherit;
+  padding:1.5px;
+  background:conic-gradient(from var(--spin), rgba(176,217,255,.1), var(--blue-bright), rgba(255,255,255,.7), rgba(176,217,255,.1) 55%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  animation:spin 4s linear infinite;
+  pointer-events:none;
+}
+.acct-strip:active{transform:scale(.985);}
+.acct-strip-pic{
+  flex:none;position:relative;
+  width:44px;height:44px;border-radius:12px;
+  display:grid;place-items:center;
+  background:linear-gradient(160deg, rgba(176,217,255,.26), rgba(91,170,255,.14));
+  border:1px solid rgba(176,217,255,.45);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.15);
+  font-family:'Bungee',cursive;font-size:18px;color:#fff;
+  overflow:hidden;
+}
+.acct-strip-pic svg{width:22px;height:22px;}
+.acct-strip-pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.acct-strip-pic [hidden]{display:none;}
+.acct-strip-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+.acct-strip-title{font-size:15px;font-weight:800;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.acct-strip-sub{position:relative;font-size:12px;font-weight:500;line-height:1.35;color:var(--ink);}
+.acct-strip-sub b{color:var(--gold);font-weight:700;}
+/* máquina de escribir: el texto fantasma reserva el lugar, el tipeado va encima */
+.acct-type-ghost{visibility:hidden;}
+.acct-type b, .acct-type-ghost b{
+  font-weight:700;
+  background:linear-gradient(90deg, #5baaff, #b0d9ff);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.acct-type{position:absolute;left:0;top:0;right:0;}
+.acct-type::after{
+  content:"";display:inline-block;
+  width:2px;height:1.05em;margin-left:2px;vertical-align:-2px;
+  background:var(--blue-bright);
+  animation:caretBlink .8s steps(1) infinite;
+}
+@keyframes caretBlink{50%{opacity:0;}}
+/* botón redondo "entrar" a la derecha */
+.acct-strip-go{
+  flex:none;
+  width:36px;height:36px;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--grad-btn);
+  box-shadow:0 3px 0 var(--btn-edge), 0 8px 18px -8px rgba(47,145,255,.9);
+  color:#fff;
+}
+.acct-strip-go svg{width:18px;height:18px;}
+html.lite .acct-strip::after{animation:none;--spin:120deg;}
+@media (prefers-reduced-motion: reduce){ .acct-strip::after{animation:none;} }
+@media(min-width:900px){
+  .acct-strip{padding:12px 14px 12px 12px;}
+  .acct-strip-title{font-size:16.5px;}
+  .acct-strip-sub{font-size:13px;}
+}
+
+/* ---------- Pop-up de invitación (4 segundos) ---------- */
+.modal-overlay.join-overlay{
+  display:flex;align-items:center;justify-content:center;padding:16px;z-index:240;
+  background:rgba(2,9,20,.74);
+  backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+}
+.join-card{
+  position:relative;
+  width:min(86vw, 330px);
+  aspect-ratio:4 / 5;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;
+  padding:56px 24px 26px;
+  border-radius:22px;
+  background:
+    radial-gradient(90% 45% at 50% 0%, rgba(70,154,255,.16), transparent 70%),
+    linear-gradient(172deg, #0e2b52 0%, #0a2143 55%, #061630 100%);
+  border:1px solid rgba(176,217,255,.16);
+  box-shadow:0 34px 80px -20px rgba(0,0,0,.85), inset 0 1px 0 rgba(255,255,255,.08);
+  transform:translate(0,30px) scale(.9);
+  opacity:0;
+  transition:transform .26s var(--ease), opacity .2s ease;
+}
+.join-overlay.open .join-card{transform:none;opacity:1;transition:transform .55s var(--ease-spring), opacity .3s ease;}
+.join-logo{
+  width:82%;max-width:240px;height:auto;
+  filter:drop-shadow(0 6px 22px rgba(91,170,255,.35));
+}
+.join-title{
+  font-family:'Bungee',cursive;font-weight:400;
+  font-size:clamp(24px, 7vw, 28px);
+  line-height:1.1;
+  margin-top:18px;
+  background:linear-gradient(180deg, #ffffff 35%, var(--blue-bright) 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.join-sub{margin-top:6px;font-size:14px;font-weight:500;color:var(--ink-dim);}
+.join-yes{
+  width:100%;
+  margin-top:28px;
+  padding:14px;
+  border:none;border-radius:14px;
+  font-family:'Poppins',sans-serif;font-weight:700;font-size:15px;letter-spacing:.3px;
+  color:#fff;
+  background:var(--grad-btn);
+  background-size:200% 100%;
+  box-shadow:0 4px 0 var(--btn-edge), 0 14px 28px -12px rgba(47,145,255,.7);
+  cursor:pointer;
+  transition:transform .15s var(--ease), background-position .5s var(--ease), box-shadow .15s var(--ease);
+}
+.join-yes:hover{background-position:100% 0;transform:translateY(-2px);}
+.join-yes:active{transform:translateY(3px);box-shadow:0 1px 0 var(--btn-edge);transition-duration:.06s;}
+/* Cuenta regresiva (arriba a la izquierda) */
+.join-count{
+  position:absolute;top:14px;left:14px;
+  width:36px;height:36px;
+  display:grid;place-items:center;
+}
+.join-count svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);}
+.join-count circle{fill:none;stroke-width:3;}
+.join-count .jc-track{stroke:rgba(176,217,255,.15);}
+.join-count .jc-bar{stroke:var(--blue-neon);stroke-linecap:round;stroke-dasharray:100.53;stroke-dashoffset:0;}
+.join-overlay.open .jc-bar{animation:jcDrain 4s linear forwards;}
+@keyframes jcDrain{to{stroke-dashoffset:100.53;}}
+.join-count span{position:relative;font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;color:var(--white-glove);font-variant-numeric:tabular-nums;}
+/* Cerrar (arriba a la derecha) */
+.join-x{
+  position:absolute;top:14px;right:14px;
+  width:36px;height:36px;border-radius:50%;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(176,217,255,.22);
+  color:var(--white-glove);
+  cursor:pointer;
+  transition:background .2s ease;
+}
+.join-x:hover{background:rgba(255,255,255,.14);}
+.join-x svg{width:15px;height:15px;}
+/* Adentro, todo entra en cascada igual que en los modales */
+.join-overlay.open .join-logo{animation:riseIn .5s var(--ease) .12s backwards;}
+.join-overlay.open .join-title{animation:riseIn .5s var(--ease) .19s backwards;}
+.join-overlay.open .join-sub{animation:riseIn .5s var(--ease) .26s backwards;}
+.join-overlay.open .join-yes{animation:riseIn .5s var(--ease) .33s backwards;}
+html.lite .modal-overlay.join-overlay{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(2,9,20,.82);}
+
+/* ---------- Cuenta: ingresar / crear cuenta / mi cuenta (tarjeta chica, estilo Google) ---------- */
+.modal-overlay.acct-overlay{
+  display:flex;align-items:center;justify-content:center;padding:16px;z-index:235;
+  background:rgba(2,9,20,.45);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+}
+html.lite .modal-overlay.acct-overlay{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(2,9,20,.75);}
+.acct-card{
+  position:relative;
+  width:min(92vw, 360px);
+  max-height:90vh;overflow-y:auto;overscroll-behavior:contain;
+  padding:20px 20px 20px;
+  border-radius:22px;
+  background:
+    radial-gradient(110% 45% at 50% 0%, rgba(70,154,255,.18), transparent 70%),
+    linear-gradient(170deg, #16437b 0%, #0d2c56 55%, #081f40 100%);
+  border:1px solid rgba(176,217,255,.2);
+  box-shadow:0 30px 70px -20px rgba(0,0,0,.75), inset 0 1px 0 rgba(255,255,255,.1);
+  text-align:center;
+  transform:translate(0,30px) scale(.92);
+  opacity:0;
+  transition:transform .26s var(--ease), opacity .2s ease;
+}
+.acct-overlay.open .acct-card{transform:none;opacity:1;transition:transform .55s var(--ease-spring), opacity .3s ease;}
+.acct-x{
+  position:absolute;top:12px;right:12px;z-index:2;
+  width:30px;height:30px;border-radius:50%;
+  display:grid;place-items:center;
+  background:none;border:none;
+  color:rgba(214,234,255,.7);cursor:pointer;
+}
+.acct-x:hover{color:#fff;background:rgba(255,255,255,.08);}
+.acct-x svg{width:14px;height:14px;}
+.acct-view.hidden{display:none;}
+.acct-title{
+  font-family:'Poppins',sans-serif;font-weight:700;
+  font-size:24px;color:#fff;
+  margin:10px 0 20px;
+}
+/* "Obtené promociones / y optimizá tus compras" */
+.acct-headline{margin:26px 0 16px;padding:0;display:flex;flex-direction:column;align-items:center;gap:0;font-weight:400;}
+.acct-hl-1{
+  font-family:'Bungee',cursive;
+  font-size:30px;line-height:1;white-space:nowrap; /* fitAcctTitle() la estira a casi todo el ancho */
+  color:#fff;
+}
+.acct-hl-2{white-space:nowrap;font-family:'Poppins',sans-serif;font-size:min(12px, 3.3vw);font-weight:300;line-height:1.25;letter-spacing:.1px;color:rgba(230,243,255,.9);margin-top:2px;}
+.acct-hl-2 b{color:var(--gold);font-weight:500;}
+/* frase que se escribe sola: el fantasma reserva el lugar, así nada salta */
+.tw{display:inline-grid;text-align:left;}
+.tw > span{grid-area:1/1;}
+.tw-ghost{visibility:hidden;}
+.tw:not(.done) .tw-out::after{
+  content:"";display:inline-block;
+  width:1.5px;height:1em;margin-left:2px;vertical-align:-2px;
+  background:var(--blue-bright);
+  animation:caretBlink .8s steps(1) infinite;
+}
+.acct-emo{display:inline-block;font-style:normal;margin-right:5px;animation:ticket-wiggle 1.8s ease-in-out .6s infinite;}
+@media (prefers-reduced-motion: reduce){ .acct-emo{animation:none;} }
+.acct-input{
+  width:100%;height:50px;
+  padding:0 16px;
+  border-radius:12px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(176,217,255,.32);
+  color:#fff;
+  font-family:'Poppins',sans-serif;font-size:16px;
+  outline:none;
+  transition:border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.acct-input::placeholder{color:rgba(214,234,255,.6);}
+.acct-input:focus{border-color:var(--blue-neon);background:rgba(255,255,255,.1);box-shadow:0 0 0 3px rgba(91,170,255,.2);}
+.acct-input.bad{border-color:var(--red-cap);}
+.acct-view > .acct-input + .acct-phone{margin-top:8px;}
+/* Campo de WhatsApp: "+54" fijo adelante, el resto lo escribe el cliente */
+.acct-phone{
+  display:flex;align-items:center;
+  height:50px;
+  border-radius:12px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(176,217,255,.32);
+  transition:border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.acct-phone:focus-within{border-color:var(--blue-neon);background:rgba(255,255,255,.1);box-shadow:0 0 0 3px rgba(91,170,255,.2);}
+.acct-phone.bad{border-color:var(--red-cap);}
+.acct-cc{
+  flex:none;align-self:stretch;
+  display:flex;align-items:center;
+  padding:0 12px 0 16px;
+  border-right:1px solid rgba(176,217,255,.25);
+  font-family:'Poppins',sans-serif;font-size:16px;font-weight:600;color:#fff;
+}
+.acct-phone input{
+  flex:1;min-width:0;height:100%;
+  padding:0 12px;
+  background:none;border:none;outline:none;
+  color:#fff;font-family:'Poppins',sans-serif;font-size:16px;letter-spacing:.3px;
+}
+.acct-phone input::placeholder{color:rgba(214,234,255,.45);}
+.acct-ok{flex:none;width:22px;height:22px;margin-right:14px;border-radius:50%;display:grid;place-items:center;background:var(--green-thc);color:#fff;opacity:0;transform:scale(.5);transition:opacity .2s ease, transform .3s var(--ease-spring);}
+.acct-ok svg{width:13px;height:13px;}
+.acct-phone.ok .acct-ok{opacity:1;transform:none;}
+.acct-err:empty{display:none;}
+.acct-err{margin-top:8px;font-size:12.5px;color:#ff8a83;text-align:left;padding-left:4px;}
+.acct-forgot{
+  display:block;margin:14px auto 0;width:max-content;
+  font-size:12.5px;font-weight:600;color:var(--blue-bright);text-decoration:none;
+}
+.acct-forgot:hover{text-decoration:underline;}
+.acct-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:100%;height:50px;
+  margin-top:16px;
+  border-radius:12px;
+  font-family:'Poppins',sans-serif;font-weight:700;font-size:15px;letter-spacing:.2px;
+  cursor:pointer;
+  transition:transform .15s var(--ease), background-position .5s var(--ease), box-shadow .15s var(--ease), background-color .2s ease, opacity .2s;
+}
+.acct-btn--main{
+  border:none;color:#fff;
+  background:var(--grad-btn);background-size:200% 100%;
+  box-shadow:0 4px 0 var(--btn-edge), 0 14px 28px -12px rgba(47,145,255,.7);
+}
+.acct-btn--main:hover{background-position:100% 0;transform:translateY(-2px);}
+.acct-btn--main:active{transform:translateY(3px);box-shadow:0 1px 0 var(--btn-edge);transition-duration:.06s;}
+.acct-btn--alt{
+  margin-top:10px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(176,217,255,.45);
+  color:#fff;
+}
+.acct-btn--alt:hover{background:rgba(255,255,255,.12);}
+.acct-btn--alt:active{transform:scale(.98);}
+.acct-btn--danger{
+  border:none;color:#fff;
+  background:linear-gradient(180deg, #f0574e, #c9302a);
+  box-shadow:0 4px 0 #8f1f1a, 0 14px 28px -12px rgba(232,67,58,.7);
+}
+.acct-btn--danger:active{transform:translateY(3px);box-shadow:0 1px 0 #8f1f1a;transition-duration:.06s;}
+.acct-btn--danger.armed{animation:acctShake .4s ease;background:linear-gradient(180deg, #ff6b61, #e8433a);}
+@keyframes acctShake{0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-6px);}40%,80%{transform:translateX(6px);}}
+.acct-row-btns{display:flex;gap:10px;margin-top:14px;}
+.acct-row-btns .acct-btn{flex:1;margin-top:0;}
+.acct-btn.busy{opacity:.6;pointer-events:none;}
+.acct-or{
+  display:flex;align-items:center;gap:10px;
+  margin-top:20px;
+  font-size:12.5px;color:rgba(214,234,255,.7);
+}
+.acct-or::before, .acct-or::after{content:"";flex:1;height:1px;background:rgba(176,217,255,.2);}
+.acct-fine{margin-top:10px;font-size:11.5px;color:rgba(214,234,255,.6);line-height:1.5;}
+.acct-switch{margin-top:16px;font-size:13px;color:rgba(214,234,255,.75);}
+.acct-switch button{background:none;border:none;padding:0;cursor:pointer;font:inherit;font-weight:700;color:var(--blue-bright);}
+/* Mi cuenta: foto (se toca para cambiarla) */
+.acct-avatar{
+  width:88px;height:88px;margin:4px auto 0;border-radius:50%;
+  display:grid;place-items:center;
+  padding:0;border:2px solid rgba(176,217,255,.5);
+  font-family:'Bungee',cursive;font-size:34px;color:#fff;
+  background:var(--grad-btn);
+  box-shadow:0 14px 30px -12px rgba(25,106,220,.9);
+  position:relative;cursor:pointer;
+}
+.acct-avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;}
+.acct-avatar img[hidden], .acct-avatar span[hidden]{display:none;}
+.acct-cam{
+  position:absolute;right:-2px;bottom:-2px;
+  width:30px;height:30px;border-radius:50%;
+  display:grid;place-items:center;
+  background:#fff;color:#0c315d;
+  box-shadow:0 0 0 3px rgba(14,44,86,.9);
+}
+.acct-cam svg{width:16px;height:16px;}
+.acct-avatar.pop{animation:ticket-pop .6s var(--ease);}
+.acct-photo-hint{margin-top:8px;font-size:12px;color:rgba(214,234,255,.6);}
+.acct-photo-hint:empty{display:none;}
+.acct-rows{margin-top:4px;text-align:left;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(176,217,255,.16);padding:2px 14px;}
+.acct-row{display:flex;gap:10px;padding:11px 0;font-size:13.5px;color:#fff;}
+.acct-row + .acct-row{border-top:1px solid rgba(176,217,255,.12);}
+.acct-row span:first-child{flex:none;width:22px;text-align:center;}
+.acct-row span:last-child{word-break:break-word;}
+.acct-row .muted{color:rgba(214,234,255,.6);}
+.acct-del{margin-top:14px;background:none;border:none;cursor:pointer;font-family:'Poppins',sans-serif;font-size:12px;color:rgba(214,234,255,.55);}
+.acct-del:hover{color:var(--red-cap);}
+.acct-warn{
+  width:64px;height:64px;margin:4px auto 0;border-radius:50%;
+  display:grid;place-items:center;
+  background:rgba(232,67,58,.16);border:1px solid rgba(232,67,58,.45);color:#ff8a83;
+}
+.acct-warn svg{width:30px;height:30px;}
+.acct-confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none;border-radius:inherit;}
+
+/* ---- Barra de compras (cada 5ta compra con descuento) ---- */
+.loyal{
+  margin:0 0 14px;
+  padding:14px 14px 12px;
+  border-radius:16px;
+  background:linear-gradient(160deg, rgba(28,84,150,.6), rgba(11,46,90,.6));
+  border:1px solid rgba(176,217,255,.18);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+  text-align:left;
+}
+.loyal-head{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.loyal-label{font-family:'Bungee',cursive;font-size:14px;color:#fff;letter-spacing:.3px;}
+.loyal-prize{
+  flex:none;
+  padding:4px 10px;border-radius:999px;
+  font-family:'Poppins',sans-serif;font-weight:800;font-size:12px;color:var(--void);
+  background:var(--wholesale-grad);
+  box-shadow:0 6px 16px -8px rgba(255,145,48,.9);
+}
+.loyal-track{
+  position:relative;
+  height:12px;
+  margin:24px 18px 22px 2px;
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(176,217,255,.15);
+}
+.loyal-fill{
+  position:absolute;left:0;top:0;bottom:0;
+  width:0;
+  border-radius:inherit;
+  overflow:hidden;
+  background:linear-gradient(90deg, #2f84ea, #5baaff 60%, #b0d9ff);
+  box-shadow:0 0 14px rgba(91,170,255,.7);
+  transition:width 1.3s var(--ease) .25s;
+}
+/* rayitas que avanzan dentro de la barra, como una carga */
+.loyal-fill::after{
+  content:"";position:absolute;top:0;bottom:0;left:-40px;right:0;
+  background:repeating-linear-gradient(115deg, rgba(255,255,255,.3) 0 8px, transparent 8px 20px);
+  animation:loyalStripes 1.1s linear infinite;
+}
+@keyframes loyalStripes{to{transform:translateX(21.8px);}}
+.loyal-dot{
+  position:absolute;top:50%;
+  width:26px;height:26px;margin:-13px 0 0 -13px;
+  border-radius:50%;
+  display:grid;place-items:center;
+  font-family:'Poppins',sans-serif;font-size:11px;font-weight:800;
+  color:rgba(214,234,255,.55);
+  background:#0d2c56;
+  border:2px solid rgba(176,217,255,.28);
+  transition:background .35s ease, border-color .35s ease, color .35s ease;
+}
+.loyal-dot.done{background:var(--grad-btn);border-color:#b0d9ff;color:#fff;animation:loyalPop .45s var(--ease-spring) backwards;}
+.loyal-dot.done svg{width:13px;height:13px;}
+.loyal-dot.next{border-color:var(--blue-neon);color:#fff;box-shadow:0 0 0 4px rgba(91,170,255,.18);}
+.loyal-dot.gift{
+  width:36px;height:36px;margin:-18px 0 0 -18px;
+  font-size:18px;
+  background:rgba(255,200,87,.12);
+  border-color:var(--gold);
+}
+.loyal-dot.gift.ready{background:var(--wholesale-grad);animation:giftPulse 1.4s ease-in-out 1.4s infinite;}
+@keyframes loyalPop{from{transform:scale(.3);}}
+@keyframes giftPulse{
+  0%,100%{transform:scale(1) rotate(0);box-shadow:0 0 0 0 rgba(255,200,87,.7);}
+  40%{transform:scale(1.14) rotate(-8deg);}
+  60%{transform:scale(1.14) rotate(8deg);box-shadow:0 0 0 10px rgba(255,200,87,0);}
+}
+.loyal-msg{font-size:12.5px;color:rgba(214,234,255,.85);line-height:1.4;}
+.loyal-msg b{color:var(--gold);}
+html.lite .loyal-fill::after{animation:none;}
+@media (prefers-reduced-motion: reduce){ .loyal-fill::after, .loyal-dot.gift.ready{animation:none;} }
+
+/* ---- Traducir sabores: interruptor deslizable + nombre en español ---- */
+.flavor-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px;}
+.flavor-head .modal-section-label{margin-bottom:0;}
+.flavor-head.hidden, .tr-switch.hidden{display:none;}
+.tr-switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer;flex:none;-webkit-tap-highlight-color:transparent;}
+.tr-switch input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none;}
+.tr-switch-text{font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:var(--ink-dim);transition:color .25s ease;}
+.tr-track{
+  position:relative;
+  width:44px;height:24px;border-radius:999px;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(176,217,255,.3);
+  transition:background .3s ease, border-color .3s ease;
+}
+.tr-knob{
+  position:absolute;top:2px;left:2px;
+  width:18px;height:18px;border-radius:50%;
+  background:#fff;
+  box-shadow:0 2px 6px rgba(2,15,35,.5);
+  display:grid;place-items:center;
+  font-size:9px;font-weight:800;color:#1a5fb4;font-family:'Poppins',sans-serif;
+  transition:transform .35s var(--ease-spring);
+}
+.tr-knob::after{content:"EN";}
+.tr-switch input:checked ~ .tr-track{background:var(--grad-btn);border-color:rgba(176,217,255,.7);}
+.tr-switch input:checked ~ .tr-track .tr-knob{transform:translateX(20px);}
+.tr-switch input:checked ~ .tr-track .tr-knob::after{content:"ES";}
+.tr-switch:has(input:checked) .tr-switch-text{color:#fff;}
+.tr-switch input:focus-visible ~ .tr-track{box-shadow:0 0 0 3px rgba(91,170,255,.35);}
+.fn-es{display:none;}
+.flavor-grid.tr .fn-en{display:none;}
+.flavor-grid.tr .fn-es{display:inline;}
+.flavor-grid.tr-anim .flavor-name{animation:riseIn .35s var(--ease) backwards;}
+
+/* Checkout: aviso de "completado con tus datos" */
+.fulfill-saved{
+  display:flex;align-items:center;gap:8px;
+  margin-top:14px;padding:9px 12px;border-radius:12px;
+  font-size:12.5px;font-weight:600;color:var(--white-glove);
+  background:linear-gradient(120deg, rgba(255,200,87,.16), rgba(91,170,255,.12));
+  border:1px solid rgba(255,200,87,.35);
+}
+.fulfill-saved.hidden{display:none;}
 </style>
 </head>
 <body>
@@ -5629,6 +6107,18 @@ body{background:#061326;}
       <h1 class="sr-only">Elegí tu vape</h1>
 
       <div class="catalog-controls">
+        <button class="acct-strip" id="userBtn" type="button" aria-label="Ingresar a mi cuenta">
+          <span class="acct-strip-pic">
+            <svg id="acctStripIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7.5 8-7.5s8 3.1 8 7.5" stroke-linecap="round"/></svg>
+            <span id="acctStripInitial" hidden></span>
+            <img id="acctStripImg" alt="" hidden>
+          </span>
+          <span class="acct-strip-text">
+            <span class="acct-strip-title" id="acctStripTitle">Ingresar a mi cuenta</span>
+            <span class="acct-strip-sub" id="acctStripSub"></span>
+          </span>
+          <span class="acct-strip-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </button>
         <div class="catalog-view-row">
           <div class="view-toggle" role="group" aria-label="Cambiar cómo se ven los vapes">
             <button id="viewGrid" class="active" aria-label="Vista grilla: todos los vapes juntos">
@@ -5854,7 +6344,14 @@ body{background:#061326;}
 
         <div class="modal-divider"></div>
 
-        <div class="modal-section-label" id="modalVariantLabel">Elegí tu sabor</div>
+        <div class="flavor-head" id="flavorHead">
+          <div class="modal-section-label" id="modalVariantLabel">Elegí tu sabor</div>
+          <label class="tr-switch" id="trSwitch">
+            <span class="tr-switch-text">Traducir</span>
+            <input type="checkbox" id="trToggle" role="switch" aria-label="Ver los sabores traducidos al español">
+            <span class="tr-track" aria-hidden="true"><span class="tr-knob"></span></span>
+          </label>
+        </div>
         <p class="flavor-legend" id="flavorLegend">Tocá un sabor y sumalo al carrito</p>
         <div class="flavor-grid" id="flavorGrid"></div>
         <button class="modal-view-cart-btn" id="modalViewCartBtn" type="button">
@@ -5956,6 +6453,7 @@ body{background:#061326;}
     <div class="fulfill-step hidden" id="fulfillAddressStep">
       <div class="modal-eyebrow">Vapesoon</div>
       <h2 class="modal-name">¿Cuál es tu dirección?</h2>
+      <p class="fulfill-saved hidden" id="fulfillSaved">⭐ Completamos con tus datos guardados</p>
 
       <div class="fulfill-zone-field">
         <label class="fulfill-zone-label" for="fulfillZoneInput">Zona de entrega</label>
@@ -5975,6 +6473,95 @@ body{background:#061326;}
         <svg class="fulfill-ok-wpp" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39c1.44.79 3.06 1.2 4.71 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.03c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.12.11-1.81-.11-.42-.13-.95-.31-1.64-.6-2.88-1.24-4.76-4.14-4.9-4.33-.14-.19-1.17-1.56-1.17-2.97 0-1.41.74-2.1 1-2.39.26-.29.57-.36.76-.36h.55c.18 0 .42-.03.65.5.24.56.8 1.94.87 2.08.07.14.12.31.02.5-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.26 1.64 2.04 1.13.99 2.07 1.31 2.36 1.46.29.15.46.13.63-.05.17-.19.72-.84.92-1.13.19-.29.39-.24.65-.14.27.1 1.7.8 1.99.95.29.15.48.22.55.34.07.13.07.72-.17 1.4z"/></svg>
         <span>Continuar en WhatsApp</span>
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- CLIENTES: pop-up de invitación (4 segundos, cuenta regresiva) -->
+<div class="modal-overlay join-overlay" id="joinOverlay" role="dialog" aria-modal="true" aria-labelledby="joinTitle">
+  <div class="join-card">
+    <div class="join-count" aria-hidden="true">
+      <svg viewBox="0 0 36 36"><circle class="jc-track" cx="18" cy="18" r="16"/><circle class="jc-bar" cx="18" cy="18" r="16"/></svg>
+      <span id="joinCount">4</span>
+    </div>
+    <button class="join-x" id="joinClose" type="button" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+    </button>
+    <img class="join-logo" src="img/logo.webp?v=6" alt="Vapesoon" width="900" height="400">
+    <h2 class="join-title" id="joinTitle">¿Querés promos?</h2>
+    <p class="join-sub">Registrate gratis en 1 minuto</p>
+    <button class="join-yes" id="joinYes" type="button">Registrarme</button>
+  </div>
+</div>
+
+<!-- CLIENTES: ingresar / crear cuenta / mi cuenta -->
+<div class="modal-overlay acct-overlay" id="acctOverlay" role="dialog" aria-modal="true" aria-label="Mi cuenta">
+  <div class="acct-card" id="acctCard">
+    <div class="acct-confetti" id="acctConfetti"></div>
+    <button class="acct-x" id="acctClose" type="button" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+    </button>
+
+    <!-- Ingresar -->
+    <form class="acct-view" id="acctLoginView" novalidate>
+      <h2 class="acct-headline"><span class="acct-hl-1 acct-fit">Iniciar sesión</span><span class="acct-hl-2"><i class="acct-emo">🔓</i><span class="tw" data-text="Entrá con tu WhatsApp, sin contraseña" data-hl="WhatsApp"></span></span></h2>
+      <div class="acct-phone" id="acctLoginPhoneBox">
+        <span class="acct-cc">+54</span>
+        <input id="acctLoginPhone" type="tel" inputmode="tel" placeholder="11 2345-6789" autocomplete="tel-national" maxlength="22" aria-label="Tu WhatsApp">
+        <span class="acct-ok" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><path d="M5 12.5l4.5 4.5L19 7.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+      <p class="acct-err" id="acctLoginErr"></p>
+      <div class="acct-row-btns">
+        <button class="acct-btn acct-btn--alt" id="acctToRegister" type="button">Crear cuenta</button>
+        <button class="acct-btn acct-btn--main" id="acctLoginBtn" type="submit">Ingresar</button>
+      </div>
+      <a class="acct-forgot" href="https://wa.me/5491131635898?text=%C2%A1Hola%20Vapesoon!%20No%20me%20acuerdo%20con%20qu%C3%A9%20n%C3%BAmero%20me%20registr%C3%A9" target="_blank" rel="noopener">¿Olvidaste tu cuenta?</a>
+    </form>
+
+    <!-- Crear cuenta -->
+    <form class="acct-view hidden" id="acctRegView" novalidate>
+      <h2 class="acct-headline"><span class="acct-hl-1 acct-fit">Crear cuenta</span><span class="acct-hl-2"><i class="acct-emo">🚀</i><span class="tw" data-text="Promos y envíos que se completan solos" data-hl="Promos"></span></span></h2>
+      <input class="acct-input" id="acctName" type="text" placeholder="Tu nombre" autocomplete="given-name" maxlength="40" aria-label="Tu nombre">
+      <div class="acct-phone" id="acctPhoneBox">
+        <span class="acct-cc">+54</span>
+        <input id="acctPhone" type="tel" inputmode="tel" placeholder="11 2345-6789" autocomplete="tel-national" maxlength="22" aria-label="Tu WhatsApp">
+        <span class="acct-ok" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><path d="M5 12.5l4.5 4.5L19 7.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+      <p class="acct-err" id="acctRegErr"></p>
+      <button class="acct-btn acct-btn--main" id="acctRegBtn" type="submit">Crear cuenta</button>
+      <p class="acct-fine">Al registrarte confirmás que sos mayor de 18.</p>
+    </form>
+
+    <!-- Mi cuenta -->
+    <div class="acct-view hidden" id="acctMeView">
+      <button class="acct-avatar" id="acctAvatar" type="button" aria-label="Cambiar mi foto">
+        <img id="acctAvatarImg" alt="" hidden>
+        <span id="acctAvatarInitial">T</span>
+        <span class="acct-cam" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 8h3l2-3h6l2 3h3v11H4z" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.5"/></svg></span>
+      </button>
+      <input type="file" id="acctPhotoInput" accept="image/*" hidden>
+      <p class="acct-photo-hint" id="acctPhotoHint"></p>
+      <h2 class="acct-title" id="acctMeTitle">Hola</h2>
+      <div class="loyal" id="loyal">
+        <div class="loyal-head">
+          <span class="loyal-label">Tu 5ta compra</span>
+          <span class="loyal-prize" id="loyalPrize">20% OFF</span>
+        </div>
+        <div class="loyal-track"><div class="loyal-fill" id="loyalFill"></div><div id="loyalDots"></div></div>
+        <p class="loyal-msg" id="loyalMsg"></p>
+      </div>
+      <div class="acct-rows" id="acctRows"></div>
+      <button class="acct-btn acct-btn--alt" id="acctLogout" type="button">Cerrar sesión</button>
+      <button class="acct-del" id="acctDelete" type="button">Borrar mi cuenta</button>
+    </div>
+
+    <!-- Borrar cuenta (doble confirmación) -->
+    <div class="acct-view hidden" id="acctDelView">
+      <div class="acct-warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3l10 18H2z" stroke-linejoin="round"/><path d="M12 10v5M12 18v.5" stroke-linecap="round"/></svg></div>
+      <h2 class="acct-title">¿Borrar tu cuenta?</h2>
+      <p class="acct-fine">Se borran tus datos, tu foto y tu dirección guardada. No se puede deshacer.</p>
+      <button class="acct-btn acct-btn--danger" id="acctDelConfirm" type="button">Sí, borrar mi cuenta</button>
+      <button class="acct-btn acct-btn--alt" id="acctDelCancel" type="button">No, volver</button>
     </div>
   </div>
 </div>
@@ -6412,9 +6999,9 @@ const CATALOG = [
   // ESCONDIDO hasta nuevo aviso (el proveedor no responde). Para volver a
   // mostrarlo con estos sabores para reservar, borrá `outOfStock:true`.
   {name:'ELFBAR ICE KING', price:25000, puffs:40000, photo:'ice_king', flagship:true, reel:'DcZkRJvKemD', outOfStock:true, preorder:true, flavors:[
-    {name:'Sour Apple Ice 🍏❄️', stock:2},{name:'Green Apple Ice 🍏❄️', stock:1},{name:'Miami Mint 🌴', stock:2},
-    {name:'Baja Splash 🌊', stock:1},{name:'Strawberry Watermelon 🍓🍉', stock:3},{name:'Tiger Blood 🐯', stock:1},
-    {name:'Watermelon Ice 🍉❄️', stock:3},{name:'Summer Splash ☀️', stock:2},{name:'Peach 🍑', stock:2},
+    {name:'Sour Apple Ice 🍏❄️', stock:2},{name:'Green Apple Ice 🍏❄️', stock:1},{name:'Miami Mint 🍍', stock:2},
+    {name:'Baja Splash 🍍🍋', stock:1},{name:'Strawberry Watermelon 🍓🍉', stock:3},{name:'Tiger Blood 🍉🍓🥥', stock:1},
+    {name:'Watermelon Ice 🍉❄️', stock:3},{name:'Summer Splash 🍉🍑', stock:2},{name:'Peach 🍑', stock:2},
     {name:'Mango Magic 🥭', stock:2},{name:'Strawberry Ice 🍓❄️', stock:3},{name:'Blue Razz Ice 🫐❄️', stock:3}
   ]},
   {name:'ELFBAR SWEET KING', price:26500, puffs:40000, photo:'sweet_king', outOfStock:true, flavors:[]},
@@ -6424,22 +7011,22 @@ const CATALOG = [
      + ~$12.000 de margen → $29.500; en oferta a $25.500. */
   {name:'LUMA', price:25500, originalPrice:29500, promo:true, promoOrder:4, puffs:40000, photo:'dinner_lady_luma', photoScale:0.85, reel:'DeSItt6KCpc', outOfStock:true, flavors:[]},
   {name:'EBCREATE BC PRO', price:20000, originalPrice:25000, promo:true, promoOrder:1, puffs:40000, photo:'ebcreate', realPhoto:'ebcreate', flavors:[
-    {name:'Aurora Berries 🫐', stock:2},{name:'Golden Berry ✨', stock:1},
-    {name:'Strawberry Blend 🍓', stock:2},{name:'Triple Berry 🫐', stock:2},
-    {name:'Watermelon Peach Frost 🍉🍑', stock:1},{name:'Strawberry Raspberry Frost 🍓❄️', stock:1},{name:'Blackberry Grape 🍇', stock:2}
+    {name:'Aurora Berries 🫐🍓', stock:2},{name:'Golden Berry 🍊', stock:1},
+    {name:'Strawberry Blend 🍓', stock:2},{name:'Triple Berry 🫐🍓🍒', stock:2},
+    {name:'Watermelon Peach Frost 🍉🍑❄️', stock:1},{name:'Strawberry Raspberry Frost 🍓🍒❄️', stock:1},{name:'Blackberry Grape 🫐🍇', stock:2}
   ]},
   {name:'IGNITE V500', price:29000, originalPrice:32000, promo:true, promoOrder:1, puffs:50000, photo:'v500', outOfStock:true, flavors:[]},
   // `note`: aclaración que se muestra arriba de los sabores en el detalle.
   {name:'IGNITE BOOST MIX', price:27000, puffs:40000, photo:'ignite_boost_mix', realPhoto:'ignite_boost_mix',
     note:'🔥 <span><b>2 sabores en 1 vape</b></span>',
     flavors:[
-    {name:'Blueberry 🫐 + Strawberry 🍓', stock:1},
-    {name:'Kiwi Passion Guava Ice 🥝 + Strawberry Ice 🍓', stock:1},
-    {name:'Strawberry Kiwi Ice 🍓⁠🥝 + Grape Kiwi Ice 🍇⁠🥝', stock:2},
-    {name:'Watermelon Ice 🍉 + Grape Ice 🍇', stock:2}
+    {name:'Blueberry 🫐 + Strawberry 🍓', stock:1},
+    {name:'Kiwi Passion Guava Ice 🥝🥭❄️ + Strawberry Ice 🍓❄️', stock:1},
+    {name:'Strawberry Kiwi Ice 🍓🥝❄️ + Grape Kiwi Ice 🍇🥝❄️', stock:2},
+    {name:'Watermelon Ice 🍉❄️ + Grape Ice 🍇❄️', stock:2}
   ]},
   {name:'IGNITE ICE ULTRA SLIM', price:26000, originalPrice:32500, promo:true, promoOrder:3, popular:true, puffs:40000, photo:'v400_ultra_slim', realPhoto:'v400_ultra_slim', flavors:[
-    {name:'Strawberry 🍓', stock:1},{name:'Tutti Frutti Mix 🍭', stock:1},
+    {name:'Strawberry 🍓', stock:1},{name:'Tutti Frutti Mix 🍒🍓🍍', stock:1},
     {name:'Strawberry Apple Watermelon 🍓🍏🍉', stock:2},{name:'Strawberry Banana 🍓🍌', stock:1}
   ]},
   {name:'IGNITE V400 ICE', price:27000, puffs:40000, photo:'v400', realPhoto:'v400', flavors:[
@@ -6459,7 +7046,7 @@ const CATALOG = [
   {name:'IGNITE V150', price:20000, puffs:15000, photo:'v150', outOfStock:true, flavors:[]},
   {name:'BLVK JUST JUICE', price:22000, originalPrice:27500, clearance:true, puffs:45000, photo:'blvk', reel:'Dd9LzkfKrsd', outOfStock:true, flavors:[]},
   {name:'ELFBAR TRIO', price:26000, puffs:40000, photo:'trio', realPhoto:'trio', pinFirst:true, flavors:[
-    {name:'Blueberry Pom Slushy 🫐', stock:1}
+    {name:'Blueberry Pom Slushy 🫐🍒', stock:1}
   ]},
   /* Precio según cotización Italia Shop (S12012): USD 7 × 1660 = $11.620
      + $10.000 de margen = $21.620 → redondeado a $22.000. */
@@ -7473,6 +8060,123 @@ if(modalMediaWatermarkImg && brandLogoImg) modalMediaWatermarkImg.src = brandLog
 const modalEyebrow = document.getElementById('modalEyebrow');
 const modalName = document.getElementById('modalName');
 const flavorGrid = document.getElementById('flavorGrid');
+
+/* ================= TRADUCIR SABORES =================
+   Interruptor "Traducir" arriba de la lista de sabores: muestra cada sabor
+   en castellano y el nombre original (el de la caja) chiquito abajo.
+   FLAVOR_ES = traducciones a mano de los sabores (sumá acá los nuevos);
+   si un sabor no está, se traduce palabra por palabra con FLAVOR_WORDS. */
+// sabor original (en minúscula, sin emojis) -> [castellano, emojis frutales]
+const FLAVOR_ES = {
+  'sour apple ice':['Manzana ácida helada','🍏'],
+  'green apple ice':['Manzana verde helada','🍏'],
+  'miami mint':['Menta tropical','🍍'],
+  'baja splash':['Frutas tropicales con lima','🍍🍋'],
+  'strawberry watermelon':['Frutilla y sandía','🍓🍉'],
+  'tiger blood':['Sandía, frutilla y coco','🍉🍓🥥'],
+  'watermelon ice':['Sandía helada','🍉'],
+  'summer splash':['Frutas de verano','🍉🍑'],
+  'peach':['Durazno','🍑'],
+  'mango magic':['Mango','🥭'],
+  'strawberry ice':['Frutilla helada','🍓'],
+  'blue razz ice':['Frambuesa azul helada','🫐'],
+  'aurora berries':['Frutos del bosque','🫐🍓'],
+  'golden berry':['Aguaymanto','🍊'],
+  'strawberry blend':['Mezcla de frutillas','🍓'],
+  'triple berry':['Frutos rojos','🫐🍓🍒'],
+  'watermelon peach frost':['Sandía y durazno helado','🍉🍑'],
+  'strawberry raspberry frost':['Frutilla y frambuesa helada','🍓🍒'],
+  'blackberry grape':['Mora y uva','🫐🍇'],
+  'blueberry':['Arándano','🫐'],
+  'strawberry':['Frutilla','🍓'],
+  'kiwi passion guava ice':['Kiwi, maracuyá y guayaba helado','🥝🥭'],
+  'strawberry kiwi ice':['Frutilla y kiwi helado','🍓🥝'],
+  'grape kiwi ice':['Uva y kiwi helado','🍇🥝'],
+  'grape ice':['Uva helada','🍇'],
+  'tutti frutti mix':['Tutti frutti','🍒🍓🍍'],
+  'strawberry apple watermelon':['Frutilla, manzana y sandía','🍓🍏🍉'],
+  'strawberry banana':['Frutilla y banana','🍓🍌'],
+  'strawberry kiwi':['Frutilla y kiwi','🍓🥝'],
+  'aloe grape':['Uva y aloe','🍇'],
+  'lemon heads':['Limón dulce','🍋'],
+  'blueberry pom slushy':['Arándano y granada helado','🫐🍒'],
+  'ice cream cake':['Torta helada','🍓'],
+};
+const FLAVOR_WORDS = [
+  [/\bcotton candy\b/g,'algodón de azúcar'], [/\bice cream\b/g,'helado'], [/\bpassion ?fruit\b/g,'maracuyá'],
+  [/\bdragon ?fruit\b/g,'pitaya'], [/\bgreen apple\b/g,'manzana verde'], [/\bsour apple\b/g,'manzana ácida'],
+  [/\bblue razz\b/g,'frambuesa azul'], [/\bcool mint\b/g,'menta fresca'], [/\bbubble ?gum\b/g,'chicle'],
+  [/\bstrawberry\b/g,'frutilla'], [/\bstrawberries\b/g,'frutillas'], [/\bblueberry\b/g,'arándano'], [/\bblueberries\b/g,'arándanos'],
+  [/\braspberry\b/g,'frambuesa'], [/\bblackberry\b/g,'mora'], [/\bwatermelon\b/g,'sandía'], [/\bpineapple\b/g,'ananá'],
+  [/\bpomegranate\b/g,'granada'], [/\bpom\b/g,'granada'], [/\bcoconut\b/g,'coco'], [/\bcherry\b/g,'cereza'], [/\bgrape\b/g,'uva'],
+  [/\bpeach\b/g,'durazno'], [/\bapple\b/g,'manzana'], [/\blemonade\b/g,'limonada'], [/\blemon\b/g,'limón'], [/\blime\b/g,'lima'],
+  [/\borange\b/g,'naranja'], [/\bguava\b/g,'guayaba'], [/\bpassion\b/g,'maracuyá'], [/\blychee\b/g,'lichi'], [/\bmelon\b/g,'melón'],
+  [/\bhoneydew\b/g,'melón'], [/\bberries\b/g,'frutos rojos'], [/\bberry\b/g,'frutos rojos'], [/\bmint\b/g,'menta'],
+  [/\bmenthol\b/g,'mentol'], [/\bvanilla\b/g,'vainilla'], [/\bcream\b/g,'crema'], [/\bcandy\b/g,'caramelo'], [/\bgum\b/g,'chicle'],
+  [/\btobacco\b/g,'tabaco'], [/\bcoffee\b/g,'café'], [/\btea\b/g,'té'], [/\bcake\b/g,'torta'], [/\bslushy\b/g,'granizado'],
+  [/\bpunch\b/g,'ponche'], [/\bsour\b/g,'ácido'], [/\bice\b/g,'helado'], [/\bfrost\b/g,'helado'], [/\bsplash\b/g,'mix'],
+  [/\band\b/g,'y'], [/&/g,'y'],
+];
+function cleanFlavorName(name){
+  return stripEmoji(name).replace(/[\u2060\u200B]/g, '').replace(/\s+/g, ' ').trim();
+}
+function translateFlavor(name){
+  const clean = cleanFlavorName(name).replace(/\s*\([^)]*\)/g, '');
+  const key = clean.toLowerCase();
+  if(FLAVOR_ES[key]) return FLAVOR_ES[key][0];
+  if(clean.includes('+')) return clean.split('+').map(part => translateFlavor(part.trim())).join(' + ');
+  let out = key;
+  FLAVOR_WORDS.forEach(([re, es]) => { out = out.replace(re, es); });
+  return out.charAt(0).toUpperCase() + out.slice(1);
+}
+// Emojis: siempre frutas. Si el sabor está en FLAVOR_ES se usan esos; si no,
+// los frutales que ya traiga el nombre; si no, se deducen de las palabras.
+const FRUIT_EMOJIS = ['🍏','🍎','🍐','🍊','🍋','🍌','🍉','🍇','🍓','🫐','🍈','🍒','🍑','🥭','🍍','🥥','🥝'];
+const FRUIT_WORDS = [
+  [/strawberr/,'🍓'], [/watermelon/,'🍉'], [/(green|sour) apple/,'🍏'], [/apple/,'🍎'], [/grape/,'🍇'],
+  [/(blue|black)berr|razz/,'🫐'], [/(rasp|cherr|pom)/,'🍒'], [/peach/,'🍑'], [/mango/,'🥭'], [/banana/,'🍌'],
+  [/kiwi/,'🥝'], [/pineapple/,'🍍'], [/coconut/,'🥥'], [/(lemon|lime)/,'🍋'], [/orange/,'🍊'], [/(melon|honeydew)/,'🍈'],
+  [/pear/,'🍐'], [/berr/,'🫐'],
+];
+function partEmojis(part, rawPart){
+  const key = part.toLowerCase().replace(/\s*\([^)]*\)/g, '');
+  if(FLAVOR_ES[key]) return FLAVOR_ES[key][1];
+  const own = [...new Set((rawPart.match(/\p{Extended_Pictographic}/gu) || []).filter(e => FRUIT_EMOJIS.includes(e)))];
+  if(own.length) return own.join('');
+  const out = [];
+  FRUIT_WORDS.forEach(([re, e]) => { if(re.test(key) && !out.includes(e)) out.push(e); });
+  return out.slice(0, 3).join('');
+}
+// Los "Ice" / "Frost" (helados) llevan además el ❄️, después de las frutas.
+function partEmojisWithIce(part, rawPart){
+  const em = partEmojis(part, rawPart);
+  return /\b(ice|frost)\b/i.test(part) ? em + '❄️' : em;
+}
+// "Sandía helada 🍉 + Uva helada 🍇": cada sabor con sus emojis, antes del "+".
+function flavorLabel(name, lang){
+  return name.split('+').map(raw =>{
+    const part = cleanFlavorName(raw);
+    const label = lang === 'es' ? translateFlavor(part) : part;
+    const em = partEmojisWithIce(part, raw);
+    return em ? `${label} ${em}` : label;
+  }).join(' + ');
+}
+function flavorNameHTML(name){
+  return `<span class="flavor-name"><span class="fn-en">${flavorLabel(name, 'en')}</span><span class="fn-es">${flavorLabel(name, 'es')}</span></span>`;
+}
+const TR_KEY = 'vapesoon_traducir';
+const trToggle = document.getElementById('trToggle');
+function applyFlavorTranslation(animate){
+  flavorGrid.classList.toggle('tr', trToggle.checked);
+  if(animate){
+    flavorGrid.classList.remove('tr-anim'); void flavorGrid.offsetWidth; flavorGrid.classList.add('tr-anim');
+  }
+}
+try{ trToggle.checked = localStorage.getItem(TR_KEY) === '1'; }catch(e){}
+trToggle.addEventListener('change', ()=>{
+  try{ localStorage.setItem(TR_KEY, trToggle.checked ? '1' : '0'); }catch(e){}
+  applyFlavorTranslation(true);
+});
 const modalCta = document.getElementById('modalCta');
 const modalCtaText = document.getElementById('modalCtaText');
 const modalHint = document.getElementById('modalHint');
@@ -7531,7 +8235,11 @@ function openModal(index, presetFlavor, sourceEvent){
   // "Sumar al carrito" button replaces that bottom bar entirely (hidden for
   // this flow).
   const skipPicker = !oos && p.category === 'apple' && p.description;
-  document.getElementById('modalVariantLabel').classList.toggle('hidden', skipPicker);
+  document.getElementById('flavorHead').classList.toggle('hidden', skipPicker);
+  // "Traducir" sólo tiene sentido con sabores (no en Apple ni sin stock).
+  document.getElementById('trSwitch').classList.toggle('hidden', !!oos || p.category === 'apple');
+  flavorGrid.classList.remove('tr-anim');
+  applyFlavorTranslation(false);
   document.getElementById('flavorLegend').classList.toggle('hidden', skipPicker || oos);
   flavorGrid.classList.toggle('hidden', skipPicker);
   document.getElementById('modalViewCartBtn').classList.toggle('hidden', skipPicker);
@@ -7564,7 +8272,7 @@ function openModal(index, presetFlavor, sourceEvent){
           <div class="flavor-row-main">
             <span class="flavor-dot" style="background:${c}"></span>
             <span class="flavor-text">
-              <span class="flavor-name">${f.name}</span>
+              ${p.category === 'apple' ? `<span class="flavor-name">${f.name}</span>` : flavorNameHTML(f.name)}
               <span class="flavor-stock"><span class="stock-dot" style="background:${dot}"></span>${stockText}</span>
             </span>
           </div>
@@ -7885,7 +8593,7 @@ function closeFulfillmentModal(){
   if(cartOverlay.classList.contains('open')) setCheckoutSteps(cartSteps, 0, cart.length > 0 ? 1 : 0);
 }
 function sendWhatsAppOrder(extra){
-  const msg = pendingCheckoutMessage + extra;
+  const msg = pendingCheckoutMessage + extra + clientOrderLine();
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');
   closeFulfillmentModal();
@@ -7960,7 +8668,8 @@ document.getElementById('fulfillPickupBtn').addEventListener('click', ()=>{
 document.getElementById('fulfillDeliveryBtn').addEventListener('click', ()=>{
   fulfillChoiceStep.classList.add('hidden');
   fulfillAddressStep.classList.remove('hidden');
-  fulfillZoneInput.focus();
+  // Cliente registrado: localidad y dirección ya cargadas, un toque y listo.
+  if(!prefillDeliveryFromProfile()) fulfillZoneInput.focus();
   stopOfferCountdown();
   setCheckoutSteps(fulfillSteps, 2, 3);
 });
@@ -8146,6 +8855,7 @@ fulfillAddressOk.addEventListener('click', ()=>{
     return;
   }
   const deliveryNote = selectedLocality.sameDay ? 'envío en el día' : 'envío al día siguiente, 17 a 22hs';
+  rememberDeliveryAddress(selectedLocality.name, stripEmoji(address));
   sendWhatsAppOrder(`\n\n*Modalidad:* Envío a domicilio\n*Localidad:* ${stripEmoji(selectedLocality.name)} (${deliveryNote})\n*Dirección:* ${stripEmoji(address)}`);
 });
 fulfillAddressInput.addEventListener('keydown', (e)=>{
@@ -9688,6 +10398,597 @@ applyWholesaleOrderingState();
   }, {passive:true});
 })();
 
+
+/* ================= CLIENTES REGISTRADOS =================
+   Crear cuenta = nombre + WhatsApp, nada más. La dirección no se pide:
+   se guarda sola la primera vez que el cliente pide con envío, y desde ahí
+   el checkout se completa solo. Todo queda en el celular del cliente
+   (localStorage) y el mensaje de WhatsApp sale con "cliente registrado".
+
+   Base de datos (gratis): con CLIENTES_SHEET_URL apuntando a la planilla
+   de Google (ver scripts/registro-clientes.gs, ahí están los pasos), cada
+   alta / cambio / baja / pedido se anota ahí, y "Ingresar" con el WhatsApp
+   funciona desde cualquier celular. Si queda vacía, todo funciona igual
+   pero sólo en el celular donde se registró. */
+const CLIENTES_SHEET_URL = '';
+const CLIENT_KEY = 'vapesoon_cliente';
+const KNOWN_KEY = 'vapesoon_cuentas';  // cuentas que ya usaron este celu (para volver a ingresar)
+const PHOTO_KEY = 'vapesoon_fotos';    // foto de perfil de cada cuenta (sólo en este celu)
+const JOIN_SNOOZE_KEY = 'vapesoon_join_snooze';
+const JOIN_ENABLED = false;         // pop-up de invitación apagado (true = vuelve a aparecer solo)
+const JOIN_SECONDS = 4;              // lo que dura el pop-up en pantalla
+const JOIN_DELAY_MS = 8000;          // cuánto espera (después de la intro) para aparecer
+const JOIN_SNOOZE_CLOSE_DAYS = 3;    // si lo cierra con la X, no vuelve por 3 días
+const JOIN_SNOOZE_TIMEOUT_DAYS = 1;  // si se termina la cuenta regresiva solo, vuelve mañana
+// Premio por compras: cada LOYALTY_EVERY compras, esa compra tiene LOYALTY_OFF % de descuento.
+// Cuenta cada pedido enviado por WhatsApp de un cliente registrado; dos pedidos en menos de
+// ORDER_GAP_MS cuentan como uno (para que no se sume tocando "enviar" varias veces).
+// El mensaje de WhatsApp avisa "Compra N° X" y "le toca X% OFF", así lo confirmás en el chat.
+const LOYALTY_EVERY = 5;
+const LOYALTY_OFF = 20;
+const ORDER_GAP_MS = 2 * 36e5;
+
+/* ---- número de WhatsApp: cada uno lo escribe distinto (+54, 54 9, 011,
+   11 15..., 15...). Lo llevamos siempre a los 10 dígitos "área + número"
+   (ej: 1123456789) para que la misma persona sea siempre la misma cuenta. */
+function normalizePhone(raw){
+  let d = String(raw || '').replace(/\D/g, '');
+  if(d.startsWith('00')) d = d.slice(2);                 // 0054...
+  if(d.startsWith('54') && d.length >= 12){              // +54 / 54 / +54 9
+    d = d.slice(2);
+    if(d.startsWith('9')) d = d.slice(1);
+  }
+  if(d.length === 11 && d.startsWith('9')) d = d.slice(1); // 9 11 ...
+  if(d.startsWith('0')) d = d.slice(1);                   // 011 ...
+  if(d.length === 12){                                    // 11 15 xxxx xxxx / 221 15 xxx xxxx
+    for(const n of [2, 3, 4]){
+      if(d.substr(n, 2) === '15'){ d = d.slice(0, n) + d.slice(n + 2); break; }
+    }
+  }
+  if(d.length === 10 && d.startsWith('15')) d = '11' + d.slice(2); // 15 xxxx xxxx (sin área: AMBA)
+  if(d.length === 8) d = '11' + d;                        // xxxx xxxx (sin área: AMBA)
+  return d.length === 10 ? d : '';
+}
+function formatPhone(d){
+  if(!d) return '';
+  return d.startsWith('11') ? `11 ${d.slice(2, 6)}-${d.slice(6)}` : `${d.slice(0, 3)} ${d.slice(3, 6)}-${d.slice(6)}`;
+}
+
+function readJSON(key, fallback){
+  try{ return JSON.parse(localStorage.getItem(key) || 'null') || fallback; }catch(e){ return fallback; }
+}
+function writeJSON(key, val){
+  try{ localStorage.setItem(key, JSON.stringify(val)); return true; }catch(e){ return false; }
+}
+function getClientProfile(){
+  const p = readJSON(CLIENT_KEY, null);
+  if(!p || !p.name || !p.phone) return null;
+  p.phone = normalizePhone(p.phone) || p.phone;
+  return p;
+}
+function saveClientProfile(p){
+  const known = readJSON(KNOWN_KEY, {});
+  known[p.phone] = p;
+  writeJSON(KNOWN_KEY, known);
+  return writeJSON(CLIENT_KEY, p);
+}
+function getPhoto(p){ return p ? readJSON(PHOTO_KEY, {})[p.phone] || '' : ''; }
+function setPhoto(p, dataUrl){
+  const all = readJSON(PHOTO_KEY, {});
+  if(dataUrl) all[p.phone] = dataUrl; else delete all[p.phone];
+  return writeJSON(PHOTO_KEY, all);
+}
+function clearClientProfile(forget){
+  const p = getClientProfile();
+  if(forget && p){
+    const known = readJSON(KNOWN_KEY, {});
+    delete known[p.phone];
+    writeJSON(KNOWN_KEY, known);
+    setPhoto(p, '');
+  }
+  try{ localStorage.removeItem(CLIENT_KEY); }catch(e){}
+}
+function sheetPayload(accion, p){
+  return JSON.stringify({accion, name:p.name || '', phone:p.phone, locality:p.locality || '', address:p.address || ''});
+}
+// Con respuesta (alta, ingreso). null = planilla no configurada.
+async function sheetCall(accion, p){
+  if(!CLIENTES_SHEET_URL) return null;
+  try{
+    const r = await fetch(CLIENTES_SHEET_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:sheetPayload(accion, p)});
+    return await r.json();
+  }catch(e){ return {ok:false, error:'red'}; }
+}
+// Sin esperar respuesta (cambio, baja, pedido).
+function sheetFire(accion, p){
+  if(!CLIENTES_SHEET_URL || !p) return;
+  try{
+    fetch(CLIENTES_SHEET_URL, {method:'POST', mode:'no-cors', keepalive:true, headers:{'Content-Type':'text/plain;charset=utf-8'}, body:sheetPayload(accion, p)}).catch(()=>{});
+  }catch(e){}
+}
+function findLocality(name){
+  return name ? LOCALITY_INDEX.find(l => normalize(l.name) === normalize(name)) : null;
+}
+function firstName(p){ return p.name.trim().split(/\s+/)[0]; }
+
+const userBtn = document.getElementById('userBtn');
+const joinOverlay = document.getElementById('joinOverlay');
+const joinCount = document.getElementById('joinCount');
+const acctOverlay = document.getElementById('acctOverlay');
+const acctCard = document.getElementById('acctCard');
+const acctViews = {
+  ingreso: document.getElementById('acctLoginView'),
+  registro: document.getElementById('acctRegView'),
+  cuenta: document.getElementById('acctMeView'),
+  borrar: document.getElementById('acctDelView'),
+};
+const acctLoginPhone = document.getElementById('acctLoginPhone');
+const acctLoginErr = document.getElementById('acctLoginErr');
+const acctName = document.getElementById('acctName');
+const acctPhone = document.getElementById('acctPhone');
+const acctRegErr = document.getElementById('acctRegErr');
+
+/* ---- franja "Ingresar a mi cuenta" / "Hola, Tadeo" ---- */
+function paintUserBtn(){
+  const p = getClientProfile();
+  const photo = getPhoto(p);
+  const img = document.getElementById('acctStripImg');
+  const initial = document.getElementById('acctStripInitial');
+  const icon = document.getElementById('acctStripIcon');
+  img.hidden = !photo;
+  if(photo) img.src = photo;
+  initial.hidden = !p || !!photo;
+  initial.textContent = p ? p.name.trim().charAt(0).toUpperCase() : '';
+  icon.toggleAttribute('hidden', !!p); // es un <svg>: no tiene .hidden como los elementos HTML
+  document.getElementById('acctStripTitle').textContent = p ? `Hola, ${firstName(p)}` : 'Ingresar a mi cuenta';
+  userBtn.classList.toggle('logged', !!p);
+  if(p){
+    stopTypewriter();
+    document.getElementById('acctStripSub').innerHTML = `<b>★</b> Mi cuenta · Compras en total: ${p.orders || 0}`;
+  } else startTypewriter();
+  userBtn.setAttribute('aria-label', p ? `Mi cuenta (${p.name})` : 'Ingresar a mi cuenta');
+}
+
+/* "Obtené promociones y optimizá tus compras" se escribe solo, letra por
+   letra, al entrar a la página y después cada TYPE_EVERY_MS (10 s). */
+const TYPE_TEXT = 'Obtené promociones y optimizá tus compras';
+const TYPE_EVERY_MS = 10000;
+let typeTimers = [];
+function stopTypewriter(){
+  typeTimers.forEach(t => t && t.clear ? t.clear() : (clearTimeout(t), clearInterval(t)));
+  typeTimers = [];
+}
+// Escribe `text` letra por letra dentro de `out`; `hl` (si está) sale resaltada
+// apenas se empieza a escribir. Devuelve una función para cortarla.
+function typeText(out, text, hl, speed, onDone){
+  const k = hl ? text.indexOf(hl) : -1;
+  const render = i =>{
+    const t = text.slice(0, i);
+    if(k < 0 || i <= k) return t;
+    return t.slice(0, k) + '<b>' + t.slice(k, Math.min(i, k + hl.length)) + '</b>' + t.slice(k + hl.length);
+  };
+  let i = 0, timer = null;
+  const step = ()=>{
+    i++;
+    out.innerHTML = render(i);
+    if(i < text.length) timer = setTimeout(step, speed);
+    else if(onDone) onDone();
+  };
+  out.innerHTML = '';
+  timer = setTimeout(step, speed);
+  return ()=> clearTimeout(timer);
+}
+function startTypewriter(){
+  stopTypewriter();
+  const sub = document.getElementById('acctStripSub');
+  sub.innerHTML = `<span class="acct-type-ghost">${TYPE_TEXT.replace('promociones', '<b>promociones</b>')}</span><span class="acct-type"></span>`;
+  const out = sub.querySelector('.acct-type');
+  let stop = null;
+  const run = ()=>{ if(stop) stop(); stop = typeText(out, TYPE_TEXT, 'promociones', 38); };
+  run();
+  typeTimers.push(setInterval(run, TYPE_EVERY_MS));
+  typeTimers.push({clear: ()=> stop && stop()});
+}
+// Frases de las tarjetas: se escriben una vez cada vez que se abre esa tarjeta.
+function typeCardLines(view){
+  view.querySelectorAll('.tw').forEach(tw =>{
+    const text = tw.dataset.text, hl = tw.dataset.hl || '';
+    if(!tw.firstChild){
+      tw.innerHTML = `<span class="tw-ghost">${hl ? text.replace(hl, '<b>' + hl + '</b>') : text}</span><span class="tw-out"></span>`;
+    }
+    if(tw._stop) tw._stop();
+    tw.classList.remove('done');
+    tw._stop = typeText(tw.querySelector('.tw-out'), text, hl, 32, ()=> tw.classList.add('done'));
+  });
+}
+function lockBody(){ document.body.style.overflow = 'hidden'; }
+function unlockBodyIfFree(){
+  setTimeout(()=>{ if(!document.querySelector('.modal-overlay.open')) document.body.style.overflow = ''; }, 0);
+}
+
+/* ---- pop-up de invitación: dura JOIN_SECONDS, con cuenta regresiva ---- */
+let joinTimer = null;
+function openJoin(){
+  let left = JOIN_SECONDS;
+  joinCount.textContent = left;
+  joinOverlay.classList.add('open');
+  lockBody();
+  clearInterval(joinTimer);
+  joinTimer = setInterval(()=>{
+    left--;
+    if(left <= 0) closeJoin(JOIN_SNOOZE_TIMEOUT_DAYS);
+    else joinCount.textContent = left;
+  }, 1000);
+}
+function closeJoin(snoozeDays){
+  clearInterval(joinTimer);
+  joinOverlay.classList.remove('open');
+  if(snoozeDays){
+    try{ localStorage.setItem(JOIN_SNOOZE_KEY, String(Date.now() + snoozeDays * 864e5)); }catch(e){}
+  }
+  unlockBodyIfFree();
+}
+let joinShownThisVisit = false;
+function maybeShowJoin(){
+  if(joinShownThisVisit || getClientProfile()) return;
+  let until = 0;
+  try{ until = Number(localStorage.getItem(JOIN_SNOOZE_KEY) || 0); }catch(e){}
+  if(Date.now() < until) return;
+  // Nunca encima de otra cosa: si hay un modal abierto o la intro sigue, esperamos.
+  if(document.querySelector('.modal-overlay.open') || document.getElementById('intro')){
+    setTimeout(maybeShowJoin, 4000);
+    return;
+  }
+  joinShownThisVisit = true;
+  openJoin();
+}
+function scheduleJoin(){
+  if(!JOIN_ENABLED) return;
+  // initIntro ya corrió: si la intro sigue en pantalla, sumamos lo que dura.
+  const introOn = !!document.getElementById('intro');
+  setTimeout(maybeShowJoin, JOIN_DELAY_MS + (introOn ? INTRO_HOLD_MS + INTRO_EXIT_MS : 0));
+}
+document.getElementById('joinYes').addEventListener('click', ()=>{
+  closeJoin(JOIN_SNOOZE_TIMEOUT_DAYS);
+  setTimeout(()=> openAccount('registro'), 220);
+});
+document.getElementById('joinClose').addEventListener('click', ()=> closeJoin(JOIN_SNOOZE_CLOSE_DAYS));
+joinOverlay.addEventListener('click', (e)=>{ if(e.target === joinOverlay) closeJoin(JOIN_SNOOZE_CLOSE_DAYS); });
+
+/* ---- tarjeta de cuenta ---- */
+function setErr(errEl, field, msg){
+  errEl.textContent = msg || '';
+  acctCard.querySelectorAll('.bad').forEach(i => i.classList.remove('bad'));
+  if(msg && field) field.classList.add('bad');
+}
+// El título ("INICIAR SESIÓN" / "CREAR CUENTA") ocupa casi todo el ancho de la tarjeta.
+function fitAcctTitle(view){
+  const el = view && view.querySelector('.acct-fit');
+  if(!el) return;
+  const fit = ()=>{
+    const room = el.parentElement.clientWidth;
+    if(!room) return;
+    el.style.fontSize = '100px';
+    const w = el.scrollWidth;
+    el.style.fontSize = Math.min(44, Math.floor(100 * room * 0.97 / w)) + 'px';
+  };
+  fit();
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+}
+function showView(name){
+  Object.entries(acctViews).forEach(([k, el]) => el.classList.toggle('hidden', k !== name));
+  fitAcctTitle(acctViews[name]);
+  typeCardLines(acctViews[name]);
+  setErr(acctLoginErr); setErr(acctRegErr);
+  disarmDelete();
+  acctCard.scrollTop = 0;
+}
+function renderMe(p, how){ // how: 'nuevo' | 'ingreso' | undefined
+  const photo = getPhoto(p);
+  const av = document.getElementById('acctAvatar');
+  const img = document.getElementById('acctAvatarImg');
+  const ini = document.getElementById('acctAvatarInitial');
+  img.hidden = !photo;
+  if(photo) img.src = photo;
+  ini.hidden = !!photo;
+  ini.textContent = p.name.trim().charAt(0).toUpperCase();
+  document.getElementById('acctPhotoHint').textContent = photo ? '' : 'Tocá para poner tu foto';
+  document.getElementById('acctMeTitle').textContent =
+    how === 'nuevo' ? `¡Listo, ${firstName(p)}!` : `Hola, ${firstName(p)}`;
+  renderLoyalty(p);
+  const rows = document.getElementById('acctRows');
+  rows.innerHTML = '';
+  const addr = p.address && p.locality ? `${p.address}, ${p.locality}` : '';
+  [['📱', '+54 9 ' + formatPhone(p.phone)], ['🏠', addr, 'Se guarda sola en tu primer envío']].forEach(([icon, val, empty])=>{
+    const row = document.createElement('div');
+    row.className = 'acct-row';
+    const a = document.createElement('span'); a.textContent = icon;
+    const b = document.createElement('span');
+    b.textContent = val || empty;
+    if(!val) b.className = 'muted';
+    row.append(a, b);
+    rows.appendChild(row);
+  });
+  showView('cuenta');
+  av.classList.remove('pop'); void av.offsetWidth;
+  if(how){ av.classList.add('pop'); }
+  if(how === 'nuevo') spawnAcctConfetti();
+}
+/* Barra de 5 pasos: 1-4 son compras normales, la 5ta (🎁) es la del descuento.
+   Se llena animada cada vez que se abre el perfil. */
+function renderLoyalty(p){
+  const total = p.orders || 0;
+  const done = total % LOYALTY_EVERY;            // compras hechas en esta vuelta (0..4)
+  const left = LOYALTY_EVERY - 1 - done;         // compras que faltan para desbloquear el premio
+  document.getElementById('loyalPrize').textContent = `${LOYALTY_OFF}% OFF`;
+  const dots = document.getElementById('loyalDots');
+  const check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4"><path d="M5 12.5l4.5 4.5L19 7.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  dots.innerHTML = '';
+  for(let i = 1; i <= LOYALTY_EVERY; i++){
+    const d = document.createElement('span');
+    const gift = i === LOYALTY_EVERY;
+    d.className = 'loyal-dot' + (gift ? ' gift' : '');
+    d.style.left = (i / LOYALTY_EVERY * 100) + '%';
+    if(gift){
+      d.textContent = '🎁';
+      if(left === 0) d.classList.add('ready');
+    } else if(i <= done){
+      d.classList.add('done');
+      d.innerHTML = check;
+      d.style.animationDelay = (0.25 + 1.3 * i / LOYALTY_EVERY) + 's'; // se prende cuando la barra pasa
+    } else {
+      d.textContent = i;
+      if(i === done + 1) d.classList.add('next');
+    }
+    dots.appendChild(d);
+  }
+  const fill = document.getElementById('loyalFill');
+  fill.style.transition = 'none';
+  fill.style.width = '0';
+  void fill.offsetWidth;
+  fill.style.transition = '';
+  requestAnimationFrame(()=>{ fill.style.width = (done / LOYALTY_EVERY * 100) + '%'; });
+  const msg = document.getElementById('loyalMsg');
+  if(left === 0) msg.innerHTML = `¡Tu próxima compra tiene <b>${LOYALTY_OFF}% OFF</b>! 🎁`;
+  else if(done === 0) msg.innerHTML = `Sumá compras: tu ${LOYALTY_EVERY}ta tiene <b>${LOYALTY_OFF}% OFF</b>`;
+  else msg.innerHTML = `Te ${left === 1 ? 'falta <b>1 compra</b>' : `faltan <b>${left} compras</b>`} para desbloquear tu <b>${LOYALTY_OFF}% OFF</b>`;
+}
+function spawnAcctConfetti(){
+  const box = document.getElementById('acctConfetti');
+  box.innerHTML = '';
+  if(document.documentElement.classList.contains('lite')) return;
+  const frag = document.createDocumentFragment();
+  for(let i = 0; i < 26; i++){
+    const piece = document.createElement('span');
+    piece.className = 'confetti-piece';
+    const isDot = Math.random() < 0.4;
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.background = RAFFLE_TICKET_COLORS[Math.floor(Math.random() * RAFFLE_TICKET_COLORS.length)];
+    piece.style.width = (isDot ? 7 : 5 + Math.random() * 4) + 'px';
+    piece.style.height = (isDot ? 7 : 12 + Math.random() * 8) + 'px';
+    piece.style.borderRadius = isDot ? '50%' : '2px';
+    piece.style.setProperty('--delay', (Math.random() * 0.6) + 's');
+    piece.style.setProperty('--fall', (260 + Math.random() * 120) + 'px');
+    piece.style.setProperty('--spin', ((Math.random() < 0.5 ? -1 : 1) * (360 + Math.random() * 360)) + 'deg');
+    frag.appendChild(piece);
+  }
+  box.appendChild(frag);
+}
+
+function resetPhoneField(input){
+  input.value = '';
+  input.closest('.acct-phone').classList.remove('ok', 'bad');
+}
+function openAccount(view){
+  const p = getClientProfile();
+  if(p) renderMe(p);
+  else {
+    resetPhoneField(acctLoginPhone);
+    resetPhoneField(acctPhone);
+    acctName.value = '';
+    showView(view || 'ingreso');
+  }
+  acctOverlay.classList.add('open');
+  lockBody();
+}
+function closeAccount(){
+  acctOverlay.classList.remove('open');
+  disarmDelete();
+  unlockBodyIfFree();
+}
+userBtn.addEventListener('click', ()=>{
+  if(joinOverlay.classList.contains('open')) closeJoin(0);
+  openAccount('ingreso');
+});
+document.getElementById('acctClose').addEventListener('click', closeAccount);
+acctOverlay.addEventListener('click', (e)=>{ if(e.target === acctOverlay) closeAccount(); });
+function carryPhone(from, to){
+  to.value = from.value;
+  to.dispatchEvent(new Event('input'));
+}
+document.getElementById('acctToRegister').addEventListener('click', ()=>{
+  showView('registro');
+  if(acctLoginPhone.value) carryPhone(acctLoginPhone, acctPhone);
+});
+document.getElementById('acctLogout').addEventListener('click', ()=>{
+  clearClientProfile(false);
+  paintUserBtn();
+  closeAccount();
+});
+
+/* ---- borrar cuenta: doble confirmación (pantalla "¿Seguro?" + tocar dos veces) ---- */
+const acctDelConfirm = document.getElementById('acctDelConfirm');
+let delArmedTimer = null;
+function disarmDelete(){
+  clearTimeout(delArmedTimer);
+  acctDelConfirm.classList.remove('armed');
+  acctDelConfirm.textContent = 'Sí, borrar mi cuenta';
+}
+document.getElementById('acctDelete').addEventListener('click', ()=> showView('borrar'));
+document.getElementById('acctDelCancel').addEventListener('click', ()=>{
+  const p = getClientProfile();
+  if(p) renderMe(p); else closeAccount();
+});
+acctDelConfirm.addEventListener('click', ()=>{
+  if(!acctDelConfirm.classList.contains('armed')){
+    acctDelConfirm.classList.add('armed');
+    acctDelConfirm.textContent = 'Tocá de nuevo para confirmar';
+    delArmedTimer = setTimeout(disarmDelete, 4000);
+    return;
+  }
+  sheetFire('baja', getClientProfile());
+  clearClientProfile(true);
+  paintUserBtn();
+  closeAccount();
+});
+
+/* ---- foto de perfil: la elige de la galería, se achica a 240px y queda en este celu ---- */
+const acctPhotoInput = document.getElementById('acctPhotoInput');
+document.getElementById('acctAvatar').addEventListener('click', ()=> acctPhotoInput.click());
+acctPhotoInput.addEventListener('change', ()=>{
+  const file = acctPhotoInput.files && acctPhotoInput.files[0];
+  acctPhotoInput.value = '';
+  const p = getClientProfile();
+  if(!file || !p) return;
+  const hint = document.getElementById('acctPhotoHint');
+  const url = URL.createObjectURL(file);
+  const im = new Image();
+  im.onload = ()=>{
+    const S = 240, side = Math.min(im.naturalWidth, im.naturalHeight);
+    const c = document.createElement('canvas');
+    c.width = c.height = S;
+    c.getContext('2d').drawImage(im, (im.naturalWidth - side) / 2, (im.naturalHeight - side) / 2, side, side, 0, 0, S, S);
+    URL.revokeObjectURL(url);
+    if(!setPhoto(p, c.toDataURL('image/jpeg', 0.82))){ hint.textContent = 'No pudimos guardar la foto'; return; }
+    paintUserBtn();
+    renderMe(p);
+    const av = document.getElementById('acctAvatar');
+    av.classList.remove('pop'); void av.offsetWidth; av.classList.add('pop');
+  };
+  im.onerror = ()=>{ URL.revokeObjectURL(url); hint.textContent = 'Esa imagen no se pudo abrir, probá con otra'; };
+  im.src = url;
+});
+
+/* ---- campos de WhatsApp: tilde verde cuando el número es válido, y al
+   salir del campo lo reescribimos prolijo (11 2345-6789) ---- */
+[acctLoginPhone, acctPhone].forEach(inp =>{
+  const box = inp.closest('.acct-phone');
+  inp.addEventListener('input', ()=>{
+    box.classList.toggle('ok', !!normalizePhone(inp.value));
+    box.classList.remove('bad');
+    (inp === acctLoginPhone ? acctLoginErr : acctRegErr).textContent = '';
+  });
+  inp.addEventListener('blur', ()=>{
+    const n = normalizePhone(inp.value);
+    if(n) inp.value = formatPhone(n);
+  });
+});
+acctName.addEventListener('input', ()=>{ acctName.classList.remove('bad'); acctRegErr.textContent = ''; });
+const PHONE_HELP = 'Escribilo así: 11 2345 6789 (código de área + número)';
+function busy(btn, on, label){ btn.classList.toggle('busy', on); btn.textContent = label; }
+
+acctViews.ingreso.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const phone = normalizePhone(acctLoginPhone.value);
+  if(!phone) return setErr(acctLoginErr, acctLoginPhone.closest('.acct-phone'), PHONE_HELP);
+  acctLoginPhone.value = formatPhone(phone);
+  const local = readJSON(KNOWN_KEY, {})[phone] || null;
+  let p = local;
+  if(CLIENTES_SHEET_URL){
+    const btn = document.getElementById('acctLoginBtn');
+    busy(btn, true, 'Ingresando...');
+    const res = await sheetCall('ingreso', {phone});
+    busy(btn, false, 'Ingresar');
+    if(res && res.ok){
+      const c = res.cliente || {};
+      const loc = findLocality(c.locality);
+      p = {
+        name: c.name || (local && local.name) || 'Cliente', phone,
+        // la dirección no viaja por internet: se usa la de este celu si la hay
+        locality: loc ? loc.name : '',
+        address: local && local.address && local.locality === (loc && loc.name) ? local.address : '',
+        since: (local && local.since) || new Date().toISOString(),
+        orders: Math.max(Number(c.orders) || 0, (local && local.orders) || 0),
+        lastOrderAt: (local && local.lastOrderAt) || 0
+      };
+    }
+  }
+  if(!p) return setErr(acctLoginErr, acctLoginPhone.closest('.acct-phone'), 'No encontramos una cuenta con ese WhatsApp');
+  saveClientProfile(p);
+  paintUserBtn();
+  renderMe(p, 'ingreso');
+});
+
+acctViews.registro.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const name = stripEmoji(acctName.value).replace(/\s+/g, ' ').trim();
+  const phone = normalizePhone(acctPhone.value);
+  if(name.length < 2) return setErr(acctRegErr, acctName, 'Poné tu nombre');
+  if(!phone) return setErr(acctRegErr, acctPhone.closest('.acct-phone'), PHONE_HELP);
+  acctPhone.value = formatPhone(phone);
+  const p = {name, phone, locality:'', address:'', since:new Date().toISOString()};
+  const btn = document.getElementById('acctRegBtn');
+  busy(btn, true, 'Creando...');
+  const res = await sheetCall('alta', p);
+  busy(btn, false, 'Crear cuenta');
+  if(res && res.error === 'existe'){
+    showView('ingreso');
+    carryPhone(acctPhone, acctLoginPhone);
+    return setErr(acctLoginErr, null, 'Ya tenés cuenta con ese WhatsApp: tocá Ingresar');
+  }
+  // Sin planilla o sin conexión: igual queda guardado en este celular.
+  if(!saveClientProfile(p)) return setErr(acctRegErr, null, 'Tu navegador no deja guardar datos (¿modo incógnito?)');
+  paintUserBtn();
+  renderMe(p, 'nuevo');
+});
+
+document.addEventListener('keydown', (e)=>{
+  if(e.key !== 'Escape') return;
+  if(joinOverlay.classList.contains('open')) closeJoin(JOIN_SNOOZE_CLOSE_DAYS);
+  else if(acctOverlay.classList.contains('open')) closeAccount();
+});
+
+/* ---- checkout: completar el envío con los datos guardados ---- */
+const fulfillSaved = document.getElementById('fulfillSaved');
+function prefillDeliveryFromProfile(){
+  const p = getClientProfile();
+  const loc = p && findLocality(p.locality);
+  if(!p || !loc || !p.address){ fulfillSaved.classList.add('hidden'); return false; }
+  selectLocality(loc.name);
+  fulfillAddressInput.value = p.address;
+  updateAddressOk();
+  fulfillSaved.classList.remove('hidden');
+  return true;
+}
+// Cliente registrado que pide con envío: la dirección queda guardada para la próxima.
+function rememberDeliveryAddress(locality, address){
+  const p = getClientProfile();
+  if(!p || (p.locality === locality && p.address === address)) return;
+  p.locality = locality;
+  p.address = address;
+  saveClientProfile(p);
+  sheetFire('cambio', p);
+}
+function clientOrderLine(){
+  const p = getClientProfile();
+  if(!p) return '';
+  const now = Date.now();
+  const repeated = p.lastOrderAt && now - p.lastOrderAt < ORDER_GAP_MS;
+  if(!repeated){
+    p.orders = (p.orders || 0) + 1;
+    p.lastOrderAt = now;
+    saveClientProfile(p);
+    sheetFire('pedido', p);
+    paintUserBtn();
+  }
+  const n = p.orders || 1;
+  let line = `\n*Cliente registrado ⭐:* ${stripEmoji(p.name)} (+54 9 ${formatPhone(p.phone)}) — compra N° ${n}`;
+  if(n % LOYALTY_EVERY === 0) line += `\n🎁 *Es su ${n}ª compra: le toca ${LOYALTY_OFF}% OFF*`;
+  return line;
+}
+
+paintUserBtn();
+scheduleJoin();
 </script>
 </body>
 </html>
