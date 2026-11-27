@@ -5956,24 +5956,35 @@ html.lite .acct-overlay.open #acctLoginPhoneBox{animation:acctFieldGlow 1s ease-
    y una sola fila. Calmo y oscuro; lo único que brilla es el próximo % OFF.
    Todo color / tamaño / tiempo vive en estos tokens. */
 .acct-card{
-  --dc-bg:linear-gradient(170deg, #0a1a33 0%, #071226 55%, #050d1c 100%);
+  --dc-bg:linear-gradient(170deg, rgba(10,26,51,.8) 0%, rgba(7,18,38,.84) 55%, rgba(5,13,28,.88) 100%);
   --dc-edge:rgba(176,217,255,.12);
   --dc-panel:rgba(255,255,255,.035);
   --dc-panel-edge:rgba(176,217,255,.11);
   --dc-ink:#e6f3ff;
   --dc-ink-dim:rgba(214,234,255,.6);
-  --dc-gold:#ffc857;
-  --dc-blue:#5baaff;
-  --dc-dot-off:rgba(176,217,255,.18);
+  --dc-accent:#5baaff;              /* neón del sitio: lo único que resalta */
+  --dc-accent-hi:#b0d9ff;
+  --dc-dot-off:rgba(176,217,255,.24);
+  --dc-x:rgba(214,234,255,.55);     /* X fina de "bloqueado" */
+  --dc-x-len:72%;
+  --dc-how-ico:20px;                /* íconos del mensaje clave (trazo 2px) */
+  --dc-tick:14px;                   /* tick de cada compra */
+  --dc-col-gap:8px;
+  --dc-chip-w:84%;                  /* etiquetas secundarias: más angostas */
+  --dc-chip-h:40px;
+  --dc-chip-next-h:50px;            /* la próxima: más alta y a todo el ancho */
+  --dc-off-small:13px;              /* % de las etiquetas secundarias */
+  --dc-off-next:19px;               /* % de la próxima (el foco) */
   --dc-avatar:56px;
-  --dc-off-size:17px;               /* el % de cada etiqueta */
   --dc-loop:4.2s;                   /* ciclo de la fila "2 compras → % OFF" */
 }
 /* tarjeta más oscura solo cuando muestra el perfil (login/registro quedan igual) */
 .acct-card:has(#acctMeView:not(.hidden)){
   background:var(--dc-bg);
   border-color:var(--dc-edge);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
 }
+html.lite .acct-card:has(#acctMeView:not(.hidden)){backdrop-filter:none;-webkit-backdrop-filter:none;background:linear-gradient(170deg, rgba(10,26,51,.92), rgba(5,13,28,.95));}
 .acct-me-head{display:flex;align-items:center;gap:12px;margin:2px 0 14px;padding-right:30px;text-align:left;}
 .acct-me-head .acct-avatar{
   flex:none;width:var(--dc-avatar);height:var(--dc-avatar);margin:0;font-size:22px;
@@ -5989,59 +6000,90 @@ html.lite .acct-overlay.open #acctLoginPhoneBox{animation:acctFieldGlow 1s ease-
 }
 .acct-me-who .acct-photo-hint{margin-top:2px;}
 
-/* ---- TUS DESCUENTOS (niveles en PASS_LEVELS, premios en PASS_REWARDS) ---- */
+/* ---- TUS DESCUENTOS (niveles en PASS_LEVELS, premios en PASS_REWARDS) ----
+   Orden del ojo: 1º mensaje clave ("2 compras → descuento"), 2º la próxima
+   etiqueta (único elemento con color lleno, late suave), 3º detalle chico.
+   Paleta del sitio: azul casi negro + celeste/neón. Sin dorado. */
 .disc{
-  margin:0 0 14px;padding:14px 14px 12px;
+  margin:0 0 14px;padding:16px 14px 14px;
   border-radius:16px;
   background:var(--dc-panel);
   border:1px solid var(--dc-panel-edge);
-  text-align:left;
+  text-align:center;
 }
-.disc-title{margin:0;font-family:'Poppins',sans-serif;font-size:15px;font-weight:700;color:var(--dc-ink);}
-/* fila que explica sola: [carrito] 2 compras → [etiqueta] % OFF */
+/* 1º mensaje clave: íconos de trazo parejo (2px, 20px) + texto en una línea */
 .disc-how{
-  display:flex;align-items:center;gap:7px;margin:6px 0 0;
-  font-size:clamp(12px, 3.6vw, 13px);font-weight:600;color:var(--dc-ink-dim);
+  display:flex;align-items:center;justify-content:center;gap:8px;margin:0;
+  font-size:clamp(15px, 4.4vw, 16.5px);font-weight:700;line-height:1;letter-spacing:-.1px;color:var(--dc-ink);
 }
-.disc-how b{color:var(--dc-ink);font-weight:700;white-space:nowrap;}
-.disc-how svg{width:18px;height:18px;flex:none;}
-.disc-cart{color:var(--dc-blue);display:grid;animation:discHop var(--dc-loop) ease-in-out .6s infinite;}
-.disc-arrow{color:var(--dc-ink-dim);display:grid;animation:discSlide var(--dc-loop) ease-in-out .6s infinite;}
-.disc-tag{color:var(--dc-gold);display:grid;animation:discPop var(--dc-loop) ease-in-out .6s infinite;}
-.disc-how .disc-tag + b{color:var(--dc-gold);}
-/* estado actual en una frase */
-.disc-now{margin:12px 0 0;font-size:16px;font-weight:600;line-height:1.3;color:#fff;}
-.disc-now b{color:var(--dc-gold);font-weight:800;white-space:nowrap;}
-/* 4 etiquetas en fila: arriba un puntito por compra, abajo el % OFF */
+.disc-how b{font-weight:700;white-space:nowrap;}
+.disc-how svg{width:var(--dc-how-ico);height:var(--dc-how-ico);flex:none;display:block;}
+.disc-cart, .disc-arrow, .disc-tag{display:grid;place-items:center;}
+.disc-cart{color:var(--dc-ink);animation:discHop var(--dc-loop) ease-in-out .6s infinite;}
+.disc-arrow{color:var(--dc-ink-dim);margin:0 2px;animation:discSlide var(--dc-loop) ease-in-out .6s infinite;}
+.disc-tag{color:var(--dc-accent);animation:discPop var(--dc-loop) ease-in-out .6s infinite;}
+.disc-how .disc-tag + b{color:var(--dc-accent-hi);}
+/* 2º fila de recompensas: 4 columnas iguales; arriba un tick por compra
+   (todos a la misma altura), abajo la etiqueta apoyada sobre la misma línea */
 .disc-steps{
-  display:grid;grid-template-columns:repeat(auto-fit, minmax(0,1fr));gap:8px;
-  list-style:none;margin:12px 0 0;padding:0;
+  display:grid;grid-template-columns:repeat(auto-fit, minmax(0,1fr));gap:var(--dc-col-gap);
+  list-style:none;margin:18px 0 0;padding:0;
 }
-.disc-step{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;}
-.disc-dots{display:flex;gap:5px;}
-.disc-dots i{width:9px;height:9px;border-radius:50%;background:var(--dc-dot-off);}
-.disc-dots i.on{background:var(--dc-blue);}
+.disc-step{
+  display:grid;grid-template-rows:var(--dc-tick) var(--dc-chip-next-h);row-gap:8px;
+  justify-items:center;min-width:0;
+}
+.disc-dots{display:flex;gap:4px;}
+.disc-dots i{
+  width:var(--dc-tick);height:var(--dc-tick);border-radius:50%;display:grid;place-items:center;
+  border:1.5px solid var(--dc-dot-off);
+}
+.disc-dots i svg{width:9px;height:9px;display:none;}
+.disc-dots i.on{background:var(--dc-accent);border-color:var(--dc-accent);color:#04101f;}
+.disc-dots i.on svg{display:block;}
 .disc-off{
-  width:100%;padding:8px 2px;border-radius:10px;
-  display:flex;align-items:baseline;justify-content:center;gap:3px;white-space:nowrap;
-  font-size:10.5px;font-weight:800;letter-spacing:.3px;
+  align-self:end;position:relative;
+  width:var(--dc-chip-w);height:var(--dc-chip-h);border-radius:10px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
   color:var(--dc-ink-dim);
+  background:rgba(255,255,255,.02);
   border:1px solid var(--dc-panel-edge);
 }
-.disc-off b{font-size:var(--dc-off-size);font-weight:800;letter-spacing:-.3px;}
-.disc-cap{min-height:13px;font-size:10.5px;font-weight:600;line-height:1.2;color:var(--dc-ink-dim);}
-/* el próximo: el único que se destaca (dorado) */
-.disc-step.is-next .disc-off{color:#1a1206;background:var(--dc-gold);border-color:var(--dc-gold);box-shadow:0 6px 16px -10px rgba(255,200,87,.9);}
-.disc-step.is-next .disc-cap{color:var(--dc-gold);font-weight:700;}
-/* ya usado: apagado, con tilde */
-.disc-step.is-used .disc-off{opacity:.55;}
-.disc-step.is-used .disc-cap svg{width:11px;height:11px;vertical-align:-1px;}
+.disc-off b{font-size:var(--dc-off-small);font-weight:800;line-height:1;letter-spacing:-.4px;}
+.disc-off{font-size:8.5px;font-weight:700;letter-spacing:.8px;line-height:1;}
+/* la próxima: la única con color lleno (celeste del sitio) y late suave */
+.disc-step.is-next .disc-off{
+  width:100%;height:var(--dc-chip-next-h);border-radius:12px;
+  color:#fff;border-color:transparent;
+  background:linear-gradient(160deg, #6fb6ff 0%, #3d8de0 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3), 0 8px 18px -10px rgba(91,170,255,.95);
+  animation:discCall 2.4s ease-in-out .8s infinite;
+}
+.disc-step.is-next .disc-off b{font-size:var(--dc-off-next);}
+/* ya conseguida: apagada (los ticks llenos ya dicen que la ganaste) */
+.disc-step.is-used .disc-off{background:rgba(91,170,255,.08);border-color:rgba(91,170,255,.22);opacity:.7;}
+/* todavía no se alcanza: más chica, apagada y con una X fina */
+.disc-step.is-later .disc-off{opacity:.5;}
+.disc-step.is-later .disc-off::before,
+.disc-step.is-later .disc-off::after{
+  content:"";position:absolute;left:50%;top:50%;width:var(--dc-x-len);height:1px;
+  background:var(--dc-x);transform:translate(-50%,-50%) rotate(var(--r));
+}
+.disc-step.is-later .disc-off::before{--r:36deg;}
+.disc-step.is-later .disc-off::after{--r:-36deg;}
+/* 3º detalle chico */
+.disc-now{margin:14px 0 0;font-size:12.5px;font-weight:500;line-height:1.3;color:var(--dc-ink-dim);}
+.disc-now b{color:var(--dc-accent-hi);font-weight:700;white-space:nowrap;}
 
-@keyframes discHop{0%,8%,100%{transform:none;}4%{transform:translateY(-4px);}}
-@keyframes discSlide{0%,12%,100%{transform:none;opacity:1;}20%{transform:translateX(4px);opacity:.6;}28%{transform:none;opacity:1;}}
-@keyframes discPop{0%,28%,100%{transform:none;}36%{transform:scale(1.25) rotate(-8deg);}44%{transform:none;}}
-html.lite .disc-cart, html.lite .disc-arrow, html.lite .disc-tag{animation:none;}
-@media (prefers-reduced-motion: reduce){ .disc-cart, .disc-arrow, .disc-tag{animation:none;} }
+@keyframes discHop{0%,8%,100%{transform:none;}4%{transform:translateY(-3px);}}
+@keyframes discSlide{0%,12%,100%{transform:none;opacity:1;}20%{transform:translateX(3px);opacity:.6;}28%{transform:none;opacity:1;}}
+@keyframes discPop{0%,28%,100%{transform:none;}36%{transform:scale(1.18) rotate(-8deg);}44%{transform:none;}}
+@keyframes discCall{
+  0%,100%{transform:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.3), 0 8px 18px -10px rgba(91,170,255,.95);}
+  50%{transform:scale(1.04);box-shadow:inset 0 1px 0 rgba(255,255,255,.3), 0 0 0 4px rgba(91,170,255,.16), 0 8px 22px -8px rgba(91,170,255,1);}
+}
+html.lite .disc-cart, html.lite .disc-arrow, html.lite .disc-tag, html.lite .disc-step.is-next .disc-off{animation:none;}
+@media (prefers-reduced-motion: reduce){ .disc-cart, .disc-arrow, .disc-tag, .disc-step.is-next .disc-off{animation:none;} }
 
 /* "Mis datos": desplegable cerrado por defecto */
 .acct-data{margin-top:4px;text-align:left;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(176,217,255,.16);}
@@ -6638,18 +6680,17 @@ a.acct-row--help .acct-addr-txt{text-decoration:underline;text-underline-offset:
           <p class="acct-photo-hint" id="acctPhotoHint"></p>
         </div>
       </div>
-      <!-- Tus descuentos: una frase + una fila (cada 2 compras, un % OFF) -->
+      <!-- Tus descuentos. Orden del ojo: 1) mensaje clave  2) la próxima etiqueta  3) detalle chico -->
       <section class="disc" id="loyal" aria-label="Tus descuentos por compras">
-        <h3 class="disc-title">Tus descuentos</h3>
         <p class="disc-how">
-          <span class="disc-cart" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2.5l2.2 10.5h10.6L20.5 7H7"/><circle cx="9.5" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/></svg></span>
-          <b id="discEvery">Cada 2 compras</b>
-          <span class="disc-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
-          <span class="disc-tag" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 12.2V4h8.2L21 13.8 13.8 21z"/><circle cx="7.6" cy="8.6" r="1.5" fill="currentColor" stroke="none"/></svg></span>
+          <span class="disc-cart" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2.2l2.3 10.6a1.2 1.2 0 0 0 1.2.9h8.9a1.2 1.2 0 0 0 1.2-.9L20.5 8H6.1"/><circle cx="9.5" cy="19.5" r="1.3"/><circle cx="16.5" cy="19.5" r="1.3"/></svg></span>
+          <b id="discEvery">2 compras</b>
+          <span class="disc-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          <span class="disc-tag" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.3"/></svg></span>
           <b>descuento</b>
         </p>
-        <p class="disc-now" id="loyalMsg" aria-live="polite"></p>
         <ol class="disc-steps" id="passTrack" aria-label="Tus descuentos, en orden"></ol>
+        <p class="disc-now" id="loyalMsg" aria-live="polite"></p>
       </section>
       <details class="acct-data" id="acctData">
         <summary class="acct-data-sum"><span>Mis datos</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
@@ -11014,7 +11055,7 @@ function renderLoyalty(p){
   const check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
   const every = rewardLevels[0] || 1;
-  document.getElementById('discEvery').textContent = every === 1 ? 'Cada compra' : `Cada ${every} compras`;
+  document.getElementById('discEvery').textContent = every === 1 ? '1 compra' : `${every} compras`;
 
   const list = document.getElementById('passTrack');
   list.innerHTML = '';
@@ -11023,13 +11064,12 @@ function renderLoyalty(p){
     const pct = PASS_REWARDS[lv];
     const state = lv <= done ? 'used' : (lv === nextLv ? 'next' : 'later');
     let dots = '';
-    for(let i = prev + 1; i <= lv; i++) dots += `<i${i <= done ? ' class="on"' : ''}></i>`;
+    for(let i = prev + 1; i <= lv; i++) dots += `<i${i <= done ? ' class="on"' : ''}>${check}</i>`;
     prev = lv;
-    const cap = state === 'used' ? `${check} usado` : state === 'next' ? 'próximo' : '';
     const li = document.createElement('li');
     li.className = `disc-step is-${state}`;
     li.setAttribute('aria-label', `${pct}% OFF en tu compra ${lv}: ${state === 'used' ? 'ya usado' : state === 'next' ? 'es el próximo' : 'más adelante'}`);
-    li.innerHTML = `<span class="disc-dots" aria-hidden="true">${dots}</span><span class="disc-off"><b>${pct}%</b>OFF</span><span class="disc-cap">${cap}</span>`;
+    li.innerHTML = `<span class="disc-dots" aria-hidden="true">${dots}</span><span class="disc-off"><b>${pct}%</b>OFF</span>`;
     list.appendChild(li);
   });
 
