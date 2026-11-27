@@ -7354,8 +7354,9 @@ function profileDiscount(items, profile){
   if(!profile || !items || !items.length) return null;
   try{
     const orders = profile.orders || 0;
-    const repeated = profile.lastOrderAt && Date.now() - profile.lastOrderAt < ORDER_GAP_MS;
-    const n = repeated && orders > 0 ? orders : orders + 1;
+    // Siempre la PRÓXIMA compra: si ya usó la bienvenida (orders ≥ 1) no vuelve a aparecer,
+    // aunque pida de nuevo dentro de las 2 h de ORDER_GAP_MS.
+    const n = orders + 1;
     const lvl = ((n - 1) % PASS_LEVELS) + 1;
     const welcome = WELCOME_OFF > 0 && n === 1;
     const pct = welcome ? WELCOME_OFF : (PASS_REWARDS[lvl] || 0);
@@ -9699,9 +9700,9 @@ cartCheckoutBtn.addEventListener('click', ()=>{
     if(discount || acct){
       msg += `Subtotal: $${subtotal.toLocaleString('es-AR')}\n`;
       if(discount) msg += `Descuento combo (llevá ${COMBO_SIZE}): -$${discount.toLocaleString('es-AR')}\n`;
-      if(acct) msg += `Descuento cuenta ${pd.pct}%${pd.welcome ? ' (bienvenida)' : ''}: -$${acct.toLocaleString('es-AR')}\n`;
+      if(acct) msg += `${pd.welcome ? 'Descuento de bienvenida' : `Descuento ${pd.pct}%`}: -$${acct.toLocaleString('es-AR')}\n`;
     }
-    msg += `Total aprox: $${(subtotal - discount - acct).toLocaleString('es-AR')}\n\n`;
+    msg += `*Total: $${(subtotal - discount - acct).toLocaleString('es-AR')}*\n\n`;
   }
   const hasPreorder = cart.some(i => i.preorder);
   if(hasPreorder) msg += `📦 Lo marcado como reserva llega ${PREORDER_ETA}.\n\n`;
@@ -11567,12 +11568,8 @@ function clientOrderLine(){
     sheetFire('pedido', p);
     paintUserBtn();
   }
-  const n = p.orders || 1;
-  let line = `\n*Cliente registrado ⭐:* ${stripEmoji(p.name)} (+54 9 ${formatPhone(p.phone)}) — compra N° ${n}`;
-  const lvl = ((n - 1) % PASS_LEVELS) + 1;   // nivel del pase de esta compra (1..PASS_LEVELS)
-  if(n === 1 && WELCOME_OFF > 0) line += `\n🎁 *Primera compra con cuenta: le toca ${WELCOME_OFF}% OFF de bienvenida*`;
-  if(PASS_REWARDS[lvl]) line += `\n🎁 *Es su compra N° ${n} (nivel ${lvl} del pase): le toca ${PASS_REWARDS[lvl]}% OFF*`;
-  return line;
+  // Sin líneas extra en el mensaje (pedido 27/11): el descuento ya va en el desglose del total.
+  return '';
 }
 
 paintUserBtn();
