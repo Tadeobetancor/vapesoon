@@ -92,6 +92,8 @@ function doPost(e) {
       case 'cambio': {
         if (!row) return json_({ ok: false, error: 'nocliente' });
         sh.getRange(row, COL.localidad, 1, 2).setValues([[clean_(d.locality) || 'Retiro', clean_(d.address)]]);
+        const newName = clean_(d.name);
+        if (newName) sh.getRange(row, COL.nombre).setValue(newName);
         return json_({ ok: true });
       }
       case 'pedido': {
