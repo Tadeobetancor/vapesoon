@@ -1037,6 +1037,9 @@ main{position:relative;z-index:1;}
   object-fit:contain;
   filter:drop-shadow(0 10px 22px var(--accent-shadow));
   animation:floaty 4s ease-in-out infinite;
+  /* Al flotar, el vape pasa POR DELANTE del cartel de puffs (z-index:1), no por detrás. */
+  position:relative;
+  z-index:2;
 }
 @media(min-width:560px){
   .p-glyph{height:320px;}
@@ -1136,7 +1139,6 @@ main{position:relative;z-index:1;}
 }
 /* The regular grey-blue secondary text gets lost on the brighter cobalt. */
 .p-card--promo .p-meta{color:#bcdcf2;}
-.p-card--promo .p-glyph .mascot-hero{position:relative;z-index:1;}
 @media (prefers-reduced-motion: reduce){
   .p-card--promo::after, .p-shine{animation:none;}
 }
@@ -1764,6 +1766,10 @@ main{position:relative;z-index:1;}
   border-radius:26px;
   padding:24px 22px 26px;
   overflow-y:auto;
+  /* Solo se mueve de arriba a abajo. Sin esto, la foto real escondida
+     (.modal-real, corrida 18% a la derecha) hacía que la ficha se pudiera
+     arrastrar de costado con un dedo y quedara descentrada. */
+  overflow-x:hidden;
   /* Stops an overscroll at the top/bottom of this sheet's own scroll from
      "chaining" into whatever's behind it — without this, dragging past
      this sheet's scroll limit on some mobile browsers lets the page behind
@@ -7011,8 +7017,8 @@ const CATALOG = [
      + ~$12.000 de margen → $29.500; en oferta a $25.500. */
   {name:'LUMA', price:25500, originalPrice:29500, promo:true, promoOrder:4, puffs:40000, photo:'dinner_lady_luma', photoScale:0.85, reel:'DeSItt6KCpc', outOfStock:true, flavors:[]},
   {name:'EBCREATE BC PRO', price:20000, originalPrice:25000, promo:true, promoOrder:1, puffs:40000, photo:'ebcreate', realPhoto:'ebcreate', flavors:[
-    {name:'Aurora Berries 🫐🍓', stock:2},{name:'Golden Berry 🍊', stock:1},
-    {name:'Strawberry Blend 🍓', stock:2},{name:'Triple Berry 🫐🍓🍒', stock:2},
+    {name:'Aurora Berries 🫐🍓', stock:1},{name:'Golden Berry 🍊', stock:1},
+    {name:'Strawberry Blend 🍓', stock:1},{name:'Triple Berry 🫐🍓🍒', stock:1},
     {name:'Blackberry Grape 🫐🍇', stock:2}
   ]},
   {name:'IGNITE V500', price:29000, originalPrice:32000, promo:true, promoOrder:1, puffs:50000, photo:'v500', outOfStock:true, flavors:[]},
@@ -7023,7 +7029,7 @@ const CATALOG = [
     {name:'Blueberry 🫐 + Strawberry 🍓', stock:1},
     {name:'Kiwi Passion Guava Ice 🥝🥭❄️ + Strawberry Ice 🍓❄️', stock:1},
     {name:'Strawberry Kiwi Ice 🍓🥝❄️ + Grape Kiwi Ice 🍇🥝❄️', stock:1},
-    {name:'Watermelon Ice 🍉❄️ + Grape Ice 🍇❄️', stock:2}
+    {name:'Watermelon Ice 🍉❄️ + Grape Ice 🍇❄️', stock:1}
   ]},
   {name:'IGNITE ICE ULTRA SLIM', price:26000, originalPrice:32500, promo:true, promoOrder:3, popular:true, puffs:40000, photo:'v400_ultra_slim', realPhoto:'v400_ultra_slim', outOfStock:true, flavors:[]},
   {name:'IGNITE V400 ICE', price:27000, puffs:40000, photo:'v400', realPhoto:'v400', flavors:[
