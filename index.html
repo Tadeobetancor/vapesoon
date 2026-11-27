@@ -5553,43 +5553,52 @@ body{background:#061326;}
    Los datos quedan en el celular del cliente (localStorage) y, si está
    configurada, en la planilla de Google (CLIENTES_SHEET_URL en el JS).
    ===================================================================== */
+/* IDEA: no es un botón, es tu "pase de acceso" flotando: una cápsula de vidrio
+   clarito (escarchado), sin caja ni sombra dura, con un destello de luz que la
+   cruza cada tanto. Los botones de abajo son cajas rectas y oscuras; esta es
+   redonda, clara y transparente, así no se confunden. Tokens acá: */
 .acct-strip{
-  position:relative;
+  --strip-glass:linear-gradient(100deg, rgba(255,255,255,.17) 0%, rgba(230,243,255,.08) 45%, rgba(176,217,255,.06) 100%);
+  --strip-glass-hover:linear-gradient(100deg, rgba(255,255,255,.24) 0%, rgba(230,243,255,.12) 45%, rgba(176,217,255,.09) 100%);
+  --strip-edge:rgba(242,251,255,.42);
+  --strip-edge-low:rgba(176,217,255,.14);
+  --strip-sheen-every:7s;
+  position:relative;overflow:hidden;
   display:flex;align-items:center;gap:12px;
   width:100%;
-  margin:0 0 10px;
-  padding:10px 10px 10px 10px;
-  border-radius:16px;
-  background:linear-gradient(160deg, rgba(28,84,150,.75), rgba(11,46,90,.75));
-  border:1px solid rgba(176,217,255,.16);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.05), var(--shadow-soft);
+  margin:0 0 12px;
+  padding:8px 12px 8px 8px;
+  border-radius:999px;
+  background:var(--strip-glass);
+  backdrop-filter:blur(12px) saturate(1.35);-webkit-backdrop-filter:blur(12px) saturate(1.35);
+  border:1px solid var(--strip-edge-low);
+  border-top-color:var(--strip-edge);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22), 0 12px 30px -22px rgba(176,217,255,.7);
   color:#fff;text-align:left;
   font-family:'Poppins',sans-serif;
   cursor:pointer;
-  transition:transform .15s ease;
+  transition:transform .15s ease, background .25s ease;
   -webkit-tap-highlight-color:transparent;
 }
-/* borde de luz que gira (como las tarjetas en oferta), en azul y dorado */
+/* destello de vidrio que cruza la cápsula cada tanto */
 .acct-strip::after{
   content:"";
-  position:absolute;inset:0;
-  border-radius:inherit;
-  padding:1.5px;
-  background:conic-gradient(from var(--spin), rgba(176,217,255,.1), var(--blue-bright), rgba(255,255,255,.7), rgba(176,217,255,.1) 55%);
-  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite:xor;
-  mask-composite:exclude;
-  animation:spin 4s linear infinite;
+  position:absolute;top:0;bottom:0;left:-40%;width:28%;
+  background:linear-gradient(100deg, transparent, rgba(255,255,255,.22), transparent);
+  transform:skewX(-20deg);
+  animation:stripSheen var(--strip-sheen-every) ease-in-out 1.5s infinite;
   pointer-events:none;
 }
+@keyframes stripSheen{0%{left:-40%;}22%,100%{left:120%;}}
+.acct-strip:hover{background:var(--strip-glass-hover);}
 .acct-strip:active{transform:scale(.985);}
+.acct-strip:focus-visible{outline:2px solid var(--blue-neon);outline-offset:2px;}
 .acct-strip-pic{
   flex:none;position:relative;
-  width:44px;height:44px;border-radius:12px;
+  width:46px;height:46px;border-radius:50%;
   display:grid;place-items:center;
-  background:linear-gradient(160deg, rgba(176,217,255,.26), rgba(91,170,255,.14));
-  border:1px solid rgba(176,217,255,.45);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.15);
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(242,251,255,.45);
   font-family:'Bungee',cursive;font-size:18px;color:#fff;
   overflow:hidden;
 }
@@ -5619,17 +5628,17 @@ body{background:#061326;}
 /* botón redondo "entrar" a la derecha */
 .acct-strip-go{
   flex:none;
-  width:36px;height:36px;border-radius:50%;
+  width:30px;height:30px;
   display:grid;place-items:center;
-  background:var(--grad-btn);
-  box-shadow:0 3px 0 var(--btn-edge), 0 8px 18px -8px rgba(47,145,255,.9);
-  color:#fff;
+  background:none;border:none;
+  color:rgba(242,251,255,.85);
 }
 .acct-strip-go svg{width:18px;height:18px;}
-html.lite .acct-strip::after{animation:none;--spin:120deg;}
-@media (prefers-reduced-motion: reduce){ .acct-strip::after{animation:none;} }
+html.lite .acct-strip::after{display:none;}
+html.lite .acct-strip{backdrop-filter:none;-webkit-backdrop-filter:none;background:linear-gradient(100deg, rgba(255,255,255,.15), rgba(176,217,255,.07));}
+@media (prefers-reduced-motion: reduce){ .acct-strip::after{animation:none;display:none;} }
 @media(min-width:900px){
-  .acct-strip{padding:12px 14px 12px 12px;}
+  .acct-strip{padding:10px 16px 10px 10px;}
   .acct-strip-title{font-size:16.5px;}
   .acct-strip-sub{font-size:13px;}
 }
@@ -5913,80 +5922,330 @@ html.lite .modal-overlay.acct-overlay{backdrop-filter:none;-webkit-backdrop-filt
 .acct-warn svg{width:30px;height:30px;}
 .acct-confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none;border-radius:inherit;}
 
-/* ---- Barra de compras (cada 5ta compra con descuento) ---- */
-.loyal{
-  margin:0 0 14px;
-  padding:14px 14px 12px;
-  border-radius:16px;
-  background:linear-gradient(160deg, rgba(28,84,150,.6), rgba(11,46,90,.6));
-  border:1px solid rgba(176,217,255,.18);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
-  text-align:left;
+/* ---- Perfil: foto + nombre arriba, pase de compras protagonista, datos en desplegable ----
+   IDEA: el perfil es tu "tarjeta de jugador". Cada compra es XP; la tira es el camino
+   del pase: lo hecho queda encendido en azul, lo que viene brilla en dorado y el último
+   premio es el trofeo. Todo el color / tamaño / tiempo del pase vive en estos tokens. */
+.acct-card{
+  --px-gold:#ffc857;
+  --px-gold-hi:#fff1c4;
+  --px-orange:#ff9130;
+  --px-hot:#ff6b4a;                 /* punta caliente del premio final */
+  --px-blue:#5baaff;
+  --px-ice:#b0d9ff;
+  --px-ink-dim:rgba(214,234,255,.62);
+  --px-tile:rgba(8,31,64,.78);
+  --px-line:rgba(176,217,255,.2);
+  --px-levels:8;                    /* casilleros de la barra de XP (= PASS_LEVELS) */
+  --px-step-h:42px;                 /* compra común (fila de arriba) */
+  --px-tile-h:94px;                 /* compra con premio (fila de abajo) */
+  --px-gap:8px;                     /* entre columnas */
+  --px-row-gap:16px;                /* entre la compra común y su premio */
+  --px-off-size:20px;               /* el % OFF de cada premio */
+  --px-off-final:23px;              /* el % OFF del premio final */
+  --px-in:.6s;                      /* entrada del perfil */
+  --px-breathe:2.2s;                /* "respira" el nivel Próxima */
+  --px-sheen:3.6s;                  /* destello que cruza los premios */
+  --px-ring:7s;                     /* aro del avatar */
 }
-.loyal-head{display:flex;align-items:center;justify-content:space-between;gap:8px;}
-.loyal-label{font-family:'Bungee',cursive;font-size:14px;color:#fff;letter-spacing:.3px;}
-.loyal-prize{
-  flex:none;
-  padding:4px 10px;border-radius:999px;
-  font-family:'Poppins',sans-serif;font-weight:800;font-size:12px;color:var(--void);
-  background:var(--wholesale-grad);
-  box-shadow:0 6px 16px -8px rgba(255,145,48,.9);
-}
-.loyal-track{
+.acct-me-head{
   position:relative;
-  height:12px;
-  margin:24px 18px 22px 2px;
-  border-radius:999px;
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(176,217,255,.15);
+  display:flex;align-items:center;gap:14px;
+  margin:4px 0 14px;padding:0 26px 0 4px;text-align:left;
+  animation:pxRise var(--px-in) var(--ease) both;
 }
-.loyal-fill{
-  position:absolute;left:0;top:0;bottom:0;
-  width:0;
-  border-radius:inherit;
+/* luz detrás del avatar, como un reflector */
+.acct-me-head::before{
+  content:"";position:absolute;left:-30px;top:50%;width:170px;height:130px;transform:translateY(-50%);
+  background:radial-gradient(closest-side, rgba(91,170,255,.32), rgba(255,200,87,.08) 60%, transparent);
+  pointer-events:none;
+}
+.acct-me-head .acct-avatar{
+  flex:none;width:74px;height:74px;margin:5px;font-size:30px;
+  border:2px solid #0d2c56;
+  box-shadow:0 12px 28px -10px rgba(25,106,220,.95);
+}
+/* aro de jugador: azul → dorado, gira lento */
+.acct-me-head .acct-avatar::before{
+  content:"";position:absolute;inset:-6px;border-radius:50%;
+  background:conic-gradient(from var(--spin), var(--px-gold), var(--px-blue), var(--px-ice), var(--px-orange), var(--px-gold));
+  -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3.5px), #000 calc(100% - 3px));
+  mask:radial-gradient(farthest-side, transparent calc(100% - 3.5px), #000 calc(100% - 3px));
+  animation:spin var(--px-ring) linear infinite;
+  pointer-events:none;
+}
+.acct-me-head .acct-cam{width:26px;height:26px;z-index:1;}
+.acct-me-head .acct-cam svg{width:14px;height:14px;}
+.acct-me-who{position:relative;min-width:0;}
+.acct-me-who .acct-title{
+  margin:0;
+  font-family:'Bungee',cursive;font-weight:400;font-size:clamp(17px, 5.1vw, 21px);line-height:1.08;letter-spacing:.3px;
+  overflow-wrap:anywhere;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  background:linear-gradient(180deg, #fff 30%, var(--px-ice));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  text-shadow:none;
+}
+.acct-me-who .acct-photo-hint{margin-top:4px;}
+
+/* ---- PASE DE COMPRAS (PASS_LEVELS niveles, premios en PASS_REWARDS) ---- */
+.pass{
+  position:relative;overflow:hidden;isolation:isolate;
+  margin:0 0 14px;
+  padding:14px 0 12px;
+  border-radius:20px;
+  background:
+    radial-gradient(90% 55% at 100% 0%, rgba(255,200,87,.2), transparent 65%),
+    radial-gradient(70% 50% at 0% 100%, rgba(91,170,255,.18), transparent 70%),
+    repeating-linear-gradient(135deg, rgba(255,255,255,.028) 0 2px, transparent 2px 11px),
+    linear-gradient(165deg, #1a4f8f 0%, #0b2a55 58%, #071c3a 100%);
+  border:1px solid rgba(255,200,87,.38);
+  box-shadow:0 18px 40px -22px rgba(0,0,0,.85), inset 0 1px 0 rgba(255,255,255,.1);
+  text-align:left;
+  animation:pxRise var(--px-in) var(--ease) .08s both;
+}
+/* hilo dorado arriba, como el borde de una carta rara */
+.pass::before{
+  content:"";position:absolute;left:14px;right:14px;top:0;height:1.5px;z-index:-1;
+  background:linear-gradient(90deg, transparent, var(--px-gold), var(--px-gold-hi), var(--px-gold), transparent);
+  opacity:.85;
+}
+.pass-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 14px;}
+.pass-title{font-family:'Bungee',cursive;font-size:clamp(13.5px, 4vw, 16px);white-space:nowrap;color:#fff;letter-spacing:.3px;text-shadow:0 2px 12px rgba(91,170,255,.55);}
+.pass-title::before{content:"★ ";color:var(--px-gold);}
+.pass-season{
+  flex:none;padding:3px 9px;border-radius:999px;white-space:nowrap;
+  font-size:10px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:var(--px-gold-hi);
+  background:rgba(255,200,87,.12);border:1px solid rgba(255,200,87,.45);
+}
+/* el próximo premio, grande: un cupón dorado con destello */
+.pass-hero{display:flex;align-items:center;gap:12px;margin:12px 14px 12px;}
+.pass-prize{
+  position:relative;overflow:hidden;flex:none;
+  padding:11px 13px;border-radius:14px;
+  font-family:'Bungee',cursive;font-size:22px;line-height:1;color:var(--void);white-space:nowrap;
+  background:linear-gradient(135deg, var(--px-gold-hi) 0%, var(--px-gold) 35%, var(--px-orange) 100%);
+  outline:1.5px dashed rgba(8,34,68,.35);outline-offset:-5px;
+  box-shadow:0 10px 24px -8px rgba(255,145,48,.95), 0 0 0 1px rgba(255,241,196,.5);
+  animation:pxPrizeIn .7s var(--ease-spring) .25s both;
+}
+.pass-prize::after{
+  content:"";position:absolute;top:-20%;bottom:-20%;left:-60%;width:40%;
+  background:linear-gradient(100deg, transparent, rgba(255,255,255,.75), transparent);
+  transform:skewX(-18deg);
+  animation:pxSweep var(--px-sheen) ease-in-out 1s infinite;
+}
+.pass-prize[hidden]{display:none;}
+.pass-next{margin:0;font-size:15px;font-weight:600;line-height:1.3;color:#fff;}
+.pass-next b{color:var(--px-gold);font-weight:800;}
+/* barra de XP: 15 casilleros, se llena con una chispa en la punta */
+.pass-bar{
+  position:relative;height:14px;margin:0 14px;border-radius:999px;
+  background:rgba(2,12,28,.55);border:1px solid rgba(176,217,255,.22);
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.4);
   overflow:hidden;
-  background:linear-gradient(90deg, #2f84ea, #5baaff 60%, #b0d9ff);
-  box-shadow:0 0 14px rgba(91,170,255,.7);
-  transition:width 1.3s var(--ease) .25s;
 }
-/* rayitas que avanzan dentro de la barra, como una carga */
-.loyal-fill::after{
-  content:"";position:absolute;top:0;bottom:0;left:-40px;right:0;
-  background:repeating-linear-gradient(115deg, rgba(255,255,255,.3) 0 8px, transparent 8px 20px);
-  animation:loyalStripes 1.1s linear infinite;
+.pass-bar::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(90deg, transparent 0 calc(100% / var(--px-levels) - 2px), rgba(4,18,40,.85) calc(100% / var(--px-levels) - 2px) calc(100% / var(--px-levels)));
 }
-@keyframes loyalStripes{to{transform:translateX(21.8px);}}
-.loyal-dot{
-  position:absolute;top:50%;
-  width:26px;height:26px;margin:-13px 0 0 -13px;
-  border-radius:50%;
-  display:grid;place-items:center;
-  font-family:'Poppins',sans-serif;font-size:11px;font-weight:800;
-  color:rgba(214,234,255,.55);
-  background:#0d2c56;
-  border:2px solid rgba(176,217,255,.28);
-  transition:background .35s ease, border-color .35s ease, color .35s ease;
+.pass-bar-fill{
+  position:absolute;left:0;top:0;bottom:0;width:0;border-radius:inherit;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.35), transparent 55%),
+    linear-gradient(90deg, #2f84ea, var(--px-blue) 60%, var(--px-ice));
+  box-shadow:0 0 14px rgba(91,170,255,.85);
+  transition:width 1.2s var(--ease) .35s;
 }
-.loyal-dot.done{background:var(--grad-btn);border-color:#b0d9ff;color:#fff;animation:loyalPop .45s var(--ease-spring) backwards;}
-.loyal-dot.done svg{width:13px;height:13px;}
-.loyal-dot.next{border-color:var(--blue-neon);color:#fff;box-shadow:0 0 0 4px rgba(91,170,255,.18);}
-.loyal-dot.gift{
-  width:36px;height:36px;margin:-18px 0 0 -18px;
-  font-size:18px;
-  background:rgba(255,200,87,.12);
-  border-color:var(--gold);
+.pass-bar-fill::after{ /* chispa */
+  content:"";position:absolute;right:-3px;top:50%;width:10px;height:10px;border-radius:50%;
+  transform:translateY(-50%);
+  background:#fff;box-shadow:0 0 8px 3px rgba(176,217,255,.95);
 }
-.loyal-dot.gift.ready{background:var(--wholesale-grad);animation:giftPulse 1.4s ease-in-out 1.4s infinite;}
-@keyframes loyalPop{from{transform:scale(.3);}}
+.pass-count{margin:6px 14px 0;font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--px-ink-dim);}
+/* TODOS los niveles a la vista, sin deslizar: 4 columnas = 4 "tramos".
+   Arriba la compra común, abajo (grande y dorada) la compra que trae premio.
+   Se lee columna por columna: 1 → 2 🎁, 3 → 4 🎁 ... (grid-auto-flow:column).
+   centerPassTrack() sigue andando: como ya no hay scroll, no mueve nada. */
+.pass-track{
+  position:relative;
+  display:grid;grid-template-rows:auto auto;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);
+  align-items:end;
+  gap:var(--px-row-gap) var(--px-gap);
+  list-style:none;margin:6px 0 0;padding:14px 14px 6px;
+}
+.pass-track:focus-visible{outline:2px solid var(--blue-neon);outline-offset:-2px;border-radius:12px;}
+.pass-lvl{
+  position:relative;
+  height:var(--px-step-h);padding:0 4px;
+  display:flex;flex-direction:row;align-items:center;justify-content:center;gap:5px;
+  border-radius:13px;
+  background:var(--px-tile);
+  border:1.5px solid var(--px-line);
+  color:var(--px-ink-dim);
+}
+.pass-lvl:not(.reward) .pass-mid{flex:none;}
+.pass-lvl:not(.reward) .pass-off{display:none;}
+.pass-lvl:not(.reward) .pass-gift{font-size:16px;}
+/* el camino: de la compra común baja un tramo hasta su premio; se enciende al completarla */
+.pass-lvl.reward::before{
+  content:"";position:absolute;bottom:100%;left:50%;width:3px;height:calc(var(--px-row-gap) + 2px);margin-bottom:1.5px;
+  transform:translateX(-50%);
+  background:rgba(176,217,255,.18);
+}
+.pass-lvl.done + .pass-lvl.reward::before{background:var(--px-blue);box-shadow:0 0 6px rgba(91,170,255,.9);}
+.pass-n{font-family:'Poppins',sans-serif;font-size:14px;font-weight:800;line-height:1;}
+.pass-mid{position:relative;flex:1;display:grid;place-items:center;}
+.pass-ico{width:18px;height:18px;}
+.pass-off{min-height:12px;display:flex;flex-direction:column;align-items:center;line-height:1;white-space:nowrap;font-size:9px;font-weight:800;letter-spacing:.8px;}
+.pass-off b{font-family:'Bungee',cursive;font-weight:400;font-size:var(--px-off-size);letter-spacing:-.3px;line-height:1;}
+.pass-gift{font-size:20px;line-height:1;}
+.pass-lock{opacity:.8;}
+.pass-lvl.reward .pass-lock{position:absolute;right:-10px;bottom:-3px;width:16px;height:16px;padding:2.5px;border-radius:50%;background:#0d2c56;border:1px solid rgba(255,200,87,.5);color:var(--px-gold-hi);opacity:1;}
+
+/* premio: dorado, alto, el % grande y un destello que lo cruza cada tanto */
+.pass-lvl.reward{
+  height:var(--px-tile-h);padding:8px 2px 8px;
+  flex-direction:column;justify-content:space-between;gap:0;
+  border-radius:15px;
+  color:var(--px-gold-hi);
+  border-color:rgba(255,200,87,.7);
+  background:
+    linear-gradient(110deg, transparent 35%, rgba(255,241,196,.28) 48%, transparent 60%) no-repeat,
+    radial-gradient(90% 60% at 50% 100%, rgba(255,145,48,.32), transparent 75%),
+    linear-gradient(180deg, rgba(255,200,87,.26), rgba(8,31,64,.85));
+  background-size:300% 100%, 100% 100%, 100% 100%;
+  background-position:150% 0, 0 0, 0 0;
+  box-shadow:0 8px 20px -10px rgba(255,170,60,.8), inset 0 1px 0 rgba(255,241,196,.25);
+  animation:pxShine var(--px-sheen) ease-in-out 1.2s infinite;
+}
+.pass-lvl.reward .pass-n{color:var(--px-gold);}
+.pass-lvl.reward .pass-off b{
+  background:linear-gradient(180deg, var(--px-gold-hi), var(--px-gold) 55%, var(--px-orange));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 1px 0 rgba(0,0,0,.35));
+}
+.pass-lvl.reward .pass-off{color:var(--px-gold);}
+
+/* PREMIO FINAL (último nivel): trofeo, aro de fuego que gira y cartel "FINAL" */
+.pass-lvl.reward:last-child{
+  height:calc(var(--px-tile-h) + 8px);
+  border-color:transparent;
+  background:
+    linear-gradient(110deg, transparent 35%, rgba(255,241,196,.35) 48%, transparent 60%) no-repeat,
+    radial-gradient(100% 70% at 50% 100%, rgba(255,107,74,.45), transparent 75%),
+    linear-gradient(180deg, rgba(255,200,87,.38), rgba(30,22,50,.9));
+  background-size:300% 100%, 100% 100%, 100% 100%;
+  background-position:150% 0, 0 0, 0 0;
+  box-shadow:0 0 22px -4px rgba(255,170,60,.75), inset 0 1px 0 rgba(255,241,196,.35);
+}
+.pass-lvl.reward:last-child::after{
+  content:"";position:absolute;inset:-1.5px;border-radius:inherit;padding:2px;pointer-events:none;
+  background:conic-gradient(from var(--spin), var(--px-gold-hi), var(--px-orange), var(--px-hot), var(--px-gold), var(--px-gold-hi));
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  animation:spin 3.5s linear infinite;
+}
+.pass-lvl.reward:last-child .pass-gift{font-size:0;}
+.pass-lvl.reward:last-child .pass-gift::after{content:"🏆";font-size:26px;filter:drop-shadow(0 0 8px rgba(255,200,87,.8));}
+.pass-lvl.reward:last-child .pass-off b{font-size:var(--px-off-final);}
+.pass-lvl.reward:last-child:not(.current) .pass-n{font-size:0;}
+.pass-lvl.reward:last-child:not(.current) .pass-n::after{
+  content:"Final";display:inline-block;padding:3px 8px;border-radius:999px;
+  font-family:'Bungee',cursive;font-size:10px;letter-spacing:.4px;color:var(--void);
+  background:var(--wholesale-grad);box-shadow:0 4px 10px -4px rgba(255,145,48,.9);
+}
+
+/* ya hecho: encendido en azul, con tilde */
+.pass-lvl.done{
+  color:#fff;
+  background:linear-gradient(160deg, rgba(91,170,255,.75), rgba(25,86,170,.8));
+  border-color:var(--px-ice);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35), 0 6px 16px -10px rgba(91,170,255,.9);
+  animation:passPop .45s var(--ease-spring) backwards;
+}
+.pass-lvl.done .pass-ico{width:22px;height:22px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.3));}
+.pass-lvl.reward.done{
+  border-color:var(--px-gold);
+  background:linear-gradient(160deg, rgba(91,170,255,.7), rgba(25,86,170,.8));
+}
+.pass-lvl.reward.done .pass-off{color:#fff;}
+.pass-lvl.reward.done .pass-off b{background:none;-webkit-text-fill-color:#fff;color:#fff;opacity:.9;}
+.pass-lvl.reward.done .pass-n{color:var(--px-gold-hi);}
+
+/* el que se está por comprar: un poco más grande y "respira" */
+.pass-lvl.current{
+  color:#fff;border-color:var(--px-blue);
+  background:linear-gradient(180deg, rgba(91,170,255,.38), rgba(12,49,93,.9));
+  transform:translateY(-3px);
+  animation:pxBreathe var(--px-breathe) ease-in-out .9s infinite;
+}
+.pass-lvl.reward.current{
+  border-color:var(--px-gold);
+  animation:pxBreatheGold var(--px-breathe) ease-in-out .9s infinite, pxShine var(--px-sheen) ease-in-out 1.2s infinite;
+}
+.pass-lvl.ready .pass-gift{animation:giftPulse 1.4s ease-in-out 1.4s infinite;}
+.pass-flag{
+  position:absolute;top:-10px;left:50%;transform:translateX(-50%);z-index:1;
+  padding:3px 8px;border-radius:999px;white-space:nowrap;
+  font-size:9.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--void);
+  background:var(--px-ice);
+  box-shadow:0 4px 10px -4px rgba(91,170,255,.9);
+}
+.pass-lvl.reward.current{padding-top:13px;}
+.pass-lvl.reward.current .pass-flag{background:var(--wholesale-grad);box-shadow:0 4px 10px -4px rgba(255,145,48,.9);}
+.pass-hint{margin:2px 14px 0;font-size:11px;color:rgba(214,234,255,.55);}
+
+@keyframes passPop{from{transform:scale(.5);opacity:0;}}
 @keyframes giftPulse{
-  0%,100%{transform:scale(1) rotate(0);box-shadow:0 0 0 0 rgba(255,200,87,.7);}
-  40%{transform:scale(1.14) rotate(-8deg);}
-  60%{transform:scale(1.14) rotate(8deg);box-shadow:0 0 0 10px rgba(255,200,87,0);}
+  0%,100%{transform:scale(1) rotate(0);}
+  40%{transform:scale(1.18) rotate(-8deg);}
+  60%{transform:scale(1.18) rotate(8deg);}
 }
-.loyal-msg{font-size:12.5px;color:rgba(214,234,255,.85);line-height:1.4;}
-.loyal-msg b{color:var(--gold);}
-html.lite .loyal-fill::after{animation:none;}
-@media (prefers-reduced-motion: reduce){ .loyal-fill::after, .loyal-dot.gift.ready{animation:none;} }
+@keyframes pxRise{from{opacity:0;transform:translateY(14px);}}
+@keyframes pxPrizeIn{from{opacity:0;transform:scale(.6) rotate(-6deg);}}
+@keyframes pxSweep{0%{left:-60%;}45%,100%{left:130%;}}
+@keyframes pxShine{0%{background-position:150% 0, 0 0, 0 0;}45%,100%{background-position:-50% 0, 0 0, 0 0;}}
+@keyframes pxBreathe{
+  0%,100%{box-shadow:0 0 0 3px rgba(91,170,255,.22), 0 8px 18px -8px rgba(91,170,255,.8);}
+  50%{box-shadow:0 0 0 6px rgba(91,170,255,.12), 0 8px 26px -4px rgba(91,170,255,1);}
+}
+@keyframes pxBreatheGold{
+  0%,100%{box-shadow:0 0 0 3px rgba(255,200,87,.28), 0 8px 18px -8px rgba(255,170,60,.9);}
+  50%{box-shadow:0 0 0 6px rgba(255,200,87,.14), 0 8px 28px -4px rgba(255,170,60,1);}
+}
+/* celulares lentos: sin animaciones que se repiten (queda todo dibujado y quieto) */
+html.lite .acct-me-head, html.lite .pass, html.lite .pass-prize,
+html.lite .pass-prize::after, html.lite .acct-me-head .acct-avatar::before,
+html.lite .pass-lvl.reward, html.lite .pass-lvl.current, html.lite .pass-lvl.reward:last-child::after{animation:none;}
+html.lite .pass-prize::after{display:none;}
+html.lite .pass-lvl.current{box-shadow:0 0 0 3px rgba(91,170,255,.25), 0 8px 18px -8px rgba(91,170,255,.8);}
+html.lite .pass-lvl.reward.current{box-shadow:0 0 0 3px rgba(255,200,87,.28), 0 8px 18px -8px rgba(255,170,60,.9);}
+html.lite .acct-me-head .acct-avatar::before, html.lite .pass-lvl.reward:last-child::after{--spin:120deg;}
+@media (prefers-reduced-motion: reduce){
+  .acct-me-head, .pass, .pass-prize, .pass-prize::after, .acct-me-head .acct-avatar::before,
+  .pass-lvl.reward, .pass-lvl.current, .pass-lvl.reward:last-child::after,
+  .pass-lvl.ready .pass-gift, .pass-lvl.done{animation:none;}
+  .pass-prize::after{display:none;}
+  .pass-lvl.current{box-shadow:0 0 0 3px rgba(91,170,255,.25), 0 8px 18px -8px rgba(91,170,255,.8);}
+  .pass-lvl.reward.current{box-shadow:0 0 0 3px rgba(255,200,87,.28), 0 8px 18px -8px rgba(255,170,60,.9);}
+  .pass-bar-fill{transition:none;}
+}
+
+/* "Mis datos": desplegable cerrado por defecto */
+.acct-data{margin-top:4px;text-align:left;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(176,217,255,.16);}
+.acct-data-sum{
+  list-style:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  min-height:46px;padding:0 14px;
+  font-size:14px;font-weight:700;color:#fff;
+  -webkit-tap-highlight-color:transparent;
+}
+.acct-data-sum::-webkit-details-marker{display:none;}
+.acct-data-sum svg{width:16px;height:16px;flex:none;transition:transform .25s ease;}
+.acct-data[open] .acct-data-sum svg{transform:rotate(180deg);}
+.acct-data-sum:focus-visible{outline:2px solid var(--blue-neon);outline-offset:-2px;border-radius:14px;}
+.acct-data .acct-rows{margin-top:0;border:none;border-top:1px solid rgba(176,217,255,.12);border-radius:0 0 14px 14px;background:none;}
 
 /* ---- Traducir sabores: interruptor deslizable + nombre en español ---- */
 .flavor-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px;}
@@ -6540,23 +6799,37 @@ html.lite .loyal-fill::after{animation:none;}
 
     <!-- Mi cuenta -->
     <div class="acct-view hidden" id="acctMeView">
-      <button class="acct-avatar" id="acctAvatar" type="button" aria-label="Cambiar mi foto">
-        <img id="acctAvatarImg" alt="" hidden>
-        <span id="acctAvatarInitial">T</span>
-        <span class="acct-cam" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 8h3l2-3h6l2 3h3v11H4z" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.5"/></svg></span>
-      </button>
-      <input type="file" id="acctPhotoInput" accept="image/*" hidden>
-      <p class="acct-photo-hint" id="acctPhotoHint"></p>
-      <h2 class="acct-title" id="acctMeTitle">Hola</h2>
-      <div class="loyal" id="loyal">
-        <div class="loyal-head">
-          <span class="loyal-label">Tu 5ta compra</span>
-          <span class="loyal-prize" id="loyalPrize">20% OFF</span>
+      <div class="acct-me-head">
+        <button class="acct-avatar" id="acctAvatar" type="button" aria-label="Cambiar mi foto">
+          <img id="acctAvatarImg" alt="" hidden>
+          <span id="acctAvatarInitial">T</span>
+          <span class="acct-cam" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 8h3l2-3h6l2 3h3v11H4z" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.5"/></svg></span>
+        </button>
+        <input type="file" id="acctPhotoInput" accept="image/*" hidden>
+        <div class="acct-me-who">
+          <h2 class="acct-title" id="acctMeTitle">Hola</h2>
+          <p class="acct-photo-hint" id="acctPhotoHint"></p>
         </div>
-        <div class="loyal-track"><div class="loyal-fill" id="loyalFill"></div><div id="loyalDots"></div></div>
-        <p class="loyal-msg" id="loyalMsg"></p>
       </div>
-      <div class="acct-rows" id="acctRows"></div>
+      <!-- Pase de compras: lo principal del perfil -->
+      <section class="pass" id="loyal" aria-label="Pase de compras">
+        <div class="pass-head">
+          <span class="pass-title">Pase Vapesoon</span>
+          <span class="pass-season" id="passSeason">Temporada 1</span>
+        </div>
+        <div class="pass-hero">
+          <span class="pass-prize" id="passPrize">5% OFF</span>
+          <p class="pass-next" id="loyalMsg" aria-live="polite"></p>
+        </div>
+        <div class="pass-bar" role="presentation"><div class="pass-bar-fill" id="loyalFill"></div></div>
+        <div class="pass-count" id="passCount">Nivel 0 de 8</div>
+        <ol class="pass-track" id="passTrack" tabindex="0" aria-label="Niveles del pase"></ol>
+        <p class="pass-hint">Cada compra sube un nivel · los dorados son premios</p>
+      </section>
+      <details class="acct-data" id="acctData">
+        <summary class="acct-data-sum"><span>Mis datos</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+        <div class="acct-rows" id="acctRows"></div>
+      </details>
       <button class="acct-btn acct-btn--alt" id="acctLogout" type="button">Cerrar sesión</button>
       <button class="acct-del" id="acctDelete" type="button">Borrar mi cuenta</button>
     </div>
@@ -10429,12 +10702,15 @@ const JOIN_SECONDS = 4;              // lo que dura el pop-up en pantalla
 const JOIN_DELAY_MS = 8000;          // cuánto espera (después de la intro) para aparecer
 const JOIN_SNOOZE_CLOSE_DAYS = 3;    // si lo cierra con la X, no vuelve por 3 días
 const JOIN_SNOOZE_TIMEOUT_DAYS = 1;  // si se termina la cuenta regresiva solo, vuelve mañana
-// Premio por compras: cada LOYALTY_EVERY compras, esa compra tiene LOYALTY_OFF % de descuento.
+// PASE DE COMPRAS (estilo pase de batalla): 1 nivel = 1 compra. Se ven los PASS_LEVELS niveles
+// desde el inicio; en los niveles de PASS_REWARDS la compra sale con ese % de descuento
+// ({nivel: % OFF}). Al terminar el último nivel el pase vuelve a empezar (temporada 2, 3...).
+// PARA CAMBIAR PREMIOS: editá solo estas dos líneas (el último nivel debería tener premio).
+const PASS_LEVELS = 8;
+const PASS_REWARDS = {2:10, 4:15, 6:20, 8:25};
 // Cuenta cada pedido enviado por WhatsApp de un cliente registrado; dos pedidos en menos de
 // ORDER_GAP_MS cuentan como uno (para que no se sume tocando "enviar" varias veces).
-// El mensaje de WhatsApp avisa "Compra N° X" y "le toca X% OFF", así lo confirmás en el chat.
-const LOYALTY_EVERY = 5;
-const LOYALTY_OFF = 20;
+// El mensaje de WhatsApp avisa "Compra N° X (nivel Y del pase)" y "le toca X% OFF", así lo confirmás en el chat.
 const ORDER_GAP_MS = 2 * 36e5;
 
 /* ---- número de WhatsApp: cada uno lo escribe distinto (+54, 54 9, 011,
@@ -10765,49 +11041,68 @@ function renderMe(p, how){ // how: 'nuevo' | 'ingreso' | undefined
     row.append(a, b);
     rows.appendChild(row);
   });
+  document.getElementById('acctData').open = false; // "Mis datos" arranca cerrado
   showView('cuenta');
+  centerPassTrack(); requestAnimationFrame(centerPassTrack); setTimeout(centerPassTrack, 400);
   av.classList.remove('pop'); void av.offsetWidth;
   if(how){ av.classList.add('pop'); }
   if(how === 'nuevo') spawnAcctConfetti();
 }
-/* Barra de 5 pasos: 1-4 son compras normales, la 5ta (🎁) es la del descuento.
-   Se llena animada cada vez que se abre el perfil. */
+/* PASE DE COMPRAS: PASS_LEVELS niveles (1 por compra), todos visibles; los hechos con tilde,
+   el resto con candado y los niveles con premio (PASS_REWARDS) destacados. Se llena animado
+   cada vez que se abre el perfil. Arranca centrado en el nivel que se está por comprar. */
 function renderLoyalty(p){
-  const total = p.orders || 0;
-  const done = total % LOYALTY_EVERY;            // compras hechas en esta vuelta (0..4)
-  const left = LOYALTY_EVERY - 1 - done;         // compras que faltan para desbloquear el premio
-  document.getElementById('loyalPrize').textContent = `${LOYALTY_OFF}% OFF`;
-  const dots = document.getElementById('loyalDots');
-  const check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4"><path d="M5 12.5l4.5 4.5L19 7.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  dots.innerHTML = '';
-  for(let i = 1; i <= LOYALTY_EVERY; i++){
-    const d = document.createElement('span');
-    const gift = i === LOYALTY_EVERY;
-    d.className = 'loyal-dot' + (gift ? ' gift' : '');
-    d.style.left = (i / LOYALTY_EVERY * 100) + '%';
-    if(gift){
-      d.textContent = '🎁';
-      if(left === 0) d.classList.add('ready');
-    } else if(i <= done){
-      d.classList.add('done');
-      d.innerHTML = check;
-      d.style.animationDelay = (0.25 + 1.3 * i / LOYALTY_EVERY) + 's'; // se prende cuando la barra pasa
-    } else {
-      d.textContent = i;
-      if(i === done + 1) d.classList.add('next');
-    }
-    dots.appendChild(d);
+  const total = Math.max(0, p.orders || 0);
+  const done = total % PASS_LEVELS;                       // niveles hechos en esta temporada (0..PASS_LEVELS-1)
+  const season = Math.floor(total / PASS_LEVELS) + 1;
+  const rewardLevels = Object.keys(PASS_REWARDS).map(Number).sort((a, b) => a - b);
+  const nextLv = rewardLevels.find(l => l > done);        // próximo nivel con premio
+  const left = nextLv ? nextLv - done : 0;                // compras que faltan para cobrarlo (contando esa)
+  const off = nextLv ? PASS_REWARDS[nextLv] : 0;
+  const check = '<svg class="pass-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const lock = '<svg class="pass-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2.2"/><path d="M8 11V8a4 4 0 018 0v3" stroke-linecap="round"/></svg>';
+
+  document.getElementById('passSeason').textContent = `Temporada ${season}`;
+  document.getElementById('passCount').textContent = `Nivel ${done} de ${PASS_LEVELS}`;
+  document.getElementById('passPrize').textContent = off ? `${off}% OFF` : '';
+  document.getElementById('passPrize').hidden = !off;
+
+  const track = document.getElementById('passTrack');
+  track.innerHTML = '';
+  for(let i = 1; i <= PASS_LEVELS; i++){
+    const reward = PASS_REWARDS[i];
+    const state = i <= done ? 'done' : (i === done + 1 ? 'current' : 'locked');
+    const li = document.createElement('li');
+    li.className = `pass-lvl ${state}` + (reward ? ' reward' : '') + (reward && state === 'current' ? ' ready' : '');
+    li.setAttribute('aria-label', `Nivel ${i}${reward ? `, ${reward}% OFF` : ''}, ${state === 'done' ? 'completado' : state === 'current' ? 'tu próxima compra' : 'bloqueado'}`);
+    const flag = state === 'current' ? '<span class="pass-flag">Próxima</span>' : '';
+    const icon = reward ? '🎁' : (state === 'current' ? '🛒' : '');
+    const mid = state === 'done' ? check
+      : (icon ? `<span class="pass-gift" aria-hidden="true">${icon}</span>` : '') + (state === 'locked' ? lock.replace('class="pass-ico"', 'class="pass-ico pass-lock"') : '');
+    li.innerHTML = `${flag}<span class="pass-n">${i}</span><span class="pass-mid">${mid}</span><span class="pass-off">${reward ? `<b>${reward}%</b>OFF` : ''}</span>`;
+    if(state === 'done') li.style.animationDelay = (0.2 + 0.9 * i / PASS_LEVELS) + 's';
+    track.appendChild(li);
   }
+
   const fill = document.getElementById('loyalFill');
   fill.style.transition = 'none';
   fill.style.width = '0';
   void fill.offsetWidth;
   fill.style.transition = '';
-  requestAnimationFrame(()=>{ fill.style.width = (done / LOYALTY_EVERY * 100) + '%'; });
+  requestAnimationFrame(()=>{ fill.style.width = (done / PASS_LEVELS * 100) + '%'; });
+
   const msg = document.getElementById('loyalMsg');
-  if(left === 0) msg.innerHTML = `¡Tu próxima compra tiene <b>${LOYALTY_OFF}% OFF</b>! 🎁`;
-  else if(done === 0) msg.innerHTML = `Sumá compras: tu ${LOYALTY_EVERY}ta tiene <b>${LOYALTY_OFF}% OFF</b>`;
-  else msg.innerHTML = `Te ${left === 1 ? 'falta <b>1 compra</b>' : `faltan <b>${left} compras</b>`} para desbloquear tu <b>${LOYALTY_OFF}% OFF</b>`;
+  const fresh = total > 0 && done === 0 ? '¡Nueva temporada! ' : '';
+  if(!nextLv) msg.innerHTML = `${fresh}Seguí sumando compras: cada una sube un nivel`;
+  else if(left === 1) msg.innerHTML = `¡Tu próxima compra tiene <b>${off}% OFF</b>! 🎁`;
+  else msg.innerHTML = `${fresh}Te faltan <b>${left} compras</b> para <b>${off}% OFF</b>`;
+}
+// Deja la tira del pase centrada en el nivel actual (hay que llamarla con el perfil ya visible).
+function centerPassTrack(){
+  const track = document.getElementById('passTrack');
+  const cur = track && track.querySelector('.pass-lvl.current');
+  if(!cur || !track.clientWidth) return;
+  track.scrollLeft = cur.offsetLeft - (track.clientWidth - cur.offsetWidth) / 2;
 }
 function spawnAcctConfetti(){
   const box = document.getElementById('acctConfetti');
@@ -11046,7 +11341,8 @@ function clientOrderLine(){
   }
   const n = p.orders || 1;
   let line = `\n*Cliente registrado ⭐:* ${stripEmoji(p.name)} (+54 9 ${formatPhone(p.phone)}) — compra N° ${n}`;
-  if(n % LOYALTY_EVERY === 0) line += `\n🎁 *Es su ${n}ª compra: le toca ${LOYALTY_OFF}% OFF*`;
+  const lvl = ((n - 1) % PASS_LEVELS) + 1;   // nivel del pase de esta compra (1..PASS_LEVELS)
+  if(PASS_REWARDS[lvl]) line += `\n🎁 *Es su compra N° ${n} (nivel ${lvl} del pase): le toca ${PASS_REWARDS[lvl]}% OFF*`;
   return line;
 }
 
