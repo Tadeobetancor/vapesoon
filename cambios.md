@@ -85,3 +85,32 @@
 ### [estética] "Tus descuentos": etiquetas bloqueadas más legibles y frase que se escribe sola — index.html
 - Técnico: etiquetas secundarias más grandes (`--dc-chip-w` 92%, `--dc-chip-h` 44px, `--dc-off-small` 15px; la próxima sigue siendo la única llena y más alta). La frase de estado se arma como tramos [texto, negrita] y `typeDiscMsg()` la escribe letra por letra (30 ms, arranca a .65s) sobre un fantasma invisible que reserva el lugar (no salta ni queda cortada); lectores de pantalla reciben la frase entera (`.sr-only`). html.lite y reduced-motion: frase completa directa.
 - En simple: los descuentos tachados se leen mejor y la frase "Te falta 1 compra para tu 10% OFF" aparece escribiéndose, como el botón de la cuenta.
+
+### [estética] Tarjetas de cuenta unificadas, carrito de vidrio oscuro y promo del carrito en una línea — index.html
+- Técnico: `.acct-card` (ingresar, crear cuenta y perfil) usa el mismo `--dc-bg` (azul casi negro al 66-78% + blur 10px; en lite sin blur y más opaco); antes solo el perfil, ahora más transparente. Carrito flotante `.cart-bar` (y expandido): vidrio oscuro `rgba(4,14,32,.42)` + blur, borde celeste fino, sin la esfera azul; badge igual. Lite: oscuro opaco sin blur. Promo del carrito `.cart-combo-nudge`: misma paleta/borde/ícono/flecha, pero el texto queda en UNA línea ("+1 vape y ahorrás **$3.000**"), más grande y pesado (14-16.5px, 700) con el monto un 10% más grande; se oculta el tag "Promoción" (template: solo esa línea). Ajuste de la etiqueta "Bienvenida" (agregada por funcional) para que entren 5 columnas a 360px (texto 8px, gap 6px).
+- En simple: las tres tarjetas de la cuenta ahora tienen el mismo color oscuro transparente; el carrito de abajo es de vidrio oscuro; y la promo del carrito se lee de un tirón en una línea.
+
+### [funcional] Iniciar sesión / crear cuenta ya no abre el perfil — index.html
+- Técnico: `finishAuth()` cierra el cartel y deja la portada; el aviso de éxito es el botón de cuenta (nombre/foto + frase nueva, con un saltito `.just-in`). Con cuenta nueva el confeti ahora cae sobre el botón (contenedor fijo temporal) en vez de dentro del cartel.
+- En simple: al entrar o registrarte volvés directo a la tienda, sin pasar por otra pantalla.
+- Pasos: registrarse antes 3 pantallas (formulario, perfil, cerrar) → 2 (formulario, tienda).
+
+### [funcional] Texto legal del carrito en una línea — index.html
+- Técnico: "El envío no está incluido. Confirmamos total y stock por WhatsApp." (era un párrafo de 3 líneas). Es el único lugar donde aparecía ese texto.
+- En simple: se lee de un vistazo.
+- Pasos: sin cambios.
+
+### [funcional] Descuento de bienvenida 10% (WELCOME_OFF) y botón de portada con sesión — index.html
+- Técnico: `const WELCOME_OFF = 10` junto a PASS_REWARDS. La 1ª compra (orders = 0) tiene ese % una sola vez. `discountInfo()` arma la misma frase para "Tus descuentos" y el botón de portada (con sesión dice "Tu primera compra tiene 10% OFF de bienvenida" / "Te falta 1 compra para tu 15% OFF" / "Tu próxima compra tiene X% OFF", escrita, queda ~11 s, se desvanece y se reescribe; sin tipeo en lite/reducir movimiento). Etiqueta `.disc-welcome` ("Bienvenida 10%") antes de las del pase. Sin cuenta: "Creá tu cuenta y llevate 10% OFF" en el botón y en el cartel de registro. WhatsApp: "🎁 Primera compra con cuenta: le toca 10% OFF de bienvenida" en la compra N° 1.
+- En simple: el cliente nuevo ve desde el primer momento que su primera compra sale con 10% menos.
+- Pasos: sin cambios (más claro de un vistazo).
+
+### [funcional] Los descuentos de la cuenta se ven y se aplican en el carrito — index.html
+- Técnico: `profileDiscount(items, profile)` calcula el % de la próxima compra (bienvenida o nivel del pase, compra N° orders+1) sobre los vapes a precio normal (los de `cartVapeCount`) después de restar el combo, redondeado a $100 hacia abajo. Fila "🎁 Tu descuento 15% OFF −$X" (o "Bienvenida 10% OFF") bajo la del combo; `cartTotal()` (barra del carrito), el total del carrito y el mensaje de WhatsApp ("Descuento cuenta 15%: -$X") usan el mismo cálculo. Sin sesión: línea chica "Creá tu cuenta y llevate 10% OFF" que abre el registro; con sesión y sin premio en esa compra: "Con esta compra, la próxima tiene 15% OFF".
+- En simple: lo que el cliente ve en el perfil como descuento ahora se descuenta de verdad en el total que le llega por WhatsApp.
+- Pasos: sin cambios (el descuento es automático).
+
+### [estética] Bienvenida fuera de la fila de descuentos — index.html
+- Técnico: se saca la 5ª etiqueta "Bienvenida 10%" de `#passTrack` (volvía a haber dos "10%" seguidos y el texto de 8px no se leía); la fila vuelve a 10/15/20/25 con los tamaños de antes. Con 0 compras, `#loyalMsg` recibe `.is-welcome` y se muestra como cupón celeste con ícono de regalo SVG (máscara CSS), 13.5px, arriba de la fila (flex `order`), latiendo como la próxima; las 4 etiquetas quedan neutras (sin X ni resaltado). Con 1+ compras no se muestra nada de bienvenida. La frase sale de `discountInfo` sin cambios. Lite/reduced-motion: cupón quieto.
+- En simple: si nunca compraste, lo primero que ves es un cupón "Tu primera compra tiene 10% OFF de bienvenida"; después, la fila de siempre con 10/15/20/25.
+- Ajuste: la frase de bienvenida se acortó a "Tu 1ª compra tiene X% OFF" (X = `WELCOME_OFF`, hoy 5%) para que entre en 1 línea en el botón de portada a 360px; el cupón del perfil suma arriba la palabra "BIENVENIDA" (CSS `::after`, 11px) y el ícono de regalo, en grilla de 2 filas.

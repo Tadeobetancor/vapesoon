@@ -5102,10 +5102,12 @@ body.has-cart .fab-tip{display:none;}
 .cart-toast-check{width:24px;height:24px;}
 
 /* ---------- AVISO DEL COMBO (carrito): una línea ---------- */
-.cart-combo-nudge{padding:11px 14px;gap:10px;border-radius:14px;margin-top:12px;}
+.cart-combo-nudge{padding:12px 12px 12px 14px;gap:9px;border-radius:14px;margin-top:12px;}
 .cart-combo-nudge-icon{font-size:20px;}
-.cart-combo-nudge-text{display:block;font-size:14px;font-weight:600;line-height:1.3;}
-.cart-combo-nudge-text b{display:inline;font-size:inherit;font-weight:800;color:var(--gold);}
+/* una sola línea, más grande y pesada; el monto un poco más grande en la misma línea */
+.cart-combo-nudge-text{display:block;font-size:clamp(14px, 4.1vw, 16.5px);font-weight:700;line-height:1.2;letter-spacing:-.15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cart-combo-nudge-text b{display:inline;font-size:1.1em;font-weight:800;color:var(--gold);}
+.cart-combo-tag{display:none;}
 .cart-combo-nudge-go{flex:none;width:18px;height:18px;color:#fff;}
 
 /* ---------- PASOS: se desbloquean enteros ---------- */
@@ -5578,6 +5580,20 @@ body{background:#061326;}
 .cart-bar.expanded .cart-bar-more{max-width:calc(100vw - 16px - 58px - 84px);padding:0 15px 0 10px;}
 @media(min-width:900px){ .cart-bar.expanded .cart-bar-more{max-width:360px;} }
 
+/* ---------- CARRITO FLOTANTE: vidrio oscuro transparente (pedido del dueño) ----------
+   Se ve el fondo a través; el badge con la cantidad sigue igual. */
+.cart-bar,.cart-bar.expanded{
+  --cartglass:rgba(4,14,32,.42);
+  background:var(--cartglass);
+  backdrop-filter:blur(10px) saturate(1.2);-webkit-backdrop-filter:blur(10px) saturate(1.2);
+  border:1px solid rgba(176,217,255,.32);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14), 0 14px 28px -12px rgba(0,0,0,.8);
+}
+.cart-bar:active{box-shadow:inset 0 1px 0 rgba(255,255,255,.14), 0 8px 18px -10px rgba(0,0,0,.8);}
+.cart-bar::before{opacity:.25;}
+.cart-bar-icon svg{filter:none;}
+html.lite .cart-bar,html.lite .cart-bar.expanded{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(4,14,32,.82);}
+
 /* =====================================================================
    CLIENTES REGISTRADOS — franja "Ingresar a mi cuenta" (arriba de
    Grilla/Deslizar, mismo vidrio que ese selector), pop-up de invitación
@@ -5785,7 +5801,7 @@ html.lite .modal-overlay.acct-overlay{backdrop-filter:none;-webkit-backdrop-filt
   --acct-pop-from:translate(0,12px) scale(.975);
   --acct-pop-ease:cubic-bezier(.3,1.22,.5,1);   /* --ease-spring rebotaba de más */
   --acct-pop-dur:.42s;
-  --acct-call-dur:.85s;                        /* "latido" del primer campo */
+  --acct-call-dur:.5s;                         /* "latido" del primer campo (rápido, una sola vez) */
   --acct-call-glow:0 0 0 4px rgba(91,170,255,.38), 0 0 22px rgba(91,170,255,.6);
   transform:var(--acct-pop-from);
   opacity:0;
@@ -5793,9 +5809,9 @@ html.lite .modal-overlay.acct-overlay{backdrop-filter:none;-webkit-backdrop-filt
 }
 .acct-overlay.open .acct-card{transform:none;opacity:1;transition:transform var(--acct-pop-dur) var(--acct-pop-ease), opacity .25s ease;}
 /* El primer campo (nombre al crear cuenta, WhatsApp al ingresar) llama la atención
-   al entrar: late 2 veces con el borde encendido y se queda quieto. */
+   al entrar: late UNA vez, rápido, con el borde encendido y se queda quieto. */
 .acct-overlay.open #acctName,
-.acct-overlay.open #acctLoginPhoneBox{animation:acctFieldCall var(--acct-call-dur) ease-in-out .4s 2;}
+.acct-overlay.open #acctLoginPhoneBox{animation:acctFieldCall var(--acct-call-dur) ease-in-out .3s 1;}
 @keyframes acctFieldCall{
   0%,100%{transform:none;}
   35%{transform:scale(1.025);border-color:var(--blue-bright);box-shadow:var(--acct-call-glow);}
@@ -5988,7 +6004,7 @@ html.lite .acct-overlay.open #acctLoginPhoneBox{animation:acctFieldGlow 1s ease-
    y una sola fila. Calmo y oscuro; lo único que brilla es el próximo % OFF.
    Todo color / tamaño / tiempo vive en estos tokens. */
 .acct-card{
-  --dc-bg:linear-gradient(170deg, rgba(10,26,51,.8) 0%, rgba(7,18,38,.84) 55%, rgba(5,13,28,.88) 100%);
+  --dc-bg:linear-gradient(170deg, rgba(10,26,51,.66) 0%, rgba(7,18,38,.72) 55%, rgba(5,13,28,.78) 100%);
   --dc-edge:rgba(176,217,255,.12);
   --dc-panel:rgba(255,255,255,.035);
   --dc-panel-edge:rgba(176,217,255,.11);
@@ -6010,13 +6026,13 @@ html.lite .acct-overlay.open #acctLoginPhoneBox{animation:acctFieldGlow 1s ease-
   --dc-avatar:56px;
   --dc-loop:4.2s;                   /* ciclo de la fila "2 compras → % OFF" */
 }
-/* tarjeta más oscura solo cuando muestra el perfil (login/registro quedan igual) */
-.acct-card:has(#acctMeView:not(.hidden)){
+/* las tres tarjetas (ingresar, crear cuenta y perfil): mismo vidrio oscuro transparente */
+.acct-card{
   background:var(--dc-bg);
   border-color:var(--dc-edge);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
 }
-html.lite .acct-card:has(#acctMeView:not(.hidden)){backdrop-filter:none;-webkit-backdrop-filter:none;background:linear-gradient(170deg, rgba(10,26,51,.92), rgba(5,13,28,.95));}
+html.lite .acct-card{backdrop-filter:none;-webkit-backdrop-filter:none;background:linear-gradient(170deg, rgba(10,26,51,.92), rgba(5,13,28,.95));}
 .acct-me-head{display:flex;align-items:center;gap:12px;margin:2px 0 14px;padding-right:30px;text-align:left;}
 .acct-me-head .acct-avatar{
   flex:none;width:var(--dc-avatar);height:var(--dc-avatar);margin:0;font-size:22px;
@@ -6145,6 +6161,41 @@ html.lite .disc-cart, html.lite .disc-arrow, html.lite .disc-tag, html.lite .dis
 .acct-addr-form .acct-row-btns{margin-top:2px;}
 .acct-addr-form .acct-err{margin:0;min-height:0;}
 .acct-input option{color:#0c315d;background:#fff;}
+.acct-type--quiet::after{display:none;}
+.cart-acct-hint{display:block;width:100%;margin:10px 0 0;padding:6px 4px;background:none;border:none;font-family:inherit;font-size:12px;font-weight:600;line-height:1.3;text-align:center;color:var(--ink-dim);}
+button.cart-acct-hint{cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(176,217,255,.45);-webkit-tap-highlight-color:transparent;}
+/* Bienvenida (0 compras): la frase pasa a ser un cupón celeste ARRIBA de la fila y es el único
+   foco; las 4 etiquetas quedan neutras (sin resaltar ni tachar). Con 1+ compras no se muestra. */
+.disc{display:flex;flex-direction:column;}
+.disc-how{order:-2;}
+.disc-now.is-welcome{
+  order:-1;align-self:center;margin:14px 0 0;
+  display:inline-grid;grid-template-columns:auto auto;align-items:center;column-gap:10px;row-gap:2px;max-width:100%;
+  padding:10px 16px 10px 12px;border-radius:12px;text-align:left;
+  font-size:14px;font-weight:600;line-height:1.25;color:#fff;
+  background:linear-gradient(160deg, #6fb6ff 0%, #3d8de0 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3), 0 8px 18px -10px rgba(91,170,255,.95);
+  animation:discCall 2.4s ease-in-out .8s infinite;
+}
+.disc-now.is-welcome b{color:#fff;font-weight:800;}
+.disc-now.is-welcome::after{
+  content:"Bienvenida";grid-column:2;grid-row:1;
+  font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.85);
+}
+.disc-now.is-welcome > span:not(.sr-only){grid-column:2;grid-row:2;}
+.disc-now.is-welcome::before{
+  content:"";grid-column:1;grid-row:1 / 3;width:22px;height:22px;background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='8' width='18' height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='8' width='18' height='4' rx='1'/%3E%3Cpath d='M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.disc:has(.disc-now.is-welcome) .disc-step.is-later .disc-off{opacity:.75;}
+.disc:has(.disc-now.is-welcome) .disc-step.is-later .disc-off::before,
+.disc:has(.disc-now.is-welcome) .disc-step.is-later .disc-off::after{display:none;}
+html.lite .disc-now.is-welcome{animation:none;}
+@media (prefers-reduced-motion: reduce){ .disc-now.is-welcome{animation:none;} }
+@keyframes acctJustIn{0%{transform:scale(.97);}40%{transform:scale(1.025);}100%{transform:none;}}
+.acct-strip.just-in{animation:acctJustIn .7s var(--ease-spring);}
+@media (prefers-reduced-motion: reduce){ .acct-strip.just-in{animation:none;} }
 .acct-row-note{flex-basis:100%;font-size:11.5px;line-height:1.3;}
 a.acct-row{text-decoration:none;color:#fff;font-weight:600;}
 a.acct-row--help .acct-addr-txt{text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(176,217,255,.5);}
@@ -6583,7 +6634,7 @@ a.acct-row--help .acct-addr-txt{text-decoration:underline;text-underline-offset:
       <span>Continuar compra</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
-    <p class="cart-disclaimer hidden" id="cartDisclaimer">El monto total exhibido no incluye el costo de envío. El importe definitivo será confirmado junto con la disponibilidad a través de WhatsApp.</p>
+    <p class="cart-disclaimer hidden" id="cartDisclaimer">El envío no está incluido. Confirmamos total y stock por WhatsApp.</p>
   </div>
 </div>
 
@@ -6676,7 +6727,7 @@ a.acct-row--help .acct-addr-txt{text-decoration:underline;text-underline-offset:
 
     <!-- Ingresar -->
     <form class="acct-view" id="acctLoginView" novalidate>
-      <h2 class="acct-headline"><span class="acct-hl-1 acct-fit">Iniciar sesión</span><span class="acct-hl-2"><i class="acct-emo">🎁</i><span class="tw" data-perk></span></span></h2>
+      <h2 class="acct-headline"><span class="acct-hl-1 acct-fit">Iniciar sesión</span><span class="acct-hl-2"><i class="acct-emo">🎁</i><span class="tw" data-perk="pass"></span></span></h2>
       <div class="acct-phone" id="acctLoginPhoneBox">
         <span class="acct-cc">+54</span>
         <input id="acctLoginPhone" type="tel" inputmode="tel" placeholder="11 2345-6789" autocomplete="tel-national" maxlength="22" aria-label="Tu WhatsApp">
@@ -6692,7 +6743,7 @@ a.acct-row--help .acct-addr-txt{text-decoration:underline;text-underline-offset:
 
     <!-- Crear cuenta -->
     <form class="acct-view hidden" id="acctRegView" novalidate>
-      <h2 class="acct-headline"><span class="acct-hl-1 acct-fit">Crear cuenta</span><span class="acct-hl-2"><i class="acct-emo">🎁</i><span class="tw" data-perk></span></span></h2>
+      <h2 class="acct-headline"><span class="acct-hl-1 acct-fit">Crear cuenta</span><span class="acct-hl-2"><i class="acct-emo">🎁</i><span class="tw" data-perk="welcome"></span></span></h2>
       <input class="acct-input" id="acctName" type="text" placeholder="Tu nombre" autocomplete="given-name" maxlength="40" aria-label="Tu nombre">
       <div class="acct-phone" id="acctPhoneBox">
         <span class="acct-cc">+54</span>
@@ -7293,6 +7344,35 @@ const COMBO_DISCOUNT = 3000;
 function cartVapeCount(items){ return items.filter(i => i.category !== 'apple' && i.price && !i.offer && !i.clearance).length; }
 function comboDiscount(items){ return Math.floor(cartVapeCount(items) / COMBO_SIZE) * COMBO_DISCOUNT; }
 
+/* Descuento de la CUENTA (bienvenida o premio del pase) en la compra que se está armando.
+   Compra N° = orders + 1 (si ya mandó un pedido hace menos de ORDER_GAP_MS cuenta como la misma:
+   igual que clientOrderLine). Bienvenida: compra 1. Pase: nivel ((N-1) % PASS_LEVELS)+1 en PASS_REWARDS.
+   Se aplica sobre los vapes a precio normal (los de cartVapeCount) DESPUÉS de restar el combo,
+   redondeado a $100 hacia abajo. Devuelve {pct, welcome, amount, label} o null si no hay descuento.
+   hint = línea chica para quien tiene sesión pero esta compra no tiene premio. */
+function profileDiscount(items, profile){
+  if(!profile || !items || !items.length) return null;
+  try{
+    const orders = profile.orders || 0;
+    const repeated = profile.lastOrderAt && Date.now() - profile.lastOrderAt < ORDER_GAP_MS;
+    const n = repeated && orders > 0 ? orders : orders + 1;
+    const lvl = ((n - 1) % PASS_LEVELS) + 1;
+    const welcome = WELCOME_OFF > 0 && n === 1;
+    const pct = welcome ? WELCOME_OFF : (PASS_REWARDS[lvl] || 0);
+    if(!pct){
+      const next = Object.keys(PASS_REWARDS).map(Number).sort((a, b) => a - b).find(l => l > lvl);
+      if(!next) return null;
+      const rem = next - lvl - 1;
+      return {pct:0, amount:0, hint: rem <= 0 ? `Con esta compra, la próxima tiene ${PASS_REWARDS[next]}% OFF`
+        : `Con esta compra te ${rem === 1 ? 'falta' : 'faltan'} ${rem} para tu ${PASS_REWARDS[next]}% OFF`};
+    }
+    const base = items.filter(i => i.category !== 'apple' && i.price && !i.offer && !i.clearance).reduce((a, i) => a + i.price, 0) - comboDiscount(items);
+    const amount = Math.floor(Math.max(0, base) * pct / 100 / 100) * 100;
+    if(amount <= 0) return null;
+    return {pct, welcome, amount, label: welcome ? `Bienvenida ${pct}% OFF` : `Tu descuento ${pct}% OFF`};
+  }catch(e){ return null; }   // antes de que cargue el resto del script
+}
+
 function formatPrice(price, originalPrice){
   if(price == null) return '<span class="p-price consult">Consultar</span>';
   const main = '$' + price.toLocaleString('es-AR');
@@ -7570,7 +7650,7 @@ function productCardHTML(p, i, badgeText, showPuffs){
         <div class="p-real" aria-hidden="true"><img loading="lazy" decoding="async" src="${realSrc.replace('img/reales/', 'img/reales/sm/')}" alt=""><span class="p-real-label">📸 Foto real</span></div>` : '';
   // A tiny camera next to the puff count says "this one has a real photo"
   // without adding another label to the card.
-  const realChip = realSrc ? `<span class="p-puffs-real" title="Tiene foto real">${CAMERA_SVG}</span>` : '';
+  const realChip = ''; // sin el iconito de cámara al lado de las pitadas (pedido 27/11)
 
   const actionsHTML = oos ? `
       <div class="p-cta">
@@ -9278,7 +9358,8 @@ let cartToastTimer = null;
 function money(n){ return '$' + n.toLocaleString('es-AR'); }
 function cartTotal(){
   const sub = cart.reduce((s,i)=> s + (i.price || 0), 0);
-  return sub - comboDiscount(cart);
+  const pd = profileDiscount(cart, getClientProfile());
+  return sub - comboDiscount(cart) - (pd ? pd.amount : 0);
 }
 function syncCartBar(){
   const n = cart.length;
@@ -9481,21 +9562,33 @@ function renderCart(){
   if(hasAllPrices){
     const subtotal = cart.reduce((s,i)=>s+i.price, 0);
     const discount = comboDiscount(cart);
-    if(discount){
+    const pd = profileDiscount(cart, getClientProfile());
+    const acct = pd ? pd.amount : 0;
+    if(discount || acct){
       cartItemsList.innerHTML += `
     <div class="cart-total-row cart-total-row--sub">
       <span class="cart-total-label">Subtotal</span>
       <span class="cart-total-value">$${subtotal.toLocaleString('es-AR')}</span>
-    </div>
+    </div>`;
+    }
+    if(discount){
+      cartItemsList.innerHTML += `
     <div class="cart-total-row cart-total-row--combo">
       <span class="cart-total-label">🔥 Combo ${COMBO_SIZE} vapes${discount > COMBO_DISCOUNT ? ' (x' + discount / COMBO_DISCOUNT + ')' : ''}</span>
       <span class="cart-total-value">-$${discount.toLocaleString('es-AR')}</span>
     </div>`;
     }
+    if(acct){   // descuento de la cuenta: misma fila que el combo, debajo
+      cartItemsList.innerHTML += `
+    <div class="cart-total-row cart-total-row--combo cart-total-row--acct">
+      <span class="cart-total-label">🎁 ${pd.label}</span>
+      <span class="cart-total-value">-$${acct.toLocaleString('es-AR')}</span>
+    </div>`;
+    }
     cartItemsList.innerHTML += `
     <div class="cart-total-row">
       <span class="cart-total-label">Total</span>
-      <span class="cart-total-value">$${(subtotal - discount).toLocaleString('es-AR')}</span>
+      <span class="cart-total-value">$${(subtotal - discount - acct).toLocaleString('es-AR')}</span>
     </div>`;
   }
   // One vape short of the next combo: tell them how much they'd save.
@@ -9505,7 +9598,7 @@ function renderCart(){
     cartItemsList.innerHTML += `
     <button class="cart-combo-nudge" type="button">
       <span class="cart-combo-nudge-icon" aria-hidden="true">🔥</span>
-      <span class="cart-combo-nudge-text"><small class="cart-combo-tag">Promoción</small>Sumá ${missing > 1 ? missing + ' vapes' : '1 vape'} más y ahorrás <b>$${COMBO_DISCOUNT.toLocaleString('es-AR')}</b></span>
+      <span class="cart-combo-nudge-text">+${missing > 1 ? missing + ' vapes' : '1 vape'} y ahorrás <b>$${COMBO_DISCOUNT.toLocaleString('es-AR')}</b></span>
       <svg class="cart-combo-nudge-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>`;
   }
@@ -9516,6 +9609,20 @@ function renderCart(){
     closeCart();
     if(modalOverlay.classList.contains('open')) closeModal();
     scrollCatalogControlsIntoView();
+  });
+  // Línea chica de la cuenta (no compite con "Continuar compra"): sin sesión invita a crearla;
+  // con sesión y sin premio en esta compra, avisa cuándo viene el próximo.
+  const prof = getClientProfile();
+  const pdesc = profileDiscount(cart, prof);
+  if(!prof && WELCOME_OFF > 0){
+    cartItemsList.insertAdjacentHTML('beforeend', `<button class="cart-acct-hint" type="button" data-acct="1">🎁 Creá tu cuenta y llevate ${WELCOME_OFF}% OFF</button>`);
+  } else if(prof && pdesc && pdesc.hint){
+    cartItemsList.insertAdjacentHTML('beforeend', `<p class="cart-acct-hint cart-acct-hint--info">🎁 ${pdesc.hint}</p>`);
+  }
+  const acctHint = cartItemsList.querySelector('.cart-acct-hint[data-acct]');
+  if(acctHint) acctHint.addEventListener('click', ()=>{
+    closeCart();
+    openAccount(hadAccountBefore() ? 'ingreso' : 'registro');
   });
 
   cartItemsList.querySelectorAll('.cart-item-remove').forEach(btn=>{
@@ -9587,11 +9694,14 @@ cartCheckoutBtn.addEventListener('click', ()=>{
   if(hasAllPrices){
     const subtotal = cart.reduce((s,i)=>s+i.price, 0);
     const discount = comboDiscount(cart);
-    if(discount){
+    const pd = profileDiscount(cart, getClientProfile());
+    const acct = pd ? pd.amount : 0;
+    if(discount || acct){
       msg += `Subtotal: $${subtotal.toLocaleString('es-AR')}\n`;
-      msg += `Descuento combo (llevá ${COMBO_SIZE}): -$${discount.toLocaleString('es-AR')}\n`;
+      if(discount) msg += `Descuento combo (llevá ${COMBO_SIZE}): -$${discount.toLocaleString('es-AR')}\n`;
+      if(acct) msg += `Descuento cuenta ${pd.pct}%${pd.welcome ? ' (bienvenida)' : ''}: -$${acct.toLocaleString('es-AR')}\n`;
     }
-    msg += `Total aprox: $${(subtotal - discount).toLocaleString('es-AR')}\n\n`;
+    msg += `Total aprox: $${(subtotal - discount - acct).toLocaleString('es-AR')}\n\n`;
   }
   const hasPreorder = cart.some(i => i.preorder);
   if(hasPreorder) msg += `📦 Lo marcado como reserva llega ${PREORDER_ETA}.\n\n`;
@@ -10611,9 +10721,12 @@ const JOIN_SNOOZE_TIMEOUT_DAYS = 1;  // si se termina la cuenta regresiva solo, 
 // PASE DE COMPRAS (estilo pase de batalla): 1 nivel = 1 compra. Se ven los PASS_LEVELS niveles
 // desde el inicio; en los niveles de PASS_REWARDS la compra sale con ese % de descuento
 // ({nivel: % OFF}). Al terminar el último nivel el pase vuelve a empezar (temporada 2, 3...).
-// PARA CAMBIAR PREMIOS: editá solo estas dos líneas (el último nivel debería tener premio).
+// PARA CAMBIAR PREMIOS: editá solo estas líneas (el último nivel debería tener premio).
 const PASS_LEVELS = 8;
 const PASS_REWARDS = {2:10, 4:15, 6:20, 8:25};
+// Bienvenida: la PRIMERA compra de un cliente con cuenta (0 compras antes) tiene este % OFF. Una sola vez
+// en la vida (no se repite al reiniciar el pase). Poné 0 para apagarla.
+const WELCOME_OFF = 5;
 // Cuenta cada pedido enviado por WhatsApp de un cliente registrado; dos pedidos en menos de
 // ORDER_GAP_MS cuentan como uno (para que no se sume tocando "enviar" varias veces).
 // El mensaje de WhatsApp avisa "Compra N° X (nivel Y del pase)" y "le toca X% OFF", así lo confirmás en el chat.
@@ -10787,10 +10900,10 @@ function paintUserBtn(){
   document.getElementById('acctStripTitle').textContent = p ? `Hola, ${firstName(p)}` : guestLabel;
   userBtn.classList.toggle('logged', !!p);
   if(p){
-    stopTypewriter();
-    document.getElementById('acctStripSub').innerHTML = `<b>★</b> Mi cuenta · Compras en total: ${p.orders || 0}`;
+    startSessionTypewriter(p);
   } else startTypewriter();
   userBtn.setAttribute('aria-label', p ? `Mi cuenta (${p.name})` : guestLabel);
+  try{ syncCartBar(); renderCart(); }catch(e){}   // el descuento de la cuenta cambia el total del carrito
 }
 
 /* "Cada 2 compras ganás hasta 25% OFF" se escribe solo, letra por
@@ -10802,11 +10915,16 @@ function perkParts(){
   const gaps = lv.map((l, i) => l - (i ? lv[i - 1] : 0));
   const even = gaps.every(g => g === gaps[0]) && lv[lv.length - 1] === PASS_LEVELS;
   const hl = `${max}% OFF`;
-  return {hl, text: even ? `Cada ${gaps[0]} compras ganás hasta ${hl}` : `Sumá compras y ganás hasta ${hl}`};
+  const pass = {hl, text: even ? `Cada ${gaps[0]} compras ganás hasta ${hl}` : `Sumá compras y ganás hasta ${hl}`};
+  // quien no tiene cuenta: se le vende la bienvenida (si está apagada, el pase)
+  const welcome = WELCOME_OFF > 0 ? {hl: `${WELCOME_OFF}% OFF`, text: `Creá tu cuenta y llevate ${WELCOME_OFF}% OFF`} : pass;
+  return {pass, welcome};
 }
-const PERK = perkParts();
+const PERKS = perkParts();
+const PERK = PERKS.welcome;            // botón de portada sin sesión
 const TYPE_TEXT = PERK.text;
-document.querySelectorAll('.tw[data-perk]').forEach(el => { el.dataset.text = PERK.text; el.dataset.hl = PERK.hl; }); // una sola línea bajo el título de ingresar / crear cuenta
+// una sola línea bajo el título: ingresar (data-perk="pass") y crear cuenta (data-perk="welcome")
+document.querySelectorAll('.tw[data-perk]').forEach(el => { const k = PERKS[el.dataset.perk] || PERKS.pass; el.dataset.text = k.text; el.dataset.hl = k.hl; });
 const TYPE_EVERY_MS = 10000;
 let typeTimers = [];
 function stopTypewriter(){
@@ -10843,6 +10961,32 @@ function startTypewriter(){
   run();
   typeTimers.push(setInterval(run, TYPE_EVERY_MS));
   typeTimers.push({clear: ()=> stop && stop()});
+}
+/* Botón de portada con sesión: dice lo que falta para el próximo descuento (misma frase que
+   "Tus descuentos"). Se escribe, queda ~11 s, se desvanece suave y se vuelve a escribir.
+   Sin cursor ni parpadeos. Lite / reducir movimiento: texto fijo, sin tipeo. */
+const SESSION_HOLD_MS = 11000;
+function startSessionTypewriter(p){
+  stopTypewriter();
+  const sub = document.getElementById('acctStripSub');
+  const parts = discountInfo(p.orders).parts;
+  const total = parts.reduce((a, [t]) => a + t.length, 0);
+  const plain = parts.map(([t]) => t).join('');
+  const still = document.documentElement.classList.contains('lite') ||
+    (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  if(still){ sub.innerHTML = partsHtml(parts, total); return; }
+  sub.innerHTML = `<span class="sr-only">${plain}</span><span class="acct-type-ghost" aria-hidden="true">${partsHtml(parts, total)}</span><span class="acct-type acct-type--quiet" aria-hidden="true"></span>`;
+  const out = sub.querySelector('.acct-type');
+  let t = null;
+  const fade = ()=>{ out.style.transition = 'opacity .7s ease'; out.style.opacity = '0'; t = setTimeout(cycle, 1500); };
+  const cycle = ()=>{
+    out.innerHTML = ''; out.style.transition = 'none'; out.style.opacity = '1';
+    let i = 0;
+    const step = ()=>{ i++; out.innerHTML = partsHtml(parts, i); t = setTimeout(i < total ? step : fade, i < total ? 34 : SESSION_HOLD_MS); };
+    t = setTimeout(step, 350);
+  };
+  cycle();
+  typeTimers.push({clear: ()=> clearTimeout(t)});
 }
 // Frases de las tarjetas: se escriben una vez cada vez que se abre esa tarjeta.
 function typeCardLines(view){
@@ -11086,13 +11230,37 @@ function renderMe(p, how){ // how: 'nuevo' | 'ingreso' | undefined
 /* TUS DESCUENTOS: PASS_LEVELS compras por vuelta; en las de PASS_REWARDS toca ese % OFF.
    Se muestra en una frase ("Te falta 1 compra para tu 15% OFF") y una fila de etiquetas
    (un puntito por compra arriba de cada %). La próxima va en dorado; las usadas, apagadas. */
-function renderLoyalty(p){
-  const total = Math.max(0, p.orders || 0);
+/* Qué descuento viene: la misma frase para "Tus descuentos" y para el botón de portada.
+   Con 0 compras manda la bienvenida; después, el próximo premio del pase. */
+function discountInfo(totalOrders){
+  const total = Math.max(0, totalOrders || 0);
   const done = total % PASS_LEVELS;                       // compras hechas en esta vuelta (0..PASS_LEVELS-1)
   const rewardLevels = Object.keys(PASS_REWARDS).map(Number).sort((a, b) => a - b);
   const nextLv = rewardLevels.find(l => l > done);        // próxima compra con descuento
   const left = nextLv ? nextLv - done : 0;                // compras que faltan hasta esa (contando esa)
   const off = nextLv ? PASS_REWARDS[nextLv] : 0;
+  const welcome = WELCOME_OFF > 0 && total === 0;         // primera compra con cuenta
+  const faltan = left - 1;                                // compras antes de la que tiene el descuento
+  // la frase como tramos [texto, negrita?] para poder escribirla letra por letra
+  const parts = welcome ? [['Tu 1ª compra tiene '], [`${WELCOME_OFF}% OFF`, 1]]
+    : !nextLv ? [['Cada compra suma para tu próximo descuento']]
+    : left === 1 ? [['Tu próxima compra tiene '], [`${off}% OFF`, 1]]
+    : [[`Te ${faltan === 1 ? 'falta' : 'faltan'} `], [`${faltan} ${faltan === 1 ? 'compra' : 'compras'}`, 1], [' para tu '], [`${off}% OFF`, 1]];
+  return {total, done, rewardLevels, nextLv, left, off, welcome, parts};
+}
+// Primeros n caracteres de una frase en tramos, respetando las negritas.
+function partsHtml(parts, n){
+  const esc = t => t.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  let out = '', left = n;
+  for(const [t, b] of parts){
+    if(left <= 0) break;
+    const piece = esc(t.slice(0, left)); left -= t.length;
+    out += b ? `<b>${piece}</b>` : piece;
+  }
+  return out;
+}
+function renderLoyalty(p){
+  const {total, done, rewardLevels, nextLv, welcome, parts} = discountInfo(p.orders);
   const check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
   const every = rewardLevels[0] || 1;
@@ -11103,7 +11271,7 @@ function renderLoyalty(p){
   let prev = 0;
   rewardLevels.forEach(lv =>{
     const pct = PASS_REWARDS[lv];
-    const state = lv <= done ? 'used' : (lv === nextLv ? 'next' : 'later');
+    const state = lv <= done ? 'used' : (lv === nextLv && !welcome ? 'next' : 'later');
     let dots = '';
     for(let i = prev + 1; i <= lv; i++) dots += `<i${i <= done ? ' class="on"' : ''}>${check}</i>`;
     prev = lv;
@@ -11115,11 +11283,7 @@ function renderLoyalty(p){
   });
 
   const msg = document.getElementById('loyalMsg');
-  const faltan = left - 1;                                 // compras antes de la que tiene el descuento
-  // la frase como tramos [texto, negrita?] para poder escribirla letra por letra
-  const parts = !nextLv ? [['Cada compra suma para tu próximo descuento']]
-    : left === 1 ? [['Tu próxima compra tiene '], [`${off}% OFF`, 1]]
-    : [[`Te ${faltan === 1 ? 'falta' : 'faltan'} `], [`${faltan} ${faltan === 1 ? 'compra' : 'compras'}`, 1], [' para tu '], [`${off}% OFF`, 1]];
+  msg.classList.toggle('is-welcome', !!welcome);   // 0 compras: la bienvenida es LA próxima (cupón celeste)
   typeDiscMsg(msg, parts);
 }
 /* Escribe la frase de "Tus descuentos" letra por letra (como el subtítulo del botón de
@@ -11127,21 +11291,13 @@ function renderLoyalty(p){
    lectores de pantalla leen la frase entera de una. Lite / reducir movimiento: directa. */
 function typeDiscMsg(el, parts){
   const esc = t => t.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-  const html = n =>{ // primeros n caracteres, respetando las negritas
-    let out = '', left = n;
-    for(const [t, b] of parts){
-      if(left <= 0) break;
-      const piece = esc(t.slice(0, left)); left -= t.length;
-      out += b ? `<b>${piece}</b>` : piece;
-    }
-    return out;
-  };
+  const html = n => partsHtml(parts, n);
   const total = parts.reduce((a, [t]) => a + t.length, 0);
   const plain = parts.map(([t]) => t).join('');
   clearTimeout(el._typeT);
   const still = document.documentElement.classList.contains('lite') ||
     (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
-  if(still){ el.innerHTML = html(total); return; }
+  if(still){ el.innerHTML = `<span>${html(total)}</span>`; return; }
   el.innerHTML = `<span class="sr-only">${esc(plain)}</span><span class="disc-type" aria-hidden="true"><span class="disc-type-ghost">${html(total)}</span><span class="disc-type-out"></span></span>`;
   const out = el.querySelector('.disc-type-out');
   let i = 0;
@@ -11155,8 +11311,25 @@ function centerPassTrack(){
   if(!cur || !track.clientWidth) return;
   track.scrollLeft = cur.offsetLeft - (track.clientWidth - cur.offsetWidth) / 2;
 }
-function spawnAcctConfetti(){
-  const box = document.getElementById('acctConfetti');
+/* Al ingresar o crear la cuenta el cartel se cierra y queda la pantalla principal: el aviso de éxito es
+   el botón de cuenta (con el nombre/foto y su frase nueva) que da un saltito, y, si la cuenta es nueva,
+   cae confeti sobre el botón. */
+function finishAuth(how){
+  closeAccount();
+  userBtn.classList.remove('just-in'); void userBtn.offsetWidth; userBtn.classList.add('just-in');
+  setTimeout(()=> userBtn.classList.remove('just-in'), 1400);
+  if(how === 'nuevo' && !document.documentElement.classList.contains('lite')){
+    const r = userBtn.getBoundingClientRect();
+    const box = document.createElement('div');
+    box.setAttribute('aria-hidden', 'true');
+    box.style.cssText = `position:fixed;left:0;right:0;top:${Math.max(0, Math.round(r.top - 10))}px;height:460px;overflow:hidden;pointer-events:none;z-index:300;`;
+    document.body.appendChild(box);
+    spawnAcctConfetti(box);
+    setTimeout(()=> box.remove(), 3600);
+  }
+}
+function spawnAcctConfetti(box){
+  box = box || document.getElementById('acctConfetti');
   box.innerHTML = '';
   if(document.documentElement.classList.contains('lite')) return;
   const frag = document.createDocumentFragment();
@@ -11329,7 +11502,7 @@ acctViews.ingreso.addEventListener('submit', async (e)=>{
   if(!p) return setErr(acctLoginErr, acctLoginPhone.closest('.acct-phone'), 'No encontramos una cuenta con ese WhatsApp');
   saveClientProfile(p);
   paintUserBtn();
-  renderMe(p, 'ingreso');
+  finishAuth('ingreso');
 });
 
 acctViews.registro.addEventListener('submit', async (e)=>{
@@ -11352,7 +11525,7 @@ acctViews.registro.addEventListener('submit', async (e)=>{
   // Sin planilla o sin conexión: igual queda guardado en este celular.
   if(!saveClientProfile(p)) return setErr(acctRegErr, null, 'Tu navegador no deja guardar datos (¿modo incógnito?)');
   paintUserBtn();
-  renderMe(p, 'nuevo');
+  finishAuth('nuevo');
 });
 
 document.addEventListener('keydown', (e)=>{
@@ -11397,6 +11570,7 @@ function clientOrderLine(){
   const n = p.orders || 1;
   let line = `\n*Cliente registrado ⭐:* ${stripEmoji(p.name)} (+54 9 ${formatPhone(p.phone)}) — compra N° ${n}`;
   const lvl = ((n - 1) % PASS_LEVELS) + 1;   // nivel del pase de esta compra (1..PASS_LEVELS)
+  if(n === 1 && WELCOME_OFF > 0) line += `\n🎁 *Primera compra con cuenta: le toca ${WELCOME_OFF}% OFF de bienvenida*`;
   if(PASS_REWARDS[lvl]) line += `\n🎁 *Es su compra N° ${n} (nivel ${lvl} del pase): le toca ${PASS_REWARDS[lvl]}% OFF*`;
   return line;
 }
