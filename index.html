@@ -10410,7 +10410,13 @@ applyWholesaleOrderingState();
 const CLIENTES_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwTPYYripd0OTTctXaXXMjArG5YzNNvqbDj0j59ekQzo2fC6g10rep-DE1M3qrLOJFb/exec';
 const CLIENT_KEY = 'vapesoon_cliente';
 const KNOWN_KEY = 'vapesoon_cuentas';  // cuentas que ya usaron este celu (para volver a ingresar)
-const PHOTO_KEY = 'vapesoon_fotos';    // foto de perfil de cada cuenta (sólo en este celu)
+const PHOTO_KEY = 'vapesoon_fotos';    // foto de perfil de cada cuenta (copia local; la original va a la planilla)
+/* La sesión queda guardada en localStorage y, de respaldo, en una cookie de
+   400 días: algunos navegadores (Instagram, WhatsApp, Safari) a veces borran
+   uno de los dos al cerrar la pestaña. Si falta uno, se recupera del otro. */
+const SESSION_COOKIE = 'vapesoon_sesion';
+const PHOTO_PX = 200;            // la foto de perfil se guarda cuadrada a 200px
+const PHOTO_MAX_CHARS = 45000;   // tope de una celda de Google Sheets (50.000) con margen
 const JOIN_SNOOZE_KEY = 'vapesoon_join_snooze';
 const JOIN_ENABLED = false;         // pop-up de invitación apagado (true = vuelve a aparecer solo)
 const JOIN_SECONDS = 4;              // lo que dura el pop-up en pantalla
@@ -10457,9 +10463,30 @@ function readJSON(key, fallback){
 function writeJSON(key, val){
   try{ localStorage.setItem(key, JSON.stringify(val)); return true; }catch(e){ return false; }
 }
+function writeSessionCookie(p){
+  try{
+    const secure = location.protocol === 'https:' ? '; Secure' : '';
+    const val = p ? encodeURIComponent(JSON.stringify(p)) : '';
+    document.cookie = `${SESSION_COOKIE}=${val}; Max-Age=${p ? 400 * 86400 : 0}; Path=/; SameSite=Lax${secure}`;
+  }catch(e){}
+}
+function readSessionCookie(){
+  try{
+    const m = document.cookie.match(new RegExp('(?:^|; )' + SESSION_COOKIE + '=([^;]*)'));
+    return m && m[1] ? JSON.parse(decodeURIComponent(m[1])) : null;
+  }catch(e){ return null; }
+}
+// Le pide al navegador que no borre los datos de la página por su cuenta.
+function askPersistentStorage(){
+  try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(()=>{}); }catch(e){}
+}
 function getClientProfile(){
-  const p = readJSON(CLIENT_KEY, null);
-  if(!p || !p.name || !p.phone) return null;
+  let p = readJSON(CLIENT_KEY, null);
+  if(!p || !p.name || !p.phone){
+    p = readSessionCookie();
+    if(!p || !p.name || !p.phone) return null;
+    writeJSON(CLIENT_KEY, p); // se había borrado el localStorage: vuelve desde la cookie
+  }
   p.phone = normalizePhone(p.phone) || p.phone;
   return p;
 }
@@ -10467,7 +10494,9 @@ function saveClientProfile(p){
   const known = readJSON(KNOWN_KEY, {});
   known[p.phone] = p;
   writeJSON(KNOWN_KEY, known);
-  return writeJSON(CLIENT_KEY, p);
+  writeSessionCookie(p);
+  askPersistentStorage();
+  return writeJSON(CLIENT_KEY, p) || !!readSessionCookie();
 }
 function getPhoto(p){ return p ? readJSON(PHOTO_KEY, {})[p.phone] || '' : ''; }
 function setPhoto(p, dataUrl){
@@ -10484,24 +10513,48 @@ function clearClientProfile(forget){
     setPhoto(p, '');
   }
   try{ localStorage.removeItem(CLIENT_KEY); }catch(e){}
+  writeSessionCookie(null);
 }
-function sheetPayload(accion, p){
-  return JSON.stringify({accion, name:p.name || '', phone:p.phone, locality:p.locality || '', address:p.address || ''});
+function sheetPayload(accion, p, extra){
+  return JSON.stringify(Object.assign({accion, name:p.name || '', phone:p.phone, locality:p.locality || '', address:p.address || ''}, extra));
 }
 // Con respuesta (alta, ingreso). null = planilla no configurada.
-async function sheetCall(accion, p){
+async function sheetCall(accion, p, extra){
   if(!CLIENTES_SHEET_URL) return null;
   try{
-    const r = await fetch(CLIENTES_SHEET_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:sheetPayload(accion, p)});
+    const r = await fetch(CLIENTES_SHEET_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:sheetPayload(accion, p, extra)});
     return await r.json();
   }catch(e){ return {ok:false, error:'red'}; }
 }
-// Sin esperar respuesta (cambio, baja, pedido).
-function sheetFire(accion, p){
+// Sin esperar respuesta (cambio, baja, pedido, foto).
+function sheetFire(accion, p, extra){
   if(!CLIENTES_SHEET_URL || !p) return;
   try{
-    fetch(CLIENTES_SHEET_URL, {method:'POST', mode:'no-cors', keepalive:true, headers:{'Content-Type':'text/plain;charset=utf-8'}, body:sheetPayload(accion, p)}).catch(()=>{});
+    fetch(CLIENTES_SHEET_URL, {method:'POST', mode:'no-cors', keepalive:true, headers:{'Content-Type':'text/plain;charset=utf-8'}, body:sheetPayload(accion, p, extra)}).catch(()=>{});
   }catch(e){}
+}
+function uploadPhoto(p, dataUrl){ if(p && dataUrl) sheetFire('foto', p, {photo:dataUrl}); }
+/* Al entrar a la página con la sesión abierta: trae de la planilla las
+   compras y la foto (por si la cambió desde otro celu), o le sube la foto
+   de este celu si la planilla todavía no la tiene. */
+async function syncClientFromSheet(){
+  const p = getClientProfile();
+  if(!p || !CLIENTES_SHEET_URL) return;
+  writeSessionCookie(p); // renueva los 400 días
+  const res = await sheetCall('ingreso', {phone:p.phone});
+  if(!res || !res.ok) return;
+  const cur = getClientProfile();
+  if(!cur || cur.phone !== p.phone) return; // cerró sesión mientras tanto
+  const c = res.cliente || {};
+  let changed = false;
+  const orders = Number(c.orders) || 0;
+  if(orders > (cur.orders || 0)){ cur.orders = orders; saveClientProfile(cur); changed = true; }
+  const local = getPhoto(cur);
+  if(c.photo && c.photo !== local){ setPhoto(cur, c.photo); changed = true; }
+  else if(!c.photo && local) uploadPhoto(cur, local);
+  if(!changed) return;
+  paintUserBtn();
+  if(acctOverlay.classList.contains('open') && !acctViews.cuenta.classList.contains('hidden')) renderMe(cur);
 }
 function findLocality(name){
   return name ? LOCALITY_INDEX.find(l => normalize(l.name) === normalize(name)) : null;
@@ -10839,7 +10892,8 @@ acctDelConfirm.addEventListener('click', ()=>{
   closeAccount();
 });
 
-/* ---- foto de perfil: la elige de la galería, se achica a 240px y queda en este celu ---- */
+/* ---- foto de perfil: la elige de la galería, se achica a 200px, queda en
+   este celu y se sube a la planilla (así aparece al ingresar desde otro) ---- */
 const acctPhotoInput = document.getElementById('acctPhotoInput');
 document.getElementById('acctAvatar').addEventListener('click', ()=> acctPhotoInput.click());
 acctPhotoInput.addEventListener('change', ()=>{
@@ -10851,12 +10905,15 @@ acctPhotoInput.addEventListener('change', ()=>{
   const url = URL.createObjectURL(file);
   const im = new Image();
   im.onload = ()=>{
-    const S = 240, side = Math.min(im.naturalWidth, im.naturalHeight);
+    const S = PHOTO_PX, side = Math.min(im.naturalWidth, im.naturalHeight);
     const c = document.createElement('canvas');
     c.width = c.height = S;
     c.getContext('2d').drawImage(im, (im.naturalWidth - side) / 2, (im.naturalHeight - side) / 2, side, side, 0, 0, S, S);
     URL.revokeObjectURL(url);
-    if(!setPhoto(p, c.toDataURL('image/jpeg', 0.82))){ hint.textContent = 'No pudimos guardar la foto'; return; }
+    let q = 0.82, dataUrl = c.toDataURL('image/jpeg', q);
+    while(dataUrl.length > PHOTO_MAX_CHARS && q > 0.35){ q -= 0.1; dataUrl = c.toDataURL('image/jpeg', q); }
+    if(!setPhoto(p, dataUrl)){ hint.textContent = 'No pudimos guardar la foto'; return; }
+    uploadPhoto(p, dataUrl);
     paintUserBtn();
     renderMe(p);
     const av = document.getElementById('acctAvatar');
@@ -10908,6 +10965,9 @@ acctViews.ingreso.addEventListener('submit', async (e)=>{
         orders: Math.max(Number(c.orders) || 0, (local && local.orders) || 0),
         lastOrderAt: (local && local.lastOrderAt) || 0
       };
+      // la foto viene de la planilla; si no hay, se sube la que tenga este celu
+      if(c.photo) setPhoto(p, c.photo);
+      else uploadPhoto(p, getPhoto(p));
     }
   }
   if(!p) return setErr(acctLoginErr, acctLoginPhone.closest('.acct-phone'), 'No encontramos una cuenta con ese WhatsApp');
@@ -10985,6 +11045,7 @@ function clientOrderLine(){
 }
 
 paintUserBtn();
+if(getClientProfile()){ askPersistentStorage(); setTimeout(syncClientFromSheet, 1500); }
 scheduleJoin();
 </script>
 </body>

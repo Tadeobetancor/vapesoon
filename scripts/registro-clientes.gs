@@ -22,9 +22,13 @@
  *  6. Copiá la "URL de la aplicación web" (termina en /exec) y pegala en
  *     index.html, en:  const CLIENTES_SHEET_URL = '...';
  *
- * Al "Ingresar" desde otro celular sólo se devuelve el nombre, la localidad y
- * las compras, nunca la dirección: así nadie puede averiguar la dirección de
- * un cliente tipeando su número.
+ * Al "Ingresar" desde otro celular sólo se devuelve el nombre, la localidad,
+ * las compras y la foto de perfil, nunca la dirección: así nadie puede
+ * averiguar la dirección de un cliente tipeando su número.
+ *
+ * Las fotos de perfil (200px, en texto base64) van en la pestaña oculta
+ * "Fotos", una fila por celular. Para verla: clic derecho en las pestañas de
+ * abajo → "Mostrar hoja" (o "Ver → Hojas ocultas").
  *
  * Si algún día cambiás este código: Implementar → Gestionar implementaciones
  * → lápiz → Versión: "Nueva versión" → Implementar (la URL no cambia).
@@ -32,6 +36,8 @@
 
 const SHEET_NAME = 'Clientes';
 const SUMMARY_NAME = 'Resumen';
+const PHOTOS_NAME = 'Fotos';
+const PHOTO_MAX_CHARS = 49000; // una celda de Sheets aguanta 50.000 caracteres
 const PREMIO_CADA = 5;      // cada cuántas compras hay premio (igual que LOYALTY_EVERY en la página)
 const PREMIO_OFF = 20;      // % de descuento del premio (igual que LOYALTY_OFF en la página)
 
@@ -70,8 +76,18 @@ function doPost(e) {
         return json_({ ok: true, cliente: {
           name: String(v[COL.nombre - 1]),
           locality: loc === 'Retiro' ? '' : loc,
-          orders: Number(v[COL.compras - 1]) || 0
+          orders: Number(v[COL.compras - 1]) || 0,
+          photo: getPhoto_(phone)
         }});
+      }
+      case 'foto': {
+        if (!row) return json_({ ok: false, error: 'nocliente' });
+        const photo = String(d.photo || '');
+        if (photo && (!/^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(photo) || photo.length > PHOTO_MAX_CHARS)) {
+          return json_({ ok: false, error: 'foto' });
+        }
+        setPhoto_(phone, photo);
+        return json_({ ok: true });
       }
       case 'cambio': {
         if (!row) return json_({ ok: false, error: 'nocliente' });
@@ -87,6 +103,7 @@ function doPost(e) {
       }
       case 'baja': {
         if (row) sh.deleteRow(row);
+        setPhoto_(phone, '');
         return json_({ ok: true });
       }
     }
@@ -116,7 +133,7 @@ function prepararPlanilla() {
   // fuera la "Hoja 1" vacía que trae toda planilla nueva
   ss.getSheets().forEach(function (s) {
     const n = s.getName();
-    if (n !== SHEET_NAME && n !== SUMMARY_NAME && s.getLastRow() === 0) ss.deleteSheet(s);
+    if (n !== SHEET_NAME && n !== SUMMARY_NAME && n !== PHOTOS_NAME && s.getLastRow() === 0) ss.deleteSheet(s);
   });
   ss.setActiveSheet(res);
 }
@@ -221,6 +238,46 @@ function sheet_() {
   let sh = ss.getSheetByName(SHEET_NAME);
   if (!sh) { prepararPlanilla(); sh = ss.getSheetByName(SHEET_NAME); }
   return sh;
+}
+
+/* ================= Fotos de perfil (pestaña oculta) ================= */
+
+function photosSheet_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(PHOTOS_NAME);
+  if (!sh) {
+    sh = ss.insertSheet(PHOTOS_NAME);
+    sh.getRange(1, 1, 1, 2).setValues([['📱 Celular', '🖼️ Foto (base64)']]).setFontWeight('bold');
+    sh.getRange('A:A').setNumberFormat('@');
+    sh.setFrozenRows(1);
+    sh.hideSheet();
+  }
+  return sh;
+}
+
+function findPhotoRow_(sh, phone) {
+  const last = sh.getLastRow();
+  if (last < 2) return 0;
+  const phones = sh.getRange(2, 1, last - 1, 1).getValues();
+  for (let i = 0; i < phones.length; i++) {
+    if (normalizePhone_(phones[i][0]) === phone) return i + 2;
+  }
+  return 0;
+}
+
+function getPhoto_(phone) {
+  const sh = photosSheet_();
+  const r = findPhotoRow_(sh, phone);
+  return r ? String(sh.getRange(r, 2).getValue() || '') : '';
+}
+
+// photo vacío = borrar la foto de ese celular
+function setPhoto_(phone, photo) {
+  const sh = photosSheet_();
+  const r = findPhotoRow_(sh, phone);
+  if (!photo) { if (r) sh.deleteRow(r); return; }
+  if (r) sh.getRange(r, 2).setValue(photo);
+  else sh.appendRow([phone, photo]);
 }
 
 function findRow_(sh, phone) {
