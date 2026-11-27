@@ -5553,38 +5553,48 @@ body{background:#061326;}
    Los datos quedan en el celular del cliente (localStorage) y, si está
    configurada, en la planilla de Google (CLIENTES_SHEET_URL en el JS).
    ===================================================================== */
-/* IDEA: no es un botón, es tu "pase de acceso" flotando: una cápsula de vidrio
-   clarito (escarchado), sin caja ni sombra dura, con un destello de luz que la
-   cruza cada tanto. Los botones de abajo son cajas rectas y oscuras; esta es
-   redonda, clara y transparente, así no se confunden. Tokens acá: */
+/* IDEA: no es un botón, es tu "credencial": un vidrio ahumado OSCURO y muy
+   transparente (se ve el fondo a través), esquinas apenas redondeadas como una
+   tarjeta de acceso, y una línea de luz fina a la izquierda. Los botones de abajo
+   son paneles azules con relleno; esta es oscura, casi sin relleno y con la línea
+   de luz, así no se confunden. Tokens acá: */
 .acct-strip{
-  --strip-glass:linear-gradient(100deg, rgba(255,255,255,.17) 0%, rgba(230,243,255,.08) 45%, rgba(176,217,255,.06) 100%);
-  --strip-glass-hover:linear-gradient(100deg, rgba(255,255,255,.24) 0%, rgba(230,243,255,.12) 45%, rgba(176,217,255,.09) 100%);
-  --strip-edge:rgba(242,251,255,.42);
-  --strip-edge-low:rgba(176,217,255,.14);
+  --strip-radius:12px;
+  --strip-glass:linear-gradient(100deg, rgba(2,10,26,.42) 0%, rgba(4,16,38,.26) 60%, rgba(4,16,38,.18) 100%);
+  --strip-glass-hover:linear-gradient(100deg, rgba(2,10,26,.55) 0%, rgba(4,16,38,.38) 60%, rgba(4,16,38,.3) 100%);
+  --strip-edge:rgba(176,217,255,.30);
+  --strip-edge-low:rgba(176,217,255,.12);
+  --strip-accent:linear-gradient(180deg, var(--blue-bright), var(--blue-neon) 55%, rgba(91,170,255,.2));
   --strip-sheen-every:7s;
   position:relative;overflow:hidden;
   display:flex;align-items:center;gap:12px;
   width:100%;
   margin:0 0 12px;
-  padding:8px 12px 8px 8px;
-  border-radius:999px;
+  padding:9px 12px 9px 14px;
+  border-radius:var(--strip-radius);
   background:var(--strip-glass);
-  backdrop-filter:blur(12px) saturate(1.35);-webkit-backdrop-filter:blur(12px) saturate(1.35);
+  backdrop-filter:blur(10px) saturate(1.2);-webkit-backdrop-filter:blur(10px) saturate(1.2);
   border:1px solid var(--strip-edge-low);
   border-top-color:var(--strip-edge);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.22), 0 12px 30px -22px rgba(176,217,255,.7);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08), 0 14px 30px -24px rgba(0,0,0,.9);
   color:#fff;text-align:left;
   font-family:'Poppins',sans-serif;
   cursor:pointer;
   transition:transform .15s ease, background .25s ease;
   -webkit-tap-highlight-color:transparent;
 }
-/* destello de vidrio que cruza la cápsula cada tanto */
+/* línea de luz a la izquierda: la "marca" de la credencial */
+.acct-strip::before{
+  content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;
+  background:var(--strip-accent);
+  box-shadow:0 0 10px rgba(91,170,255,.8);
+  pointer-events:none;
+}
+/* destello de vidrio que cruza la credencial cada tanto */
 .acct-strip::after{
   content:"";
   position:absolute;top:0;bottom:0;left:-40%;width:28%;
-  background:linear-gradient(100deg, transparent, rgba(255,255,255,.22), transparent);
+  background:linear-gradient(100deg, transparent, rgba(176,217,255,.12), transparent);
   transform:skewX(-20deg);
   animation:stripSheen var(--strip-sheen-every) ease-in-out 1.5s infinite;
   pointer-events:none;
@@ -5595,10 +5605,10 @@ body{background:#061326;}
 .acct-strip:focus-visible{outline:2px solid var(--blue-neon);outline-offset:2px;}
 .acct-strip-pic{
   flex:none;position:relative;
-  width:46px;height:46px;border-radius:50%;
+  width:44px;height:44px;border-radius:50%;
   display:grid;place-items:center;
-  background:rgba(255,255,255,.14);
-  border:1px solid rgba(242,251,255,.45);
+  background:rgba(176,217,255,.08);
+  border:1px solid rgba(176,217,255,.35);
   font-family:'Bungee',cursive;font-size:18px;color:#fff;
   overflow:hidden;
 }
@@ -5635,10 +5645,10 @@ body{background:#061326;}
 }
 .acct-strip-go svg{width:18px;height:18px;}
 html.lite .acct-strip::after{display:none;}
-html.lite .acct-strip{backdrop-filter:none;-webkit-backdrop-filter:none;background:linear-gradient(100deg, rgba(255,255,255,.15), rgba(176,217,255,.07));}
+html.lite .acct-strip{backdrop-filter:none;-webkit-backdrop-filter:none;background:linear-gradient(100deg, rgba(2,10,26,.55), rgba(4,16,38,.35));}
 @media (prefers-reduced-motion: reduce){ .acct-strip::after{animation:none;display:none;} }
 @media(min-width:900px){
-  .acct-strip{padding:10px 16px 10px 10px;}
+  .acct-strip{padding:11px 16px 11px 16px;}
   .acct-strip-title{font-size:16.5px;}
   .acct-strip-sub{font-size:13px;}
 }
@@ -5748,11 +5758,39 @@ html.lite .modal-overlay.acct-overlay{backdrop-filter:none;-webkit-backdrop-filt
   border:1px solid rgba(176,217,255,.2);
   box-shadow:0 30px 70px -20px rgba(0,0,0,.75), inset 0 1px 0 rgba(255,255,255,.1);
   text-align:center;
-  transform:translate(0,30px) scale(.92);
+  /* entrada: rebote MUY chico (sube 12px, apenas se pasa y se acomoda) */
+  --acct-pop-from:translate(0,12px) scale(.975);
+  --acct-pop-ease:cubic-bezier(.3,1.22,.5,1);   /* --ease-spring rebotaba de más */
+  --acct-pop-dur:.42s;
+  --acct-call-dur:.85s;                        /* "latido" del primer campo */
+  --acct-call-glow:0 0 0 4px rgba(91,170,255,.38), 0 0 22px rgba(91,170,255,.6);
+  transform:var(--acct-pop-from);
   opacity:0;
-  transition:transform .26s var(--ease), opacity .2s ease;
+  transition:transform .22s var(--ease), opacity .18s ease;
 }
-.acct-overlay.open .acct-card{transform:none;opacity:1;transition:transform .55s var(--ease-spring), opacity .3s ease;}
+.acct-overlay.open .acct-card{transform:none;opacity:1;transition:transform var(--acct-pop-dur) var(--acct-pop-ease), opacity .25s ease;}
+/* El primer campo (nombre al crear cuenta, WhatsApp al ingresar) llama la atención
+   al entrar: late 2 veces con el borde encendido y se queda quieto. */
+.acct-overlay.open #acctName,
+.acct-overlay.open #acctLoginPhoneBox{animation:acctFieldCall var(--acct-call-dur) ease-in-out .4s 2;}
+@keyframes acctFieldCall{
+  0%,100%{transform:none;}
+  35%{transform:scale(1.025);border-color:var(--blue-bright);box-shadow:var(--acct-call-glow);}
+  65%{transform:scale(.998);border-color:var(--blue-neon);}
+}
+@keyframes acctFieldGlow{
+  40%{border-color:var(--blue-bright);box-shadow:var(--acct-call-glow);}
+}
+/* celulares lentos y "reducir movimiento": sin rebote ni latido, solo el brillo del borde una vez */
+html.lite .acct-card{--acct-pop-from:translate(0,8px);}
+html.lite .acct-overlay.open #acctName,
+html.lite .acct-overlay.open #acctLoginPhoneBox{animation:acctFieldGlow 1s ease-in-out .3s 1;}
+@media (prefers-reduced-motion: reduce){
+  .acct-card{--acct-pop-from:none;}
+  .acct-overlay.open .acct-card{transition:opacity .2s ease;}
+  .acct-overlay.open #acctName,
+  .acct-overlay.open #acctLoginPhoneBox{animation:acctFieldGlow 1.2s ease-in-out .2s 1;}
+}
 .acct-x{
   position:absolute;top:12px;right:12px;z-index:2;
   width:30px;height:30px;border-radius:50%;
@@ -5909,8 +5947,8 @@ html.lite .modal-overlay.acct-overlay{backdrop-filter:none;-webkit-backdrop-filt
 .acct-rows{margin-top:4px;text-align:left;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(176,217,255,.16);padding:2px 14px;}
 .acct-row{display:flex;gap:10px;padding:11px 0;font-size:13.5px;color:#fff;}
 .acct-row + .acct-row{border-top:1px solid rgba(176,217,255,.12);}
-.acct-row span:first-child{flex:none;width:22px;text-align:center;}
-.acct-row span:last-child{word-break:break-word;}
+.acct-row > span:first-child{flex:none;width:22px;text-align:center;}
+.acct-row > span:last-child{word-break:break-word;}
 .acct-row .muted{color:rgba(214,234,255,.6);}
 .acct-del{margin-top:14px;background:none;border:none;cursor:pointer;font-family:'Poppins',sans-serif;font-size:12px;color:rgba(214,234,255,.55);}
 .acct-del:hover{color:var(--red-cap);}
@@ -5937,10 +5975,12 @@ html.lite .modal-overlay.acct-overlay{backdrop-filter:none;-webkit-backdrop-filt
   --px-tile:rgba(8,31,64,.78);
   --px-line:rgba(176,217,255,.2);
   --px-levels:8;                    /* casilleros de la barra de XP (= PASS_LEVELS) */
-  --px-step-h:42px;                 /* compra común (fila de arriba) */
-  --px-tile-h:94px;                 /* compra con premio (fila de abajo) */
-  --px-gap:8px;                     /* entre columnas */
-  --px-row-gap:16px;                /* entre la compra común y su premio */
+  --px-step-h:60px;                 /* compra común (angosta) */
+  --px-tile-h:94px;                 /* compra con premio (ancha y dorada) */
+  --px-step-fr:.8fr;                /* ancho relativo: compra común */
+  --px-reward-fr:1.5fr;             /* ancho relativo: compra con premio */
+  --px-gap:12px;                    /* entre niveles (lleva la flechita) */
+  --px-row-gap:18px;                /* entre renglones */
   --px-off-size:20px;               /* el % OFF de cada premio */
   --px-off-final:23px;              /* el % OFF del premio final */
   --px-in:.6s;                      /* entrada del perfil */
@@ -6038,7 +6078,7 @@ html.lite .modal-overlay.acct-overlay{backdrop-filter:none;-webkit-backdrop-filt
 .pass-prize[hidden]{display:none;}
 .pass-next{margin:0;font-size:15px;font-weight:600;line-height:1.3;color:#fff;}
 .pass-next b{color:var(--px-gold);font-weight:800;}
-/* barra de XP: 15 casilleros, se llena con una chispa en la punta */
+/* barra de XP: un casillero por nivel, se llena con una chispa en la punta */
 .pass-bar{
   position:relative;height:14px;margin:0 14px;border-radius:999px;
   background:rgba(2,12,28,.55);border:1px solid rgba(176,217,255,.22);
@@ -6063,22 +6103,24 @@ html.lite .modal-overlay.acct-overlay{backdrop-filter:none;-webkit-backdrop-filt
   background:#fff;box-shadow:0 0 8px 3px rgba(176,217,255,.95);
 }
 .pass-count{margin:6px 14px 0;font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--px-ink-dim);}
-/* TODOS los niveles a la vista, sin deslizar: 4 columnas = 4 "tramos".
-   Arriba la compra común, abajo (grande y dorada) la compra que trae premio.
-   Se lee columna por columna: 1 → 2 🎁, 3 → 4 🎁 ... (grid-auto-flow:column).
+/* TODOS los niveles a la vista, sin deslizar, y en ORDEN DE LECTURA:
+   dos renglones como un texto (1 2 3 4 / 5 6 7 8), compra común angosta y
+   compra con premio ancha y dorada. Entre cada nivel una flechita de camino
+   (se enciende al completar el anterior); el renglón 1 "sale" por la derecha
+   y el 2 "entra" por la izquierda, así se entiende que sigue.
    centerPassTrack() sigue andando: como ya no hay scroll, no mueve nada. */
 .pass-track{
   position:relative;
-  display:grid;grid-template-rows:auto auto;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);
-  align-items:end;
+  display:grid;grid-auto-flow:row;align-items:center;
+  grid-template-columns:repeat(2, minmax(0,var(--px-step-fr)) minmax(0,var(--px-reward-fr)));
   gap:var(--px-row-gap) var(--px-gap);
-  list-style:none;margin:6px 0 0;padding:14px 14px 6px;
+  list-style:none;margin:6px 0 0;padding:16px 14px 6px;
 }
 .pass-track:focus-visible{outline:2px solid var(--blue-neon);outline-offset:-2px;border-radius:12px;}
 .pass-lvl{
   position:relative;
-  height:var(--px-step-h);padding:0 4px;
-  display:flex;flex-direction:row;align-items:center;justify-content:center;gap:5px;
+  height:var(--px-step-h);padding:6px 2px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
   border-radius:13px;
   background:var(--px-tile);
   border:1.5px solid var(--px-line);
@@ -6087,21 +6129,32 @@ html.lite .modal-overlay.acct-overlay{backdrop-filter:none;-webkit-backdrop-filt
 .pass-lvl:not(.reward) .pass-mid{flex:none;}
 .pass-lvl:not(.reward) .pass-off{display:none;}
 .pass-lvl:not(.reward) .pass-gift{font-size:16px;}
-/* el camino: de la compra común baja un tramo hasta su premio; se enciende al completarla */
-.pass-lvl.reward::before{
-  content:"";position:absolute;bottom:100%;left:50%;width:3px;height:calc(var(--px-row-gap) + 2px);margin-bottom:1.5px;
-  transform:translateX(-50%);
-  background:rgba(176,217,255,.18);
+/* flechita de camino entre un nivel y el siguiente */
+.pass-lvl + .pass-lvl::before,
+.pass-lvl:nth-child(4n):not(:last-child)::after{
+  content:"";position:absolute;top:50%;width:calc(var(--px-gap) + 2px);height:10px;
+  transform:translateY(-50%);
+  background:rgba(176,217,255,.3);
+  clip-path:polygon(0 38%, 55% 38%, 55% 0, 100% 50%, 55% 100%, 55% 62%, 0 62%);
+  pointer-events:none;
 }
-.pass-lvl.done + .pass-lvl.reward::before{background:var(--px-blue);box-shadow:0 0 6px rgba(91,170,255,.9);}
+.pass-lvl + .pass-lvl::before{right:100%;margin-right:.5px;}
+.pass-lvl:nth-child(4n):not(:last-child)::after{left:100%;margin-left:1px;width:12px;clip-path:polygon(0 38%, 100% 38%, 100% 62%, 0 62%);}
+.pass-lvl.done + .pass-lvl::before,
+.pass-lvl.done:nth-child(4n)::after{background:var(--px-blue);filter:drop-shadow(0 0 3px rgba(91,170,255,.9));}
 .pass-n{font-family:'Poppins',sans-serif;font-size:14px;font-weight:800;line-height:1;}
 .pass-mid{position:relative;flex:1;display:grid;place-items:center;}
 .pass-ico{width:18px;height:18px;}
 .pass-off{min-height:12px;display:flex;flex-direction:column;align-items:center;line-height:1;white-space:nowrap;font-size:9px;font-weight:800;letter-spacing:.8px;}
 .pass-off b{font-family:'Bungee',cursive;font-weight:400;font-size:var(--px-off-size);letter-spacing:-.3px;line-height:1;}
 .pass-gift{font-size:20px;line-height:1;}
-.pass-lock{opacity:.8;}
-.pass-lvl.reward .pass-lock{position:absolute;right:-10px;bottom:-3px;width:16px;height:16px;padding:2.5px;border-radius:50%;background:#0d2c56;border:1px solid rgba(255,200,87,.5);color:var(--px-gold-hi);opacity:1;}
+/* candados: bien visibles (antes se perdían) */
+.pass-lock{color:var(--px-ice);opacity:.9;}
+.pass-lvl.reward .pass-lock{
+  position:absolute;right:-17px;top:-6px;width:20px;height:20px;padding:3.5px;border-radius:50%;
+  background:var(--px-gold);color:var(--void);opacity:1;
+  box-shadow:0 0 0 2px #0b2a55, 0 3px 8px -2px rgba(0,0,0,.6);
+}
 
 /* premio: dorado, alto, el % grande y un destello que lo cruza cada tanto */
 .pass-lvl.reward{
@@ -6245,6 +6298,18 @@ html.lite .acct-me-head .acct-avatar::before, html.lite .pass-lvl.reward:last-ch
 .acct-data-sum svg{width:16px;height:16px;flex:none;transition:transform .25s ease;}
 .acct-data[open] .acct-data-sum svg{transform:rotate(180deg);}
 .acct-data-sum:focus-visible{outline:2px solid var(--blue-neon);outline-offset:-2px;border-radius:14px;}
+.acct-perk{margin:0 0 14px;font-size:13px;font-weight:600;color:#fff;text-align:center;}
+.acct-perk b{color:var(--gold);font-weight:800;}
+.acct-row-val{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;}
+.acct-addr-txt{flex:1 1 140px;min-width:0;}
+.acct-addr-edit{flex:none;padding:6px 12px;border-radius:999px;cursor:pointer;font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(176,217,255,.35);}
+.acct-addr-ok{flex-basis:100%;font-size:12px;font-weight:600;color:#7be0a0;}
+.acct-addr-form{width:100%;display:flex;flex-direction:column;gap:8px;}
+.acct-addr-form .acct-input{height:46px;font-size:15px;}
+.acct-addr-form .acct-btn{height:44px;margin-top:0;font-size:14px;}
+.acct-addr-form .acct-row-btns{margin-top:2px;}
+.acct-addr-form .acct-err{margin:0;min-height:0;}
+.acct-input option{color:#0c315d;background:#fff;}
 .acct-data .acct-rows{margin-top:0;border:none;border-top:1px solid rgba(176,217,255,.12);border-radius:0 0 14px 14px;background:none;}
 
 /* ---- Traducir sabores: interruptor deslizable + nombre en español ---- */
@@ -6769,7 +6834,7 @@ html.lite .acct-me-head .acct-avatar::before, html.lite .pass-lvl.reward:last-ch
 
     <!-- Ingresar -->
     <form class="acct-view" id="acctLoginView" novalidate>
-      <h2 class="acct-headline"><span class="acct-hl-1 acct-fit">Iniciar sesión</span><span class="acct-hl-2"><i class="acct-emo">🔓</i><span class="tw" data-text="Entrá con tu WhatsApp, sin contraseña" data-hl="WhatsApp"></span></span></h2>
+      <h2 class="acct-headline"><span class="acct-hl-1 acct-fit">Iniciar sesión</span><span class="acct-hl-2"><i class="acct-emo">🎁</i><span class="tw" data-perk></span></span></h2>
       <div class="acct-phone" id="acctLoginPhoneBox">
         <span class="acct-cc">+54</span>
         <input id="acctLoginPhone" type="tel" inputmode="tel" placeholder="11 2345-6789" autocomplete="tel-national" maxlength="22" aria-label="Tu WhatsApp">
@@ -6785,7 +6850,7 @@ html.lite .acct-me-head .acct-avatar::before, html.lite .pass-lvl.reward:last-ch
 
     <!-- Crear cuenta -->
     <form class="acct-view hidden" id="acctRegView" novalidate>
-      <h2 class="acct-headline"><span class="acct-hl-1 acct-fit">Crear cuenta</span><span class="acct-hl-2"><i class="acct-emo">🚀</i><span class="tw" data-text="Promos y envíos que se completan solos" data-hl="Promos"></span></span></h2>
+      <h2 class="acct-headline"><span class="acct-hl-1 acct-fit">Crear cuenta</span><span class="acct-hl-2"><i class="acct-emo">🎁</i><span class="tw" data-perk></span></span></h2>
       <input class="acct-input" id="acctName" type="text" placeholder="Tu nombre" autocomplete="given-name" maxlength="40" aria-label="Tu nombre">
       <div class="acct-phone" id="acctPhoneBox">
         <span class="acct-cc">+54</span>
@@ -6795,6 +6860,7 @@ html.lite .acct-me-head .acct-avatar::before, html.lite .pass-lvl.reward:last-ch
       <p class="acct-err" id="acctRegErr"></p>
       <button class="acct-btn acct-btn--main" id="acctRegBtn" type="submit">Crear cuenta</button>
       <p class="acct-fine">Al registrarte confirmás que sos mayor de 18.</p>
+      <p class="acct-switch">¿Ya tenés cuenta? <button type="button" id="acctToLogin">Ingresar</button></p>
     </form>
 
     <!-- Mi cuenta -->
@@ -10688,6 +10754,7 @@ applyWholesaleOrderingState();
    pero sólo en el celular donde se registró. */
 const CLIENTES_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwTPYYripd0OTTctXaXXMjArG5YzNNvqbDj0j59ekQzo2fC6g10rep-DE1M3qrLOJFb/exec';
 const CLIENT_KEY = 'vapesoon_cliente';
+const HAD_KEY = 'vapesoon_hubo_cuenta'; // marquita: en este celu ya hubo una cuenta (entonces el botón abre "Ingresar" y no "Crear cuenta")
 const KNOWN_KEY = 'vapesoon_cuentas';  // cuentas que ya usaron este celu (para volver a ingresar)
 const PHOTO_KEY = 'vapesoon_fotos';    // foto de perfil de cada cuenta (copia local; la original va a la planilla)
 /* La sesión queda guardada en localStorage y, de respaldo, en una cookie de
@@ -10772,7 +10839,12 @@ function getClientProfile(){
   p.phone = normalizePhone(p.phone) || p.phone;
   return p;
 }
+function hadAccountBefore(){
+  try{ if(localStorage.getItem(HAD_KEY)) return true; }catch(e){}
+  return Object.keys(readJSON(KNOWN_KEY, {})).length > 0;
+}
 function saveClientProfile(p){
+  try{ localStorage.setItem(HAD_KEY, '1'); }catch(e){}
   const known = readJSON(KNOWN_KEY, {});
   known[p.phone] = p;
   writeJSON(KNOWN_KEY, known);
@@ -10872,18 +10944,30 @@ function paintUserBtn(){
   initial.hidden = !p || !!photo;
   initial.textContent = p ? p.name.trim().charAt(0).toUpperCase() : '';
   icon.toggleAttribute('hidden', !!p); // es un <svg>: no tiene .hidden como los elementos HTML
-  document.getElementById('acctStripTitle').textContent = p ? `Hola, ${firstName(p)}` : 'Ingresar a mi cuenta';
+  const guestLabel = hadAccountBefore() ? 'Ingresar a mi cuenta' : 'Creá tu cuenta';
+  document.getElementById('acctStripTitle').textContent = p ? `Hola, ${firstName(p)}` : guestLabel;
   userBtn.classList.toggle('logged', !!p);
   if(p){
     stopTypewriter();
     document.getElementById('acctStripSub').innerHTML = `<b>★</b> Mi cuenta · Compras en total: ${p.orders || 0}`;
   } else startTypewriter();
-  userBtn.setAttribute('aria-label', p ? `Mi cuenta (${p.name})` : 'Ingresar a mi cuenta');
+  userBtn.setAttribute('aria-label', p ? `Mi cuenta (${p.name})` : guestLabel);
 }
 
-/* "Obtené promociones y optimizá tus compras" se escribe solo, letra por
+/* "Cada 2 compras ganás hasta 25% OFF" se escribe solo, letra por
    letra, al entrar a la página y después cada TYPE_EVERY_MS (10 s). */
-const TYPE_TEXT = 'Obtené promociones y optimizá tus compras';
+// Frase que vende el premio, armada con PASS_REWARDS (si cambia la config, cambia el texto).
+function perkParts(){
+  const lv = Object.keys(PASS_REWARDS).map(Number).sort((a, b) => a - b);
+  const max = Math.max(...lv.map(l => PASS_REWARDS[l]));
+  const gaps = lv.map((l, i) => l - (i ? lv[i - 1] : 0));
+  const even = gaps.every(g => g === gaps[0]) && lv[lv.length - 1] === PASS_LEVELS;
+  const hl = `${max}% OFF`;
+  return {hl, text: even ? `Cada ${gaps[0]} compras ganás hasta ${hl}` : `Sumá compras y ganás hasta ${hl}`};
+}
+const PERK = perkParts();
+const TYPE_TEXT = PERK.text;
+document.querySelectorAll('.tw[data-perk]').forEach(el => { el.dataset.text = PERK.text; el.dataset.hl = PERK.hl; }); // una sola línea bajo el título de ingresar / crear cuenta
 const TYPE_EVERY_MS = 10000;
 let typeTimers = [];
 function stopTypewriter(){
@@ -10913,10 +10997,10 @@ function typeText(out, text, hl, speed, onDone){
 function startTypewriter(){
   stopTypewriter();
   const sub = document.getElementById('acctStripSub');
-  sub.innerHTML = `<span class="acct-type-ghost">${TYPE_TEXT.replace('promociones', '<b>promociones</b>')}</span><span class="acct-type"></span>`;
+  sub.innerHTML = `<span class="acct-type-ghost">${TYPE_TEXT.replace(PERK.hl, '<b>' + PERK.hl + '</b>')}</span><span class="acct-type"></span>`;
   const out = sub.querySelector('.acct-type');
   let stop = null;
-  const run = ()=>{ if(stop) stop(); stop = typeText(out, TYPE_TEXT, 'promociones', 38); };
+  const run = ()=>{ if(stop) stop(); stop = typeText(out, TYPE_TEXT, PERK.hl, 38); };
   run();
   typeTimers.push(setInterval(run, TYPE_EVERY_MS));
   typeTimers.push({clear: ()=> stop && stop()});
@@ -11015,6 +11099,77 @@ function showView(name){
   disarmDelete();
   acctCard.scrollTop = 0;
 }
+/* "Mis datos": teléfono + dirección de envío (se puede cambiar ahí mismo).
+   Guarda en el perfil (el checkout la usa) y avisa a la planilla con la acción 'cambio'. */
+function renderDataRows(p, flash){
+  const rows = document.getElementById('acctRows');
+  rows.innerHTML = '';
+  const mkRow = (icon)=>{
+    const row = document.createElement('div');
+    row.className = 'acct-row';
+    const a = document.createElement('span'); a.textContent = icon; a.setAttribute('aria-hidden', 'true');
+    const b = document.createElement('span'); b.className = 'acct-row-val';
+    row.append(a, b);
+    rows.appendChild(row);
+    return {row, val:b};
+  };
+  mkRow('📱').val.textContent = '+54 9 ' + formatPhone(p.phone);
+
+  const addr = mkRow('🏠');
+  addr.row.classList.add('acct-row--addr');
+  const has = !!(p.address && p.locality);
+  const txt = document.createElement('span');
+  txt.className = 'acct-addr-txt' + (has ? '' : ' muted');
+  txt.textContent = has ? `${p.address}, ${p.locality}` : 'Sin dirección guardada. Se guarda sola cuando hagas tu primer envío.';
+  const edit = document.createElement('button');
+  edit.type = 'button'; edit.className = 'acct-addr-edit';
+  edit.textContent = has ? 'Cambiar' : 'Agregar';
+  edit.setAttribute('aria-label', has ? 'Cambiar mi dirección de envío' : 'Agregar mi dirección de envío');
+  addr.val.append(txt, edit);
+  if(flash){ const ok = document.createElement('span'); ok.className = 'acct-addr-ok'; ok.setAttribute('role', 'status'); ok.textContent = '✓ Dirección guardada'; addr.val.appendChild(ok); }
+
+  edit.addEventListener('click', ()=>{
+    addr.val.innerHTML = '';
+    const form = document.createElement('form');
+    form.className = 'acct-addr-form'; form.noValidate = true;
+    const sel = document.createElement('select');
+    sel.className = 'acct-input'; sel.setAttribute('aria-label', 'Localidad');
+    sel.innerHTML = '<option value="">Localidad</option>' + LOCALITY_INDEX.map(l => `<option value="${l.name}">${l.name}</option>`).join('');
+    const loc = findLocality(p.locality);
+    if(loc) sel.value = loc.name;
+    const inp = document.createElement('input');
+    inp.className = 'acct-input'; inp.type = 'text'; inp.placeholder = 'Calle y número/dpto';
+    inp.maxLength = 80; inp.autocomplete = 'street-address'; inp.setAttribute('aria-label', 'Calle y número');
+    inp.value = p.address || '';
+    const err = document.createElement('p'); err.className = 'acct-err'; err.setAttribute('role', 'alert');
+    const btns = document.createElement('div'); btns.className = 'acct-row-btns';
+    const cancel = document.createElement('button'); cancel.type = 'button'; cancel.className = 'acct-btn acct-btn--alt'; cancel.textContent = 'Cancelar';
+    const save = document.createElement('button'); save.type = 'submit'; save.className = 'acct-btn acct-btn--main'; save.textContent = 'Guardar';
+    btns.append(cancel, save);
+    form.append(sel, inp, err, btns);
+    addr.val.appendChild(form);
+    (loc ? inp : sel).focus();
+    keepActionsVisible();
+    cancel.addEventListener('click', ()=> renderDataRows(p));
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const address = stripEmoji(inp.value).trim();
+      if(!sel.value){ err.textContent = 'Elegí tu localidad'; return sel.focus(); }
+      if(!address){ err.textContent = 'Escribí calle y número'; return inp.focus(); }
+      const cur = getClientProfile() || p;
+      cur.locality = sel.value;
+      cur.address = address;
+      saveClientProfile(cur);
+      sheetFire('cambio', cur);
+      renderDataRows(cur, true);
+    });
+  });
+}
+// Con "Mis datos" abierto o editando, el card se desplaza lo justo para que se vean los botones de abajo.
+function keepActionsVisible(){
+  setTimeout(()=>{ const b = document.getElementById('acctDelete'); if(b && b.offsetParent) b.scrollIntoView({block:'nearest', behavior:'smooth'}); }, 60);
+}
+document.getElementById('acctData').addEventListener('toggle', ()=>{ if(document.getElementById('acctData').open) keepActionsVisible(); });
 function renderMe(p, how){ // how: 'nuevo' | 'ingreso' | undefined
   const photo = getPhoto(p);
   const av = document.getElementById('acctAvatar');
@@ -11028,19 +11183,7 @@ function renderMe(p, how){ // how: 'nuevo' | 'ingreso' | undefined
   document.getElementById('acctMeTitle').textContent =
     how === 'nuevo' ? `¡Listo, ${firstName(p)}!` : `Hola, ${firstName(p)}`;
   renderLoyalty(p);
-  const rows = document.getElementById('acctRows');
-  rows.innerHTML = '';
-  const addr = p.address && p.locality ? `${p.address}, ${p.locality}` : '';
-  [['📱', '+54 9 ' + formatPhone(p.phone)], ['🏠', addr, 'Se guarda sola en tu primer envío']].forEach(([icon, val, empty])=>{
-    const row = document.createElement('div');
-    row.className = 'acct-row';
-    const a = document.createElement('span'); a.textContent = icon;
-    const b = document.createElement('span');
-    b.textContent = val || empty;
-    if(!val) b.className = 'muted';
-    row.append(a, b);
-    rows.appendChild(row);
-  });
+  renderDataRows(p);
   document.getElementById('acctData').open = false; // "Mis datos" arranca cerrado
   showView('cuenta');
   centerPassTrack(); requestAnimationFrame(centerPassTrack); setTimeout(centerPassTrack, 400);
@@ -11149,7 +11292,7 @@ function closeAccount(){
 }
 userBtn.addEventListener('click', ()=>{
   if(joinOverlay.classList.contains('open')) closeJoin(0);
-  openAccount('ingreso');
+  openAccount(hadAccountBefore() ? 'ingreso' : 'registro'); // cuenta nueva primero; si ya hubo una en este celu, Ingresar
 });
 document.getElementById('acctClose').addEventListener('click', closeAccount);
 acctOverlay.addEventListener('click', (e)=>{ if(e.target === acctOverlay) closeAccount(); });
@@ -11160,6 +11303,10 @@ function carryPhone(from, to){
 document.getElementById('acctToRegister').addEventListener('click', ()=>{
   showView('registro');
   if(acctLoginPhone.value) carryPhone(acctLoginPhone, acctPhone);
+});
+document.getElementById('acctToLogin').addEventListener('click', ()=>{
+  showView('ingreso');
+  if(acctPhone.value) carryPhone(acctPhone, acctLoginPhone);
 });
 document.getElementById('acctLogout').addEventListener('click', ()=>{
   clearClientProfile(false);
